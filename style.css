@@ -1,4 +1,3 @@
-
 :root {
   --primary: #6c63ff;
   --primary-dark: #5a52d5;
@@ -153,7 +152,8 @@ body {
   gap: 8px;
   text-decoration: none;
   font-size: 1rem;
-  
+  transition: all 0.3s ease;
+  animation: border-flicker 2s infinite;
 }
 
 
@@ -2403,7 +2403,9 @@ body {
   align-items: center;
   margin-bottom: 25px;
 }
-
+.nav-menu {
+  font-size: medium;
+}
 .code-header i {
   font-size: 2rem;
   color: #4a6cf7;
@@ -2588,28 +2590,121 @@ body {
 }
 
 /* News */
-.news-card {
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
-  border-left: 4px solid #764ba2;
-  padding: 20px;
-  border-radius: 0 15px 15px 0;
-  margin-bottom: 20px;
+/* Container & Slider Logic */
+.slider-container {
+  overflow: hidden;
+  width: 100%;
+  border-radius: 12px;
+  position: relative;
 }
 
-.news-date {
-  font-size: 0.75rem;
+/* News Slider Updates */
+.news-slider {
+  display: flex;
+  width: 500%; /* Changed to 500% for 5 slides */
+  animation: slideAnimation 20s infinite ease-in-out; /* Slower timing for 5 slides */
+}
+
+.news-card-slide {
+  width: 100%;
+  position: relative;
+  height: 450px;
+  overflow: hidden;
+}
+
+.news-card-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.news-section {
+   background-color: #000;
+}
+/* Text Content Styling */
+.news-content-box {
+  position: absolute;
+  bottom: 40px; /* Positions text towards the bottom-left */
+  left: 40px;
+  max-width: 40%; /* Keeps the right side of the image clear */
+  z-index: 10;
+  text-align: left;
+  pointer-events: auto; /* Allows hovering the card even through text */
+}
+
+/* Title: Always Visible */
+.slide-title {
+  color: #fff;
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin: 0;
   text-transform: uppercase;
-  letter-spacing: 1px;
-  color: #aaa;
+  /* Shadow ensures visibility without a background overlay */
+  text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.8), 0px 0px 20px rgba(0, 0, 0, 0.5);
 }
 
-.news-link {
-  color: #667eea;
-  text-decoration: none;
-  font-weight: bold;
-  font-size: 0.9rem;
-  display: inline-block;
+/* Description: Hidden by default */
+.slide-description {
+  color: #e0e0e0;
+  font-size: 1.1rem;
   margin-top: 10px;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.4s ease-in-out;
+  text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.9);
+}
+/* Styling for the buttons inside news */
+.slide-btn {
+  display: inline-block;
+  margin-top: 15px;
+  padding: 10px 25px;
+  opacity: 0; /* Hidden initially like description */
+  transform: translateY(10px);
+  transition: all 0.4s ease-in-out 0.1s; /* Slight delay after description */
+  text-decoration: none;
+  border-radius: 5px;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+.btn-group {
+  display: flex;
+  gap: 10px;
+}
+/* Hover Effect: Reveal Description */
+.news-card-slide:hover .slide-description ,.slide-btn{
+  opacity: 1;
+  transform: translateY(0);
+}
+/* New Animation for 5 Slides (20% steps) */
+@keyframes slideAnimation {
+  0%, 18% { transform: translateX(0); }
+  20%, 38% { transform: translateX(-20%); }
+  40%, 58% { transform: translateX(-40%); }
+  60%, 78% { transform: translateX(-60%); }
+  80%, 98% { transform: translateX(-80%); }
+  100% { transform: translateX(0); }
+}
+
+/* Pause slider on hover */
+.slider-container:hover .news-slider {
+  animation-play-state: paused;
+}
+
+/* Mobile Adjustments */
+@media (max-width: 768px) {
+  .news-card-slide { height: 300px; }
+  .news-content-box { left: 20px; bottom: 20px; max-width: 80%; }
+  .slide-title { font-size: 1.5rem; }
+}
+
+/* Mobile Adjustments */
+@media (max-width: 768px) {
+  .news-card-slide { height: 300px; }
+  .news-content-box { left: 20px; bottom: 20px; max-width: 80%; }
+  .slide-title { font-size: 1.5rem; }
+}
+/* Responsive fix */
+@media (max-width: 768px) {
+  .news-card-slide { height: 250px; }
 }
 
 /* Responsive */
@@ -2619,13 +2714,9 @@ body {
   }
 }
 /* Layout Separation */
-.projects-section, .news-section {
+.projects-section{
   padding: 80px 0;
   background: #1a1a2e;
-}
-
-.news-section {
-  background: #16213e; /* Slightly different shade to separate sections */
 }
 
 /* Projects Grid (Dynamic) */
@@ -2635,104 +2726,6 @@ body {
   gap: 25px;
 }
 
-/* News Cards with Image Overlay */
-.news-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 30px;
-}
-
-.news-card {
-  position: relative;
-  height: 400px;
-  border-radius: 20px;
-  overflow: hidden;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-}
-
-.news-card img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.5s ease;
-}
-
-.news-overlay {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 30px;
-  background: linear-gradient(to top, rgba(0,0,0,0.9) 20%, transparent 100%);
-  color: white;
-  transition: all 0.3s ease;
-}
-
-.news-card:hover img {
-  transform: scale(1.1);
-}
-
-.news-tag {
-  background: #667eea;
-  padding: 5px 12px;
-  border-radius: 20px;
-  font-size: 0.7rem;
-  font-weight: bold;
-  text-transform: uppercase;
-  display: inline-block;
-  margin-bottom: 10px;
-}
-
-.news-overlay h3 {
-  margin: 5px 0 10px;
-  font-size: 1.4rem;
-}
-
-.news-overlay p {
-  font-size: 0.9rem;
-  opacity: 0;
-  transform: translateY(20px);
-  transition: all 0.3s ease;
-}
-
-.news-card:hover .news-overlay p {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.read-btn {
-  color: #667eea;
-  text-decoration: none;
-  font-weight: bold;
-  margin-top: 15px;
-  display: inline-block;
-  border-bottom: 2px solid transparent;
-}
-
-.read-btn:hover {
-  border-bottom: 2px solid #667eea;
-}
-.hidden-news {
-  display: none;
-  opacity: 0;
-  transform: translateY(20px);
-  transition: all 0.5s ease-in-out;
-}
-
-.show-news {
-  display: block !important;
-  opacity: 1 !important;
-  transform: translateY(0) !important;
-}
-
-/* Ensure the button looks consistent with PhineX branding */
-#loadMoreBtn {
-  padding: 12px 30px;
-  font-size: 1rem;
-  border-radius: 50px;
-  cursor: pointer;
-  border: none;
-}
 .search-section { padding: 40px 0; background: #1a1a2e; }
 
 .search-box { max-width: 700px; margin: 0 auto; position: relative; }
@@ -2779,6 +2772,7 @@ body {
   display: none;
   overflow: hidden;
   box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  font-size: medium;
 }
 
 .prediction-item {
@@ -2807,8 +2801,13 @@ body {
 .search-recommendations button:hover { background: #667eea; color: white; }
 
 /* Highlight Style */
-.highlight { background-color: #fff200; color: white; padding: 2px; border-radius: 3px; font-weight: bold; }
-/* Container and Card Base */
+.highlight {
+    background-color: yellow;
+    color: black;
+    padding: 2px;
+    border-radius: 5000px;
+    transition: background-color 0.3s ease;
+}
 .featured-card {
   display: flex;
   background: rgba(255, 255, 255, 0.03);
@@ -2935,6 +2934,223 @@ body {
   }
 }
 
+
+/* ===== THEME VARIABLES ===== */
+:root.dark-theme {
+  --primary: #667eea;
+  --bg-color: #121212;
+  --nav-bg: rgba(18, 18, 18, 0.8);
+  --text-color: #e0e0e0;
+  --text-muted: #ffffff;
+  --card-bg: rgba(255, 255, 255, 0.05 );
+  --glass-border: 1px solid rgb(0, 0, 0);
+  --border-color: rgba(255, 255, 255, 0.2);
+}
+:root.light-themes {
+  --primary: #1e3a8a; /* Dark Blue for Light Theme */
+  --bg-color: #f0f0f0;
+  --nav-bg: rgba(255, 255, 255, 0.8);
+  --text-color: #000000;
+  --text-muted: #333333;
+  --card-bg: rgba(255, 255, 255, 0.7);
+  --glass-border: 1px solid rgba(0, 0, 0, 0.1);
+  --border-color: rgba(0, 0, 0, 0.2);
+}
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: background-color 0.4s ease, color 0.4s ease;
+}
+/* Force all icons to be Dark Blue in Light Themes */
+.light-theme i, 
+.light-theme .fas, 
+.light-theme .fab {
+    color: var(--primary) !important;
+}
+.coming-soon-badge {
+    background-color: var(--primary) !important;
+    color: var(--bg-color) !important;
+    font-size: 0.65rem;
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-left: 8px;
+    text-transform: uppercase;
+    font-weight: bold;
+    vertical-align: middle;
+}
+
+/* Optional: Make the button look disabled or hinted */
+.filter-btn:has(.coming-soon-badge) {
+    position: relative;
+    opacity: 0.8;
+}
+/* Force all text in the navbar and body to be Black */
+.light-theme body,
+.light-theme .nav-menu a,
+.light-theme .nav-menu span,
+.light-theme .logo span {
+    color: var(--text-color) !important;
+}
+
+/* Ensure the navbar background follows the variable */
+.light-theme .navbar {
+    background-color: var(--nav-bg) !important;
+    border-bottom: 1px solid var(--border-color) !important;
+}
+/* Update Components to use Variables */
+.navbar {
+  background-color: var(--nav-bg);
+  border-bottom: var(--glass-border);
+}
+
+.settings-card, .news-card-slide, .feature-card {
+  background: var(--card-bg);
+  border: var(--glass-border);
+  color: var(--text-color);
+}
+
+.slide-description, .hero-content p, p {
+  color: var(--text-muted);
+}
+
+/* Settings Page Specifics */
+.settings-page {
+  padding: 120px 0 60px;
+  min-height: 100vh;
+}
+
+.page-title {
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+  color: var(--text-color);
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 20px;
+}
+
+.settings-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+}
+
+.settings-card {
+  border-radius: 16px;
+  padding: 25px;
+  backdrop-filter: blur(10px);
+}
+
+.full-width { grid-column: 1 / -1; }
+
+/* Filter Buttons */
+.theme-filters {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 25px;
+  background: rgba(0,0,0,0.2);
+  padding: 5px;
+  border-radius: 10px;
+  width: fit-content;
+}
+
+.filter-btn {
+  padding: 8px 20px;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.filter-btn.active {
+  background: var(--primary);
+  color: white;
+}
+
+/* Theme Grid */
+.theme-selection-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 20px;
+}
+
+.theme-option {
+  cursor: pointer;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 2px solid transparent;
+  transition: transform 0.3s ease;
+  background: rgba(0,0,0,0.2);
+}
+
+.theme-option:hover { transform: translateY(-5px); }
+
+.theme-option.selected-theme {
+  border-color: var(--primary);
+  box-shadow: 0 0 15px var(--primary);
+}
+
+.theme-preview { height: 100px; width: 100%; position: relative; }
+
+.theme-info {
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.9rem;
+  color: var(--text-color);
+}
+
+.theme-info .active-icon { opacity: 0; color: var(--primary); }
+.selected-theme .theme-info .active-icon { opacity: 1; }
+
+.hidden-theme { display: none; }
+
+/* Language List */
+.language-list { display: flex; flex-direction: column; gap: 10px; }
+
+.lang-item {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 8px;
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+
+.lang-item.active-lang {
+  border-color: var(--primary);
+  background: rgba(99, 102, 241, 0.1);
+}
+
+.lang-item img { width: 25px; border-radius: 4px; margin-inline-end: 15px; } /* Margin-inline-end handles RTL automatically */
+.lang-item span { flex-grow: 1; }
+.lang-item .fa-check { opacity: 0; color: var(--primary); }
+.lang-item.active-lang .fa-check { opacity: 1; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+/* This ensures icons follow the text color variable */
+i, .fas, .fab {
+  color: var(--text-color);
+}
+
+/* This ensures links follow the text color variable unless they are buttons */
+a {
+  color: var(--text-color);
+}
+
+/* Optional: Make borders more visible in High Contrast */
+.settings-card, .feature-card, .news-card-slide {
+  border: 1px solid var(--border-color);
+}
+
 /* Modal Styles */
 /* --- Modal Overlay (The Blured Background) --- */
 .modal-overlay {
@@ -2962,11 +3178,19 @@ body {
     max-width: 500px;
     padding: 25px; 
     border-radius: 15px;
-    box-shadow: 0 10px 30px rgb(255, 0, 0);
+    box-shadow: 0 10px 30px rgb(81, 0, 135);
     display: flex;
     flex-direction: column;
+    transform: translateY(0);
+    transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1),
+                box-shadow 0.3s ease;
 }
-
+.modal-content:hover {
+    box-shadow: 0 10px 30px rgb(255, 0, 0);
+    transition: all 0.3s ease;
+    transform: translateY(-15px);
+    transition: all 0.3s ease-out;
+}
 /* --- Text Visibility Fixes --- */
 .modal-content h2 {
     color: rgb(255, 255, 255) !important;
@@ -3025,4 +3249,157 @@ body {
 
 .close-x-btn:hover {
     transform: scale(1.1);
+    box-shadow: 0 0 15px rgb(255, 0, 0);
+
+}
+.modal-header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(0,0,0);
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+}
+
+/* Wrapper to hold the Icon and Select together */
+.lang-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+/* The Globe Icon styling */
+.lang-icon {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: rgb(255, 255, 255);
+    pointer-events: none; /* Allows clicking through the icon */
+    z-index: 1;
+}
+
+/* The Select Dropdown styling */
+.modal-lang-select {
+    appearance: none; /* Removes default ugly browser arrow */
+    -webkit-appearance: none;
+    padding: 8px 30px 8px 35px; /* Left padding makes room for the icon */
+    border-radius: 20px; /* Pill shape */
+    border: 2px solid rgba(0,0,0);
+    background-color: rgb(102, 0, 255);
+    color: rgba(255, 255, 255);
+    font-weight: bold;
+    font-family: inherit; /* Inherit site font */
+    cursor: pointer;
+    outline: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 30px rgb(111, 0, 255);
+    z-index: 2;
+}
+
+.modal-lang-select:hover {
+    appearance: none; /* Removes default ugly browser arrow */
+    -webkit-appearance: none;
+    padding: 8px 30px 8px 35px; /* Left padding makes room for the icon */
+    border-radius: 20px; /* Pill shape */
+    border: 2px solid rgba(0,0,0);
+    background-color: rgb(102, 0, 255);
+    color: rgba(255, 255, 255);
+    font-weight: bold;
+    font-family: inherit; /* Inherit site font */
+    cursor: pointer;
+    outline: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 30px rgb(255, 0, 0);
+    z-index: 2;
+}
+
+/* Custom Arrow indicator on the right */
+.lang-wrapper::after {
+    content: '\f0d7'; /* FontAwesome Down Arrow Unicode */
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: rgba(255, 255, 255);
+    pointer-events: none;
+    font-size: 0.8rem;
+}
+/* Hide the default browser checkbox */
+.real-checkbox {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+/* The Container */
+.check-container {
+    display: flex;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+    font-size: 16px;
+    user-select: none;
+    gap: 12px;
+}
+/* The Custom Box */
+.custom-checkbox {
+    height: 20px;
+    width: 20px;
+    background-color: rgba(255, 255, 255);
+    border: 2px solid var(--border-color);
+    border-radius: 6px; /* Soft rounded corners */
+    position: relative;
+    transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+/* Hover effect on the box */
+.check-container:hover .custom-checkbox {
+    border-color: rgb(255, 0, 0);
+    box-shadow: 0 0 8px rgb(81, 0, 161);
+}
+
+/* Checked state: Background changes to Primary */
+.real-checkbox:checked + .custom-checkbox {
+    background-color: var(--primary);
+    border-color: var(--primary);
+}
+
+/* Create the checkmark (hidden by default) */
+.custom-checkbox:after {
+    content: "";
+    position: absolute;
+    display: none;
+    left: 6px;
+    top: 2px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+/* Show checkmark when checked */
+.real-checkbox:checked + .custom-checkbox:after {
+    display: block;
+}
+
+/* Disabled state (for your scroll-to-read logic) */
+.real-checkbox:disabled + .custom-checkbox {
+    opacity: 0.4;
+    cursor: not-allowed;
+    filter: grayscale(1);
+}
+
+.label-text {
+    color: var(--text-color);
+    font-weight: 500;
+    transition: opacity 0.3s;
+}
+
+.real-checkbox:disabled ~ .label-text {
+    opacity: 0.5;
 }
