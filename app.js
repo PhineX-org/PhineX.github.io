@@ -858,65 +858,7 @@ searchInput.addEventListener('keypress', (e) => {
     }
 });
 
-const themesData = {
-  // --- DARK THEMES (Full White Text/Icons) ---
-  'light-contrast-dark': {
-    '--bg-color': '#1a1a2e',
-    '--card-bg': '#24243e',
-    '--text-color': '#ffffff', // Full White
-    '--text-muted': '#ffffff', // Full White
-    '--primary': '#818cf8',    // Brighter Indigo
-    '--nav-bg': '#161625',
-    '--border-color': '#4a4a6a'
-  },
-  'mid-contrast-dark': {
-    '--bg-color': '#0f0f1a',
-    '--card-bg': '#161625',
-    '--text-color': '#ffffff', // Full White
-    '--text-muted': '#ffffff', // Full White
-    '--primary': '#6366f1',
-    '--nav-bg': '#0a0a12',
-    '--border-color': '#ffffff' // White borders for visibility
-  },
-  'high-contrast-dark': {
-    '--bg-color': '#000000',
-    '--card-bg': '#000000',
-    '--text-color': '#ffffff', // Full White
-    '--text-muted': '#ffffff', // Full White
-    '--primary': '#ffff00',    // Neon Yellow
-    '--nav-bg': '#000000',
-    '--border-color': '#ffffff'
-  },
 
-  // --- LIGHT THEMES (Full Black Text/Icons) ---
-  'low-contrast-light': {
-    '--bg-color': '#e5e7eb !important',      // Distinguishable Greyish-White
-    '--card-bg': '#d1d5db !important',      // Slightly darker cards for depth
-    '--text-color': '#000000 !important',    // Absolute Black Text
-    '--text-muted': '#000000ff !important',    // Very Dark Grey for secondary text
-    '--primary': '#00008b !important',       // Deep Dark Blue Icons
-    '--nav-bg': '#f3f4f6  !important;',       // Light Grey Nav
-    '--border-color': '#9ca3af !important'   // Visible Grey Borders
-  },
-  'mid-contrast-light': {
-    '--bg-color': '#f9fafb',      // Soft Off-White
-    '--card-bg': '#ffffff',      // Pure White Cards
-    '--text-color': '#000000',    // Absolute Black Text
-    '--text-muted': '#000000',    // Absolute Black Muted Text
-    '--primary': '#00008b',       // Deep Dark Blue Icons
-    '--nav-bg': '#f9fafb',
-    '--border-color': '#4b5563'   // Stronger Borders
-  },
-  'full-contrast-light': {
-    '--bg-color': '#ffffff',      // Pure White Background
-    '--card-bg': '#ffffff',      // Pure White Cards
-    '--text-color': '#000000',    // Absolute Black Text
-    '--text-muted': '#000000',    // Absolute Black Muted Text
-    '--primary': '#00008b',       // Deep Dark Blue Icons
-    '--nav-bg': '#ffffff',
-    '--border-color': '#000000'   // Sharp Black Borders
-  }
-};
 const translations = {
   
   // --- ENGLISH ---
@@ -1113,13 +1055,6 @@ const translations = {
 
 function applySettings() {
   const lang = localStorage.getItem('phinex-lang') || 'en';
-  const theme = localStorage.getItem('phinex-theme') || 'default-dark';
-
-  // Apply Theme
-  const root = document.documentElement;
-  if(globalThemes[theme]) {
-    Object.entries(globalThemes[theme]).forEach(([prop, val]) => root.style.setProperty(prop, val));
-  }
 
   // Apply Language
   document.documentElement.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
@@ -1136,4 +1071,5 @@ function applySettings() {
 }
 
 window.addEventListener('DOMContentLoaded', applySettings);
+
 
