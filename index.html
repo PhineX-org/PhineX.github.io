@@ -15,67 +15,98 @@
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
 </head>
 <body>
-<!-- Navigation -->
+  <!-- Navigation -->
 <nav class="navbar">
   <div class="nav-container">
     <div class="logo">
       <i class="fas fa-dragon"></i>
       <span>PhineX</span>
-    </div>
-    <ul class="nav-menu" id="primary-navigation">
-      <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
-      <li><a href="hiring.html"><i class="fas fa-laptop-code"></i> Join Us</a></li>
-      <li><a href="x-academy.html"><i class="fas fa-graduation-cap"></i> X-Academy</a></li>
-      <li><a href="aboutus.html"><i class="fas fa-info-circle"></i> About Us</a></li>
-      <li><a href="bugreport.html"><i class="fas fa-exclamation-triangle"></i> Report Error</a></li>
-      <li><a href="redeemcode.html"><i class="fas fa-key"></i> Redeem Code</a></li>
-      <li><button id="logoutBtn" class="btn-outline hidden">Logout</button></li>
-    </ul>
-  </div>
-</nav>
-<section class="search-section" id="search-section">
-  <div class="container">
-    <div class="search-box">
       <div class="input-wrapper">
-        <i class="fas fa-search search-icon"></i>
-        <input type="text" id="mainSearch" placeholder="Search PhineX projects, news, or tutorials..." autocomplete="off">
+        <i class="fas fa-search search-icon" id="searchSubmit" style="cursor: pointer;"></i>
+        <input type="text" id="mainSearch" placeholder="Search PhineX projects..." autocomplete="off">
         <div id="predictionList" class="prediction-list"></div>
       </div>
-      <div class="search-recommendations">
-        <span>Try:</span>
-        <button onclick="fillSearch('X-Academy')">X-Academy</button>
-        <button onclick="fillSearch('EG Portfolio')">EG Portfolio</button>
-        <button onclick="fillSearch('Join Us')">Join Us</button>
-        <button onclick="fillSearch('JavaScript')">JavaScript</button>
-        <button onclick="fillSearch('X-Academy test')">X-Academy test</button>
-        <button onclick="fillSearch('X-Developers')">X-Developers</button>
-        <button onclick="fillSearch('PhineX')">PhineX</button>
-        <button onclick="fillSearch('Projects')">Projects</button>
-        <button onclick="fillSearch('News')">News</button>
+      <ul class="nav-menu" id="primary-navigation">
+        <li><a href="hiring.html"><i class="fas fa-laptop-code"></i> <span data-i18n="nav_join">Join Us</span></a></li>
+        <li><a href="x-academy.html"><i class="fas fa-graduation-cap"></i> <span data-i18n="nav_academy">X-Academy</span></a></li>
+        <li><a href="bugreport.html"><i class="fas fa-bug"></i> <span data-i18n="nav_bug">Report Bug</span></a></li>
+        <li><a href="redeemcode.html"><i class="fas fa-gift"></i> <span data-i18n="nav_redeem">Redeem Code</span></a></li>
+        <li><a href="settings.html"><i class="fas fa-gear"></i> <span data-i18n="nav_settings">Settings</span></a></li>
+        <li><a href="aboutus.html"><i class="fas fa-info-circle"></i> <span data-i18n="nav_about">About Us</span></a></li>
+        <li><button id="logoutBtn" class="btn-outline hidden" data-i18n="nav_logout">Logout</button></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<section class="news-section slider-context">
+  <div class="container">
+    <div class="slider-container">
+      <div class="news-slider" id="news-container">
+        
+        <div class="news-card-slide">
+          <img src="P-Tech.png" alt="New Project">
+          <div class="news-content-box">
+            <h3 class="slide-title" data-i18n="slide1_title">EG Portfolio</h3>
+            <p class="slide-description" data-i18n="slide1_desc">PhineX has deployed a new web-site showcase with advanced UI/UX designs.</p>
+            <a href="https://ahmedelgoharymessi-dot.github.io/Portfolio.github.io/" class="btn-primary slide-btn">
+              <span data-i18n="slide1_btn">View Live</span> <i class="fas fa-eye"></i>
+            </a>
+          </div>
+        </div>
+
+        <div class="news-card-slide">
+          <img src="X-Developers.png" alt="X-Developers">
+          <div class="news-content-box">
+            <h3 class="slide-title" data-i18n="slide2_title">Join X-Developers</h3>
+            <p class="slide-description" data-i18n="slide2_desc">Collaborate with senior devs and earn money on global projects.</p>
+            <div class="btn-group">
+              <a href="hiring.html" class="btn-primary slide-btn" data-i18n="slide2_btn1">Join Team</a>
+              <a href="redeemcode.html" class="btn-secondary slide-btn">
+                <span data-i18n="slide2_btn2">Redeem Code</span> <i class="fas fa-gift"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="news-card-slide">
+          <img src="Tech.png" alt="PhineX Update">
+          <div class="news-content-box">
+            <h3 class="slide-title" data-i18n="slide3_title">X-Academy</h3>
+            <p class="slide-description" data-i18n="slide3_desc">Randomized testing and live timers are now active for all students.</p>
+            <a href="x-academy.html" class="btn-primary slide-btn">
+              <span data-i18n="slide3_btn">Start Learning</span> <i class="fas fa-graduation-cap"></i>
+            </a>
+          </div>
+        </div>
+
+        <div class="news-card-slide">
+          <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=2070" alt="Support">
+          <div class="news-content-box">
+            <h3 class="slide-title" data-i18n="slide4_title">Found a Bug?</h3>
+            <p class="slide-description" data-i18n="slide4_desc">Help us improve the PhineX ecosystem by reporting errors to our dev team.</p>
+            <a href="bugreport.html" class="btn-secondary slide-btn">
+              <span data-i18n="slide4_btn">Report Error</span> <i class="fas fa-bug"></i>
+            </a>
+          </div>
+        </div>
+
+        <div class="news-card-slide">
+          <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=2070" alt="About Us">
+          <div class="news-content-box">
+            <h3 class="slide-title" data-i18n="slide5_title">Who we are</h3>
+            <p class="slide-description" data-i18n="slide5_desc">Discover the vision behind PhineX and our mission for 2026.</p>
+            <a href="aboutus.html" class="btn-primary slide-btn">
+              <span data-i18n="slide5_btn">About Us</span> <i class="fas fa-info-circle"></i>
+            </a>
+          </div>
+        </div>
+
       </div>
     </div>
   </div>
 </section>
 
-<div id="searchInfo" class="search-info container"></div>
-  <!-- Hero Section -->
-  <section class="hero" style="background-image: url('Phinex.png'); background-size: cover; background-position: center;">
-    <div class="redeem-icon">
-      <i class="fas fa-home"></i>
-    </div>
-    <div class="hero-content">
-      <h1>Welcome to <span class="gradient-text">PhineX</span></h1>
-      <p>Your gateway to innovation, learning, and opportunities in the programming world.</p>
-      <div class="hero-buttons">
-        <a href="x-academy.html" class="btn-primary" id="joinAcademyBtn">
-          <i class="fas fa-graduation-cap"></i> Join X-Academy
-        </a>
-        <a href="hiring.html" class="btn-secondary">
-          <i class="fas fa-briefcase"></i> Join Our Team
-        </a>
-      </div>
-    </div>
-  </section>
   <!-- Features Section -->
   <section class="features">
     <div class="container">
@@ -125,61 +156,6 @@
           Explore Project <i class="fas fa-external-link-alt"></i>
         </a>
       </div>
-    </div>
-  </div>
-</section>
-  <section class="news-section">
-  <div class="container">
-    <h2 class="section-title"><i class="fas fa-newspaper"></i> PhineX News</h2>
-    <div class="news-grid" id="news-container">
-      
-      <div class="news-card">
-        <img src="EG-portfolio.png" alt="New Project">
-        <div class="news-overlay">
-          <span class="news-tag">EG Portfilo project</span>
-          <h3>New Project</h3>
-          <p>PhineX has deployed a new web-site.</p>
-          <a href="#projects-section" class="read-btn">More Details</a>
-        </div>
-      </div>
-
-      <div class="news-card">
-        <img src="EG-portfolio.png" alt="Coding">
-        <div class="news-overlay">
-          <span class="news-tag">PhineX's First project</span>
-          <h3>1st project launched</h3>
-          <p>On 18-12-2025 PhineX has launched the "EG Portfolio" project to be the first project to the group.</p>
-          <a href="#projects-section" class="read-btn">More Details</a>
-        </div>
-      </div>
-
-      <div class="news-card hidden-news">
-        <img src="Phinex - Copy2.png" alt="PhineX">
-        <div class="news-overlay">
-          <span class="news-tag">PhineX updates the test system</span>
-          <h3>The new system information</h3>
-          <p>PhineX has updated the test system to be more user-friendly and easier to use for everyone ,<strong>A Timer was added to the test system</strong> and the questions are now randomized from 300 questions but don't worry , <strong>10 Questions</strong> only are the test questions, so this makes 1/30 chance of appearing same question to you.</p>
-          <a href="x-academy-pretest.html" class="read-btn">More</a>
-        </div>
-      </div>
-
-      <div class="news-card">
-  <div class="card-icon-bg">
-    <img src="https://www.svgrepo.com/show/65949/search.svg" alt="search-icon">
-  </div>
-  
-  <div class="news-overlay">
-    <span class="news-tag">New Search Engine!</span>
-    <h3>New search bar is available.</h3>
-    <p>PhineX has integrated a wide-style search engine for faster navigation.</p>
-    <a href="#search-section" class="read-btn">More</a>
-  </div>
-</div>
-    
-    <div style="text-align: center; margin-top: 40px;">
-      <button id="loadMoreBtn" class="btn-primary" onclick="loadMoreNews()">
-        <i class="fas fa-plus-circle"></i> Load More News
-      </button>
     </div>
   </div>
 </section>
@@ -250,7 +226,7 @@
     }
 
     /* small-screen layout: hide nav-menu by default, show toggle */
-    @media (max-width: 900px) {
+    @media (max-width: 2900px) {
       .menu-toggle { display: inline-flex; align-items: center; justify-content: center; }
 
       .nav-menu {
@@ -325,7 +301,8 @@
         }
       });
     })();
-     // ===== WELCOME MODAL INTERACTIONS =====
+    
+    // ===== WELCOME MODAL INTERACTIONS =====
 document.addEventListener('DOMContentLoaded', () => {
     const modalBody = document.getElementById('modalBody');
     const readCheck = document.getElementById('readCheck');
@@ -473,5 +450,3 @@ function applyLanguage(lang) {
 </div>
 </body>
 </html>
-
-
