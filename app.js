@@ -884,7 +884,7 @@ const translations = {
     'coming_soon_btn': 'Check Back Later',
     'modal_title': 'Up Coming Update',
     'modal_intro': 'New features are coming soon!',
-    'modal_huge': '<strong>Huge improvements</strong> are on the way on our <strong>largest update ever!</strong>',
+    'modal_huge': 'Huge improvements are on the way on our largest update ever!',
     'modal_include': 'The New feautures include:',
     'li_settings': 'settings section :',
     'li_themes': 'themes list (light and dark)',
@@ -900,7 +900,9 @@ const translations = {
     'modal_or': 'Or',
     'btn_discord': 'Our Discord Server',
     'modal_info': 'for more information.',
-    'modal_read_confirm': 'I have read this message'
+    'modal_read_confirm': 'I have read this message',
+    'update_error': 'Note: Many errors have occurred due to the last update, but it functionally works perfectly.'
+  },
   },
   // --- ARABIC ---
   'ar': {
@@ -919,7 +921,7 @@ const translations = {
     'footer_copy': 'جميع الحقوق محفوظة.', 'footer_made': 'صنع بـ','coming_soon': 'قريباً!', 'coming_soon_desc': 'هذه الميزة قيد الإعداد حالياً.', 'coming_soon_btn': 'تحقق لاحقاً',
     'modal_title': 'تحديث قادم',
     'modal_intro': 'ميزات جديدة قادمة قريباً!',
-    'modal_huge': '<strong>تحسينات ضخمة</strong> في طريقها إليكم في <strong>أكبر تحديث لنا على الإطلاق!</strong>',
+    'modal_huge': 'تحسينات ضخمة في طريقها إليكم في أكبر تحديث لنا على الإطلاق!',
     'modal_include': 'تشمل الميزات الجديدة:',
     'li_settings': 'قسم الإعدادات :',
     'li_themes': 'قائمة السمات (فاتح وداكن)',
@@ -929,19 +931,21 @@ const translations = {
     'li_news': 'قسم آخر الأخبار',
     'li_projects': 'قسم المشاريع يعرض جميع المشاريع التي قمنا بها',
     'li_more': 'وأكثر من ذلك بكثير...',
-    'modal_date': 'سيصدر التحديث حوالي <strong>مايو 2026 - يوليو 2026.</strong>',
+    'modal_date': 'سيصدر التحديث حوالي مايو 2026 - يوليو 2026.',
     'modal_check': 'تحقق من',
     'btn_facebook': 'صفحة الفيسبوك',
     'modal_or': 'أو',
     'btn_discord': 'سيرفر الديسكورد',
     'modal_info': 'لمزيد من المعلومات.',
     'modal_read_confirm': 'لقد قرأت هذه الرسالة'
+    'update_error': 'ملاحظة: حدثت العديد من الأخطاء بسبب التحديث الأخير، لكن النظام يعمل بشكل مثالي من الناحية الوظيفية.'
+  },
   },
   // --- SPANISH ---
   'es': {
     'modal_title': 'Próxima Actualización',
     'modal_intro': '¡Nuevas características llegarán pronto!',
-    'modal_huge': '¡<strong>Mejoras enormes</strong> están en camino en nuestra <strong>actualización más grande!</strong>',
+    'modal_huge': '¡Mejoras enormes están en camino en nuestra actualización más grande!',
     'modal_include': 'Las nuevas características incluyen:',
     'li_settings': 'sección de ajustes :',
     'li_themes': 'lista de temas (claro y oscuro)',
@@ -951,20 +955,22 @@ const translations = {
     'li_news': 'Sección de últimas noticias',
     'li_projects': 'La sección de proyectos muestra todo lo que hemos creado',
     'li_more': 'Y mucho más...',
-    'modal_date': 'La actualización saldrá alrededor de <strong>Mayo 2026 - Julio 2026.</strong>',
+    'modal_date': 'La actualización saldrá alrededor de <strong>Mayo 2026 - Julio 2026.',
     'modal_check': 'Visita nuestra',
     'btn_facebook': 'Página de Facebook',
     'modal_or': 'O',
     'btn_discord': 'Nuestro Servidor de Discord',
     'modal_info': 'para más información.',
-    'modal_read_confirm': 'He leído este mensaje'
+    'modal_read_confirm': 'He leído este mensaje',
+    'update_error': 'Nota: Han ocurrido muchos errores debido a la última actualización, pero funcionalmente funciona a la perfección.'
+  },
   },
 
   // --- FRENCH ---
   'fr': {
     'modal_title': 'Mise à jour à venir',
     'modal_intro': 'De nouvelles fonctionnalités arrivent bientôt !',
-    'modal_huge': 'D\'<strong>énormes améliorations</strong> sont en route pour notre <strong>plus grande mise à jour !</strong>',
+    'modal_huge': 'D\'énormes améliorations sont en route pour notre plus grande mise à jour !',
     'modal_include': 'Les nouvelles fonctionnalités incluent :',
     'li_settings': 'section paramètres :',
     'li_themes': 'liste des thèmes (clair et sombre)',
@@ -974,20 +980,21 @@ const translations = {
     'li_news': 'Section des dernières nouvelles',
     'li_projects': 'La section projets présente tout ce que nous avons réalisé',
     'li_more': 'Et bien plus encore...',
-    'modal_date': 'La mise à jour sortira vers <strong>Mai 2026 - Juillet 2026.</strong>',
+    'modal_date': 'La mise à jour sortira vers Mai 2026 - Juillet 2026.',
     'modal_check': 'Consultez notre',
     'btn_facebook': 'Page Facebook',
     'modal_or': 'Ou',
     'btn_discord': 'Notre Serveur Discord',
     'modal_info': 'pour plus d\'informations.',
-    'modal_read_confirm': 'J\'ai lu ce message'
+    'modal_read_confirm': 'J\'ai lu ce message',
+    'update_error': 'Note : De nombreuses erreurs se sont produites à cause de la dernière mise à jour, mais le système fonctionne parfaitement.'
   },
 
   // --- GERMAN ---
   'de': {
     'modal_title': 'Kommendes Update',
     'modal_intro': 'Neue Funktionen kommen bald!',
-    'modal_huge': '<strong>Riesige Verbesserungen</strong> sind auf dem Weg in unserem <strong>größten Update aller Zeiten!</strong>',
+    'modal_huge': 'Riesige Verbesserungen sind auf dem Weg in unserem größten Update aller Zeiten!',
     'modal_include': 'Die neuen Funktionen beinhalten:',
     'li_settings': 'Einstellungsbereich :',
     'li_themes': 'Themenliste (hell und dunkel)',
@@ -997,20 +1004,21 @@ const translations = {
     'li_news': 'Bereich für aktuelle Nachrichten',
     'li_projects': 'Projektbereich zeigt alle unsere Projekte',
     'li_more': 'Und vieles mehr...',
-    'modal_date': 'Das Update erscheint etwa <strong>Mai 2026 - Juli 2026.</strong>',
+    'modal_date': 'Das Update erscheint etwa Mai 2026 - Juli 2026.',
     'modal_check': 'Besuchen Sie unsere',
     'btn_facebook': 'Facebook Seite',
     'modal_or': 'Oder',
     'btn_discord': 'Unser Discord Server',
     'modal_info': 'für weitere Informationen.',
-    'modal_read_confirm': 'Ich habe diese Nachricht gelesen'
+    'modal_read_confirm': 'Ich habe diese Nachricht gelesen',
+   'update_error': 'Hinweis: Aufgrund des letzten Updates sind viele Fehler aufgetreten, aber funktionell arbeitet es perfekt.'
   },
 
   // --- ITALIAN ---
   'it': {
     'modal_title': 'Prossimo Aggiornamento',
     'modal_intro': 'Nuove funzionalità in arrivo!',
-    'modal_huge': '<strong>Enormi miglioramenti</strong> sono in arrivo nel nostro <strong>più grande aggiornamento di sempre!</strong>',
+    'modal_huge': 'Enormi miglioramenti sono in arrivo nel nostro più grande aggiornamento di sempre!',
     'modal_include': 'Le nuove funzionalità includono:',
     'li_settings': 'sezione impostazioni :',
     'li_themes': 'elenco temi (chiaro e scuro)',
@@ -1020,20 +1028,21 @@ const translations = {
     'li_news': 'Sezione ultime notizie',
     'li_projects': 'La sezione progetti mostra tutto ciò che abbiamo creato',
     'li_more': 'E molto altro...',
-    'modal_date': 'L\'aggiornamento uscirà circa a <strong>Maggio 2026 - Luglio 2026.</strong>',
+    'modal_date': 'L\'aggiornamento uscirà circa a Maggio 2026 - Luglio 2026.',
     'modal_check': 'Dai un\'occhiata alla nostra',
     'btn_facebook': 'Pagina Facebook',
     'modal_or': 'O',
     'btn_discord': 'Nostro Server Discord',
     'modal_info': 'per maggiori informazioni.',
-    'modal_read_confirm': 'Ho letto questo messaggio'
+    'modal_read_confirm': 'Ho letto questo messaggio',
+    'update_error': 'Nota: Si sono verificati molti errori a causa dell\'ultimo aggiornamento, ma funzionalmente funziona perfettamente.'
   },
 
   // --- PORTUGUESE ---
   'pt': {
     'modal_title': 'Próxima Atualização',
     'modal_intro': 'Novos recursos em breve!',
-    'modal_huge': '<strong>Enormes melhorias</strong> estão a caminho na nossa <strong>maior atualização de sempre!</strong>',
+    'modal_huge': 'Enormes melhorias estão a caminho na nossa maior atualização de sempre!',
     'modal_include': 'Os novos recursos incluem:',
     'li_settings': 'seção de configurações :',
     'li_themes': 'lista de temas (claro e escuro)',
@@ -1043,13 +1052,14 @@ const translations = {
     'li_news': 'Seção de últimas notícias',
     'li_projects': 'A seção de projetos mostra tudo o que criamos',
     'li_more': 'E muito mais...',
-    'modal_date': 'A atualização sairá por volta de <strong>Maio 2026 - Julho 2026.</strong>',
+    'modal_date': 'A atualização sairá por volta de Maio 2026 - Julho 2026.',
     'modal_check': 'Confira nossa',
     'btn_facebook': 'Página do Facebook',
     'modal_or': 'Ou',
     'btn_discord': 'Nosso Servidor Discord',
     'modal_info': 'para mais informações.',
-    'modal_read_confirm': 'Eu li esta mensagem'
+    'modal_read_confirm': 'Eu li esta mensagem',
+    'update_error': 'Nota: Ocorreram muitos erros devido à última atualização, mas funcionalmente funciona perfeitamente.'
   }
 };
 
@@ -1071,5 +1081,6 @@ function applySettings() {
 }
 
 window.addEventListener('DOMContentLoaded', applySettings);
+
 
 
