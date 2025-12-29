@@ -325,6 +325,82 @@
         }
       });
     })();
+     // ===== WELCOME MODAL INTERACTIONS =====
+document.addEventListener('DOMContentLoaded', () => {
+    const modalBody = document.getElementById('modalBody');
+    const readCheck = document.getElementById('readCheck');
+    const closeModalBtn = document.getElementById('closeModalBtn');
+    const welcomeModal = document.getElementById('welcomeModal');
+
+    // 1. Detect if user scrolled to the bottom
+    modalBody.onscroll = function() {
+        // If (scrolled amount + visible height) >= total height
+        if (modalBody.offsetHeight + modalBody.scrollTop >= modalBody.scrollHeight - 5) {
+            readCheck.disabled = false;
+        }
+    };
+
+    // 2. Detect if checkbox is checked to show X button
+    readCheck.addEventListener('change', () => {
+        if (readCheck.checked) {
+            closeModalBtn.style.display = 'block';
+        } else {
+            closeModalBtn.style.display = 'none';
+        }
+    });
+
+    // 3. Close modal function
+    closeModalBtn.onclick = () => {
+        welcomeModal.style.display = 'none';
+        // Optional: Save to localStorage so it doesn't appear every time
+        localStorage.setItem('phinex_welcome_read', 'true');
+    };
+
+});
   </script>
+  <!-- Welcome Modal -->
+ <div id="welcomeModal" class="modal-overlay">
+    <div class="modal-content">
+        <h2 data-i18n="modal_title">Up Coming Update <i class="fas fa-exclamation-triangle"></i></h2>
+        
+        <div class="modal-body" id="modalBody">
+            <p style="margin-bottom: 20px;">New features are coming soon!</p>
+            <p style="margin-bottom: 15px;"><strong>Huge improvements</strong> are on the way on our <strong>largest update ever!</strong></p>
+            <p style="margin-bottom: 10px;">The New feautures include:</p>
+            <ol>
+                <li style="margin-bottom: 7px;"><strong>settings section :</strong><i class="fas fa-cog" style="margin-left: 10px;"></i></li>
+                <li style="margin-bottom: 7px;"><strong>themes list (light and dark)</strong><i class="fas fa-palette" style="margin-left: 10px;"></i></li>
+                <li style="margin-bottom: 7px;"><strong>New languages list</strong><i class="fas fa-language" style="margin-left: 10px;"></i></li>
+                <li style="margin-bottom: 20px;"><strong>English - Arabic - Spanish - French - German - Italian - Portuguese</strong></li>
+                <li style="margin-bottom: 20px;"><strong>Improvements in the search engine</strong><i class="fas fa-search" style="margin-left: 10px;"></i></li>
+                <li style="margin-bottom: 20px;"><strong>Lastest news section</strong><i class="fas fa-newspaper" style="margin-left: 10px;"></i></li>
+                <li style="margin-bottom: 7px;"><strong>Projects section previews all project we have made</strong><i class="fas fa-external-link-alt" style="margin-left: 10px;"></i></li>
+                <li style="margin-bottom: 7px;">And much more...</li>
+            </ol>
+            <p>The update will come out about <strong>May 2026 - July 2026.</strong></p>
+            <p>Check out our</p>
+            <p><a href="https://www.facebook.com/profile.php?id=61584765330775" class="btn-facebooklink"><i class="fab fa-facebook" style="margin-right: 10px;"></i>Facebook Page</a></p>
+            <p>
+              Or 
+            </p>
+            <p>
+                <a href="https://discord.gg/V2NDkCmhEm" class="btn-facebooklink"><i class="fab fa-discord" style="margin-right: 10px;"></i>Our Discord Server</a>
+            </p>
+            <p>
+              for more information.
+            </p>
+        </div>
+
+        <div class="modal-footer">
+            <label class="check-container">
+                <input type="checkbox" id="readCheck" disabled>
+                <span class="checkmark"></span>
+                <span data-i18n="modal_check">I have read this message</span>
+            </label>
+            <button id="closeModalBtn" class="close-x-btn">&times;</button>
+        </div>
+    </div>
+</div>
 </body>
 </html>
+
