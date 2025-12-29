@@ -357,50 +357,121 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
 });
+function applyLanguage(lang) {
+    const t = translations[lang];
+    if (!t) return;
+
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (t[key]) {
+            // Use innerHTML so <strong> tags work
+            el.innerHTML = t[key]; 
+            
+            // Handle placeholders for inputs if necessary
+            if (el.tagName === 'INPUT') {
+                el.placeholder = t[key].replace(/<[^>]*>?/gm, ''); // Strip HTML for placeholder
+            }
+        }
+    });
+
+    // Handle RTL for Arabic
+    document.documentElement.dir = (lang === 'ar') ? 'rtl' : 'ltr';
+    document.documentElement.lang = lang;
+    
+    // Save preference
+    localStorage.setItem('phinex_lang', lang);
+
+    // Sync the dropdown if it exists
+    const selector = document.querySelector('.modal-lang-select');
+    if(selector) selector.value = lang;
+}
   </script>
-  <!-- Welcome Modal -->
- <div id="welcomeModal" class="modal-overlay">
+<div id="welcomeModal" class="modal-overlay">
     <div class="modal-content">
-        <h2 data-i18n="modal_title">Up Coming Update <i class="fas fa-exclamation-triangle"></i></h2>
+        
+        <div class="modal-header-top">
+    <h2 data-i18n="modal_title">Up Coming Update <i class="fas fa-exclamation-triangle"></i></h2>
+    
+    <div class="lang-wrapper">
+        <i class="fas fa-globe lang-icon"></i>
+        <select class="modal-lang-select" onchange="applyLanguage(this.value)">
+            <option value="en"><img src="https://flagcdn.com/w40/us.png" alt="English" class="img"> English</option>
+            <option value="ar"><img src="https://flagcdn.com/w40/ar.png" alt="Arabic" class="icon"> العربية</option>
+            <option value="es"><img src="https://flagcdn.com/w40/es.png" alt="Spanish" class="icon"> Español</option>
+            <option value="fr"><img src="https://flagcdn.com/w40/fr.png" alt="French" class="icon"> Français</option>
+            <option value="de"><img src="https://flagcdn.com/w40/de.png" alt="German" class="icon"> Deutsch</option>
+            <option value="it"><img src="https://flagcdn.com/w40/it.png" alt="Italian" class="icon"> Italiano</option>
+            <option value="pt"><img src="https://flagcdn.com/w40/pt.png" alt="Portuguese" class="icon"> Português</option>
+        </select>
+    </div>
+</div>
         
         <div class="modal-body" id="modalBody">
-            <p style="margin-bottom: 20px;">New features are coming soon!</p>
-            <p style="margin-bottom: 15px;"><strong>Huge improvements</strong> are on the way on our <strong>largest update ever!</strong></p>
-            <p style="margin-bottom: 10px;">The New feautures include:</p>
+            <p style="margin-bottom: 20px;" data-i18n="modal_intro">New features are coming soon!</p>
+            
+            <p style="margin-bottom: 15px;" data-i18n="modal_huge">
+                <strong>Huge improvements</strong> are on the way on our <strong>largest update ever!</strong>
+            </p>
+            
+            <p style="margin-bottom: 10px;" data-i18n="modal_include">The New feautures include:</p>
+            
             <ol>
-                <li style="margin-bottom: 7px;"><strong>settings section :</strong><i class="fas fa-cog" style="margin-left: 10px;"></i></li>
-                <li style="margin-bottom: 7px;"><strong>themes list (light and dark)</strong><i class="fas fa-palette" style="margin-left: 10px;"></i></li>
-                <li style="margin-bottom: 7px;"><strong>New languages list</strong><i class="fas fa-language" style="margin-left: 10px;"></i></li>
-                <li style="margin-bottom: 20px;"><strong>English - Arabic - Spanish - French - German - Italian - Portuguese</strong></li>
-                <li style="margin-bottom: 20px;"><strong>Improvements in the search engine</strong><i class="fas fa-search" style="margin-left: 10px;"></i></li>
-                <li style="margin-bottom: 20px;"><strong>Lastest news section</strong><i class="fas fa-newspaper" style="margin-left: 10px;"></i></li>
-                <li style="margin-bottom: 7px;"><strong>Projects section previews all project we have made</strong><i class="fas fa-external-link-alt" style="margin-left: 10px;"></i></li>
-                <li style="margin-bottom: 7px;">And much more...</li>
+                <li style="margin-bottom: 7px;">
+                    <strong data-i18n="li_settings">settings section :</strong><i class="fas fa-cog" style="margin-left: 10px; margin-right: 10px;"></i>
+                </li>
+                <li style="margin-bottom: 7px;">
+                    <strong data-i18n="li_themes">themes list (light and dark)</strong><i class="fas fa-palette" style="margin-left: 10px; margin-right: 10px;"></i>
+                </li>
+                <li style="margin-bottom: 7px;">
+                    <strong data-i18n="li_new_lang">New languages list</strong><i class="fas fa-language" style="margin-left: 10px; margin-right: 10px;"></i>
+                </li>
+                <li style="margin-bottom: 20px;">
+                    <strong data-i18n="li_lang_names">English - Arabic - Spanish - French - German - Italian - Portuguese</strong>
+                </li>
+                <li style="margin-bottom: 20px;">
+                    <strong data-i18n="li_search">Improvements in the search engine</strong><i class="fas fa-search" style="margin-left: 10px; margin-right: 10px;"></i>
+                </li>
+                <li style="margin-bottom: 20px;">
+                    <strong data-i18n="li_news">Lastest news section</strong><i class="fas fa-newspaper" style="margin-left: 10px; margin-right: 10px;"></i>
+                </li>
+                <li style="margin-bottom: 7px;">
+                    <strong data-i18n="li_projects">Projects section previews all project we have made</strong><i class="fas fa-external-link-alt" style="margin-left: 10px; margin-right: 10px;"></i>
+                </li>
+                <li style="margin-bottom: 7px;" data-i18n="li_more">And much more...</li>
             </ol>
-            <p>The update will come out about <strong>May 2026 - July 2026.</strong></p>
-            <p>Check out our</p>
-            <p><a href="https://www.facebook.com/profile.php?id=61584765330775" class="btn-facebooklink"><i class="fab fa-facebook" style="margin-right: 10px;"></i>Facebook Page</a></p>
+            
+            <p data-i18n="modal_date">The update will come out about <strong>May 2026 - July 2026.</strong></p>
+            
+            <p data-i18n="modal_check">Check out our</p>
+            
             <p>
-              Or 
+                <a href="https://www.facebook.com/profile.php?id=61584765330775" class="btn-facebooklink">
+                    <i class="fab fa-facebook" style="margin-left: 10px; margin-right: 10px;"></i><span data-i18n="btn_facebook">Facebook Page</span>
+                </a>
             </p>
+            
+            <p data-i18n="modal_or">Or</p>
+            
             <p>
-                <a href="https://discord.gg/V2NDkCmhEm" class="btn-facebooklink"><i class="fab fa-discord" style="margin-right: 10px;"></i>Our Discord Server</a>
+                <a href="https://discord.gg/V2NDkCmhEm" class="btn-facebooklink">
+                    <i class="fab fa-discord" style="margin-left: 10px; margin-right: 10px;"></i><span data-i18n="btn_discord">Our Discord Server</span>
+                </a>
             </p>
-            <p>
-              for more information.
-            </p>
+            
+            <p data-i18n="modal_info">for more information.</p>
         </div>
 
         <div class="modal-footer">
             <label class="check-container">
-                <input type="checkbox" id="readCheck" disabled>
-                <span class="checkmark"></span>
-                <span data-i18n="modal_check">I have read this message</span>
-            </label>
+            <input type="checkbox" id="readCheck" class="real-checkbox" disabled>
+            <span class="custom-checkbox"></span>
+            <span class="label-text" data-i18n="modal_read_confirm">I have read this message</span>
+        </label>
             <button id="closeModalBtn" class="close-x-btn">&times;</button>
         </div>
     </div>
 </div>
 </body>
 </html>
+
 
