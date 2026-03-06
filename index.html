@@ -30,7 +30,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
   <style>
     :root {
       --neon:#39ff14;--neon-dim:#39ff1440;--void:#050508;
@@ -183,49 +183,328 @@
     .reveal{opacity:0;transform:translateY(30px);transition:opacity 0.7s ease,transform 0.7s ease;}
     .reveal.visible{opacity:1;transform:translateY(0);}
     .reveal-delay-1{transition-delay:0.1s;}.reveal-delay-2{transition-delay:0.2s;}.reveal-delay-3{transition-delay:0.3s;}
-    .eljasus-btn {
-    display: inline-block;
-    padding: 16px 32px;
-    font-size: 18px;
-    font-weight: bold;
-    color: #00ffff;
-    text-decoration: none;
-    border: 2px solid #00ffff;
-    border-radius: 10px;
-    background: black;
-    letter-spacing: 1px;
-    position: relative;
-    overflow: hidden;
-    transition: 0.4s;
-    box-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff inset;
-}
-
-/* Hover glow */
-.eljasus-btn:hover {
-    color: black;
-    background: #00ffff;
-    box-shadow:
-        0 0 10px #00ffff,
-        0 0 30px #00ffff,
-        0 0 60px #00ffff;
-    transform: scale(1.08);
-}
-
-/* Animated glow pulse */
-@keyframes cyanPulse {
-    0% {
-        box-shadow: 0 0 10px #00ffff;
-    }
-    50% {
-        box-shadow: 0 0 25px #00ffff;
-    }
-    100% {
-        box-shadow: 0 0 10px #00ffff;
-    }
-}
-
+    /* ════════════════════════════════════════
+   ELJASUS BUTTON
+════════════════════════════════════════ */
 .eljasus-btn {
-    animation: cyanPulse 2s infinite;
+  --cx: 50%; --cy: 50%;
+
+  /* hover gradient colors (from screenshot) */
+  --g-left:   #00e8a2;
+  --g-mid:    #0099cc;
+  --g-right:  #3a3aff;
+  --bg:       #060e10;
+
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 11px 28px;
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+  border-radius: 999px;
+  background: var(--bg);
+  isolation: isolate;
+  transition: transform 0.3s cubic-bezier(.34,1.4,.64,1), box-shadow 0.4s;
+  animation: ej-idle 4s ease-in-out infinite;
+}
+
+/* ── Conic cursor-tracking border ── */
+.eljasus-btn .ej-border {
+  position: absolute;
+  inset: -1.5px;
+  border-radius: 999px;
+  z-index: -3;
+  background: conic-gradient(
+    from 0deg at var(--cx) var(--cy),
+    transparent 0deg,
+    rgba(0, 255, 187, 0.336) 30deg,
+    #00fbff 75deg,
+    #ffffff 90deg,
+    #1e00ff 105deg,
+    rgba(0, 54, 204, 0.769) 145deg,
+    transparent 185deg,
+    transparent 360deg
+  );
+  transition: opacity 0.4s;
+}
+
+.eljasus-btn .ej-border::after {
+  content: '';
+  position: absolute;
+  inset: 1.5px;
+  border-radius: 999px;
+  background: var(--bg);
+  transition: background 0.45s ease, box-shadow 0.45s ease;
+}
+
+/* ── Hover gradient fill (the image effect) ── */
+.eljasus-btn .ej-fill {
+  position: absolute;
+  inset: 1.5px;
+  border-radius: 999px;
+  background: linear-gradient(105deg,
+    rgba(0, 232, 162, 0.0)   0%,
+    rgba(0, 232, 162, 0.0)  50%,
+    rgba(58,  58, 255, 0.0) 100%
+  );
+  z-index: -2;
+  transition: background 0.45s ease, opacity 0.45s ease;
+  opacity: 0;
+}
+
+/* ── Radial bloom left (teal) ── */
+.eljasus-btn .ej-bloom-left {
+  position: absolute;
+  width: 80px; height: 80px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0,232,162,0.35) 0%, transparent 70%);
+  left: -10px; top: 50%;
+  transform: translateY(-50%);
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.4s;
+  pointer-events: none;
+  filter: blur(6px);
+}
+
+/* ── Radial bloom right (blue) ── */
+.eljasus-btn .ej-bloom-right {
+  position: absolute;
+  width: 80px; height: 80px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(58,58,255,0.4) 0%, transparent 70%);
+  right: -10px; top: 50%;
+  transform: translateY(-50%);
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.4s;
+  pointer-events: none;
+  filter: blur(8px);
+}
+
+/* ── Cursor inner glow ── */
+.eljasus-btn .ej-glow {
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  background: radial-gradient(
+    circle 55px at var(--cx) var(--cy),
+    rgba(0,232,162,0.10), transparent 70%
+  );
+  z-index: -2;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+/* ── Spinning dashed rings ── */
+.eljasus-btn .ej-ring1 {
+  position: absolute;
+  inset: -7px;
+  border-radius: 999px;
+  border: 1px dashed rgba(0,220,160,0.15);
+  z-index: -4;
+  animation: ej-spin 14s linear infinite;
+  pointer-events: none;
+  transition: border-color 0.4s;
+}
+
+.eljasus-btn .ej-ring2 {
+  position: absolute;
+  inset: -12px;
+  border-radius: 999px;
+  border: 1px dashed rgba(58,58,255,0.10);
+  z-index: -5;
+  animation: ej-spin 20s linear infinite reverse;
+  pointer-events: none;
+  transition: border-color 0.4s;
+}
+
+@keyframes ej-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Two orbiting particles ── */
+.ej-dot {
+  position: absolute;
+  width: 4px; height: 4px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.ej-dot1 {
+  background: #00e8a2;
+  box-shadow: 0 0 6px #00e8a2, 0 0 14px #00e8a2;
+  animation: ej-orbit1 3s linear infinite;
+}
+
+.ej-dot2 {
+  background: #0099cc;
+  box-shadow: 0 0 6px #0099cc, 0 0 14px #0099cc;
+  animation: ej-orbit1 4.5s linear infinite reverse;
+  animation-delay: -2.2s;
+}
+
+@keyframes ej-orbit1 {
+  from { transform: rotate(0deg)   translateX(calc(50% + 18px)); }
+  to   { transform: rotate(360deg) translateX(calc(50% + 18px)); }
+}
+
+/* ── Scan sweep ── */
+.eljasus-btn .ej-scan {
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.eljasus-btn .ej-scan::before {
+  content: '';
+  position: absolute;
+  left: 8%; right: 8%;
+  height: 1px;
+  background: linear-gradient(90deg,
+    transparent,
+    rgba(0,232,162,0.5) 30%,
+    rgba(255,255,255,0.95) 50%,
+    rgb(0, 221, 255) 70%,
+    transparent
+  );
+  animation: ej-sweep 2.8s ease-in-out infinite;
+}
+
+@keyframes ej-sweep {
+  0%   { top: -1px; opacity: 0; }
+  5%   { opacity: 1; }
+  95%  { opacity: 0.6; }
+  100% { top: 100%; opacity: 0; }
+}
+
+/* ── Label ── */
+.eljasus-btn .ej-label {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: rgba(0,232,162,0.85);
+  transition: color 0.4s, text-shadow 0.4s;
+  white-space: nowrap;
+  user-select: none;
+}
+
+.eljasus-btn .ej-label i {
+  font-size: 10px;
+  animation: ej-lock 6s ease-in-out infinite;
+  transition: color 0.4s;
+}
+
+@keyframes ej-lock {
+  0%,75%,100% { transform: rotate(0deg) scale(1); }
+  80%          { transform: rotate(45deg) scale(1.25); filter: drop-shadow(0 0 5px #00e8a2); }
+  88%          { transform: rotate(45deg) scale(1.0); }
+  92%          { transform: rotate(0deg) scale(1); }
+}
+
+/* glitch */
+@keyframes ej-glitch {
+  0%,85%,100% { transform: none; text-shadow: none; color: rgba(0,232,162,0.85); }
+  87% { transform: translateX(-2px); text-shadow: 2px 0 #ff0055, -2px 0 #00e8a2; color: #fff; }
+  89% { transform: translateX(2px);  text-shadow: -2px 0 #3a3aff, 2px 0 #00e8a2; color: #fff; }
+  91% { transform: none; text-shadow: none; color: rgba(0,232,162,0.85); }
+}
+
+.eljasus-btn .ej-label span {
+  display: inline-block;
+  animation: ej-glitch 7s steps(1) infinite;
+  transition: color 0.4s;
+}
+
+@keyframes ej-idle {
+  0%,100% { box-shadow: 0 0 0 transparent; }
+  50%     { box-shadow: 0 0 14px rgba(0,232,162,0.12), 0 0 30px rgba(0,232,162,0.05); }
+}
+
+/* ════════════
+   HOVER
+════════════ */
+.eljasus-btn:hover {
+  transform: translateY(-2px) scale(1.04);
+  animation: none;
+  box-shadow:
+    0 0 0 1.5px rgba(0,232,162,0.6),
+    0 0 18px rgba(0,232,162,0.4),
+    0 0 40px rgba(0,153,204,0.25),
+    0 0 70px rgba(58,58,255,0.15),
+    0 8px 28px rgba(0,0,0,0.7);
+}
+
+/* Gradient fill matching screenshot */
+.eljasus-btn:hover .ej-fill {
+  opacity: 1;
+  background: linear-gradient(105deg,
+    rgb(0, 224, 232)  0%,
+    rgba(0, 153, 204, 0.18) 50%,
+    rgba(58,  58, 255, 0.22) 100%
+  );
+}
+
+/* remove the dark mask, show gradient behind border */
+.eljasus-btn:hover .ej-border::after {
+  background: transparent;
+}
+
+/* stronger border glow */
+.eljasus-btn:hover .ej-border {
+  background: conic-gradient(
+    from 0deg at var(--cx) var(--cy),
+    rgba(0,232,162,0.3)   0deg,
+    #00e8a2  60deg,
+    #ffffff  90deg,
+    #0099cc 120deg,
+    #3a3aff 160deg,
+    rgba(58,58,255,0.3) 200deg,
+    rgba(0,232,162,0.1) 300deg,
+    rgba(0,232,162,0.3) 360deg
+  );
+}
+
+.eljasus-btn:hover .ej-glow      { opacity: 1; }
+.eljasus-btn:hover .ej-bloom-left  { opacity: 1; }
+.eljasus-btn:hover .ej-bloom-right { opacity: 1; }
+
+.eljasus-btn:hover .ej-ring1 { border-color: rgba(0,220,160,0.4); }
+.eljasus-btn:hover .ej-ring2 { border-color: rgba(58,58,255,0.3); }
+
+/* faster orbit on hover */
+.eljasus-btn:hover .ej-dot1 { animation-duration: 1.4s; }
+.eljasus-btn:hover .ej-dot2 { animation-duration: 2.2s; }
+
+/* text stays bright */
+.eljasus-btn:hover .ej-label       { color: #e8fff8; text-shadow: 0 0 12px rgba(0,232,162,0.5); }
+.eljasus-btn:hover .ej-label span  { animation: none; color: #e8fff8; }
+.eljasus-btn:hover .ej-label i     { color: #e8fff8; animation: none; }
+
+/* ════════════
+   ACTIVE
+════════════ */
+.eljasus-btn:active {
+  transform: scale(0.97);
+  box-shadow:
+    0 0 40px rgba(0,232,162,0.7),
+    0 0 80px rgba(58,58,255,0.3);
+  transition: transform 0.1s, box-shadow 0.1s;
 }
     @media(max-width:1024px){.features-grid{grid-template-columns:repeat(2,1fr);}.footer-inner{grid-template-columns:1fr 1fr;}}
     @media(max-width:768px){#mobileToggle{display:flex;}.features-grid{grid-template-columns:1fr;}.footer-inner{grid-template-columns:1fr 1fr;gap:28px;}.stats-row{flex-direction:column;}.stat-item{border-right:none;border-bottom:1px solid var(--border);}.stat-item:last-child{border-bottom:none;}}
@@ -309,9 +588,27 @@
     <div class="hero-actions">
       <a href="#features" class="btn-primary-hero"><i class="fas fa-rocket"></i>Explore Features</a>
       <a href="hiring.html" class="btn-outline-hero"><i class="fas fa-users"></i>Join Our Team</a>
-      <a href="https://phinex-org.github.io/ElJasus-The_ULTIMATE_Edition/" target="_blank" class="eljasus-btn">
-      ElJasus
-      </a>
+      <a href="https://phinex-org.github.io/ElJasus-The_ULTIMATE_Edition/"
+   target="_blank"
+   class="eljasus-btn">
+
+  <div class="ej-border"></div>
+  <div class="ej-fill"></div>
+  <div class="ej-glow"></div>
+  <div class="ej-bloom-left"></div>
+  <div class="ej-bloom-right"></div>
+  <div class="ej-ring1"></div>
+  <div class="ej-ring2"></div>
+  <div class="ej-scan"></div>
+  <div class="ej-dot ej-dot1"></div>
+  <div class="ej-dot ej-dot2"></div>
+
+  <span class="ej-label">
+    <i class="fas fa-crosshairs"></i>
+    <span>ElJasus</span>
+  </span>
+
+</a>
     </div>
     <div class="stats-row">
       <div class="stat-item"><div class="stat-num">50+</div><div class="stat-label">Needed Devs</div></div>
@@ -696,6 +993,18 @@ auth.onAuthStateChanged(user => {
     loginBtn.style.background = 'var(--neon)';
     loginBtn.style.border = 'none';
   }
+});
+
+document.querySelectorAll('.eljasus-btn').forEach(btn => {
+  btn.addEventListener('mousemove', e => {
+    const r = btn.getBoundingClientRect();
+    btn.style.setProperty('--cx', ((e.clientX - r.left) / r.width  * 100) + '%');
+    btn.style.setProperty('--cy', ((e.clientY - r.top)  / r.height * 100) + '%');
+  });
+  btn.addEventListener('mouseleave', () => {
+    btn.style.setProperty('--cx', '50%');
+    btn.style.setProperty('--cy', '50%');
+  });
 });
 </script>
 
