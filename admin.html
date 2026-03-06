@@ -1,0 +1,1222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bug Admin Dashboard | PhineX</title>
+<link rel="icon" type="image/x-icon" href="Phinex - Copy2.png">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="bg3d.js"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
+
+<style>
+:root{
+  --g:#39ff14;--gd:rgba(57,255,20,.1);--gd2:rgba(57,255,20,.05);
+  --bg:#04040a;--s1:#0b0b14;--s2:#111120;
+  --bd:rgba(255,255,255,.06);--bdg:rgba(57,255,20,.18);
+  --tx:#eeeeff;--mu:#5c5c84;
+  --rd:#ff4444;--rdd:rgba(255,68,68,.08);--rdb:rgba(255,68,68,.2);
+  --or:#ff9632;--ord:rgba(255,150,50,.08);--orb:rgba(255,150,50,.2);
+  --yw:#ffd700;--ywd:rgba(255,215,0,.08);--ywb:rgba(255,215,0,.2);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--tx);min-height:100vh;overflow-x:hidden;}
+
+.grid-bg{position:fixed;inset:0;pointer-events:none;z-index:0;background-image:linear-gradient(rgba(57,255,20,.02)1px,transparent 1px),linear-gradient(90deg,rgba(57,255,20,.02)1px,transparent 1px);background-size:52px 52px;}
+.grid-bg::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 60% at 80% 20%,rgba(57,255,20,.04),transparent);}
+
+/* ── GATE OVERLAY ── */
+.gate-overlay{
+  position:fixed;inset:0;z-index:9000;
+  background:#04040a;
+  display:flex;align-items:center;justify-content:center;
+  padding:20px;
+}
+.gate-card{
+  background:#0b0b14;
+  border:1px solid rgba(57,255,20,0.15);
+  border-radius:28px;
+  padding:56px 48px;
+  max-width:460px;width:100%;
+  text-align:center;
+  box-shadow:0 40px 80px rgba(0,0,0,0.8);
+  position:relative;overflow:hidden;
+}
+.gate-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,#39ff14,transparent);
+  opacity:0.6;
+}
+.gate-logo{font-size:52px;margin-bottom:20px;display:block;}
+.gate-title{font-family:'Syne',sans-serif;font-size:24px;font-weight:800;margin-bottom:8px;}
+.gate-sub{font-size:13px;color:var(--mu);line-height:1.7;margin-bottom:32px;}
+.gate-input-wrap{position:relative;margin-bottom:16px;}
+.gate-input{
+  width:100%;background:rgba(255,255,255,0.04);
+  border:1px solid var(--bd);border-radius:12px;
+  padding:14px 50px 14px 18px;
+  font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700;
+  color:var(--tx);outline:none;letter-spacing:3px;text-align:center;
+  transition:all 0.3s;
+}
+.gate-input:focus{
+  border-color:rgba(57,255,20,0.5);
+  background:rgba(57,255,20,0.04);
+  box-shadow:0 0 0 3px rgba(57,255,20,0.1);
+}
+.gate-input::placeholder{letter-spacing:1px;font-size:13px;color:var(--mu);}
+.gate-toggle{
+  position:absolute;right:14px;top:50%;transform:translateY(-50%);
+  background:none;border:none;color:var(--mu);cursor:pointer;font-size:14px;
+  transition:color 0.2s;
+}
+.gate-toggle:hover{color:var(--tx);}
+.gate-btn{
+  width:100%;padding:14px;border-radius:12px;
+  background:var(--g);color:#04040a;
+  font-family:'Syne',sans-serif;font-weight:800;font-size:15px;
+  border:none;cursor:pointer;transition:all 0.25s;
+  display:flex;align-items:center;justify-content:center;gap:9px;
+  margin-bottom:16px;
+}
+.gate-btn:hover{background:#52ff28;box-shadow:0 0 30px rgba(57,255,20,0.35);transform:translateY(-2px);}
+.gate-btn:disabled{opacity:0.5;cursor:not-allowed;transform:none;}
+.gate-error{
+  background:rgba(255,68,68,0.08);border:1px solid rgba(255,68,68,0.2);
+  border-radius:10px;padding:10px 16px;font-size:13px;color:var(--rd);
+  display:none;margin-bottom:12px;
+}
+.gate-error.show{display:block;}
+.gate-link{font-size:12px;color:var(--mu);text-decoration:none;transition:color 0.2s;}
+.gate-link:hover{color:var(--g);}
+/* Shake animation on wrong code */
+@keyframes shake{0%,100%{transform:translateX(0);}20%{transform:translateX(-8px);}40%{transform:translateX(8px);}60%{transform:translateX(-6px);}80%{transform:translateX(6px);}}
+.shake{animation:shake 0.5s ease;}
+
+/* ── TOPBAR ── */
+.topbar{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  height:60px;background:rgba(4,4,10,.95);
+  backdrop-filter:blur(24px);border-bottom:1px solid var(--bd);
+}
+.tw{max-width:1500px;margin:0 auto;padding:0 28px;height:100%;display:flex;align-items:center;gap:14px;}
+.logo{display:flex;align-items:center;gap:9px;text-decoration:none;}
+.lb{width:30px;height:30px;border-radius:7px;background:linear-gradient(135deg,#39ff14,#00cc88);display:flex;align-items:center;justify-content:center;box-shadow:0 0 14px rgba(57,255,20,.3);}
+.lb i{color:#04040a;font-size:12px;}
+.ln{font-family:'Syne',sans-serif;font-size:17px;font-weight:800;color:#eeeeff;}
+.ln b{color:var(--g);}
+.admin-badge{background:rgba(57,255,20,.08);border:1px solid var(--bdg);border-radius:6px;padding:3px 10px;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;color:var(--g);letter-spacing:1px;}
+@keyframes blk{0%,100%{opacity:1;}50%{opacity:.2;}}
+.live-dot{width:7px;height:7px;border-radius:50%;background:var(--g);box-shadow:0 0 7px var(--g);animation:blk 2s infinite;}
+.tb-right{margin-left:auto;display:flex;align-items:center;gap:10px;}
+.nb{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:8px;font-family:'Syne',sans-serif;font-weight:700;font-size:12px;text-decoration:none;transition:all .18s;border:none;cursor:pointer;}
+.nb-o{background:transparent;color:var(--mu);border:1px solid var(--bd);}
+.nb-o:hover{border-color:var(--bdg);color:var(--g);}
+.nb-rd{background:var(--rdd);color:var(--rd);border:1px solid var(--rdb);}
+.nb-rd:hover{background:rgba(255,68,68,.14);}
+.nb-g{background:var(--g);color:#04040a;}
+.nb-g:hover{background:#52ff28;box-shadow:0 0 18px rgba(57,255,20,.3);}
+/* User chip in topbar */
+.user-chip-bar{display:flex;align-items:center;gap:7px;background:rgba(57,255,20,0.06);border:1px solid rgba(57,255,20,0.15);border-radius:100px;padding:4px 12px;font-size:11px;color:var(--g);}
+
+/* ── LAYOUT ── */
+.layout{display:grid;grid-template-columns:230px 1fr;min-height:100vh;padding-top:60px;position:relative;z-index:1;}
+.sb{border-right:1px solid var(--bd);padding:24px 16px;background:rgba(4,4,10,.7);backdrop-filter:blur(8px);display:flex;flex-direction:column;gap:24px;}
+.sb-section-label{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;color:var(--mu);text-transform:uppercase;letter-spacing:.9px;padding:0 8px;margin-bottom:6px;}
+.sb-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:9px;font-size:13px;color:var(--mu);cursor:pointer;transition:all .18s;border:none;background:transparent;width:100%;text-align:left;}
+.sb-item:hover{background:rgba(255,255,255,.04);color:var(--tx);}
+.sb-item.active{background:var(--gd2);color:var(--g);border:1px solid var(--bdg);}
+.sb-item i{width:16px;text-align:center;font-size:12px;}
+.sb-count{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:10px;background:rgba(255,255,255,.06);border-radius:5px;padding:2px 7px;}
+.sb-item.active .sb-count{background:rgba(57,255,20,.15);color:var(--g);}
+.filter-group{border:1px solid var(--bd);border-radius:11px;overflow:hidden;}
+.filter-btn{display:flex;align-items:center;gap:8px;width:100%;padding:10px 14px;font-size:12px;font-weight:600;border:none;background:transparent;color:var(--mu);cursor:pointer;transition:all .18s;text-align:left;border-bottom:1px solid var(--bd);}
+.filter-btn:last-child{border-bottom:none;}
+.filter-btn:hover{background:rgba(255,255,255,.03);color:var(--tx);}
+.filter-btn.active{background:rgba(57,255,20,.05);color:var(--g);}
+.filter-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+
+/* ── MAIN ── */
+.main{padding:28px 32px;overflow-y:auto;}
+.page-header{display:flex;align-items:center;gap:16px;margin-bottom:28px;}
+.page-title{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;}
+.report-count{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--mu);background:var(--s1);border:1px solid var(--bd);border-radius:6px;padding:4px 10px;}
+
+.stat-row{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:28px;}
+.stat-card{background:var(--s1);border:1px solid var(--bd);border-radius:14px;padding:18px 16px;transition:border-color .2s,transform .2s;cursor:pointer;}
+.stat-card:hover{transform:translateY(-2px);}
+.stat-card.active-filter{border-color:var(--bdg);}
+.sc-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.sc-icon{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:14px;}
+.sc-val{font-family:'Syne',sans-serif;font-size:26px;font-weight:800;margin-bottom:2px;}
+.sc-label{font-size:11px;color:var(--mu);text-transform:uppercase;letter-spacing:.6px;}
+
+.table-wrap{background:var(--s1);border:1px solid var(--bd);border-radius:16px;overflow:hidden;}
+.table-head{display:grid;grid-template-columns:130px 1fr 140px 100px 100px 100px 110px;gap:0;padding:12px 20px;border-bottom:1px solid var(--bd);background:rgba(255,255,255,.015);}
+.th{font-family:'Syne',sans-serif;font-size:10.5px;font-weight:700;color:var(--mu);text-transform:uppercase;letter-spacing:.8px;display:flex;align-items:center;gap:5px;cursor:pointer;user-select:none;}
+.th:hover{color:var(--tx);}
+.th i{font-size:8px;}
+.report-row{display:grid;grid-template-columns:130px 1fr 140px 100px 100px 100px 110px;gap:0;padding:14px 20px;border-bottom:1px solid var(--bd);cursor:pointer;transition:background .18s;align-items:center;}
+.report-row:last-child{border-bottom:none;}
+.report-row:hover{background:rgba(255,255,255,.025);}
+.rr-id{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--g);font-weight:700;}
+.rr-title{font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-right:16px;}
+.rr-page{font-size:11.5px;color:var(--mu);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-right:8px;}
+.rr-email{font-size:11px;color:var(--mu);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-right:8px;}
+.rr-time{font-size:11px;color:var(--mu);font-family:'JetBrains Mono',monospace;}
+.badge{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;white-space:nowrap;}
+.badge-critical{background:var(--rdd);border:1px solid var(--rdb);color:var(--rd);}
+.badge-high{background:var(--ord);border:1px solid var(--orb);color:var(--or);}
+.badge-medium{background:var(--ywd);border:1px solid var(--ywb);color:var(--yw);}
+.badge-low{background:var(--gd2);border:1px solid var(--bdg);color:var(--g);}
+.badge-open{background:var(--ord);border:1px solid var(--orb);color:var(--or);}
+.badge-resolved{background:var(--gd2);border:1px solid var(--bdg);color:var(--g);}
+.badge-closed{background:rgba(255,255,255,.04);border:1px solid var(--bd);color:var(--mu);}
+.badge-investigating{background:rgba(96,165,250,.07);border:1px solid rgba(96,165,250,.2);color:#60a5fa;}
+.action-btn{width:28px;height:28px;border-radius:7px;display:inline-flex;align-items:center;justify-content:center;font-size:11px;border:1px solid var(--bd);background:transparent;cursor:pointer;transition:all .18s;color:var(--mu);}
+.action-btn:hover{border-color:var(--bdg);color:var(--g);}
+.action-btn.del:hover{border-color:var(--rdb);color:var(--rd);}
+.empty-state{padding:80px 20px;text-align:center;}
+.empty-icon{font-size:48px;margin-bottom:16px;opacity:.4;}
+.empty-title{font-family:'Syne',sans-serif;font-size:18px;font-weight:700;margin-bottom:8px;color:var(--mu);}
+.empty-sub{font-size:13px;color:var(--mu);line-height:1.7;}
+
+/* ── DETAIL PANEL ── */
+.detail-overlay{position:fixed;top:60px;right:0;bottom:0;width:480px;z-index:50;background:rgba(4,4,10,.98);border-left:1px solid var(--bd);backdrop-filter:blur(24px);transform:translateX(100%);transition:transform .3s cubic-bezier(.175,.885,.32,1.275);overflow-y:auto;}
+.detail-overlay.open{transform:translateX(0);}
+.detail-head{padding:22px 24px;border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:12px;position:sticky;top:0;background:rgba(4,4,10,.97);z-index:1;}
+.detail-close{width:30px;height:30px;border-radius:7px;border:1px solid var(--bd);background:transparent;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--mu);transition:all .2s;margin-left:auto;}
+.detail-close:hover{border-color:var(--rdb);color:var(--rd);}
+.detail-body{padding:24px;}
+.detail-section{margin-bottom:24px;}
+.ds-label{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--mu);margin-bottom:10px;display:flex;align-items:center;gap:6px;}
+.ds-label i{color:var(--g);font-size:9px;}
+.ds-content{background:rgba(255,255,255,.025);border:1px solid var(--bd);border-radius:10px;padding:14px 16px;font-size:13px;color:var(--mu);line-height:1.7;white-space:pre-wrap;word-break:break-word;}
+.ds-content.mono{font-family:'JetBrains Mono',monospace;font-size:11px;}
+.meta-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.meta-item{background:rgba(255,255,255,.025);border:1px solid var(--bd);border-radius:9px;padding:12px 14px;}
+.meta-item .mk{font-size:9px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--mu);margin-bottom:4px;}
+.meta-item .mv{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--tx);}
+.status-select{width:100%;background:rgba(255,255,255,.03);border:1px solid var(--bd);border-radius:9px;padding:10px 14px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--tx);outline:none;cursor:pointer;transition:border-color .2s;}
+.status-select:focus{border-color:var(--bdg);}
+.status-select option{background:#0b0b14;}
+.save-btn{width:100%;padding:12px;background:var(--g);color:#04040a;font-family:'Syne',sans-serif;font-weight:800;font-size:13px;border:none;border-radius:10px;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:7px;}
+.save-btn:hover{background:#52ff28;box-shadow:0 0 22px rgba(57,255,20,.3);}
+
+/* ── MODAL ── */
+#modal{position:fixed;inset:0;z-index:9999;background:rgba(4,4,10,.85);backdrop-filter:blur(12px);display:none;align-items:center;justify-content:center;padding:20px;}
+#modal.on{display:flex;}
+#mc{background:var(--s1);border:1px solid var(--rdb);border-radius:20px;padding:36px 30px;max-width:380px;width:100%;text-align:center;box-shadow:0 40px 80px rgba(0,0,0,.7);transform:scale(.88);opacity:0;transition:transform .28s cubic-bezier(.175,.885,.32,1.275),opacity .28s;}
+#modal.on #mc{transform:scale(1);opacity:1;}
+.m-ico{font-size:40px;margin-bottom:12px;}
+.m-title{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;margin-bottom:7px;}
+.m-msg{font-size:13px;color:var(--mu);line-height:1.7;margin-bottom:22px;}
+.m-btns{display:flex;gap:10px;justify-content:center;}
+.mbt{display:inline-flex;align-items:center;gap:6px;padding:10px 22px;border-radius:9px;font-family:'Syne',sans-serif;font-weight:800;font-size:13px;cursor:pointer;border:none;transition:all .2s;}
+.mbt-rd{background:var(--rd);color:#fff;}
+.mbt-rd:hover{background:#ff6060;box-shadow:0 0 18px rgba(255,68,68,.35);}
+.mbt-o{background:transparent;color:var(--mu);border:1px solid var(--bd);}
+.mbt-o:hover{border-color:var(--bdg);color:var(--tx);}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+.row-enter{animation:fadeUp .25s ease both;}
+
+@media(max-width:1200px){.layout{grid-template-columns:1fr;}.sb{display:none;}.stat-row{grid-template-columns:repeat(3,1fr);}}
+@media(max-width:900px){.table-head,.report-row{grid-template-columns:100px 1fr 90px 80px 80px;}.th:nth-child(3),.report-row>*:nth-child(3){display:none;}}
+@media(max-width:600px){.stat-row{grid-template-columns:1fr 1fr;}.detail-overlay{width:100%;}.gate-card{padding:36px 24px;}}
+
+    /* ══════════ MOBILE RESPONSIVE — PhineX ══════════ */
+    *{min-width:0;}
+    img,video{max-width:100%;height:auto;}
+
+    /* Hamburger */
+    .ham{display:none;flex-direction:column;justify-content:center;gap:5px;
+         width:40px;height:40px;background:none;border:none;cursor:pointer;
+         padding:8px;margin-left:auto;z-index:200;}
+    .ham span{display:block;width:22px;height:2px;background:var(--neon,#39ff14);
+              border-radius:2px;transition:all .3s;}
+    .ham.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+    .ham.open span:nth-child(2){opacity:0;}
+    .ham.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+
+    /* Mobile drawer */
+    .mobile-nav{display:none;position:fixed;top:68px;left:0;right:0;
+                background:rgba(5,5,8,0.97);backdrop-filter:blur(20px);
+                border-bottom:1px solid rgba(255,255,255,.08);
+                z-index:150;padding:12px 16px 20px;flex-direction:column;gap:4px;}
+    .mobile-nav.open{display:flex;}
+    .mobile-nav a{padding:12px 16px;border-radius:10px;font-size:14px;
+                  color:#7070a0;text-decoration:none;transition:all .2s;
+                  min-height:44px;display:flex;align-items:center;}
+    .mobile-nav a:hover,.mobile-nav a.active{color:#f0f0ff;
+      background:rgba(255,255,255,.06);}
+    .mobile-nav .btn-neon{justify-content:center;margin-top:8px;}
+
+    @media(max-width:1024px){
+      .hero-inner{grid-template-columns:1fr;gap:40px;}
+      .hero-inner>*:last-child{display:none;}
+    }
+    @media(max-width:768px){
+      .ham{display:flex;}
+      .nav-links{display:none!important;}
+      .nav-inner .btn-neon,.nav-inner .nb-g{display:none;}
+      body{overflow-x:hidden;}
+      .hero{padding:88px 16px 48px;}
+      .hero-inner{gap:24px;}
+      .section-wrap,.page{padding-left:16px;padding-right:16px;}
+      .hero h1,.hero-h1,.h1{font-size:clamp(2.2rem,9vw,3.5rem)!important;letter-spacing:-1.5px!important;}
+    }
+    @media(max-width:480px){
+      .mobile-nav a,.mobile-nav button{min-height:44px;}
+      .btn-neon{min-height:44px;padding:10px 18px;}
+      .hero{padding:80px 12px 40px;}
+      .hero h1,.hero-h1,.h1{font-size:clamp(1.9rem,8vw,2.8rem)!important;}
+      .cards-grid,.grid-2,.grid-3,[class*="-grid"]{grid-template-columns:1fr!important;}
+      .stats-row,.stat-row{flex-direction:column;gap:12px;}
+    }
+    @media(max-width:360px){
+      nav,.nav-inner{padding-left:12px!important;padding-right:12px!important;}
+      .hero{padding-left:8px;padding-right:8px;}
+    }
+    @media(hover:none){
+      [class*="float"],[class*="Float"]{animation:none!important;}
+    }
+    @media(orientation:landscape) and (max-height:500px){
+      .hero{min-height:auto;padding-top:80px;}
+    }
+    
+    /* ── Admin mobile fixes ── */
+    @media(max-width:768px){
+      .gate-card{padding:40px 24px;margin:16px;}
+      .admin-grid,[class*="grid"]{grid-template-columns:1fr!important;}
+      .filter-bar{flex-wrap:wrap;gap:8px;}
+      .filter-btn{min-height:40px;}
+      .admin-table{font-size:12px;}
+      .admin-table th,.admin-table td{padding:10px 8px;}
+    }
+    @media(max-width:480px){
+      .gate-card{padding:32px 16px;}
+      .gate-title{font-size:20px;}
+    }
+
+</style>
+</head>
+<body>
+<div class="grid-bg"></div>
+
+<!-- ════════════════════════════════════════
+     GATE OVERLAY — shown until unlocked
+════════════════════════════════════════ -->
+<div class="gate-overlay" id="gateOverlay">
+  <div class="gate-card" id="gateCard">
+    <!-- Step 1: Not logged in -->
+    <div id="gateStepAuth">
+      <span class="gate-logo">🔐</span>
+      <h2 class="gate-title">Admin Access</h2>
+      <p class="gate-sub">You must be signed in with a verified PhineX account to access the admin dashboard.</p>
+      <a href="login.html" style="display:inline-flex;align-items:center;gap:8px;background:var(--g);color:#04040a;font-family:'Syne',sans-serif;font-weight:800;font-size:14px;padding:13px 28px;border-radius:12px;text-decoration:none;margin-bottom:12px;">
+        <i class="fas fa-sign-in-alt"></i> Sign In to Continue
+      </a><br>
+      <a href="index.html" class="gate-link">← Back to Home</a>
+    </div>
+
+    <!-- Step 2: Logged in but not admin — redeem inline -->
+    <div id="gateStepRedeem" style="display:none;">
+      <span class="gate-logo">🎁</span>
+      <h2 class="gate-title">Redeem Access Code</h2>
+      <p class="gate-sub">Enter your PhineX invite code to unlock admin access.</p>
+
+      <div id="gateRedeemError"   style="display:none;background:rgba(255,68,68,0.08);border:1px solid rgba(255,68,68,0.2);border-radius:10px;padding:10px 14px;font-size:12px;color:#ff6464;margin-bottom:14px;text-align:left;"></div>
+      <div id="gateRedeemSuccess" style="display:none;background:rgba(57,255,20,0.08);border:1px solid rgba(57,255,20,0.2);border-radius:10px;padding:10px 14px;font-size:12px;color:var(--g);margin-bottom:14px;text-align:left;"></div>
+
+      <div class="gate-input-wrap" style="margin-bottom:14px;">
+        <input
+          type="text"
+          id="gateRedeemInput"
+          class="gate-input"
+          placeholder="Enter code e.g. ADMIN26"
+          maxlength="30"
+          autocomplete="off"
+          style="letter-spacing:3px;text-transform:uppercase;font-size:15px;"
+          oninput="this.value=this.value.replace(/[^A-Za-z0-9]/g,'').toUpperCase()"
+          onkeydown="if(event.key==='Enter')gateRedeemSubmit()"
+        >
+      </div>
+
+      <button class="gate-btn" id="gateRedeemBtn" onclick="gateRedeemSubmit()">
+        <i class="fas fa-gift"></i> Redeem &amp; Unlock
+      </button>
+      <a href="javascript:void(0)" class="gate-link" style="display:block;margin-top:14px;" onclick="firebase.auth().signOut().then(()=>location.reload())">Sign out</a>
+    </div>
+
+    <!-- Step 3: Enter ADMIN26 code -->
+    <div id="gateStepCode" style="display:none;">
+      <span class="gate-logo">🛡️</span>
+      <h2 class="gate-title">Enter Admin Code</h2>
+      <p class="gate-sub" id="gateSubText">Enter the admin access code to unlock the dashboard.</p>
+
+      <div id="gateError" class="gate-error">Incorrect code. Please try again.</div>
+
+      <div class="gate-input-wrap">
+        <input
+          type="password"
+          id="gateInput"
+          class="gate-input"
+          placeholder="Enter code..."
+          maxlength="20"
+          autocomplete="off"
+          onkeydown="if(event.key==='Enter')checkAdminCode()"
+        >
+        <button class="gate-toggle" onclick="toggleGateVis()" id="gateToggleBtn">
+          <i class="fas fa-eye" id="gateEyeIcon"></i>
+        </button>
+      </div>
+
+      <button class="gate-btn" id="gateBtn" onclick="checkAdminCode()">
+        <i class="fas fa-unlock-keyhole"></i> Unlock Dashboard
+      </button>
+      <a href="javascript:void(0)" class="gate-link" onclick="firebase.auth().signOut().then(()=>location.reload())">Sign out</a>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════
+     TOPBAR
+════════════════════════════════════ -->
+<div class="topbar">
+  <div class="tw">
+    <a href="index.html" class="logo"><div class="lb"><i class="fas fa-dragon"></i></div><span class="ln">Phine<b>X</b></span></a>
+    <span class="admin-badge">ADMIN</span>
+    <div style="display:flex;align-items:center;gap:7px;font-size:12px;color:var(--mu);"><div class="live-dot"></div> Live Dashboard</div>
+    <div class="tb-right">
+      <!-- Logged-in user chip -->
+      <div class="user-chip-bar" id="topUserChip" style="display:none;">
+        <i class="fas fa-circle-user" style="font-size:10px;"></i>
+        <span id="topUserEmail" style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:11px;"></span>
+      </div>
+      <button class="nb nb-o" onclick="exportCSV()"><i class="fas fa-download"></i> Export CSV</button>
+      <button class="nb nb-rd" onclick="confirmClearAll()"><i class="fas fa-trash"></i> Clear All</button>
+      <a href="bugreport.html" class="nb nb-g"><i class="fas fa-bug"></i> Bug Report</a>
+      <button class="nb nb-o" onclick="firebase.auth().signOut().then(()=>location.reload())"><i class="fas fa-sign-out-alt"></i></button>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════
+     LAYOUT
+════════════════════════════════════ -->
+<div class="layout">
+  <!-- SIDEBAR -->
+  <div class="sb">
+    <div>
+      <div class="sb-section-label">Views</div>
+      <button class="sb-item active" onclick="setFilter('all',this)"><i class="fas fa-list"></i> All Reports <span class="sb-count" id="countAll">0</span></button>
+      <button class="sb-item" onclick="setFilter('Open',this)"><i class="fas fa-circle-dot"></i> Open <span class="sb-count" id="countOpen">0</span></button>
+      <button class="sb-item" onclick="setFilter('Investigating',this)"><i class="fas fa-magnifying-glass"></i> Investigating <span class="sb-count" id="countInv">0</span></button>
+      <button class="sb-item" onclick="setFilter('Resolved',this)"><i class="fas fa-circle-check"></i> Resolved <span class="sb-count" id="countRes">0</span></button>
+      <button class="sb-item" onclick="setFilter('Closed',this)"><i class="fas fa-xmark-circle"></i> Closed <span class="sb-count" id="countClo">0</span></button>
+    </div>
+    <div>
+      <div class="sb-section-label">By Severity</div>
+      <div class="filter-group">
+        <button class="filter-btn" onclick="setSeverityFilter('Critical')"><div class="filter-dot" style="background:var(--rd);"></div> Critical</button>
+        <button class="filter-btn" onclick="setSeverityFilter('High')"><div class="filter-dot" style="background:var(--or);"></div> High</button>
+        <button class="filter-btn" onclick="setSeverityFilter('Medium')"><div class="filter-dot" style="background:var(--yw);"></div> Medium</button>
+        <button class="filter-btn" onclick="setSeverityFilter('Low')"><div class="filter-dot" style="background:var(--g);"></div> Low</button>
+      </div>
+    </div>
+    <div style="margin-top:auto;">
+      <div style="background:var(--s1);border:1px solid var(--bd);border-radius:12px;padding:16px;font-size:12px;">
+        <div style="font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:var(--mu);text-transform:uppercase;letter-spacing:.8px;margin-bottom:12px;"><i class="fas fa-database" style="color:var(--g);margin-right:5px;"></i> Data Source</div>
+        <div style="color:var(--mu);line-height:1.8;">Reports are loaded live from <span style="color:var(--g);">Firebase Realtime Database</span>. Changes sync instantly.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title"><i class="fas fa-bug" style="color:var(--rd);margin-right:10px;font-size:20px;"></i>Bug Reports</h1>
+      </div>
+      <span class="report-count" id="visibleCount">0 reports</span>
+    </div>
+
+    <!-- STAT CARDS -->
+    <div class="stat-row">
+      <div class="stat-card" onclick="setFilter('all',null)" id="sc-all">
+        <div class="sc-top"><div class="sc-icon" style="background:rgba(255,255,255,.04);"><i class="fas fa-list" style="color:var(--mu);"></i></div></div>
+        <div class="sc-val" id="sv-total">0</div><div class="sc-label">Total Reports</div>
+      </div>
+      <div class="stat-card" onclick="setFilter('Open',null)" id="sc-open">
+        <div class="sc-top"><div class="sc-icon" style="background:var(--ord);"><i class="fas fa-circle-dot" style="color:var(--or);"></i></div></div>
+        <div class="sc-val" style="color:var(--or);" id="sv-open">0</div><div class="sc-label">Open</div>
+      </div>
+      <div class="stat-card" onclick="setFilter('Investigating',null)" id="sc-inv">
+        <div class="sc-top"><div class="sc-icon" style="background:rgba(96,165,250,.08);"><i class="fas fa-magnifying-glass" style="color:#60a5fa;"></i></div></div>
+        <div class="sc-val" style="color:#60a5fa;" id="sv-inv">0</div><div class="sc-label">Investigating</div>
+      </div>
+      <div class="stat-card" onclick="setFilter('Resolved',null)" id="sc-res">
+        <div class="sc-top"><div class="sc-icon" style="background:var(--gd2);"><i class="fas fa-circle-check" style="color:var(--g);"></i></div></div>
+        <div class="sc-val" style="color:var(--g);" id="sv-res">0</div><div class="sc-label">Resolved</div>
+      </div>
+      <div class="stat-card" onclick="setSeverityFilter('Critical')" id="sc-crit">
+        <div class="sc-top"><div class="sc-icon" style="background:var(--rdd);"><i class="fas fa-triangle-exclamation" style="color:var(--rd);"></i></div></div>
+        <div class="sc-val" style="color:var(--rd);" id="sv-crit">0</div><div class="sc-label">Critical</div>
+      </div>
+    </div>
+
+    <!-- TABLE -->
+    <div class="table-wrap">
+      <div class="table-head">
+        <div class="th" onclick="sortBy('id')">ID <i class="fas fa-sort"></i></div>
+        <div class="th" onclick="sortBy('title')">Title <i class="fas fa-sort"></i></div>
+        <div class="th" onclick="sortBy('reporterEmail')">Reporter Email <i class="fas fa-sort"></i></div>
+        <div class="th" onclick="sortBy('severity')">Severity <i class="fas fa-sort"></i></div>
+        <div class="th" onclick="sortBy('status')">Status <i class="fas fa-sort"></i></div>
+        <div class="th" onclick="sortBy('timestamp')">Date <i class="fas fa-sort"></i></div>
+        <div class="th">Actions</div>
+      </div>
+      <div id="tableBody">
+        <div class="empty-state"><div class="empty-icon">⏳</div><div class="empty-title">Loading reports...</div><div class="empty-sub">Connecting to Firebase database.</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DETAIL PANEL -->
+<div class="detail-overlay" id="detailPanel">
+  <div class="detail-head">
+    <div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--g);margin-bottom:3px;" id="dp-id">BUG-000000</div>
+      <div style="font-family:'Syne',sans-serif;font-size:16px;font-weight:800;" id="dp-title">Bug Title</div>
+    </div>
+    <button class="detail-close" onclick="closeDetail()"><i class="fas fa-xmark"></i></button>
+  </div>
+  <div class="detail-body">
+    <div class="detail-section"><div class="meta-grid" id="dp-meta"></div></div>
+    <div class="detail-section" id="dp-steps-wrap">
+      <div class="ds-label"><i class="fas fa-list-ol"></i> Steps to Reproduce</div>
+      <div class="ds-content" id="dp-steps"></div>
+    </div>
+    <div class="detail-section" id="dp-exp-wrap">
+      <div class="ds-label"><i class="fas fa-arrows-left-right"></i> Expected vs Actual</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <div><div style="font-size:10px;font-weight:700;color:var(--mu);text-transform:uppercase;letter-spacing:.7px;margin-bottom:6px;">Expected</div><div class="ds-content" id="dp-expected"></div></div>
+        <div><div style="font-size:10px;font-weight:700;color:var(--rd);text-transform:uppercase;letter-spacing:.7px;margin-bottom:6px;">Actual</div><div class="ds-content" id="dp-actual"></div></div>
+      </div>
+    </div>
+    <div class="detail-section" id="dp-reporter-wrap">
+      <div class="ds-label"><i class="fas fa-user"></i> Reporter Info</div>
+      <div class="ds-content" id="dp-reporter"></div>
+    </div>
+    <div class="detail-section" id="dp-ua-wrap">
+      <div class="ds-label"><i class="fas fa-microchip"></i> User Agent</div>
+      <div class="ds-content mono" id="dp-ua"></div>
+    </div>
+    <div class="detail-section">
+      <div class="ds-label"><i class="fas fa-sliders"></i> Update Status</div>
+      <select class="status-select" id="dp-status-sel">
+        <option>Open</option><option>Investigating</option><option>Resolved</option><option>Closed</option>
+      </select>
+      <div style="margin-top:10px;display:flex;gap:8px;">
+        <button class="save-btn" id="saveStatusBtn" onclick="saveStatus()"><i class="fas fa-check"></i> Save Status</button>
+        <button class="nb nb-rd" style="flex-shrink:0;" onclick="deleteCurrentReport()"><i class="fas fa-trash"></i></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div id="modal" onclick="if(event.target===this)closeModal()">
+  <div id="mc">
+    <div class="m-ico" id="mico">🗑️</div>
+    <div class="m-title" id="mtitle">Delete Report?</div>
+    <div class="m-msg" id="mmsg">This action cannot be undone.</div>
+    <div class="m-btns" id="mbtns">
+      <button class="mbt mbt-o" onclick="closeModal()">Cancel</button>
+      <button class="mbt mbt-rd" id="mconfirm">Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- firebase-config.js MUST init Firebase before this script -->
+<script src="firebase-config.js"></script>
+
+<script>
+// ═══════════════════════════════════════
+//  FIREBASE REFS
+// ═══════════════════════════════════════
+const db   = firebase.database();
+const auth = firebase.auth();
+const ADMIN_CODE = 'ADMIN26';
+
+// ═══════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════
+let reports       = [];
+let currentFilter = 'all';
+let currentSevFilter = null;
+let sortField     = 'timestamp';
+let sortDir       = -1;
+let currentDetailId = null;
+let pendingDeleteId = null;
+let dbListener    = null; // Firebase listener reference
+
+// ═══════════════════════════════════════
+//  GATE: CHECK CODE
+// ═══════════════════════════════════════
+function toggleGateVis() {
+  const inp = document.getElementById('gateInput');
+  const icon = document.getElementById('gateEyeIcon');
+  if (inp.type === 'password') { inp.type = 'text'; icon.className = 'fas fa-eye-slash'; }
+  else { inp.type = 'password'; icon.className = 'fas fa-eye'; }
+}
+
+function checkAdminCode() {
+  const val   = document.getElementById('gateInput').value.trim();
+  const errEl = document.getElementById('gateError');
+  const card  = document.getElementById('gateCard');
+
+  if (val === ADMIN_CODE) {
+    // Correct — hide gate and boot dashboard
+    errEl.classList.remove('show');
+    sessionStorage.setItem('pxAdminUnlocked', '1');
+    document.getElementById('gateOverlay').style.opacity = '0';
+    document.getElementById('gateOverlay').style.pointerEvents = 'none';
+    setTimeout(() => document.getElementById('gateOverlay').style.display = 'none', 500);
+    initDashboard();
+  } else {
+    errEl.textContent = val ? 'Incorrect code. Please try again.' : 'Please enter the admin code.';
+    errEl.classList.add('show');
+    card.classList.add('shake');
+    document.getElementById('gateInput').value = '';
+    setTimeout(() => card.classList.remove('shake'), 500);
+  }
+}
+
+// ═══════════════════════════════════════
+//  AUTH STATE — drives gate steps
+// ═══════════════════════════════════════
+auth.onAuthStateChanged(async user => {
+  if (!user) {
+    // Not logged in → show step 1
+    showGateStep('auth');
+    return;
+  }
+
+  // Show user chip in topbar
+  document.getElementById('topUserChip').style.display = 'flex';
+  document.getElementById('topUserEmail').textContent = user.email;
+
+  // Check if user has admin access (redeemed a code)
+  let redeemed = false;
+  try {
+    const snap = await db.ref(`users/${user.uid}/admin`).once('value');
+    redeemed = snap.val() === true;
+  } catch (e) {
+    console.warn('Could not check redeemed status:', e);
+  }
+
+  if (!redeemed) {
+    showGateStep('redeem');
+    return;
+  }
+
+  // User is authenticated and has redeemed — show code step
+  // (or restore session if already unlocked this tab)
+  if (sessionStorage.getItem('pxAdminUnlocked') === '1') {
+    document.getElementById('gateOverlay').style.display = 'none';
+    initDashboard();
+  } else {
+    document.getElementById('gateSubText').textContent =
+      `Signed in as ${user.email}. Enter the admin code to continue.`;
+    showGateStep('code');
+  }
+});
+
+function showGateStep(step) {
+  document.getElementById('gateStepAuth').style.display   = step === 'auth'   ? '' : 'none';
+  document.getElementById('gateStepRedeem').style.display = step === 'redeem' ? '' : 'none';
+  document.getElementById('gateStepCode').style.display   = step === 'code'   ? '' : 'none';
+  // Focus input on code step
+  if (step === 'code') setTimeout(() => document.getElementById('gateInput').focus(), 100);
+  if (step === 'redeem') setTimeout(() => document.getElementById('gateRedeemInput').focus(), 100);
+}
+
+// ═══════════════════════════════════════
+//  GATE INLINE REDEEM
+// ═══════════════════════════════════════
+async function gateRedeemSubmit() {
+  const code = document.getElementById('gateRedeemInput').value.trim().toUpperCase();
+  const errEl = document.getElementById('gateRedeemError');
+  const okEl  = document.getElementById('gateRedeemSuccess');
+  const btn   = document.getElementById('gateRedeemBtn');
+
+  errEl.style.display = 'none';
+  okEl.style.display  = 'none';
+
+  if (!code) {
+    errEl.textContent = 'Please enter your access code.';
+    errEl.style.display = 'block';
+    return;
+  }
+
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Verifying...';
+
+  try {
+    const user = auth.currentUser;
+    const codesSnap = await db.ref('redeemCodes').once('value');
+
+    if (!codesSnap.exists()) {
+      throw new Error('no_codes');
+    }
+
+    const codesVal = codesSnap.val();
+    let codeValid = false;
+    let codeRef   = null;
+    let codeData  = null;
+
+    if (typeof codesVal === 'string') {
+      codeValid = (codesVal.toUpperCase() === code);
+    } else if (typeof codesVal === 'object' && codesVal !== null) {
+      if (codesVal[code] !== undefined) {
+        codeValid = true;
+        codeRef   = db.ref('redeemCodes/' + code);
+        codeData  = codesVal[code];
+      }
+    }
+
+    if (!codeValid) {
+      errEl.innerHTML = 'Invalid or expired code. <a href="https://www.facebook.com/A.Mo.Elgohary/" target="_blank" style="color:var(--g);text-decoration:underline;">Contact support</a> if this is an error.';
+      errEl.style.display = 'block';
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fas fa-gift"></i> Redeem &amp; Unlock';
+      return;
+    }
+
+    if (codeData && typeof codeData === 'object') {
+      if (codeData.used === true) {
+        errEl.textContent = 'This code has already been redeemed by another user.';
+        errEl.style.display = 'block';
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-gift"></i> Redeem &amp; Unlock';
+        return;
+      }
+      if (codeData.expiresAt && new Date(codeData.expiresAt) < new Date()) {
+        errEl.textContent = 'This code has expired.';
+        errEl.style.display = 'block';
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-gift"></i> Redeem &amp; Unlock';
+        return;
+      }
+      await codeRef.update({ used: true, usedBy: user.uid, usedByEmail: user.email, redeemedAt: new Date().toISOString() });
+    }
+
+    // Grant admin
+    await db.ref('users/' + user.uid).update({ admin: true, upgradedAt: new Date().toISOString(), upgradedVia: 'redeem_code' });
+
+    okEl.textContent = '✅ Code accepted! Unlocking dashboard...';
+    okEl.style.display = 'block';
+    btn.innerHTML = '<i class="fas fa-check"></i> Unlocked!';
+
+    setTimeout(() => {
+      sessionStorage.setItem('pxAdminUnlocked', '1');
+      document.getElementById('gateOverlay').style.opacity = '0';
+      document.getElementById('gateOverlay').style.pointerEvents = 'none';
+      setTimeout(() => document.getElementById('gateOverlay').style.display = 'none', 500);
+      initDashboard();
+    }, 1200);
+
+  } catch (err) {
+    console.error('Gate redeem error:', err);
+    errEl.textContent = err.message === 'no_codes' ? 'No valid codes found. Contact support.' : 'An error occurred: ' + err.message;
+    errEl.style.display = 'block';
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fas fa-gift"></i> Redeem &amp; Unlock';
+  }
+}
+
+// ═══════════════════════════════════════
+//  INIT DASHBOARD — attach Firebase listener
+// ═══════════════════════════════════════
+function initDashboard() {
+  if (dbListener) return; // already listening
+  const ref = db.ref('bugReports').orderByChild('timestamp');
+  dbListener = ref.on('value', snap => {
+    reports = [];
+    if (snap.exists()) {
+      snap.forEach(child => {
+        reports.push({ _key: child.key, ...child.val() });
+      });
+      // Newest first
+      reports.reverse();
+    }
+    renderTable();
+  });
+}
+
+// ═══════════════════════════════════════
+//  FILTERS & SORT
+// ═══════════════════════════════════════
+function setFilter(f, btn) {
+  currentFilter = f;
+  currentSevFilter = null;
+  document.querySelectorAll('.sb-item').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  renderTable();
+}
+
+function setSeverityFilter(sev) {
+  currentSevFilter = (currentSevFilter === sev) ? null : sev;
+  currentFilter = 'all';
+  document.querySelectorAll('.sb-item').forEach(b => b.classList.remove('active'));
+  document.querySelector('.sb-item').classList.add('active');
+  document.querySelectorAll('.filter-btn').forEach(b => {
+    b.classList.toggle('active', b.textContent.trim() === sev && currentSevFilter);
+  });
+  renderTable();
+}
+
+function sortBy(field) {
+  if (sortField === field) sortDir *= -1;
+  else { sortField = field; sortDir = -1; }
+  renderTable();
+}
+
+// ═══════════════════════════════════════
+//  GET FILTERED + SORTED REPORTS
+// ═══════════════════════════════════════
+function getFiltered() {
+  let list = reports.slice();
+
+  // Status filter
+  if (currentFilter !== 'all') {
+    list = list.filter(r => (r.status || 'Open') === currentFilter);
+  }
+
+  // Severity filter
+  if (currentSevFilter) {
+    list = list.filter(r => r.severity === currentSevFilter);
+  }
+
+  // Sort
+  list.sort((a, b) => {
+    let av = a[sortField] || '';
+    let bv = b[sortField] || '';
+    if (av < bv) return -1 * sortDir;
+    if (av > bv) return  1 * sortDir;
+    return 0;
+  });
+
+  return list;
+}
+
+// ═══════════════════════════════════════
+//  RENDER TABLE
+// ═══════════════════════════════════════
+function renderTable() {
+  updateStats();
+  const filtered = getFiltered();
+  document.getElementById('visibleCount').textContent = `${filtered.length} report${filtered.length !== 1 ? 's' : ''}`;
+  const body = document.getElementById('tableBody');
+
+  if (!filtered.length) {
+    body.innerHTML = `<div class="empty-state"><div class="empty-icon">🔍</div><div class="empty-title">No reports found</div><div class="empty-sub">Try adjusting your filters or search query.<br><a href="bugreport.html" style="color:var(--g);text-decoration:none;">Submit the first bug report →</a></div></div>`;
+    return;
+  }
+
+  body.innerHTML = filtered.map(r => {
+    const time     = timeAgo(r.timestamp);
+    const sevBadge = `badge-${(r.severity||'low').toLowerCase()}`;
+    const stBadge  = `badge-${(r.status||'open').toLowerCase().replace(' ','-')}`;
+    const emailDisp = r.reporterEmail ? esc(r.reporterEmail) : '<span style="color:var(--mu);font-style:italic;">anonymous</span>';
+    return `<div class="report-row row-enter" onclick="openDetail('${r._key}')">
+      <div class="rr-id">${esc(r.id||r._key)}</div>
+      <div class="rr-title">${esc(r.title||'')}</div>
+      <div class="rr-email">${emailDisp}</div>
+      <div><span class="badge ${sevBadge}">${r.severity||'—'}</span></div>
+      <div><span class="badge ${stBadge}">${r.status||'—'}</span></div>
+      <div class="rr-time">${time}</div>
+      <div style="display:flex;gap:5px;" onclick="event.stopPropagation()">
+        <button class="action-btn" title="View" onclick="openDetail('${r._key}')"><i class="fas fa-eye"></i></button>
+        <button class="action-btn" title="Mark Resolved" onclick="quickResolve('${r._key}')"><i class="fas fa-check"></i></button>
+        <button class="action-btn del" title="Delete" onclick="confirmDelete('${r._key}')"><i class="fas fa-trash"></i></button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function updateStats() {
+  const c = { all: reports.length, open: 0, inv: 0, res: 0, crit: 0, clo: 0 };
+  reports.forEach(r => {
+    if (r.status === 'Open')          c.open++;
+    if (r.status === 'Investigating') c.inv++;
+    if (r.status === 'Resolved')      c.res++;
+    if (r.status === 'Closed')        c.clo++;
+    if (r.severity === 'Critical')    c.crit++;
+  });
+  document.getElementById('sv-total').textContent = c.all;
+  document.getElementById('sv-open').textContent  = c.open;
+  document.getElementById('sv-inv').textContent   = c.inv;
+  document.getElementById('sv-res').textContent   = c.res;
+  document.getElementById('sv-crit').textContent  = c.crit;
+  document.getElementById('countAll').textContent  = c.all;
+  document.getElementById('countOpen').textContent = c.open;
+  document.getElementById('countInv').textContent  = c.inv;
+  document.getElementById('countRes').textContent  = c.res;
+  document.getElementById('countClo').textContent  = c.clo;
+}
+
+// ═══════════════════════════════════════
+//  DETAIL PANEL
+// ═══════════════════════════════════════
+function openDetail(key) {
+  const r = reports.find(x => x._key === key);
+  if (!r) return;
+  currentDetailId = key;
+
+  document.getElementById('dp-id').textContent    = r.id || key;
+  document.getElementById('dp-title').textContent = r.title || '';
+
+  const sevColor = {Critical:'var(--rd)',High:'var(--or)',Medium:'var(--yw)',Low:'var(--g)'}[r.severity] || 'var(--mu)';
+  const stColor  = {Open:'var(--or)',Investigating:'#60a5fa',Resolved:'var(--g)',Closed:'var(--mu)'}[r.status] || 'var(--mu)';
+
+  document.getElementById('dp-meta').innerHTML = `
+    <div class="meta-item"><div class="mk">Severity</div><div class="mv" style="color:${sevColor};">${r.severity||'—'}</div></div>
+    <div class="meta-item"><div class="mk">Status</div><div class="mv" style="color:${stColor};">${r.status||'—'}</div></div>
+    <div class="meta-item"><div class="mk">Page</div><div class="mv" style="font-size:11.5px;">${r.page||'—'}</div></div>
+    <div class="meta-item"><div class="mk">Browser</div><div class="mv">${r.browser||'Unknown'}</div></div>
+    <div class="meta-item"><div class="mk">Submitted</div><div class="mv" style="font-size:11px;">${new Date(r.timestamp).toLocaleString()}</div></div>
+    <div class="meta-item"><div class="mk">Reporter Email</div><div class="mv" style="font-size:11px;color:var(--g);">${r.reporterEmail||'Anonymous'}</div></div>
+    ${r.uid ? `<div class="meta-item" style="grid-column:span 2"><div class="mk">User ID</div><div class="mv" style="font-size:10px;color:var(--mu);font-family:'JetBrains Mono',monospace;">${r.uid}</div></div>` : ''}
+    ${r.attachment ? renderAttachment(r.attachment) : ''}
+  `;
+  // Reporter info block
+  const repWrap = document.getElementById('dp-reporter-wrap');
+  if (r.reporterEmail || r.displayName || r.uid) {
+    repWrap.style.display = '';
+    document.getElementById('dp-reporter').textContent =
+      `Email:    ${r.reporterEmail || 'Anonymous'}\nName:     ${r.displayName || '—'}\nUID:      ${r.uid || '—'}`;
+  } else { repWrap.style.display = 'none'; }
+
+  document.getElementById('dp-steps-wrap').style.display = r.steps ? '' : 'none';
+  document.getElementById('dp-steps').textContent = r.steps || '';
+
+  const expWrap = document.getElementById('dp-exp-wrap');
+  expWrap.style.display = (r.expected || r.actual) ? '' : 'none';
+  document.getElementById('dp-expected').textContent = r.expected || '—';
+  document.getElementById('dp-actual').textContent   = r.actual   || '—';
+
+  document.getElementById('dp-ua-wrap').style.display = r.userAgent ? '' : 'none';
+  document.getElementById('dp-ua').textContent = r.userAgent || '';
+
+  document.getElementById('dp-status-sel').value = r.status || 'Open';
+  document.getElementById('detailPanel').classList.add('open');
+}
+
+function closeDetail() {
+  document.getElementById('detailPanel').classList.remove('open');
+  currentDetailId = null;
+}
+
+// ═══════════════════════════════════════
+//  SAVE STATUS TO FIREBASE
+// ═══════════════════════════════════════
+async function saveStatus() {
+  if (!currentDetailId) return;
+  const newStatus = document.getElementById('dp-status-sel').value;
+  const btn = document.getElementById('saveStatusBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+  try {
+    await db.ref(`bugReports/${currentDetailId}/status`).set(newStatus);
+    btn.innerHTML = '<i class="fas fa-check"></i> Saved!';
+  } catch (e) {
+    btn.innerHTML = '<i class="fas fa-times"></i> Error';
+  }
+  setTimeout(() => { btn.innerHTML = '<i class="fas fa-check"></i> Save Status'; btn.disabled = false; }, 1800);
+}
+
+async function quickResolve(key) {
+  await db.ref(`bugReports/${key}/status`).set('Resolved');
+}
+
+// ═══════════════════════════════════════
+//  DELETE FROM FIREBASE
+// ═══════════════════════════════════════
+function confirmDelete(key) {
+  const r = reports.find(x => x._key === key);
+  pendingDeleteId = key;
+  showModal('🗑️', `Delete ${r?.id || key}?`, `"${r?.title||'This report'}" will be permanently removed from the database.`, [
+    { label: 'Cancel',  cls: 'mbt-o',  fn: 'closeModal()' },
+    { label: 'Delete',  cls: 'mbt-rd', fn: 'doDelete()' },
+  ]);
+}
+
+function deleteCurrentReport() {
+  if (currentDetailId) confirmDelete(currentDetailId);
+}
+
+async function doDelete() {
+  closeModal();
+  if (!pendingDeleteId) return;
+  try {
+    await db.ref(`bugReports/${pendingDeleteId}`).remove();
+    if (currentDetailId === pendingDeleteId) closeDetail();
+  } catch (e) { console.error('Delete failed:', e); }
+  pendingDeleteId = null;
+}
+
+function confirmClearAll() {
+  if (!reports.length) return;
+  showModal('⚠️', 'Clear All Reports?', `This will permanently delete all ${reports.length} reports from Firebase. This cannot be undone.`, [
+    { label: 'Cancel',    cls: 'mbt-o',  fn: 'closeModal()' },
+    { label: 'Clear All', cls: 'mbt-rd', fn: 'clearAll()' },
+  ]);
+}
+
+async function clearAll() {
+  closeModal();
+  try { await db.ref('bugReports').remove(); closeDetail(); }
+  catch (e) { console.error('Clear failed:', e); }
+}
+
+// ═══════════════════════════════════════
+//  EXPORT CSV
+// ═══════════════════════════════════════
+function exportCSV() {
+  const headers = ['ID','Title','Page','Browser','Severity','Status','Reporter Email','UID','Steps','Expected','Actual','Timestamp'];
+  const rows = reports.map(r => [
+    r.id||r._key, r.title, r.page, r.browser, r.severity, r.status,
+    r.reporterEmail||'', r.uid||'',
+    (r.steps||'').replace(/\n/g,' '), (r.expected||'').replace(/\n/g,' '),
+    (r.actual||'').replace(/\n/g,' '), r.timestamp
+  ].map(v => `"${String(v||'').replace(/"/g,'""')}"`).join(','));
+  const csv = [headers.join(','), ...rows].join('\n');
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv' }));
+  a.download = `phinex-bugs-${new Date().toISOString().slice(0,10)}.csv`;
+  a.click();
+}
+
+// ═══════════════════════════════════════
+//  MODAL
+// ═══════════════════════════════════════
+function showModal(ico, title, msg, btns) {
+  document.getElementById('mico').textContent  = ico;
+  document.getElementById('mtitle').textContent = title;
+  document.getElementById('mmsg').textContent   = msg;
+  document.getElementById('mbtns').innerHTML = btns.map(b =>
+    `<button class="mbt ${b.cls}" onclick="${b.fn}">${b.label}</button>`
+  ).join('');
+  document.getElementById('modal').classList.add('on');
+}
+function closeModal() {
+  const c = document.getElementById('mc');
+  c.style.cssText = 'transform:scale(.88);opacity:0;';
+  setTimeout(() => { document.getElementById('modal').classList.remove('on'); c.style.cssText = ''; }, 260);
+}
+
+function openViewer(type,url){
+
+  const viewer=document.getElementById("fileViewer");
+  const content=document.getElementById("viewerContent");
+
+  viewer.style.display="flex";
+
+  if(type==="image"){
+
+    content.innerHTML=`
+    <img src="${url}" style="max-width:90vw;max-height:90vh;border-radius:10px;">
+    `;
+
+  }
+
+  else if(type==="video"){
+
+    content.innerHTML=`
+    <video controls autoplay style="max-width:90vw;max-height:90vh;border-radius:10px;">
+      <source src="${url}">
+    </video>
+    `;
+
+  }
+
+  else if(type==="pdf"){
+
+    content.innerHTML=`
+    <iframe src="${url}" 
+      style="width:90vw;height:90vh;border:none;border-radius:10px;">
+    </iframe>
+    `;
+
+  }
+
+}
+
+function closeViewer(){
+  document.getElementById("fileViewer").style.display="none";
+  document.getElementById("viewerContent").innerHTML="";
+}
+
+function getFileIcon(ext){
+
+  const icons={
+    png:"fa-file-image",
+    jpg:"fa-file-image",
+    jpeg:"fa-file-image",
+    gif:"fa-file-image",
+    webp:"fa-file-image",
+
+    mp4:"fa-file-video",
+    webm:"fa-file-video",
+    mov:"fa-file-video",
+
+    mp3:"fa-file-audio",
+    wav:"fa-file-audio",
+
+    pdf:"fa-file-pdf",
+
+    zip:"fa-file-zipper",
+    rar:"fa-file-zipper",
+
+    txt:"fa-file-lines",
+    doc:"fa-file-word",
+    docx:"fa-file-word"
+  };
+
+  return icons[ext] || "fa-file";
+}
+
+function renderAttachment(file){
+
+  if(!file) return "";
+
+  // file may be a bare filename ("screenshot.png") or already a full URL/path
+  const url = file.startsWith('http') || file.startsWith('/') ? file : '/uploads/' + encodeURIComponent(file);
+  const ext=file.split('.').pop().toLowerCase();
+  const icon=getFileIcon(ext);
+
+  let preview="";
+
+  if(["png","jpg","jpeg","gif","webp"].includes(ext)){
+
+    preview=`
+    <img src="${url}"
+    onclick="openViewer('image','${url}')"
+    style="max-width:200px;border-radius:8px;margin-top:8px;cursor:pointer;">
+    `;
+
+  }
+
+  else if(["mp4","webm","mov"].includes(ext)){
+
+    preview=`
+    <button onclick="openViewer('video','${url}')"
+    style="margin-top:8px;padding:6px 12px;border-radius:8px;background:#39ff14;border:none;font-weight:700;cursor:pointer;">
+    ▶ Play Video
+    </button>
+    `;
+
+  }
+
+  else if(ext==="pdf"){
+
+    preview=`
+    <button onclick="openViewer('pdf','${url}')"
+    style="margin-top:8px;padding:6px 12px;border-radius:8px;background:#ff4444;border:none;color:white;font-weight:700;cursor:pointer;">
+    📄 Open PDF
+    </button>
+    `;
+
+  }
+
+  else if(["mp3","wav","ogg"].includes(ext)){
+
+    preview=`
+    <audio controls style="margin-top:8px;">
+      <source src="${url}">
+    </audio>
+    `;
+
+  }
+
+  return `
+  <div class="meta-item" style="grid-column:span 2">
+
+    <div class="mk">Attachment</div>
+
+    <div class="mv" style="font-size:12px;">
+
+      <i class="fas ${icon}"></i>
+
+      <a href="${url}" target="_blank" style="margin-left:6px;">
+      ${file.split('/').pop()}
+      </a>
+
+      <br>
+
+      ${preview}
+
+    </div>
+
+  </div>
+  `;
+}
+
+// ═══════════════════════════════════════
+//  HELPERS
+// ═══════════════════════════════════════
+function timeAgo(ts) {
+  const diff = Date.now() - new Date(ts).getTime();
+  const m = Math.floor(diff/60000), h = Math.floor(m/60), d = Math.floor(h/24);
+  if (d > 0) return `${d}d ago`;
+  if (h > 0) return `${h}h ago`;
+  if (m > 0) return `${m}m ago`;
+  return 'Just now';
+}
+function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') { closeDetail(); closeModal(); }
+  // Enter key in gate input
+  if (e.key === 'Enter' && document.getElementById('gateInput') === document.activeElement) checkAdminCode();
+});
+</script>
+<!-- UNIVERSAL FILE VIEWER -->
+<div id="fileViewer" style="
+position:fixed;
+inset:0;
+background:rgba(0,0,0,0.85);
+display:none;
+align-items:center;
+justify-content:center;
+z-index:99999;
+backdrop-filter:blur(8px);
+">
+
+  <div style="position:absolute;top:20px;right:20px;">
+    <button onclick="closeViewer()" style="
+      background:#ff4444;
+      border:none;
+      color:white;
+      padding:8px 14px;
+      border-radius:8px;
+      font-weight:700;
+      cursor:pointer;">
+      Close
+    </button>
+  </div>
+
+  <div id="viewerContent" style="max-width:90%;max-height:90%;"></div>
+
+</div>
+</body>
+</html>

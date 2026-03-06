@@ -1,1766 +1,2736 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>X-Developers Test | PhineX</title>
-  <link rel="stylesheet" href="cdnjs.cloudflare.com">
-  <link rel="icon" type="image/png" class="icon" href="Phinex.png">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <style>
-    /* CSS styles remain mostly the same as provided earlier, adding a couple for code display */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>X-Developer Assessment | PhineX</title>
+<link rel="icon" type="image/png" href="PhineX (2).png">
+<script src="bg3d.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --g:#39ff14;--gd:rgba(57,255,20,.12);--gd2:rgba(57,255,20,.06);
+  --bg:#04040a;--s1:#0b0b14;--s2:#111120;
+  --bd:rgba(255,255,255,.06);--bdg:rgba(57,255,20,.18);
+  --tx:#eeeeff;--mu:#5c5c84;--go:#fbbf24;--rd:#ff4444;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--tx);min-height:100vh;overflow-x:hidden;}
 
-    body {
-      background-color: #0f172a;
-      color: #e2e8f0;
-      line-height: 1.6;
-    }
-    /* ... (rest of the provided CSS) ... */
-    .navbar {
-      background-color: #1e293b;
-      padding: 1rem 0;
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
+/* ambient */
+.amb{position:fixed;inset:0;pointer-events:none;z-index:0;}
+.amb-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(57,255,20,.02)1px,transparent 1px),linear-gradient(90deg,rgba(57,255,20,.02)1px,transparent 1px);background-size:52px 52px;}
+.amb-orb{position:absolute;border-radius:50%;filter:blur(120px);}
+.ao1{width:500px;height:500px;background:rgba(57,255,20,.045);top:-180px;right:-80px;}
+.ao2{width:350px;height:350px;background:rgba(0,180,130,.035);bottom:-100px;left:-100px;}
+.amb-scan{position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(0,0,0,.018)0,rgba(0,0,0,.018)1px,transparent 1px,transparent 4px);}
 
-    .nav-container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 2rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
+/* ── TOPBAR ── */
+.topbar{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  height:60px;
+  background:rgba(4,4,10,.95);
+  backdrop-filter:blur(28px);
+  border-bottom:1px solid var(--bd);
+  display:flex;align-items:center;
+}
+.tb-wrap{max-width:1400px;margin:0 auto;padding:0 28px;width:100%;display:flex;align-items:center;gap:16px;}
 
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: #60a5fa;
-    }
+.logo{display:flex;align-items:center;gap:9px;text-decoration:none;flex-shrink:0;}
+.lb{width:30px;height:30px;border-radius:7px;background:linear-gradient(135deg,#39ff14,#00cc88);display:flex;align-items:center;justify-content:center;box-shadow:0 0 14px rgba(57,255,20,.3);}
+.lb i{color:#04040a;font-size:12px;}
+.ln{font-family:'Syne',sans-serif;font-size:17px;font-weight:800;}
+.ln b{color:var(--g);}
 
-    .logo i {
-      font-size: 2rem;
-    }
+.tb-sep{width:1px;height:18px;background:var(--bd);}
 
-    .test-container {
-      max-width: 800px;
-      margin: 2rem auto;
-      padding: 0 1.5rem;
-    }
+/* progress bar in topbar */
+.tb-prog{flex:1;max-width:300px;display:flex;align-items:center;gap:10px;}
+.prog-track{flex:1;height:4px;background:rgba(255,255,255,.07);border-radius:100px;overflow:hidden;}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--g),#00e8a2);border-radius:100px;transition:width .4s ease;width:0%;}
+.prog-label{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--mu);white-space:nowrap;}
 
-    .test-header {
-      text-align: center;
-      margin-bottom: 2.5rem;
-      padding: 2rem;
-      background-color: #1e293b;
-      border-radius: 12px;
-      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-    }
+/* timer */
+.tb-timer{display:flex;align-items:center;gap:10px;margin-left:auto;}
+.timer-box{
+  display:flex;align-items:center;gap:8px;
+  background:var(--s1);border:1px solid var(--bd);
+  border-radius:9px;padding:7px 14px;
+  font-family:'JetBrains Mono',monospace;font-size:15px;font-weight:700;
+  color:var(--tx);transition:all .3s;
+}
+.timer-box.warn{border-color:rgba(251,191,36,.3);color:var(--go);}
+.timer-box.danger{border-color:rgba(255,68,68,.3);color:var(--rd);animation:pulse-rd .5s ease-in-out infinite;}
+@keyframes pulse-rd{0%,100%{box-shadow:none;}50%{box-shadow:0 0 16px rgba(255,68,68,.3);}}
+.timer-icon{font-size:12px;}
 
-    .test-header h1 {
-      font-size: 2.25rem;
-      margin-bottom: 0.75rem;
-      background: linear-gradient(to right, #60a5fa, #a78bfa);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
+/* question counter badge */
+.qcount{
+  background:var(--gd2);border:1px solid var(--bdg);
+  border-radius:7px;padding:5px 12px;
+  font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--g);
+  white-space:nowrap;
+}
 
-    .test-header p {
-      color: #94a3b8;
-      font-size: 1.1rem;
-    }
+/* ── MAIN LAYOUT ── */
+.main{
+  display:grid;
+  grid-template-columns:260px 1fr 240px;
+  min-height:100vh;
+  padding-top:60px;
+  position:relative;z-index:1;
+}
 
-    .questions-container {
-      background-color: #1e293b;
-      border-radius: 12px;
-      padding: 2rem;
-      margin-bottom: 2rem;
-      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-    }
+/* ── LEFT SIDEBAR — question nav ── */
+.lsb{
+  border-right:1px solid var(--bd);
+  padding:28px 20px;
+  display:flex;flex-direction:column;
+  gap:20px;
+  background:rgba(4,4,10,.6);
+  backdrop-filter:blur(8px);
+}
+.lsb-title{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:var(--mu);text-transform:uppercase;letter-spacing:.9px;display:flex;align-items:center;gap:7px;}
+.lsb-title i{color:var(--g);}
 
-    .question-card {
-      margin-bottom: 2.5rem;
-      padding-bottom: 2rem;
-      border-bottom: 1px solid #334155;
-    }
+.qnav{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;}
+.qbtn{
+  aspect-ratio:1;border-radius:9px;border:1px solid var(--bd);
+  background:var(--s1);
+  font-family:'Syne',sans-serif;font-size:12px;font-weight:700;
+  color:var(--mu);cursor:pointer;transition:all .2s;
+  display:flex;align-items:center;justify-content:center;
+}
+.qbtn:hover{border-color:var(--bdg);color:var(--tx);}
+.qbtn.answered{border-color:rgba(57,255,20,.3);background:rgba(57,255,20,.07);color:var(--g);}
+.qbtn.current{border-color:var(--g);background:rgba(57,255,20,.12);color:var(--g);box-shadow:0 0 12px rgba(57,255,20,.2);}
+.qbtn.answered.current{background:rgba(57,255,20,.18);}
 
-    .question-card:last-child {
-      border-bottom: none;
-      margin-bottom: 0;
-      padding-bottom: 0;
-    }
+/* legend */
+.legend{display:flex;flex-direction:column;gap:7px;}
+.leg-item{display:flex;align-items:center;gap:8px;font-size:11.5px;color:var(--mu);}
+.leg-dot{width:10px;height:10px;border-radius:3px;flex-shrink:0;}
 
-    .question-title {
-      font-size: 1.25rem;
-      margin-bottom: 1.25rem;
-      color: #f1f5f9;
-      display: flex;
-      gap: 0.75rem;
-      flex-direction: column;
+/* score preview */
+.score-preview{background:var(--s1);border:1px solid var(--bd);border-radius:12px;padding:16px;}
+.sp-title{font-size:10.5px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--mu);margin-bottom:12px;display:flex;align-items:center;gap:6px;}
+.sp-title i{color:var(--g);}
+.sp-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;font-size:12px;}
+.sp-val{font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--tx);}
+
+/* ── CENTER — question area ── */
+.center{padding:44px 60px;display:flex;flex-direction:column;}
+
+/* question header */
+.q-meta{display:flex;align-items:center;gap:12px;margin-bottom:28px;}
+.q-num{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--mu);}
+.q-cat{font-size:11px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--mu);background:var(--s1);border:1px solid var(--bd);border-radius:6px;padding:3px 9px;}
+.q-diff{font-size:11px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;border-radius:6px;padding:3px 9px;}
+.diff-hard{color:#ff6868;background:rgba(255,68,68,.07);border:1px solid rgba(255,68,68,.2);}
+.diff-med{color:var(--go);background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.2);}
+.diff-easy{color:var(--g);background:var(--gd2);border:1px solid var(--bdg);}
+
+.q-text{
+  font-family:'Syne',sans-serif;font-size:clamp(1.2rem,2vw,1.7rem);
+  font-weight:700;line-height:1.35;color:var(--tx);
+  margin-bottom:40px;
+  min-height:80px;
+}
+
+/* options */
+.options{display:flex;flex-direction:column;gap:11px;margin-bottom:40px;}
+.opt{
+  display:flex;align-items:center;gap:14px;
+  padding:16px 20px;
+  background:var(--s1);border:1px solid var(--bd);
+  border-radius:13px;cursor:pointer;transition:all .22s;
+  user-select:none;
+}
+.opt:hover{border-color:var(--bdg);background:rgba(57,255,20,.03);}
+.opt.selected{border-color:var(--g);background:rgba(57,255,20,.07);box-shadow:0 0 0 1px rgba(57,255,20,.12);}
+.opt.correct{border-color:var(--g);background:rgba(57,255,20,.1);pointer-events:none;}
+.opt.wrong{border-color:var(--rd);background:rgba(255,68,68,.07);pointer-events:none;}
+.opt.disabled{opacity:.5;pointer-events:none;}
+.opt-key{
+  width:30px;height:30px;border-radius:8px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(255,255,255,.05);border:1px solid var(--bd);
+  font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;
+  color:var(--mu);transition:all .2s;
+}
+.opt.selected .opt-key{background:var(--g);border-color:var(--g);color:#04040a;}
+.opt.correct .opt-key{background:var(--g);border-color:var(--g);color:#04040a;}
+.opt.wrong .opt-key{background:var(--rd);border-color:var(--rd);color:#fff;}
+.opt-text{font-size:14px;color:var(--tx);line-height:1.5;flex:1;}
+.opt-check{margin-left:auto;font-size:14px;display:none;}
+.opt.correct .opt-check{display:block;color:var(--g);}
+.opt.wrong .opt-check{display:block;color:var(--rd);}
+
+/* nav buttons */
+.q-nav{display:flex;gap:10px;align-items:center;margin-top:auto;}
+.bn{
+  display:inline-flex;align-items:center;gap:7px;
+  padding:12px 20px;border-radius:10px;
+  font-family:'Syne',sans-serif;font-weight:700;font-size:13px;
+  cursor:pointer;transition:all .2s;border:none;text-decoration:none;
+}
+.bn-prev{background:var(--s1);color:var(--mu);border:1px solid var(--bd);}
+.bn-prev:hover{border-color:var(--bdg);color:var(--tx);}
+.bn-next{background:var(--s2);color:var(--tx);border:1px solid rgba(255,255,255,.1);}
+.bn-next:hover{border-color:var(--bdg);color:var(--g);}
+.bn-submit{background:var(--g);color:#04040a;box-shadow:0 0 24px rgba(57,255,20,.25);}
+.bn-submit:hover{background:#52ff28;box-shadow:0 0 40px rgba(57,255,20,.4);transform:translateY(-1px);}
+.q-hint{margin-left:auto;font-size:12px;color:var(--mu);}
+
+/* ── RIGHT SIDEBAR ── */
+.rsb{
+  border-left:1px solid var(--bd);
+  padding:28px 20px;
+  display:flex;flex-direction:column;gap:20px;
+  background:rgba(4,4,10,.6);
+  backdrop-filter:blur(8px);
+}
+.rsb-title{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:var(--mu);text-transform:uppercase;letter-spacing:.9px;display:flex;align-items:center;gap:7px;}
+.rsb-title i{color:var(--g);}
+
+/* file upload */
+.file-zone{
+  border:1.5px dashed rgba(57,255,20,.2);
+  border-radius:12px;padding:20px;text-align:center;
+  cursor:pointer;transition:all .2s;
+  background:var(--gd2);
+}
+.file-zone:hover,.file-zone.drag{border-color:var(--g);background:rgba(57,255,20,.07);}
+.fz-icon{font-size:22px;color:var(--g);margin-bottom:8px;opacity:.7;}
+.fz-text{font-size:11.5px;color:var(--mu);line-height:1.6;}
+.fz-text b{color:var(--tx);}
+.fz-req{font-size:10px;color:var(--mu);margin-top:4px;}
+input[type=file]{display:none;}
+.fz-preview{
+  background:var(--s1);border:1px solid var(--bdg);
+  border-radius:9px;padding:11px;margin-top:10px;display:none;
+}
+.fz-preview.show{display:block;}
+.fzp-name{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--g);word-break:break-all;}
+.fzp-size{font-size:10px;color:var(--mu);margin-top:3px;}
+.fzp-ok{display:flex;align-items:center;gap:5px;margin-top:6px;font-size:11px;color:var(--g);}
+.fzp-warn{display:flex;align-items:center;gap:5px;margin-top:6px;font-size:11px;color:var(--rd);}
+
+/* info card */
+.info-card{background:var(--s1);border:1px solid var(--bd);border-radius:12px;overflow:hidden;}
+.ic-head{padding:11px 15px;border-bottom:1px solid var(--bd);font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:var(--mu);text-transform:uppercase;letter-spacing:.8px;display:flex;align-items:center;gap:7px;}
+.ic-head i{color:var(--g);}
+.ic-row{display:flex;justify-content:space-between;align-items:center;padding:10px 15px;border-bottom:1px solid var(--bd);font-size:12px;}
+.ic-row:last-child{border:none;}
+.ic-label{color:var(--mu);}
+.ic-val{font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--tx);}
+
+/* keyboard hints */
+.kb-hints{display:flex;flex-direction:column;gap:6px;}
+.kb-hint{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--mu);}
+.key{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-width:22px;height:20px;padding:0 5px;
+  background:rgba(255,255,255,.06);border:1px solid var(--bd);
+  border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:9.5px;
+  color:var(--tx);flex-shrink:0;
+}
+
+/* ── RESULT SCREEN ── */
+#resultScreen{
+  position:fixed;inset:0;z-index:999;
+  background:rgba(4,4,10,.97);
+  backdrop-filter:blur(20px);
+  display:none;align-items:center;justify-content:center;
+  padding:20px;flex-direction:column;gap:0;
+}
+#resultScreen.on{display:flex;}
+.rs-wrap{max-width:520px;width:100%;text-align:center;}
+
+@keyframes fu{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+@keyframes blk{0%,100%{opacity:1;}50%{opacity:.15;}}
+@keyframes scalein{from{opacity:0;transform:scale(.7);}to{opacity:1;transform:scale(1);}}
+
+.rs-icon{font-size:72px;margin-bottom:20px;animation:scalein .5s cubic-bezier(.175,.885,.32,1.275) both;}
+.rs-title{font-family:'Syne',sans-serif;font-size:clamp(2rem,5vw,3.5rem);font-weight:800;letter-spacing:-2px;margin-bottom:10px;animation:fu .4s .1s ease both;}
+.rs-sub{font-size:15px;color:var(--mu);line-height:1.7;margin-bottom:36px;animation:fu .4s .18s ease both;}
+
+.rs-stats{display:flex;gap:16px;justify-content:center;margin-bottom:36px;animation:fu .4s .24s ease both;}
+.rs-stat{background:var(--s1);border:1px solid var(--bd);border-radius:14px;padding:20px 24px;text-align:center;}
+.rss-val{font-family:'Syne',sans-serif;font-size:26px;font-weight:800;color:var(--tx);display:block;margin-bottom:3px;}
+.rss-label{font-size:11px;color:var(--mu);text-transform:uppercase;letter-spacing:.7px;}
+
+.rs-btns{display:flex;gap:12px;justify-content:center;animation:fu .4s .3s ease both;}
+.rb{display:inline-flex;align-items:center;gap:8px;padding:13px 26px;border-radius:11px;font-family:'Syne',sans-serif;font-weight:800;font-size:14px;cursor:pointer;transition:all .2s;border:none;text-decoration:none;}
+.rb-g{background:var(--g);color:#04040a;box-shadow:0 0 26px rgba(57,255,20,.25);}
+.rb-g:hover{background:#52ff28;box-shadow:0 0 40px rgba(57,255,20,.4);transform:translateY(-2px);}
+.rb-o{background:transparent;color:var(--tx);border:1px solid var(--bd);}
+.rb-o:hover{border-color:var(--bdg);color:var(--g);}
+
+/* confetti */
+.confetti-piece{position:fixed;width:8px;height:8px;border-radius:1px;pointer-events:none;z-index:1000;}
+
+/* ── MODAL ── */
+#modal{position:fixed;inset:0;z-index:9999;background:rgba(4,4,10,.85);backdrop-filter:blur(12px);display:none;align-items:center;justify-content:center;padding:20px;}
+#modal.on{display:flex;}
+#mc{background:var(--s1);border:1px solid var(--bdg);border-radius:20px;padding:36px 30px;max-width:380px;width:100%;text-align:center;box-shadow:0 40px 80px rgba(0,0,0,.7);transform:scale(.88);opacity:0;transition:transform .28s cubic-bezier(.175,.885,.32,1.275),opacity .28s;}
+#modal.on #mc{transform:scale(1);opacity:1;}
+.m-ico{font-size:40px;margin-bottom:12px;}
+.m-title{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;margin-bottom:7px;}
+.m-msg{font-size:13px;color:var(--mu);line-height:1.7;margin-bottom:22px;}
+.m-btns{display:flex;gap:10px;justify-content:center;}
+.mbt{display:inline-flex;align-items:center;gap:6px;padding:11px 22px;border-radius:9px;font-family:'Syne',sans-serif;font-weight:800;font-size:13px;cursor:pointer;transition:all .2s;border:none;}
+.mbt-g{background:var(--g);color:#04040a;}
+.mbt-g:hover{background:#52ff28;box-shadow:0 0 18px rgba(57,255,20,.35);}
+.mbt-o{background:transparent;color:var(--mu);border:1px solid var(--bd);}
+.mbt-o:hover{border-color:var(--bdg);color:var(--tx);}
+
+@media(max-width:1200px){.main{grid-template-columns:220px 1fr;}.rsb{display:none;}}
+@media(max-width:900px){.main{grid-template-columns:1fr;}.lsb{display:none;}.center{padding:28px 24px;}}
+
+    /* ══════════ MOBILE RESPONSIVE — PhineX ══════════ */
+    *{min-width:0;}
+    img,video{max-width:100%;height:auto;}
+
+    /* Hamburger */
+    .ham{display:none;flex-direction:column;justify-content:center;gap:5px;
+         width:40px;height:40px;background:none;border:none;cursor:pointer;
+         padding:8px;margin-left:auto;z-index:200;}
+    .ham span{display:block;width:22px;height:2px;background:var(--neon,#39ff14);
+              border-radius:2px;transition:all .3s;}
+    .ham.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+    .ham.open span:nth-child(2){opacity:0;}
+    .ham.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+
+    /* Mobile drawer */
+    .mobile-nav{display:none;position:fixed;top:68px;left:0;right:0;
+                background:rgba(5,5,8,0.97);backdrop-filter:blur(20px);
+                border-bottom:1px solid rgba(255,255,255,.08);
+                z-index:150;padding:12px 16px 20px;flex-direction:column;gap:4px;}
+    .mobile-nav.open{display:flex;}
+    .mobile-nav a{padding:12px 16px;border-radius:10px;font-size:14px;
+                  color:#7070a0;text-decoration:none;transition:all .2s;
+                  min-height:44px;display:flex;align-items:center;}
+    .mobile-nav a:hover,.mobile-nav a.active{color:#f0f0ff;
+      background:rgba(255,255,255,.06);}
+    .mobile-nav .btn-neon{justify-content:center;margin-top:8px;}
+
+    @media(max-width:1024px){
+      .hero-inner{grid-template-columns:1fr;gap:40px;}
+      .hero-inner>*:last-child{display:none;}
+    }
+    @media(max-width:768px){
+      .ham{display:flex;}
+      .nav-links{display:none!important;}
+      .nav-inner .btn-neon,.nav-inner .nb-g{display:none;}
+      body{overflow-x:hidden;}
+      .hero{padding:88px 16px 48px;}
+      .hero-inner{gap:24px;}
+      .section-wrap,.page{padding-left:16px;padding-right:16px;}
+      .hero h1,.hero-h1,.h1{font-size:clamp(2.2rem,9vw,3.5rem)!important;letter-spacing:-1.5px!important;}
+    }
+    @media(max-width:480px){
+      .mobile-nav a,.mobile-nav button{min-height:44px;}
+      .btn-neon{min-height:44px;padding:10px 18px;}
+      .hero{padding:80px 12px 40px;}
+      .hero h1,.hero-h1,.h1{font-size:clamp(1.9rem,8vw,2.8rem)!important;}
+      .cards-grid,.grid-2,.grid-3,[class*="-grid"]{grid-template-columns:1fr!important;}
+      .stats-row,.stat-row{flex-direction:column;gap:12px;}
+    }
+    @media(max-width:360px){
+      nav,.nav-inner{padding-left:12px!important;padding-right:12px!important;}
+      .hero{padding-left:8px;padding-right:8px;}
+    }
+    @media(hover:none){
+      [class*="float"],[class*="Float"]{animation:none!important;}
+    }
+    @media(orientation:landscape) and (max-height:500px){
+      .hero{min-height:auto;padding-top:80px;}
     }
     
-    .question-code {
-        background-color: #0f172a;
-        padding: 1rem;
-        border-radius: 8px;
-        font-family: monospace;
-        white-space: pre-wrap;
-        margin-top: 0.5rem;
-        font-size: 0.9rem;
+    /* ── X-Academy Test mobile fixes ── */
+    @media(max-width:900px){
+      .exam-layout{grid-template-columns:1fr!important;height:auto!important;}
+      .sidebar{position:static!important;width:100%!important;height:auto!important;
+               border-right:none!important;border-bottom:1px solid rgba(255,255,255,.06);}
+      .main-panel{height:auto!important;overflow:visible!important;}
+    }
+    @media(max-width:768px){
+      .topbar .tb-wrap{padding:0 16px;}
+      .tb-prog{display:none;}
+      .q-nav{flex-wrap:wrap;}
+      .bn{min-height:44px;padding:10px 16px;}
+      .option-btn{min-height:52px;}
+      .qnav{grid-template-columns:repeat(6,1fr)!important;}
+    }
+    @media(max-width:480px){
+      .qnav{grid-template-columns:repeat(5,1fr)!important;}
+      .q-text{font-size:15px!important;}
     }
 
-    .question-number {
-      background-color: #3b82f6;
-      color: white;
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: bold;
-      flex-shrink: 0;
-    }
-
-    .options-container {
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
-    }
-
-    .option {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      padding: 1rem;
-      background-color: #334155;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    .option:hover {
-      background-color: #475569;
-      transform: translateY(-2px);
-    }
-
-    .option.selected {
-      background-color: #1e40af;
-      border: 2px solid #3b82f6;
-    }
-
-    .option input {
-      display: none;
-    }
-
-    .option-label {
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
-      border: 2px solid #64748b;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .option.selected .option-label {
-      background-color: #3b82f6;
-      border-color: #3b82f6;
-    }
-
-    .option.selected .option-label:after {
-      content: "✓";
-      color: white;
-      font-size: 0.8rem;
-      font-weight: bold;
-    }
-
-    .test-footer {
-      text-align: center;
-      margin-top: 2rem;
-    }
-
-    .btn-primary {
-      background: linear-gradient(to right, #3b82f6, #8b5cf6);
-      color: white;
-      border: none;
-      padding: 1rem 2.5rem;
-      font-size: 1.1rem;
-      border-radius: 8px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.75rem;
-      margin: 0 auto;
-      transition: all 0.3s ease;
-      font-weight: 600;
-    }
-
-    .btn-primary:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 10px 20px rgba(59, 130, 246, 0.3);
-    }
-
-    .btn-primary:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-      transform: none;
-    }
-
-    .thank-you {
-      background-color: #1e293b;
-      border-radius: 12px;
-      padding: 3rem 2rem;
-      text-align: center;
-      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-    }
-
-    .hidden {
-      display: none;
-    }
-    
-    /* ... (rest of the provided CSS for result screen/media queries) ... */
-    .success-message i {
-      font-size: 4rem;
-      color: #10b981;
-      margin-bottom: 1.5rem;
-    }
-
-    .success-message h2 {
-      font-size: 2rem;
-      margin-bottom: 1rem;
-      color: #f1f5f9;
-    }
-
-    .success-message p {
-      color: #94a3b8;
-      margin-bottom: 1.5rem;
-      font-size: 1.1rem;
-    }
-
-    .community-links {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 1rem;
-      margin-top: 2rem;
-    }
-
-    .btn-secondary {
-      background-color: #5865F2;
-      color: white;
-      padding: 0.75rem 1.5rem;
-      border-radius: 8px;
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      font-weight: 600;
-      transition: all 0.3s ease;
-    }
-
-    .btn-secondary:hover {
-      background-color: #4752c4;
-      transform: translateY(-2px);
-    }
-
-    .result-container {
-      background-color: #1e293b;
-      border-radius: 12px;
-      padding: 3rem 2rem;
-      text-align: center;
-      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-      margin-bottom: 2rem;
-    }
-
-    .result-header {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin-bottom: 2rem;
-    }
-
-    .result-score {
-      font-size: 3.5rem;
-      font-weight: 800;
-      margin-bottom: 0.5rem;
-      background: linear-gradient(to right, #3b82f6, #8b5cf6);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .result-message {
-      font-size: 1.5rem;
-      margin-bottom: 1rem;
-      color: #f1f5f9;
-    }
-
-    .result-details {
-      color: #94a3b8;
-      margin-bottom: 2rem;
-      font-size: 1.1rem;
-    }
-
-    .progress-bar {
-      width: 100%;
-      height: 20px;
-      background-color: #334155;
-      border-radius: 10px;
-      margin: 2rem 0;
-      overflow: hidden;
-    }
-
-    .progress-fill {
-      height: 100%;
-      border-radius: 10px;
-      background: linear-gradient(to right, #3b82f6, #8b5cf6);
-      transition: width 1.5s ease-in-out;
-    }
-
-    .failed-message {
-      background-color: rgba(220, 38, 38, 0.1);
-      border: 1px solid rgba(220, 38, 38, 0.3);
-      border-radius: 8px;
-      padding: 1.5rem;
-      margin-bottom: 2rem;
-    }
-
-    .failed-message h3 {
-      color: #fca5a5;
-      margin-bottom: 0.5rem;
-    }
-
-    .failed-message p {
-      color: #fca5a5;
-    }
-
-    .celebration {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 1000;
-    }
-
-    .confetti {
-      position: absolute;
-      width: 10px;
-      height: 20px;
-      opacity: 0;
-    }
-
-    @keyframes confetti-fall {
-      0% {
-        transform: translateY(-100px) rotate(0deg);
-        opacity: 1;
-      }
-      100% {
-        transform: translateY(100vh) rotate(720deg);
-        opacity: 0;
-      }
-    }
-
-    @keyframes pulse {
-      0%, 100% {
-        transform: scale(1);
-      }
-      50% {
-        transform: scale(1.05);
-      }
-    }
-
-    .pulse {
-      animation: pulse 1.5s infinite;
-    }
-
-    @media (max-width: 768px) {
-      .test-container {
-        padding: 0 1rem;
-      }
-      
-      .test-header h1 {
-        font-size: 1.75rem;
-      }
-      
-      .question-title {
-        font-size: 1.1rem;
-      }
-      
-      .community-links {
-        flex-direction: column;
-        align-items: center;
-      }
-      
-      .btn-primary, .btn-secondary, .btn-outline {
-        width: 100%;
-        justify-content: center;
-      }
-    }
-
-    /* Timer specific CSS */
-    .timer-container {
-        background-color: #dc2626; /* Red background for urgency */
-        color: white;
-        padding: 0.5rem 1rem;
-        border-radius: 8px;
-        font-size: 1.2rem;
-        font-weight: bold;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-    }
-
-    .timer-container i {
-        font-size: 1.5rem;
-    }
-  </style>
+    </style>
 </head>
 <body>
-  <nav class="navbar">
-    <div class="nav-container">
-      <div class="logo">
-        <i class="fas fa-laptop-code"></i>
-        <span>X-Developers Test</span>
-      </div>
-      <div class="timer-container">
-        <i class="fas fa-clock"></i>
-        <span id="time">00:00</span> <!-- Timer updated by JS -->
+
+<div class="amb">
+  <div class="amb-grid"></div>
+  <div class="amb-orb ao1"></div>
+  <div class="amb-orb ao2"></div>
+  <div class="amb-scan"></div>
+</div>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="tb-wrap">
+    <a href="index.html" class="logo">
+      <div class="lb"><i class="fas fa-dragon"></i></div>
+      <span class="ln">Phine<b>X</b></span>
+    </a>
+    <div class="tb-sep"></div>
+    <div class="tb-prog">
+      <div class="prog-track"><div class="prog-fill" id="progFill"></div></div>
+      <span class="prog-label" id="progLabel">0 / 10</span>
+    </div>
+    <div class="tb-timer">
+      <div class="qcount" id="qcount">Q 1 of 10</div>
+      <div class="timer-box" id="timerBox">
+        <i class="fas fa-clock timer-icon"></i>
+        <span id="timerDisplay">5:00</span>
       </div>
     </div>
-  </nav>
+  </div>
+</div>
 
-  <main class="test-container">
-    <div class="test-header" id="welcome-screen">
-      <h1>Welcome to the X-Developers Test</h1>
-      <p>This test contains 10 randomly selected, extremely hard questions from a pool of 100. You have a limited time to complete them.</p>
-      <p>Time limit is 5 mins.</p>
-      <button class="btn-primary" onclick="startTest()" style="margin-top: 10px;">
-        <i class="fas fa-play"></i> Start Test
+<!-- MAIN -->
+<div class="main">
+
+  <!-- LEFT SIDEBAR -->
+  <div class="lsb">
+    <div>
+      <div class="lsb-title"><i class="fas fa-th"></i> Questions</div>
+      <div class="qnav" id="qnav"></div>
+    </div>
+    <div>
+      <div class="legend">
+        <div class="leg-item"><div class="leg-dot" style="background:var(--g);border:1px solid var(--bdg);"></div> Answered</div>
+        <div class="leg-item"><div class="leg-dot" style="background:rgba(57,255,20,.12);border:1px solid var(--g);"></div> Current</div>
+        <div class="leg-item"><div class="leg-dot" style="background:var(--s1);border:1px solid var(--bd);"></div> Unanswered</div>
+      </div>
+    </div>
+    <div class="score-preview">
+      <div class="sp-title"><i class="fas fa-chart-line"></i> Progress</div>
+      <div class="sp-row"><span style="font-size:12px;color:var(--mu);">Answered</span><span class="sp-val" id="answeredCount">0 / 10</span></div>
+      <div class="sp-row"><span style="font-size:12px;color:var(--mu);">Remaining</span><span class="sp-val" id="remainCount">10</span></div>
+    </div>
+  </div>
+
+  <!-- CENTER -->
+  <div class="center">
+    <div class="q-meta">
+      <span class="q-num" id="qNumLabel">Question 01 / 10</span>
+      <span class="q-cat" id="qCat">General</span>
+      <span class="q-diff diff-hard" id="qDiff">Hard</span>
+    </div>
+
+    <div class="q-text" id="qText">Loading question...</div>
+
+    <div class="options" id="optList"></div>
+
+    <div class="q-nav">
+      <button class="bn bn-prev" id="btnPrev" onclick="navigate(-1)">
+        <i class="fas fa-arrow-left"></i> Previous
       </button>
-    </div>
-
-    <div class="questions-container hidden" id="questions-screen">
-      <!-- Questions will be dynamically injected here by JavaScript -->
-    </div>
-
-    <div class="test-footer hidden" id="submit-footer">
-      <button class="btn-primary" onclick="submitTest()">
+      <button class="bn bn-next" id="btnNext" onclick="navigate(1)">
+        Next <i class="fas fa-arrow-right"></i>
+      </button>
+      <button class="bn bn-submit" id="btnSubmit" onclick="confirmSubmit()" style="display:none;">
         <i class="fas fa-check-circle"></i> Submit Test
       </button>
+      <span class="q-hint" id="qHint"></span>
+    </div>
+  </div>
+
+  <!-- RIGHT SIDEBAR -->
+  <div class="rsb">
+    <div>
+      <div class="rsb-title"><i class="fas fa-upload"></i> Project File</div>
+      <div class="file-zone" id="fileZone" onclick="document.getElementById('fileInput').click()"
+        ondragover="event.preventDefault();this.classList.add('drag')"
+        ondragleave="this.classList.remove('drag')"
+        ondrop="handleDrop(event)">
+        <div class="fz-icon"><i class="fas fa-cloud-arrow-up"></i></div>
+        <div class="fz-text"><b>Drop your project</b><br>or click to browse</div>
+        <div class="fz-req">Minimum 3 MB required</div>
+      </div>
+      <input type="file" id="fileInput" onchange="handleFile(this.files[0])">
+      <div class="fz-preview" id="fzPreview">
+        <div class="fzp-name" id="fzName"></div>
+        <div class="fzp-size" id="fzSize"></div>
+        <div id="fzStatus"></div>
+      </div>
     </div>
 
-    <div class="result-container hidden" id="result-screen">
-      <!-- Results will be dynamically injected here -->
+    <div>
+      <div class="rsb-title"><i class="fas fa-info-circle"></i> Test Info</div>
+      <div class="info-card">
+        <div class="ic-head"><i class="fas fa-cog"></i> Config</div>
+        <div class="ic-row"><span class="ic-label">Pool</span><span class="ic-val">400+ Qs</span></div>
+        <div class="ic-row"><span class="ic-label">This test</span><span class="ic-val">10 random</span></div>
+        <div class="ic-row"><span class="ic-label">Pass score</span><span class="ic-val" style="color:var(--g);">100%</span></div>
+        <div class="ic-row"><span class="ic-label">Retries</span><span class="ic-val">Unlimited</span></div>
+      </div>
     </div>
 
-  </main>
-  
-  <!-- JavaScript Code -->
-  <script>
-    // The large pool of 100 questions (only 12 examples provided for brevity)
-    const ALL_QUESTIONS_POOL = [
-        {
-          id: 1,
-          question: "An element has `width: 300px; padding: 20px; border: 10px solid black; box-sizing: content-box;`. What is its total rendered width?",
-          codeSnippet: null,
-          options: [
-            { id: 'a', text: "300px", isCorrect: false },
-            { id: 'b', text: "340px", isCorrect: false },
-            { id: 'c', text: "360px", isCorrect: true },
-            { id: 'd', text: "390px", isCorrect: false }
-          ]
-        },
-        {
-          id: 2,
-          question: "In complex stacking contexts using CSS `position` and `z-index`, which property on a parent element can force a new stacking context *without* changing its `position` value away from static?",
-          codeSnippet: null,
-          options: [
-            { id: 'a', text: "margin", isCorrect: false },
-            { id: 'b', text: "display", isCorrect: false },
-            { id: 'c', text: "opacity (if < 1)", isCorrect: true },
-            { id: 'd', text: "color", isCorrect: false }
-          ]
-        },
-        {
-          id: 3,
-          question: "What will be the color of the text 'Hello World' given the following inline style and CSS rules?",
-          codeSnippet: '<p id="message" class="text" style="color: blue;">Hello World</p>\np { color: red; }\n.text { color: green; }\n#message { color: orange; }',
-          options: [
-            { id: 'a', text: "Red", isCorrect: false },
-            { id: 'b', text: "Green", isCorrect: false },
-            { id: 'c', text: "Orange", isCorrect: false },
-            { id: 'd', text: "Blue", isCorrect: true }
-          ]
-        },
-        {
-          id: 4,
-          question: "A flex container is 500px wide. Two items inside have `width: 300px` and `flex-shrink: 1`. What is the final width of each item?",
-          codeSnippet: null,
-          options: [
-            { id: 'a', text: "300px", isCorrect: false },
-            { id: 'b', text: "250px", isCorrect: true },
-            { id: 'c', text: "200px", isCorrect: false },
-            { id: 'd', text: "500px", isCorrect: false }
-          ]
-        },
-        {
-          id: 5,
-          question: "What CSS technique can eliminate the whitespace between two adjacent `display: inline-block;` elements without modifying the HTML structure or using comments?",
-          codeSnippet: null,
-          options: [
-            { id: 'a', text: "Setting margin: -4px;", isCorrect: false },
-            { id: 'b', text: "Setting font-size: 0; on the parent container", isCorrect: true },
-            { id: 'c', text: "Setting word-spacing: -1em;", isCorrect: false },
-            { id: 'd', text: "Setting white-space: nowrap;", isCorrect: false }
-          ]
-        },
-        {
-          id: 6,
-          question: "Which HTML attribute pair makes a non-semantic `div` behave like a clickable button for screen readers and keyboard navigation?",
-          codeSnippet: '<div id="myButton">Click me</div>',
-          options: [
-            { id: 'a', text: "role=\"button\" and aria-pressed=\"false\"", isCorrect: false },
-            { id: 'b', text: "type=\"button\" and tabindex=\"0\"", isCorrect: false },
-            { id: 'c', text: "role=\"button\" and tabindex=\"0\"", isCorrect: true },
-            { id: 'd', text: "aria-label=\"button\" and onclick=\"func()\"", isCorrect: false }
-          ]
-        },
-        {
-          id: 7,
-          question: "Which statement accurately describes the difference between the HTML `< canvas >` and `< svg >` elements?",
-          codeSnippet: null,
-          options: [
-            { id: 'a', text: "< canvas > is for vector graphics, < svg > is for bitmap graphics.", isCorrect: false },
-            { id: 'b', text: "< canvas > graphics are part of the DOM, < svg > graphics are not.", isCorrect: false },
-            { id: 'c', text: "< canvas > is better for dynamic/game rendering; < svg > is better for static, resolution-independent diagrams.", isCorrect: true },
-            { id: 'd', text: "< canvas > uses CSS width/height properties for its drawing surface size.", isCorrect: false }
-          ]
-        },
-        {
-          id: 8,
-          question: "Which `enctype` must be set on the `< form >` element for a successful file upload?",
-          codeSnippet: '<form action="/upload" method="POST" enctype="...">\n  <input type="file" name="fileUpload">\n  <input type="submit">\n</form>',
-          options: [
-            { id: 'a', text: "text/plain", isCorrect: false },
-            { id: 'b', text: "application/x-www-form-urlencoded", isCorrect: false },
-            { id: 'c', text: "multipart/form-data", isCorrect: true },
-            { id: 'd', text: "application/json", isCorrect: false }
-          ]
-        },
-        {
-          id: 9,
-          question: "Which HTML `< meta >` tag attribute is used to prevent a browser from caching the page for highly sensitive or real-time data?",
-          codeSnippet: null,
-          options: [
-            { id: 'a', text: "< meta name=\"viewport\" ... >", isCorrect: false },
-            { id: 'b', text: "< meta http-equiv=\"refresh\" ... >", isCorrect: false },
-            { id: 'c', text: "< meta name=\"robots\" ... >", isCorrect: false },
-            { id: 'd', text: "< meta http-equiv=\"cache-control\" content=\"no-cache\" >", isCorrect: true }
-          ]
-        },
-        {
-          id: 10,
-          question: "Which of the following is an invalid nesting structure according to HTML5 specification rules regarding flow/phrasing content?",
-          codeSnippet: null,
-          options: [
-            { id: 'a', text: "< div >< p >...< /p >< /div >", isCorrect: false },
-            { id: 'b', text: "< p >< span >...< /span >< /p >", isCorrect: false },
-            { id: 'c', text: "< span >< div >...< /div >< /span >", isCorrect: true },
-            { id: 'd', text: "< ul >< li >...< /li >< /ul >", isCorrect: false }
-          ]
-        },
-        {
-          id: 11,
-          question: "How do you select all elements with the class 'intro' inside a < div > element using CSS?",
-          codeSnippet: null,
-          options: [
-            { id: 'a', text: "div > .intro", isCorrect: false },
-            { id: 'b', text: "div + .intro", isCorrect: false },
-            { id: 'c', text: "div.intro", isCorrect: false },
-            { id: 'd', text: "div .intro", isCorrect: true }
-          ]
-        },
-        {
-          id: 12,
-          question: "What is the purpose of the `aria-label` attribute in HTML?",
-          codeSnippet: null,
-          options: [
-            { id: 'a', text: "To define a keyboard shortcut for an element", isCorrect: false },
-            { id: 'b', text: "To provide a visible label for form elements", isCorrect: false },
-            { id: 'c', text: "To provide an accessible name for an element when no visible text is available", isCorrect: true },
-            { id: 'd', text: "To create a custom tooltip for an element", isCorrect: false }
-          ]
-        },
-        {
-          id: 13,
-          question: "Which of the following is NOT a valid way to declare a variable in JavaScript?",
-          codeSnippet: null,
-          options: [
-            { id: 'a', text: "var x = 10;", isCorrect: false },
-            { id: 'b', text: "let y = 20;", isCorrect: false },
-            { id: 'c', text: "const z = 30;", isCorrect: false },
-            { id: 'd', text: "variable w = 40;", isCorrect: true }
-          ]
-        },
-        {
-          id: 14,
-          question: "What will be the output of `console.log(typeof NaN)` in JavaScript?",
-          codeSnippet: null,
-          options: [
-            { id: 'a', text: "\"number\"", isCorrect: true },
-            { id: 'b', text: "\"NaN\"", isCorrect: false },
-            { id: 'c', text: "\"undefined\"", isCorrect: false },
-            { id: 'd', text: "\"object\"", isCorrect: false }
-          ]
-        },
-        {
-          id: 15,
-          question: "In React, what is the primary purpose of the `useEffect` hook?",
-          codeSnippet: null,
-          options: [
-            { id: 'a', text: "To manage state in functional components", isCorrect: false },
-            { id: 'b', text: "To perform side effects in functional components", isCorrect: true },
-            { id: 'c', text: "To create refs to DOM elements", isCorrect: false },
-            { id: 'd', text: "To optimize performance by memoizing values", isCorrect: false }
-          ]
-        },
-        {
-          id: 16,
-          question: "Which CSS property is used to create space between the element's border and its content?",
-          codeSnippet: null,
-          options: [
-            { id: 'a', text: "margin", isCorrect: false },
-            { id: 'b', text: "padding", isCorrect: true },
-            { id: 'c', text: "border-spacing", isCorrect: false },
-            { id: 'd', text: "gap", isCorrect: false }
-          ]
-        },
-        {
-          id: 17,
-          question: "What does the following code output?",
-          codeSnippet: "console.log(0.1 + 0.2 === 0.3);",
-          options: [
-            { id: 'a', text: "true", isCorrect: false },
-            { id: 'b', text: "false", isCorrect: true },
-            { id: 'c', text: "undefined", isCorrect: false },
-            { id: 'd', text: "NaN", isCorrect: false }
-          ]
-        },
-        {
-          id: 18,
-          question: "Which HTTP status code indicates that a resource has been permanently moved?",
-          codeSnippet: null,
-          options: [
-            { id: 'a', text: "200", isCorrect: false },
-            { id: 'b', text: "301", isCorrect: true },
-            { id: 'c', text: "404", isCorrect: false },
-            { id: 'd', text: "500", isCorrect: false }
-          ]
-        },
-        {
-          id: 19,
-          question: "In Git, what command is used to combine multiple commits into one?",
-          codeSnippet: null,
-          options: [
-            { id: 'a', text: "git merge", isCorrect: false },
-            { id: 'b', text: "git rebase", isCorrect: false },
-            { id: 'c', text: "git squash", isCorrect: false },
-            { id: 'd', text: "git rebase -i", isCorrect: true }
-          ]
-        },
-        {
-          id: 20,
-          question: "What is the time complexity of accessing an element in an array by index?",
-          codeSnippet: null,
-          options: [
-            { id: 'a', text: "O(1)", isCorrect: true },
-            { id: 'b', text: "O(log n)", isCorrect: false },
-            { id: 'c', text: "O(n)", isCorrect: false },
-            { id: 'd', text: "O(n²)", isCorrect: false }
-          ]
-        },
-        {
-          id: 21,
-          question: "Which of the following is NOT a valid JavaScript data type?",
-          codeSnippet: null,
-          options: [
-            { id: 'a', text: "symbol", isCorrect: false },
-            { id: 'b', text: "bigint", isCorrect: false },
-            { id: 'c', text: "float", isCorrect: true },
-            { id: 'd', text: "undefined", isCorrect: false }
-          ]
-        },
-        {
-          id: 22,
-          question: "What does CSS stand for?",
-          codeSnippet: null,
-          options: [
-            { id: 'a', text: "Computer Style Sheets", isCorrect: false },
-            { id: 'b', text: "Creative Style System", isCorrect: false },
-            { id: 'c', text: "Cascading Style Sheets", isCorrect: true },
-            { id: 'd', text: "Colorful Style Sheets", isCorrect: false }
-          ]
-        },
-        {
-          id: 23,
-          question: "Which method is used to add an element to the end of an array in JavaScript?",
-          codeSnippet: null,
-          options: [
-            { id: 'a', text: "push()", isCorrect: true },
-            { id: 'b', text: "append()", isCorrect: false },
-            { id: 'c', text: "addToEnd()", isCorrect: false },
-            { id: 'd', text: "insertLast()", isCorrect: false }
-          ]
-        },
-        {
-          id: 24,
-          question: "What is the purpose of the `alt` attribute in an HTML image tag?",
-          codeSnippet: null,
-          options: [
-            { id: 'a', text: "To specify image dimensions", isCorrect: false },
-            { id: 'b', text: "To provide alternative text for screen readers", isCorrect: true },
-            { id: 'c', text: "To set image alignment", isCorrect: false },
-            { id: 'd', text: "To define image loading strategy", isCorrect: false }
-          ]
-        },
-        {
-          id: 25,
-          question: "Which SQL clause is used to filter results?",
-          codeSnippet: null,
-          options: [
-            { id: 'a', text: "SELECT", isCorrect: false },
-            { id: 'b', text: "FROM", isCorrect: false },
-            { id: 'c', text: "WHERE", isCorrect: true },
-            { id: 'd', text: "ORDER BY", isCorrect: false }
-          ]
-        },
-        {
-          id: 26,
-          question: "What will be the value of `x` after this code executes?",
-          codeSnippet: "let x = 5;\nx += '5';",
-          options: [
-            { id: 'a', text: "10", isCorrect: false },
-            { id: 'b', text: "55", isCorrect: true },
-            { id: 'c', text: "\"55\"", isCorrect: true },
-            { id: 'd', text: "Error", isCorrect: false }
-          ]
-        },
-        {
-          id: 27,
-          question: "In object-oriented programming, what is encapsulation?",
-          codeSnippet: null,
-          options: [
-            { id: 'a', text: "The process of converting data into code", isCorrect: false },
-            { id: 'b', text: "Hiding implementation details and exposing only necessary features", isCorrect: true },
-            { id: 'c', text: "Creating multiple methods with the same name", isCorrect: false },
-            { id: 'd', text: "Inheriting properties from a parent class", isCorrect: false }
-          ]
-        },
-        {
-          id: 28,
-          question: "Which of these is a NoSQL database?",
-          codeSnippet: null,
-          options: [
-            { id: 'a', text: "MySQL", isCorrect: false },
-            { id: 'b', text: "PostgreSQL", isCorrect: false },
-            { id: 'c', text: "MongoDB", isCorrect: true },
-            { id: 'd', text: "SQLite", isCorrect: false }
-          ]
-        },
-        {
-          id: 29,
-          question: "What does API stand for?",
-          codeSnippet: null,
-          options: [
-            { id: 'a', text: "Application Programming Interface", isCorrect: true },
-            { id: 'b', text: "Advanced Programming Instruction", isCorrect: false },
-            { id: 'c', text: "Automated Program Integration", isCorrect: false },
-            { id: 'd', text: "Application Process Integration", isCorrect: false }
-          ]
-        },
-        {
-          id: 30,
-          question: "Which CSS selector has the highest specificity?",
-          codeSnippet: null,
-          options: [
-            { id: 'a', text: "Class selector (.class)", isCorrect: false },
-            { id: 'b', text: "ID selector (#id)", isCorrect: true },
-            { id: 'c', text: "Element selector (div)", isCorrect: false },
-            { id: 'd', text: "Inline style", isCorrect: true }
-          ]
-        },
-        {
-          id: 31,
-          question: "What is the purpose of the `map()` method in JavaScript?",
-          codeSnippet: null,
-          options: [
-            { id: 'a', text: "To create a new array by transforming each element", isCorrect: true },
-            { id: 'b', text: "To filter array elements based on a condition", isCorrect: false },
-            { id: 'c', text: "To reduce an array to a single value", isCorrect: false },
-            { id: 'd', text: "To sort array elements", isCorrect: false }
-          ]
-        },
-        {
-          id: 32,
-          question: "Which HTML5 tag is used for navigation links?",
-          codeSnippet: null,
-          options: [
-            { id: 'a', text: "< nav >", isCorrect: true },
-            { id: 'b', text: "< navigation >", isCorrect: false },
-            { id: 'c', text: "< menu >", isCorrect: false },
-            { id: 'd', text: "< links >", isCorrect: false }
-          ]
-        },
-        {
-          id: 33,
-          question: "What is the default port for HTTPS?",
-          codeSnippet: null,
-          options: [
-            { id: 'a', text: "80", isCorrect: false },
-            { id: 'b', text: "443", isCorrect: true },
-            { id: 'c', text: "8080", isCorrect: false },
-            { id: 'd', text: "21", isCorrect: false }
-          ]
-        },
-        {
-          id: 34,
-          question: "Which of these is a JavaScript runtime environment?",
-          codeSnippet: null,
-          options: [
-            { id: 'a', text: "Node.js", isCorrect: true },
-            { id: 'b', text: "Django", isCorrect: false },
-            { id: 'c', text: "Apache", isCorrect: false },
-            { id: 'd', text: "Nginx", isCorrect: false }
-          ]
-        },
-        {
-          id: 35,
-          question: "What does the `flex` property in CSS Flexbox control?",
-          codeSnippet: null,
-          options: [
-            { id: 'a', text: "The direction of flex items", isCorrect: false },
-            { id: 'b', text: "How flex items grow, shrink, and their initial size", isCorrect: true },
-            { id: 'c', text: "The alignment of flex items", isCorrect: false },
-            { id: 'd', text: "The wrapping behavior of flex items", isCorrect: false }
-          ]
-        },
-        {
-          id: 36,
-          question: "Which command is used to install dependencies from package.json?",
-          codeSnippet: null,
-          options: [
-            { id: 'a', text: "npm init", isCorrect: false },
-            { id: 'b', text: "npm start", isCorrect: false },
-            { id: 'c', text: "npm install", isCorrect: true },
-            { id: 'd', text: "npm build", isCorrect: false }
-          ]
-        },
-        {
-          id: 37,
-          question: "What will this code output?",
-          codeSnippet: "console.log([] == ![]);",
-          options: [
-            { id: 'a', text: "true", isCorrect: false },
-            { id: 'b', text: "false", isCorrect: true },
-            { id: 'c', text: "undefined", isCorrect: false },
-            { id: 'd', text: "Error", isCorrect: false }
-          ]
-        },
-        {
-          id: 38,
-          question: "Which method converts a JSON string to a JavaScript object?",
-          codeSnippet: null,
-          options: [
-            { id: 'a', text: "JSON.parse()", isCorrect: true },
-            { id: 'b', text: "JSON.stringify()", isCorrect: false },
-            { id: 'c', text: "JSON.toObject()", isCorrect: false },
-            { id: 'd', text: "JSON.convert()", isCorrect: false }
-          ]
-        },
-        {
-          id: 39,
-          question: "What is the purpose of the `z-index` property in CSS?",
-          codeSnippet: null,
-          options: [
-            { id: 'a', text: "To control element sizing", isCorrect: false },
-            { id: 'b', text: "To set the stacking order of positioned elements", isCorrect: true },
-            { id: 'c', text: "To define animation duration", isCorrect: false },
-            { id: 'd', text: "To control text alignment", isCorrect: false }
-          ]
-        },
-        {
-          id: 40,
-          question: "Which HTTP method is used to update an existing resource?",
-          codeSnippet: null,
-          options: [
-            { id: 'a', text: "GET", isCorrect: false },
-            { id: 'b', text: "POST", isCorrect: false },
-            { id: 'c', text: "PUT", isCorrect: true },
-            { id: 'd', text: "DELETE", isCorrect: false }
-          ]
-        },
-        {
-          id: 41,
-          question: "What does the `this` keyword refer to in a JavaScript object method?",
-          codeSnippet: null,
-          options: [
-            { id: 'a', text: "The global window object", isCorrect: false },
-            { id: 'b', text: "The object that owns the method", isCorrect: true },
-            { id: 'c', text: "The parent object", isCorrect: false },
-            { id: 'd', text: "The method itself", isCorrect: false }
-          ]
-        },
-        {
-          id: 42,
-          question: "Which CSS unit is relative to the font-size of the root element?",
-          codeSnippet: null,
-          options: [
-            { id: 'a', text: "em", isCorrect: false },
-            { id: 'b', text: "rem", isCorrect: true },
-            { id: 'c', text: "px", isCorrect: false },
-            { id: 'd', text: "%", isCorrect: false }
-          ]
-        },
-        {
-          id: 43,
-          question: "What is the output of this code?",
-          codeSnippet: "let a = [1, 2, 3];\nlet b = a;\nb.push(4);\nconsole.log(a.length);",
-          options: [
-            { id: 'a', text: "3", isCorrect: false },
-            { id: 'b', text: "4", isCorrect: true },
-            { id: 'c', text: "Error", isCorrect: false },
-            { id: 'd', text: "undefined", isCorrect: false }
-          ]
-        },
-        {
-          id: 44,
-          question: "Which HTML attribute is used to make an input field required?",
-          codeSnippet: null,
-          options: [
-            { id: 'a', text: "validate", isCorrect: false },
-            { id: 'b', text: "required", isCorrect: true },
-            { id: 'c', text: "mandatory", isCorrect: false },
-            { id: 'd', text: "mustfill", isCorrect: false }
-          ]
-        },
-        {
-          id: 45,
-          question: "What is a closure in JavaScript?",
-          codeSnippet: null,
-          options: [
-            { id: 'a', text: "A function that returns another function", isCorrect: false },
-            { id: 'b', text: "A function with access to its own scope, outer function's scope, and global scope", isCorrect: true },
-            { id: 'c', text: "A function that closes the browser window", isCorrect: false },
-            { id: 'd', text: "A function that executes immediately", isCorrect: false }
-          ]
-        },
-        {
-          id: 46,
-          question: "Which of these is NOT a valid way to center a div horizontally in CSS?",
-          codeSnippet: null,
-          options: [
-            { id: 'a', text: "margin: 0 auto;", isCorrect: false },
-            { id: 'b', text: "text-align: center;", isCorrect: false },
-            { id: 'c', text: "position: absolute; left: 50%;", isCorrect: false },
-            { id: 'd', text: "display: center;", isCorrect: true }
-          ]
-        },
-        {
-          id: 47,
-          question: "In CSS, which property is used to control the indentation of the first line of text in a block-level element?",
-          codeSnippet: null,
-          options: [
-            { id: 'a', text: "text-indent", isCorrect: true },
-            { id: 'b', text: "line-height", isCorrect: false },
-            { id: 'c', text: "letter-spacing", isCorrect: false },
-            { id: 'd', text: "word-spacing", isCorrect: false }
-          ]
-        },
-        {
-          id: 48,
-          question: "In CSS, which property is used to control the spacing between characters in a text element?",
-          codeSnippet: null,
-          options: [
-            { id: 'a', text: "letter-spacing", isCorrect: true },
-            { id: 'b', text: "word-spacing", isCorrect: false },
-            { id: 'c', text: "text-indent", isCorrect: false },
-            { id: 'd', text: "line-height", isCorrect: false }
-          ]
-        },
-        {
-          id: 49,
-          question: "In CSS, which property is used to control the spacing between the lines of text within an element?",
-          codeSnippet: null,
-          options: [
-            { id: 'a', text: "line-height", isCorrect: true },
-            { id: 'b', text: "text-indent", isCorrect: false },
-            { id: 'c', text: "letter-spacing", isCorrect: false },
-            { id: 'd', text: "word-spacing", isCorrect: false }
-          ]
-        },
-        {
-          id: 50,
-          question: "In CSS, which property is used to control the indentation of the first line of text in a block-level element?",
-          codeSnippet: null,
-          options: [
-            { id: 'a', text: "text-indent", isCorrect: true },
-            { id: 'b', text: "line-height", isCorrect: false },
-            { id: 'c', text: "letter-spacing", isCorrect: false },
-            { id: 'd', text: "word-spacing", isCorrect: false }
-          ]
-        },
-        {
-          id: 51,
-          question: "In CSS, which property is used to control the space between words in a text element?",
-          codeSnippet: null,
-          options: [
-            { id: 'a', text: "letter-spacing", isCorrect: false },
-            { id: 'b', text: "word-spacing", isCorrect: true },
-            { id: 'c', text: "text-indent", isCorrect: false },
-            { id: 'd', text: "line-height", isCorrect: false }
-          ]
-        },
-        {
-          id: 52,
-          question: "In CSS, which property is used to control the space between characters in a text element?",
-          codeSnippet: null,
-          options: [
-            { id: 'a', text: "word-spacing", isCorrect: false },
-            { id: 'b', text: "text-indent", isCorrect: false },
-            { id: 'c', text: "letter-spacing", isCorrect: true },
-            { id: 'd', text: "line-height", isCorrect: false }
-          ]
-        },
-        { id: 53,
-          question: "In CSS, which property is used to control the spacing between lines of text within an element?",
-          codeSnippet: null,
-          options: [
-            { id: 'a', text: "letter-spacing", isCorrect: false },
-            { id: 'b', text: "line-height", isCorrect: true },
-            { id: 'c', text: "text-spacing", isCorrect: false },
-            { id: 'd', text: "word-spacing", isCorrect: false }
-          ]
-        },
-        {
-          id: 54,
-          question: "In CSS Grid, which property is used to define the size of rows in a grid container?",
-          codeSnippet: ".grid-container { display: grid; ... }",
-          options: [
-            { id: 'a', text: "grid-template-columns", isCorrect: false },
-            { id: 'b', text: "grid-auto-rows", isCorrect: false },
-            { id: 'c', text: "grid-template-rows", isCorrect: true },
-            { id: 'd', text: "grid-auto-columns", isCorrect: false }
-          ]
-        },
-        { id: 55,
-question: "Which HTML attribute is used to provide a hint or example input to the user in a text field, which disappears when the field is focused?",
-codeSnippet: '< input type="text" ... >',
-options: [
-{ id: 'a', text: "value", isCorrect: false },
-{ id: 'b', text: "label", isCorrect: false },
-{ id: 'c', text: "placeholder", isCorrect: true },
-{ id: 'd', text: "hint", isCorrect: false }
-]
-},
-{
-id: 56,
-question: "What is the difference between the CSS properties visibility: hidden; and display: none;?",
-codeSnippet: ".hidden { visibility: hidden; }\n.none { display: none; }",
-options: [
-{ id: 'a', text: "visibility: hidden; hides the element but it still occupies space; display: none; hides the element and removes it from the document flow.", isCorrect: true },
-{ id: 'b', text: "display: none; hides the element but it still occupies space; visibility: hidden; hides the element and removes it from the document flow.", isCorrect: false },
-{ id: 'c', text: "They are functionally identical.", isCorrect: false },
-{ id: 'd', text: "visibility: hidden; makes the element transparent; display: none; makes it invisible.", isCorrect: false }
-]
-},
-{
-id: 57,
-question: "Which HTML tag is used to define an independent, self-contained piece of content, like a blog post or news article?",
-codeSnippet: null,
-options: [
-{ id: 'a', text: "< section >", isCorrect: false },
-{ id: 'b', text: "< article >", isCorrect: true },
-{ id: 'c', text: "< div >", isCorrect: false },
-{ id: 'd', text: "< aside >", isCorrect: false }
-]
-},
-{
-id: 58,
-question: "In CSS, what is the default value for the box-sizing property?",
-codeSnippet: null,
-options: [
-{ id: 'a', text: "border-box", isCorrect: false },
-{ id: 'b', text: "padding-box", isCorrect: false },
-{ id: 'c', text: "content-box", isCorrect: true },
-{ id: 'd', text: "margin-box", isCorrect: false }
-]
-},
-{
-id: 59,
-question: "Which HTML attribute is used to group related input fields in a form with a boundary and a caption?",
-codeSnippet: '\n ...\n \n ...\n',
-options: [
-{ id: 'a', text: "< fieldset >", isCorrect: true },
-{ id: 'b', text: "< div >", isCorrect: false },
-{ id: 'c', text: "< section >", isCorrect: false },
-{ id: 'd', text: "< group >", isCorrect: false }
-]
-},
-{
-id: 60,
-question: "Which CSS property is used to control the appearance of an element's outline?",
-codeSnippet: "button:focus { ... }",
-options: [
-{ id: 'a', text: "border", isCorrect: false },
-{ id: 'b', text: "shadow", isCorrect: false },
-{ id: 'c', text: "outline", isCorrect: true },
-{ id: 'd', text: "focus-style", isCorrect: false }
-]
-},
-{
-id: 61,
-question: "What is the correct HTML element for inserting a line break?",
-codeSnippet: null,
-options: [
-{ id: 'a', text: "< break >", isCorrect: false },
-{ id: 'b', text: "< linebreak >", isCorrect: false },
-{ id: 'c', text: "< br >", isCorrect: true },
-{ id: 'd', text: "< lb >", isCorrect: false }
-]
-},
-{
-id: 62,
-question: "In Flexbox, what does the align-items property control?",
-codeSnippet: ".container { display: flex; align-items: center; }",
-options: [
-{ id: 'a', text: "Alignment of items along the main axis.", isCorrect: false },
-{ id: 'b', text: "Alignment of items along the cross-axis.", isCorrect: true },
-{ id: 'c', text: "The spacing between flex items.", isCorrect: false },
-{ id: 'd', text: "Whether items wrap to a new line.", isCorrect: false }
-]
-},
-{
-id: 63,
-question: "Which HTML tag is used to define metadata about an HTML document, such as author, description, and keywords?",
-codeSnippet: "\n ...\n",
-options: [
-{ id: 'a', text: "< head >", isCorrect: false },
-{ id: 'b', text: "< meta >", isCorrect: true },
-{ id: 'c', text: "< tiltle >", isCorrect: false },
-{ id: 'd', text: "< info >", isCorrect: false }
-]
-},
-{
-id: 64,
-question: "What CSS property is used to change the mouse cursor when hovering over an element?",
-codeSnippet: "a:hover { ... }",
-options: [
-{ id: 'a', text: "pointer", isCorrect: false },
-{ id: 'b', text: "mouse", isCorrect: false },
-{ id: 'c', text: "cursor", isCorrect: true },
-{ id: 'd', text: "interaction", isCorrect: false }
-]
-},
-{
-id: 65,
-question: "Which HTML5 attribute indicates that a form input field should have focus when the page loads?",
-codeSnippet: '<input type="text" ...>',
-options: [
-{ id: 'a', text: "focus", isCorrect: false },
-{ id: 'b', text: "autofocus", isCorrect: true },
-{ id: 'c', text: "selected", isCorrect: false },
-{ id: 'd', text: "active", isCorrect: false }
-]
-},
-{
-id: 66,
-question: "In CSS, which selector is used to select elements that are the first child of their parent?",
-codeSnippet: "ul li:first-child { ... }",
-options: [
-{ id: 'a', text: ":first-of-type", isCorrect: false },
-{ id: 'b', text: "::first", isCorrect: false },
-{ id: 'c', text: ":first-child", isCorrect: true },
-{ id: 'd', text: ":nth-child(1)", isCorrect: false }
-]
-},
-{
-id: 67,
-question: "Which HTML attribute specifies the URL of the page that the link goes to?",
-codeSnippet: '<a ...>Link Text',
-options: [
-{ id: 'a', text: "src", isCorrect: false },
-{ id: 'b', text: "link", isCorrect: false },
-{ id: 'c', text: "href", isCorrect: true },
-{ id: 'd', text: "url", isCorrect: false }
-]
-},
-{
-id: 68,
-question: "What CSS property is used to create space outside the element's border?",
-codeSnippet: "div { ... }",
-options: [
-{ id: 'a', text: "padding", isCorrect: false },
-{ id: 'b', text: "border-spacing", isCorrect: false },
-{ id: 'c', text: "margin", isCorrect: true },
-{ id: 'd', text: "outline-space", isCorrect: false }
-]
-},
-{
-id: 69,
-question: "Which HTML element is used to define a list item within an ordered or unordered list?",
-codeSnippet: null,
-options: [
-{ id: 'a', text: "< ol >", isCorrect: false },
-{ id: 'b', text: "< ul >", isCorrect: false },
-{ id: 'c', text: "< li >", isCorrect: true },
-{ id: 'd', text: "< list >", isCorrect: false }
-]
-},
-{
-id: 70,
-question: "In CSS, what is the purpose of the float property?",
-codeSnippet: ".image { float: left; }",
-options: [
-{ id: 'a', text: "To make an element hover over other elements.", isCorrect: false },
-{ id: 'b', text: "To position an element to the left or right, allowing text and inline elements to wrap around it.", isCorrect: true },
-{ id: 'c', text: "To create a sticky position effect.", isCorrect: false },
-{ id: 'd', text: "To center an element horizontally.", isCorrect: false }
-]
-},
-{
-id: 71,
-question: "Which HTML tag is used for the largest heading?",
-codeSnippet: null,
-options: [
-{ id: 'a', text: "< heading >", isCorrect: false },
-{ id: 'b', text: "< h6 >", isCorrect: false },
-{ id: 'c', text: "< h3 >", isCorrect: false },
-{ id: 'd', text: "< h1 >", isCorrect: true }
-]
-},
-{
-id: 72,
-question: "What CSS property is used to set the background color of an element?",
-codeSnippet: "body { ... }",
-options: [
-{ id: 'a', text: "color", isCorrect: false },
-{ id: 'b', text: "bgcolor", isCorrect: false },
-{ id: 'c', text: "background-color", isCorrect: true },
-{ id: 'd', text: "fill-color", isCorrect: false }
-]
-},
-{
-id: 73,
-question: "Which HTML attribute specifies that an input field should be disabled?",
-codeSnippet: '<input type="text" ...>',
-options: [
-{ id: 'a', text: "active=false", isCorrect: false },
-{ id: 'b', text: "disabled", isCorrect: true },
-{ id: 'c', text: "readonly", isCorrect: false },
-{ id: 'd', text: "inactive", isCorrect: false }
-]
-},
-{
-id: 74,
-question: "Which CSS property is used to control the style of a list's bullets or numbers?",
-codeSnippet: "ul { ... }",
-options: [
-{ id: 'a', text: "list-style-type", isCorrect: true },
-{ id: 'b', text: "marker-style", isCorrect: false },
-{ id: 'c', text: "bullet-style", isCorrect: false },
-{ id: 'd', text: "list-decoration", isCorrect: false }
-]
-},
-{
-id: 75,
-question: "What is the purpose of the HTML <abbr> tag?",
-codeSnippet: null,
-options: [
-{ id: 'a', text: "To create a line break.", isCorrect: false },
-{ id: 'b', text: "To define an abbreviation or acronym.", isCorrect: true },
-{ id: 'c', text: "To insert a horizontal rule.", isCorrect: false },
-{ id: 'd', text: "To make text bold.", isCorrect: false }
-]
-},
-{
-id: 76,
-question: "In CSS, how do you select all < p > elements where the title attribute is present, regardless of its value?",
-codeSnippet: '...\n...',
-options: [
-{ id: 'a', text: "p[title='*']", isCorrect: false },
-{ id: 'b', text: "p[title]", isCorrect: true },
-{ id: 'c', text: "p.title", isCorrect: false },
-{ id: 'd', text: "p > title", isCorrect: false }
-]
-},
-{
-id: 77,
-question: "Which HTML element is used to represent the dominant content of the < body > of a document, excluding content that is repeated across a set of documents?",
-codeSnippet: null,
-options: [
-{ id: 'a', text: "< aside >", isCorrect: false },
-{ id: 'b', text: "< header >", isCorrect: false },
-{ id: 'c', text: "< footer >", isCorrect: false },
-{ id: 'd', text: "< main >", isCorrect: true }
-]
-},
-{
-id: 78,
-question: "What is the correct CSS syntax for making a paragraph italic?",
-codeSnippet: "p { ... }",
-options: [
-{ id: 'a', text: "font-style: italic;", isCorrect: true },
-{ id: 'b', text: "text-decoration: italic;", isCorrect: false },
-{ id: 'c', text: "font-weight: italic;", isCorrect: false },
-{ id: 'd', text: "text-style: italic;", isCorrect: false }
-]
-},
-{
-id: 79,
-question: "Which HTML attribute specifies the width of an image?",
-codeSnippet: '<img src="photo.jpg" ...>',
-options: [
-{ id: 'a', text: "size", isCorrect: false },
-{ id: 'b', text: "dimensions", isCorrect: false },
-{ id: 'c', text: "width", isCorrect: true },
-{ id: 'd', text: "style", isCorrect: false }
-]
-},
-{
-id: 80,
-question: "In CSS, what does the text-transform property do?",
-codeSnippet: "h1 { text-transform: uppercase; }",
-options: [
-{ id: 'a', text: "Changes the font family of the text.", isCorrect: false },
-{ id: 'b', text: "Changes the color of the text.", isCorrect: false },
-{ id: 'c', text: "Changes the capitalization of the text (e.g., uppercase, lowercase).", isCorrect: true },
-{ id: 'd', text: "Adds a shadow effect to the text.", isCorrect: false }
-]
-},
-{
-id: 81,
-question: "Which HTML tag is used to define a client-side script (like JavaScript)?",
-codeSnippet: null,
-options: [
-{ id: 'a', text: "< javascript >", isCorrect: false },
-{ id: 'b', text: "< script >", isCorrect: true },
-{ id: 'c', text: "< js >", isCorrect: false },
-{ id: 'd', text: "< code >", isCorrect: false }
-]
-},
-{
-id: 82,
-question: "Which CSS property is used to add a shadow effect to text?",
-codeSnippet: "h2 { ... }",
-options: [
-{ id: 'a', text: "box-shadow", isCorrect: false },
-{ id: 'b', text: "text-decoration", isCorrect: false },
-{ id: 'c', text: "text-shadow", isCorrect: true },
-{ id: 'd', text: "font-shadow", isCorrect: false }
-]
-},
-{
-id: 83,
-question: "What is the correct HTML for creating a checkbox?",
-codeSnippet: null,
-options: [
-{ id: 'a', text: '< check >', isCorrect: false },
-{ id: 'b', text: '< input type="checkbox" >', isCorrect: true },
-{ id: 'c', text: '< cb >', isCorrect: false },
-{ id: 'd', text: '< input type="check" >', isCorrect: false }
-]
-},
-{
-id: 84,
-question: "Which CSS property is used to specify the minimum width of an element?",
-codeSnippet: "div { ... }",
-options: [
-{ id: 'a', text: "max-width", isCorrect: false },
-{ id: 'b', text: "width-min", isCorrect: false },
-{ id: 'c', text: "min-width", isCorrect: true },
-{ id: 'd', text: "minimum-width", isCorrect: false }
-]
-},
-{
-id: 85,
-question: "Which HTML attribute specifies how the browser should handle preformatted text that exceeds the line width?",
-codeSnippet: '<pre ...>...',
-options: [
-{ id: 'a', text: "wrap", isCorrect: false },
-{ id: 'b', text: "overflow", isCorrect: false },
-{ id: 'c', text: "word-wrap", isCorrect: false },
-{ id: 'd', text: "wrap or pre-wrap", isCorrect: true } // HTML5 specifies 'wrap', CSS white-space uses 'pre-wrap'
-]
-},
-{
-id: 86,
-question: "What does the CSS property outline-offset do?",
-codeSnippet: "button:focus { outline: 2px solid blue; outline-offset: 5px; }",
-options: [
-{ id: 'a', text: "Changes the color of the outline.", isCorrect: false },
-{ id: 'b', text: "Adds space between an outline and the edge of an element/border.", isCorrect: true },
-{ id: 'c', text: "Changes the style of the outline.", isCorrect: false },
-{ id: 'd', text: "Adds a shadow to the outline.", isCorrect: false }
-]
-},
-{
-id: 87,
-question: "Which HTML element is used to define a caption for a < figure > element?",
-codeSnippet: '\n \n ...\n',
-options: [
-{ id: 'a', text: "< c >", isCorrect: false },
-{ id: 'b', text: "< caption >", isCorrect: false },
-{ id: 'c', text: "< figcaption >", isCorrect: true },
-{ id: 'd', text: '< figure type="caption"', isCorrect: false }
-]
-},
-{
-id: 88,
-question: "In CSS, how can you force an element to start on a new line after a floated element?",
-codeSnippet: ".float-left { float: left; } .new-line { ... }",
-options: [
-{ id: 'a', text: "display: block;", isCorrect: false },
-{ id: 'b', text: "overflow: hidden;", isCorrect: false },
-{ id: 'c', text: "clear: both;", isCorrect: true },
-{ id: 'd', text: "float: none;", isCorrect: false }
-]
-},
-{
-id: 89,
-question: "Which HTML tag is used to embed scalable vector graphics (SVG) directly into an HTML document?",
-codeSnippet: null,
-options: [
-{ id: 'a', text: "< vector >", isCorrect: false },
-{ id: 'b', text: "< img src='....' >", isCorrect: false },
-{ id: 'c', text: "< svg >", isCorrect: true },
-{ id: 'd', text: "< canvas >", isCorrect: false }
-]
-},
-{
-id: 90,
-question: "What is the purpose of the transform CSS property?",
-codeSnippet: ".box { transform: rotate(45deg); }",
-options: [
-{ id: 'a', text: "To change the color of an element.", isCorrect: false },
-{ id: 'b', text: "To apply 2D or 3D transformations to an element (like rotate, scale, translate).", isCorrect: true },
-{ id: 'c', text: "To transition CSS property values smoothly.", isCorrect: false },
-{ id: 'd', text: "To change the display type of an element.", isCorrect: false }
-]
-},
-{
-id: 91,
-question: "Which HTML attribute specifies a keyboard shortcut for an element?",
-codeSnippet: '<a href="/contact" ...>Contact Us',
-options: [
-{ id: 'a', text: "shortcut", isCorrect: false },
-{ id: 'b', text: "key", isCorrect: false },
-{ id: 'c', text: "accesskey", isCorrect: true },
-{ id: 'd', text: "keyboard", isCorrect: false }
-]
-},
-{
-id: 92,
-question: "In CSS, what is the effect of setting background-attachment: fixed;?",
-codeSnippet: "body { background-image: url('bg.jpg'); background-attachment: fixed; }",
-options: [
-{ id: 'a', text: "The background image scrolls with the element.", isCorrect: false },
-{ id: 'b', text: "The background image is centered in the element.", isCorrect: false },
-{ id: 'c', text: "The background image is fixed relative to the viewport and does not scroll with the element.", isCorrect: true },
-{ id: 'd', text: "The background image repeats to fill the element.", isCorrect: false }
-]
-},
-{
-id: 93,
-question: "Which HTML tag is used to mark text as no longer accurate or relevant?",
-codeSnippet: null,
-options: [
-{ id: 'a', text: "< removed >", isCorrect: false },
-{ id: 'b', text: "< wrong >", isCorrect: false },
-{ id: 'c', text: "< del >", isCorrect: true },
-{ id: 'd', text: "< old >", isCorrect: false }
-]
-},
-{
-id: 94,
-question: "What is the purpose of the transition CSS property?",
-codeSnippet: ".box:hover { background-color: blue; transition: background-color 0.5s ease-in-out; }",
-options: [
-{ id: 'a', text: "To apply transformations like rotate or scale.", isCorrect: false },
-{ id: 'b', text: "To create complex animations with keyframes.", isCorrect: false },
-{ id: 'c', text: "To create smooth changes in CSS property values over a specified duration.", isCorrect: true },
-{ id: 'd', text: "To make an element interactive on hover.", isCorrect: false }
-]
-},
-{
-id: 95,
-question: "Which HTML tag is used to define an inline quotation?",
-codeSnippet: null,
-options: [
-{ id: 'a', text: "< blockquote >", isCorrect: false },
-{ id: 'b', text: "< cite >", isCorrect: false },
-{ id: 'c', text: "< q >", isCorrect: true },
-{ id: 'd', text: "< quote >", isCorrect: false }
-]
-},
-{
-id: 96,
-question: "In CSS, what does the object-fit property control?",
-codeSnippet: "img { object-fit: cover; width: 100px; height: 100px; }",
-options: [
-{ id: 'a', text: "How an image or video should be resized to fit its container.", isCorrect: true },
-{ id: 'b', text: "The alignment of the object within its container.", isCorrect: false },
-{ id: 'c', text: "Whether the object is visible or hidden.", isCorrect: false },
-{ id: 'd', text: "The border style of the object.", isCorrect: false }
-]
-},
-{
-id: 97,
-question: "Which HTML attribute is used to provide a path to a resource like an image or script?",
-codeSnippet: '<img ...>\n<script ...>',
-options: [
-{ id: 'a', text: "href", isCorrect: false },
-{ id: 'b', text: "link", isCorrect: false },
-{ id: 'c', text: "src", isCorrect: true },
-{ id: 'd', text: "path", isCorrect: false }
-]
-},
-{
-id: 98,
-question: "In CSS, what is the shorthand property for setting the padding-top, padding-right, padding-bottom, and padding-left all at once?",
-codeSnippet: "div { ... }",
-options: [
-{ id: 'a', text: "margin", isCorrect: false },
-{ id: 'b', text: "spacing", isCorrect: false },
-{ id: 'c', text: "padding", isCorrect: true },
-{ id: 'd', text: "box-padding", isCorrect: false }
-]
-},
-{
-id: 99,
-question: "Which HTML tag is used to embed audio content in a document?",
-codeSnippet: null,
-options: [
-{ id: 'a', text: "< sound >", isCorrect: false },
-{ id: 'b', text: "< music >", isCorrect: false },
-{ id: 'c', text: "< audio >", isCorrect: true },
-{ id: 'd', text: "< mp3 >", isCorrect: false }
-]
-},
-{
-id: 100,
-question: "In CSS, what does the white-space property control?",
-codeSnippet: "p { white-space: nowrap; }",
-options: [
-{ id: 'a', text: "The space around an element's border.", isCorrect: false },
-{ id: 'b', text: "The space between words.", isCorrect: false },
-{ id: 'c', text: "How whitespace inside an element is handled (e.g., collapsing spaces, wrapping lines).", isCorrect: true },
-{ id: 'd', text: "The background color of an element.", isCorrect: false }
-]},
-    ];
+    <div>
+      <div class="rsb-title"><i class="fas fa-keyboard"></i> Shortcuts</div>
+      <div class="kb-hints">
+        <div class="kb-hint"><span class="key">1–4</span> Select option</div>
+        <div class="kb-hint"><span class="key">←</span><span class="key">→</span> Navigate</div>
+        <div class="kb-hint"><span class="key">Enter</span> Next question</div>
+      </div>
+    </div>
+  </div>
+</div>
 
-    // State variables
-    let userAnswers = {};
-    let timerInterval;
-    const SECONDS_PER_QUESTION = 30;
-    const NUMBER_OF_QUESTIONS_TO_PICK = 10;
-    const TOTAL_TIME = NUMBER_OF_QUESTIONS_TO_PICK * SECONDS_PER_QUESTION; // 5 minutes
-    let timeLeft = TOTAL_TIME;
-    let timerExpired = false;
-    let testQuestions = []; // Array to hold the 10 selected questions
+<!-- RESULT SCREEN -->
+<div id="resultScreen">
+  <div class="rs-wrap">
+    <div class="rs-icon" id="rsIcon">🏆</div>
+    <h2 class="rs-title" id="rsTitle">Assessment Complete</h2>
+    <p class="rs-sub" id="rsSub">Here are your results.</p>
+    <div class="rs-stats" id="rsStats"></div>
+    <div class="rs-btns" id="rsBtns"></div>
+  </div>
+</div>
 
-    // DOM Elements
-    const welcomeScreen = document.getElementById('welcome-screen');
-    const questionsScreen = document.getElementById('questions-screen');
-    const submitFooter = document.getElementById('submit-footer');
-    const resultScreen = document.getElementById('result-screen');
-    const timeDisplay = document.getElementById('time');
-    const timerContainer = document.querySelector('.timer-container');
+<!-- MODAL -->
+<div id="modal" onclick="if(event.target===this)closeModal()">
+  <div id="mc">
+    <div class="m-ico" id="mico">📋</div>
+    <div class="m-title" id="mtitle">Submit Test?</div>
+    <div class="m-msg" id="mmsg">Are you sure you want to submit? Make sure you've answered all questions.</div>
+    <div class="m-btns" id="mbtns">
+      <button class="mbt mbt-o" onclick="closeModal()">Review</button>
+      <button class="mbt mbt-g" onclick="submitTest()"><i class="fas fa-check"></i> Submit Now</button>
+    </div>
+  </div>
+</div>
 
-    // Utility function to escape HTML for display as code
-    function escapeHTML(str) {
-        if (!str) return '';
-        const div = document.createElement('div');
-        div.textContent = str; // textContent automatically escapes <, >, & etc.
-        return div.innerHTML;
-    }
+<script>
+// ═══════════════════════════════════════════
+//   QUESTION BANK (sample — 30 questions)
+// ═══════════════════════════════════════════
+const BANK = [
+  {
+    id: 1,
+    cat: "CSS",
+    q: "An element has `width: 300px; padding: 20px; border: 10px solid black; box-sizing: content-box;`. What is its total rendered width?",
+    opts: ["300px", "340px", "360px", "390px"],
+    ans: 2
+  },
+  {
+    id: 2,
+    cat: "CSS",
+    q: "In complex stacking contexts using CSS `position` and `z-index`, which property on a parent element can force a new stacking context without changing its `position` value away from static?",
+    opts: ["margin", "display", "opacity (if < 1)", "color"],
+    ans: 2
+  },
+  {
+    id: 3,
+    cat: "CSS",
+    q: "What will be the color of the text 'Hello World' given the following inline style and CSS rules?",
+    opts: ["Red", "Green", "Orange", "Blue"],
+    ans: 3
+  },
+  {
+    id: 4,
+    cat: "CSS",
+    q: "A flex container is 500px wide. Two items inside have `width: 300px` and `flex-shrink: 1`. What is the final width of each item?",
+    opts: ["300px", "250px", "200px", "500px"],
+    ans: 1
+  },
+  {
+    id: 5,
+    cat: "CSS",
+    q: "What CSS technique can eliminate the whitespace between two adjacent `display: inline-block;` elements without modifying the HTML structure or using comments?",
+    opts: ["Setting margin: -4px;", "Setting font-size: 0; on the parent container", "Setting word-spacing: -1em;", "Setting white-space: nowrap;"],
+    ans: 1
+  },
+  {
+    id: 6,
+    cat: "HTML",
+    q: "Which HTML attribute pair makes a non-semantic `div` behave like a clickable button for screen readers and keyboard navigation?",
+    opts: ["role=\"button\" and aria-pressed=\"false\"", "type=\"button\" and tabindex=\"0\"", "role=\"button\" and tabindex=\"0\"", "aria-label=\"button\" and onclick=\"func()\""],
+    ans: 2
+  },
+  {
+    id: 7,
+    cat: "HTML",
+    q: "Which statement accurately describes the difference between the HTML `<canvas>` and `<svg>` elements?",
+    opts: ["<canvas> is for vector graphics, <svg> is for bitmap graphics.", "<canvas> graphics are part of the DOM, <svg> graphics are not.", "<canvas> is better for dynamic/game rendering; <svg> is better for static, resolution-independent diagrams.", "<canvas> uses CSS width/height properties for its drawing surface size."],
+    ans: 2
+  },
+  {
+    id: 8,
+    cat: "HTML",
+    q: "Which `enctype` must be set on the `<form>` element for a successful file upload?",
+    opts: ["text/plain", "application/x-www-form-urlencoded", "multipart/form-data", "application/json"],
+    ans: 2
+  },
+  {
+    id: 9,
+    cat: "HTML",
+    q: "Which HTML `<meta>` tag attribute is used to prevent a browser from caching the page for highly sensitive or real-time data?",
+    opts: ["<meta name=\"viewport\" ... >", "<meta http-equiv=\"refresh\" ... >", "<meta name=\"robots\" ... >", "<meta http-equiv=\"cache-control\" content=\"no-cache\" >"],
+    ans: 3
+  },
+  {
+    id: 10,
+    cat: "HTML",
+    q: "Which of the following is an invalid nesting structure according to HTML5 specification rules regarding flow/phrasing content?",
+    opts: ["<div><p>...</p></div>", "<p><span>...</span></p>", "<span><div>...</div></span>", "<ul><li>...</li></ul>"],
+    ans: 2
+  },
+  {
+    id: 11,
+    cat: "CSS",
+    q: "How do you select all elements with the class 'intro' inside a <div> element using CSS?",
+    opts: ["div > .intro", "div + .intro", "div.intro", "div .intro"],
+    ans: 3
+  },
+  {
+    id: 12,
+    cat: "HTML",
+    q: "What is the purpose of the `aria-label` attribute in HTML?",
+    opts: ["To define a keyboard shortcut for an element", "To provide a visible label for form elements", "To provide an accessible name for an element when no visible text is available", "To create a custom tooltip for an element"],
+    ans: 2
+  },
+  {
+    id: 13,
+    cat: "JavaScript",
+    q: "Which of the following is NOT a valid way to declare a variable in JavaScript?",
+    opts: ["var x = 10;", "let y = 20;", "const z = 30;", "variable w = 40;"],
+    ans: 3
+  },
+  {
+    id: 14,
+    cat: "JavaScript",
+    q: "What will be the output of `console.log(typeof NaN)` in JavaScript?",
+    opts: ["\"number\"", "\"NaN\"", "\"undefined\"", "\"object\""],
+    ans: 0
+  },
+  {
+    id: 15,
+    cat: "React",
+    q: "In React, what is the primary purpose of the `useEffect` hook?",
+    opts: ["To manage state in functional components", "To perform side effects in functional components", "To create refs to DOM elements", "To optimize performance by memoizing values"],
+    ans: 1
+  },
+  {
+    id: 16,
+    cat: "CSS",
+    q: "Which CSS property is used to create space between the element's border and its content?",
+    opts: ["margin", "padding", "border-spacing", "gap"],
+    ans: 1
+  },
+  {
+    id: 17,
+    cat: "JavaScript",
+    q: "What does the following code output? console.log(0.1 + 0.2 === 0.3);",
+    opts: ["true", "false", "undefined", "NaN"],
+    ans: 1
+  },
+  {
+    id: 18,
+    cat: "HTTP",
+    q: "Which HTTP status code indicates that a resource has been permanently moved?",
+    opts: ["200", "301", "404", "500"],
+    ans: 1
+  },
+  {
+    id: 19,
+    cat: "Git",
+    q: "In Git, what command is used to combine multiple commits into one?",
+    opts: ["git merge", "git rebase", "git squash", "git rebase -i"],
+    ans: 3
+  },
+  {
+    id: 20,
+    cat: "DSA",
+    q: "What is the time complexity of accessing an element in an array by index?",
+    opts: ["O(1)", "O(log n)", "O(n)", "O(n²)"],
+    ans: 0
+  },
+  {
+    id: 21,
+    cat: "JavaScript",
+    q: "Which of the following is NOT a valid JavaScript data type?",
+    opts: ["symbol", "bigint", "float", "undefined"],
+    ans: 2
+  },
+  {
+    id: 22,
+    cat: "CSS",
+    q: "What does CSS stand for?",
+    opts: ["Computer Style Sheets", "Creative Style System", "Cascading Style Sheets", "Colorful Style Sheets"],
+    ans: 2
+  },
+  {
+    id: 23,
+    cat: "JavaScript",
+    q: "Which method is used to add an element to the end of an array in JavaScript?",
+    opts: ["push()", "append()", "addToEnd()", "insertLast()"],
+    ans: 0
+  },
+  {
+    id: 24,
+    cat: "HTML",
+    q: "What is the purpose of the `alt` attribute in an HTML image tag?",
+    opts: ["To specify image dimensions", "To provide alternative text for screen readers", "To set image alignment", "To define image loading strategy"],
+    ans: 1
+  },
+  {
+    id: 25,
+    cat: "SQL",
+    q: "Which SQL clause is used to filter results?",
+    opts: ["SELECT", "FROM", "WHERE", "ORDER BY"],
+    ans: 2
+  },
+  {
+    id: 26,
+    cat: "JavaScript",
+    q: "What will be the value of `x` after this code executes? let x = 5; x += '5';",
+    opts: ["10", "55", "\"55\"", "Error"],
+    ans: 1
+  },
+  {
+    id: 27,
+    cat: "OOP",
+    q: "In object-oriented programming, what is encapsulation?",
+    opts: ["The process of converting data into code", "Hiding implementation details and exposing only necessary features", "Creating multiple methods with the same name", "Inheriting properties from a parent class"],
+    ans: 1
+  },
+  {
+    id: 28,
+    cat: "Database",
+    q: "Which of these is a NoSQL database?",
+    opts: ["MySQL", "PostgreSQL", "MongoDB", "SQLite"],
+    ans: 2
+  },
+  {
+    id: 29,
+    cat: "Web",
+    q: "What does API stand for?",
+    opts: ["Application Programming Interface", "Advanced Programming Instruction", "Automated Program Integration", "Application Process Integration"],
+    ans: 0
+  },
+  {
+    id: 30,
+    cat: "CSS",
+    q: "Which CSS selector has the highest specificity?",
+    opts: ["Class selector (.class)", "ID selector (#id)", "Element selector (div)", "Inline style"],
+    ans: 1
+  },
+{
+  id: 31,
+  cat: "HTML",
+  q: "Which HTML attribute is used to provide a hint or example input to the user in a text field, which disappears when the field is focused?",
+  opts: ["value", "label", "placeholder", "hint"],
+  ans: 2
+},
+{
+  id: 56,
+  cat: "CSS",
+  q: "What is the difference between the CSS properties visibility: hidden; and display: none;?",
+  opts: ["visibility: hidden; hides the element but it still occupies space; display: none; hides the element and removes it from the document flow.", "display: none; hides the element but it still occupies space; visibility: hidden; hides the element and removes it from the document flow.", "They are functionally identical.", "visibility: hidden; makes the element transparent; display: none; makes it invisible."],
+  ans: 0
+},
+{
+  id: 57,
+  cat: "HTML",
+  q: "Which HTML tag is used to define an independent, self-contained piece of content, like a blog post or news article?",
+  opts: ["section", "article", "div", "aside"],
+  ans: 1
+},
+{
+  id: 58,
+  cat: "CSS",
+  q: "In CSS, what is the default value for the box-sizing property?",
+  opts: ["border-box", "padding-box", "content-box", "margin-box"],
+  ans: 2
+},
+{
+  id: 59,
+  cat: "HTML",
+  q: "Which HTML attribute is used to group related input fields in a form with a boundary and a caption?",
+  opts: ["fieldset", "div", "section", "group"],
+  ans: 0
+},
+{
+  id: 60,
+  cat: "CSS",
+  q: "Which CSS property is used to control the appearance of an element's outline?",
+  opts: ["border", "shadow", "outline", "focus-style"],
+  ans: 2
+},
+{
+  id: 61,
+  cat: "HTML",
+  q: "What is the correct HTML element for inserting a line break?",
+  opts: ["break", "linebreak", "br", "lb"],
+  ans: 2
+},
+{
+  id: 62,
+  cat: "CSS",
+  q: "In Flexbox, what does the align-items property control?",
+  opts: ["Alignment of items along the main axis.", "Alignment of items along the cross-axis.", "The spacing between flex items.", "Whether items wrap to a new line."],
+  ans: 1
+},
+{
+  id: 63,
+  cat: "HTML",
+  q: "Which HTML tag is used to define metadata about an HTML document, such as author, description, and keywords?",
+  opts: ["head", "meta", "title", "info"],
+  ans: 1
+},
+{
+  id: 64,
+  cat: "CSS",
+  q: "What CSS property is used to change the mouse cursor when hovering over an element?",
+  opts: ["pointer", "mouse", "cursor", "interaction"],
+  ans: 2
+},
+{
+  id: 65,
+  cat: "HTML",
+  q: "Which HTML5 attribute indicates that a form input field should have focus when the page loads?",
+  opts: ["focus", "autofocus", "selected", "active"],
+  ans: 1
+},
+{
+  id: 66,
+  cat: "CSS",
+  q: "In CSS, which selector is used to select elements that are the first child of their parent?",
+  opts: [":first-of-type", "::first", ":first-child", ":nth-child(1)"],
+  ans: 2
+},
+{
+  id: 67,
+  cat: "HTML",
+  q: "Which HTML attribute specifies the URL of the page that the link goes to?",
+  opts: ["src", "link", "href", "url"],
+  ans: 2
+},
+{
+  id: 68,
+  cat: "CSS",
+  q: "What CSS property is used to create space outside the element's border?",
+  opts: ["padding", "border-spacing", "margin", "outline-space"],
+  ans: 2
+},
+{
+  id: 69,
+  cat: "HTML",
+  q: "Which HTML element is used to define a list item within an ordered or unordered list?",
+  opts: ["`<ol>`", "`<ul>`", "`<li>`", "`<list>`"],
+  ans: 2
+},
+{
+  id: 70,
+  cat: "CSS",
+  q: "In CSS, what is the purpose of the float property?",
+  opts: ["To make an element hover over other elements.", "To position an element to the left or right, allowing text and inline elements to wrap around it.", "To create a sticky position effect.", "To center an element horizontally."],
+  ans: 1
+},
+{
+  id: 71,
+  cat: "HTML",
+  q: "Which HTML tag is used for the largest heading?",
+  opts: ["`<h1>`", "`<h6>`", "`<h3>`", "`<h1>`"],
+  ans: 3
+},
+{
+  id: 72,
+  cat: "CSS",
+  q: "What CSS property is used to set the background color of an element?",
+  opts: ["color", "bgcolor", "background-color", "fill-color"],
+  ans: 2
+},
+{
+  id: 73,
+  cat: "HTML",
+  q: "Which HTML attribute specifies that an input field should be disabled?",
+  opts: ["active=false", "disabled", "readonly", "inactive"],
+  ans: 1
+},
+{
+  id: 74,
+  cat: "CSS",
+  q: "Which CSS property is used to control the style of a list's bullets or numbers?",
+  opts: ["list-style-type", "marker-style", "bullet-style", "list-decoration"],
+  ans: 0
+},
+{
+  id: 75,
+  cat: "HTML",
+  q: "What is the purpose of the HTML <abbr> tag?",
+  opts: ["To create a line break.", "To define an abbreviation or acronym.", "To insert a horizontal rule.", "To make text bold."],
+  ans: 1
+},
+{
+  id: 76,
+  cat: "CSS",
+  q: "In CSS, how do you select all <p> elements where the title attribute is present, regardless of its value?",
+  opts: ["p[title='*']", "p[title]", "p.title", "p > title"],
+  ans: 1
+},
+{
+  id: 77,
+  cat: "HTML",
+  q: "Which HTML element is used to represent the dominant content of the <body> of a document, excluding content that is repeated across a set of documents?",
+  opts: ["aside", "header", "footer", "main"],
+  ans: 3
+},
+{
+  id: 78,
+  cat: "CSS",
+  q: "What is the correct CSS syntax for making a paragraph italic?",
+  opts: ["font-style: italic;", "text-decoration: italic;", "font-weight: italic;", "text-style: italic;"],
+  ans: 0
+},
+{
+  id: 79,
+  cat: "HTML",
+  q: "Which HTML attribute specifies the width of an image?",
+  opts: ["size", "dimensions", "width", "style"],
+  ans: 2
+},
+{
+  id: 80,
+  cat: "CSS",
+  q: "In CSS, what does the text-transform property do?",
+  opts: ["Changes the font family of the text.", "Changes the color of the text.", "Changes the capitalization of the text (e.g., uppercase, lowercase).", "Adds a shadow effect to the text."],
+  ans: 2
+},
+{
+  id: 81,
+  cat: "HTML",
+  q: "Which HTML tag is used to define a client-side script (like JavaScript)?",
+  opts: ["javascript", "script", "js", "code"],
+  ans: 1
+},
+{
+  id: 82,
+  cat: "CSS",
+  q: "Which CSS property is used to add a shadow effect to text?",
+  opts: ["box-shadow", "text-decoration", "text-shadow", "font-shadow"],
+  ans: 2
+},
+{
+  id: 83,
+  cat: "HTML",
+  q: "What is the correct HTML for creating a checkbox?",
+  opts: ["<check>", "<input type='checkbox'>", "<cb>", "<input type='check'>"],
+  ans: 1
+},
+{
+  id: 84,
+  cat: "CSS",
+  q: "Which CSS property is used to specify the minimum width of an element?",
+  opts: ["max-width", "width-min", "min-width", "minimum-width"],
+  ans: 2
+},
+{
+  id: 85,
+  cat: "HTML",
+  q: "Which HTML attribute specifies how the browser should handle preformatted text that exceeds the line width?",
+  opts: ["wrap", "overflow", "word-wrap", "wrap or CSS pre-wrap"],
+  ans: 3
+},
+{
+  id: 86,
+  cat: "CSS",
+  q: "What does the CSS property outline-offset do?",
+  opts: ["Changes the color of the outline.", "Adds space between an outline and the edge of an element/border.", "Changes the style of the outline.", "Adds a shadow to the outline."],
+  ans: 1
+},
+{
+  id: 87,
+  cat: "HTML",
+  q: "Which HTML element is used to define a caption for a <figure> element?",
+  opts: ["<c>", "<caption>", "<figcaption>", "<figure type='caption'>"],
+  ans: 2
+},
+{
+  id: 88,
+  cat: "CSS",
+  q: "In CSS, how can you force an element to start on a new line after a floated element?",
+  opts: ["display: block;", "overflow: hidden;", "clear: both;", "float: none;"],
+  ans: 2
+},
+{
+  id: 89,
+  cat: "HTML",
+  q: "Which HTML tag is used to embed scalable vector graphics (SVG) directly into an HTML document?",
+  opts: ["<vector>", "<img src='....'>", "<svg>", "<canvas>"],
+  ans: 2
+},
+{
+  id: 90,
+  cat: "CSS",
+  q: "What is the purpose of the transform CSS property?",
+  opts: ["To change the color of an element.", "To apply 2D or 3D transformations to an element (like rotate, scale, translate).", "To transition CSS property values smoothly.", "To change the display type of an element."],
+  ans: 1
+},
+{
+  id: 91,
+  cat: "HTML",
+  q: "Which HTML attribute specifies a keyboard shortcut for an element?",
+  opts: ["shortcut", "key", "accesskey", "keyboard"],
+  ans: 2
+},
+{
+  id: 92,
+  cat: "CSS",
+  q: "In CSS, what is the effect of setting background-attachment: fixed;?",
+  opts: ["The background image scrolls with the element.", "The background image is centered in the element.", "The background image is fixed relative to the viewport and does not scroll with the element.", "The background image repeats to fill the element."],
+  ans: 2
+},
+{
+  id: 93,
+  cat: "HTML",
+  q: "Which HTML tag is used to mark text as no longer accurate or relevant?",
+  opts: ["<removed>", "<wrong>", "<del>", "<old>"],
+  ans: 2
+},
+{
+  id: 94,
+  cat: "CSS",
+  q: "What is the purpose of the transition CSS property?",
+  opts: ["To apply transformations like rotate or scale.", "To create complex animations with keyframes.", "To create smooth changes in CSS property values over a specified duration.", "To make an element interactive on hover."],
+  ans: 2
+},
+{
+  id: 95,
+  cat: "HTML",
+  q: "Which HTML tag is used to define an inline quotation?",
+  opts: ["<blockquote>", "<cite>", "<q>", "<quote>"],
+  ans: 2
+},
+{
+  id: 96,
+  cat: "CSS",
+  q: "In CSS, what does the object-fit property control?",
+  opts: ["How an image or video should be resized to fit its container.", "The alignment of the object within its container.", "Whether the object is visible or hidden.", "The border style of the object."],
+  ans: 0
+},
+{
+  id: 97,
+  cat: "HTML",
+  q: "Which HTML attribute is used to provide a path to a resource like an image or script?",
+  opts: ["href", "link", "src", "path"],
+  ans: 2
+},
+{
+  id: 98,
+  cat: "CSS",
+  q: "In CSS, what is the shorthand property for setting the padding-top, padding-right, padding-bottom, and padding-left all at once?",
+  opts: ["margin", "spacing", "padding", "box-padding"],
+  ans: 2
+},
+{
+  id: 99,
+  cat: "HTML",
+  q: "Which HTML tag is used to embed audio content in a document?",
+  opts: ["<sound>", "<music>", "<audio>", "<mp3>"],
+  ans: 2
+},
+{
+  id: 100,
+  cat: "CSS",
+  q: "In CSS, what does the white-space property control?",
+  opts: ["The space around an element's border.", "The space between words.", "How whitespace inside an element is handled (e.g., collapsing spaces, wrapping lines).", "The background color of an element."],
+  ans: 2
+},
+{
+  id: 101,
+  cat: "HTML",
+  q: "Which HTML tag is used to define a table row?",
+  opts: ["<table>", "<td>", "<tr>", "<th>"],
+  ans: 2
+},
+{
+  id: 102,
+  cat: "HTML",
+  q: "What does the HTML <iframe> tag do?",
+  opts: ["Creates an inline frame for embedding another document", "Defines an input field", "Creates a clickable button", "Embeds an image"],
+  ans: 0
+},
+{
+  id: 103,
+  cat: "CSS",
+  q: "Which CSS property controls the order of flex items?",
+  opts: ["flex-direction", "flex-order", "order", "flex-sequence"],
+  ans: 2
+},
+{
+  id: 104,
+  cat: "HTML",
+  q: "What does the HTML <strong> tag indicate?",
+  opts: ["Italic text", "Important text", "Underlined text", "Small text"],
+  ans: 1
+},
+{
+  id: 105,
+  cat: "JavaScript",
+  q: "Which JavaScript method returns the length of a string?",
+  opts: ["size()", "length()", ".length", "count()"],
+  ans: 2
+},
+{
+  id: 106,
+  cat: "CSS",
+  q: "What does the CSS property 'position: relative;' do?",
+  opts: ["Positions element relative to its normal position", "Positions element relative to the viewport", "Positions element relative to its parent", "Removes element from normal flow"],
+  ans: 0
+},
+{
+  id: 107,
+  cat: "HTML",
+  q: "Which HTML tag is used for the smallest heading?",
+  opts: ["<h1>", "<h6>", "<small>", "<tiny>"],
+  ans: 1
+},
+{
+  id: 108,
+  cat: "JavaScript",
+  q: "What does the JavaScript '===' operator do?",
+  opts: ["Compares values only", "Compares values and types", "Assigns a value", "Checks if undefined"],
+  ans: 1
+},
+{
+  id: 109,
+  cat: "CSS",
+  q: "Which CSS selector selects all <p> elements inside <div> elements?",
+  opts: ["div p", "div > p", "div + p", "div.p"],
+  ans: 0
+},
+{
+  id: 110,
+  cat: "HTML",
+  q: "What does the HTML <mark> tag do?",
+  opts: ["Marks text as deleted", "Highlights text", "Creates a bookmark", "Adds a comment"],
+  ans: 1
+},
+{
+  id: 111,
+  cat: "CSS",
+  q: "Which CSS property makes text bold?",
+  opts: ["font-style: bold;", "text-weight: bold;", "font-weight: bold;", "text-style: bold;"],
+  ans: 2
+},
+{
+  id: 112,
+  cat: "JavaScript",
+  q: "What does the JavaScript Array method 'filter()' do?",
+  opts: ["Creates a new array with elements that pass a test", "Changes all elements in an array", "Sorts array elements", "Joins two arrays"],
+  ans: 0
+},
+{
+  id: 113,
+  cat: "HTML",
+  q: "Which HTML tag defines a hyperlink?",
+  opts: ["<link>", "<a>", "<href>", "<hyper>"],
+  ans: 1
+},
+{
+  id: 114,
+  cat: "Web",
+  q: "What does 'HTTP' stand for?",
+  opts: ["HyperText Transfer Protocol", "High Transfer Text Protocol", "Hyper Transfer Text Protocol", "HyperText Transmission Protocol"],
+  ans: 0
+},
+{
+  id: 115,
+  cat: "CSS",
+  q: "Which CSS property adds space between table cells?",
+  opts: ["cell-spacing", "border-spacing", "table-spacing", "spacing"],
+  ans: 1
+},
+{
+  id: 116,
+  cat: "JavaScript",
+  q: "What does the JavaScript method 'toString()' do?",
+  opts: ["Converts a number to string", "Converts string to number", "Checks if value is string", "Splits a string"],
+  ans: 0
+},
+{
+  id: 117,
+  cat: "HTML",
+  q: "Which HTML tag defines a list of definitions?",
+  opts: ["<dl>", "<ul>", "<ol>", "<list>"],
+  ans: 0
+},
+{
+  id: 118,
+  cat: "CSS",
+  q: "What does the CSS 'vh' unit stand for?",
+  opts: ["Vertical height", "Viewport height", "Variable height", "Visual height"],
+  ans: 1
+},
+{
+  id: 119,
+  cat: "JavaScript",
+  q: "Which JavaScript keyword declares a constant?",
+  opts: ["var", "let", "const", "static"],
+  ans: 2
+},
+{
+  id: 120,
+  cat: "HTML",
+  q: "What does the HTML <sup> tag do?",
+  opts: ["Makes text subscript", "Makes text superscript", "Adds underline", "Makes text smaller"],
+  ans: 1
+},
+{
+  id: 121,
+  cat: "CSS",
+  q: "Which CSS property controls text alignment?",
+  opts: ["text-align", "align-text", "font-align", "alignment"],
+  ans: 0
+},
+{
+  id: 122,
+  cat: "JavaScript",
+  q: "What does the JavaScript method 'setInterval()' do?",
+  opts: ["Calls a function repeatedly", "Calls a function once", "Sets a timeout", "Creates an interval variable"],
+  ans: 0
+},
+{
+  id: 123,
+  cat: "HTML",
+  q: "Which HTML tag defines a paragraph?",
+  opts: ["<para>", "<p>", "<paragraph>", "<text>"],
+  ans: 1
+},
+{
+  id: 124,
+  cat: "CSS",
+  q: "What does the CSS property 'overflow: hidden;' do?",
+  opts: ["Hides overflow content", "Adds scrollbars", "Shows all content", "Creates hidden element"],
+  ans: 0
+},
+{
+  id: 125,
+  cat: "JavaScript",
+  q: "Which JavaScript method removes the last element from an array?",
+  opts: ["pop()", "shift()", "removeLast()", "delete()"],
+  ans: 0
+},
+{
+  id: 126,
+  cat: "HTML",
+  q: "What does the HTML <sub> tag do?",
+  opts: ["Makes text subscript", "Makes text superscript", "Adds strikethrough", "Makes text bold"],
+  ans: 0
+},
+{
+  id: 127,
+  cat: "CSS",
+  q: "Which CSS property sets the font family?",
+  opts: ["font-family", "font-type", "text-font", "family-font"],
+  ans: 0
+},
+{
+  id: 128,
+  cat: "JavaScript",
+  q: "What does the JavaScript method 'charAt()' do?",
+  opts: ["Returns character at specified index", "Checks if string contains character", "Changes character at index", "Counts characters"],
+  ans: 0
+},
+{
+  id: 129,
+  cat: "HTML",
+  q: "Which HTML tag defines a table header cell?",
+  opts: ["<td>", "<th>", "<header>", "<thead>"],
+  ans: 1
+},
+{
+  id: 130,
+  cat: "CSS",
+  q: "What does the CSS property 'cursor: pointer;' do?",
+  opts: ["Changes cursor to hand pointer", "Changes cursor to text cursor", "Changes cursor to crosshair", "Hides cursor"],
+  ans: 0
+},
+{
+  id: 131,
+  cat: "JavaScript",
+  q: "Which JavaScript method converts a string to lowercase?",
+  opts: ["toLower()", "lowerCase()", "toLowerCase()", "convertLower()"],
+  ans: 2
+},
+{
+  id: 132,
+  cat: "HTML",
+  q: "What does the HTML <ins> tag indicate?",
+  opts: ["Inserted text", "Important text", "Instruction text", "Inline text"],
+  ans: 0
+},
+{
+  id: 133,
+  cat: "CSS",
+  q: "Which CSS property sets the background image?",
+  opts: ["background-image", "image-background", "bg-image", "img-background"],
+  ans: 0
+},
+{
+  id: 134,
+  cat: "JavaScript",
+  q: "What does the JavaScript method 'Math.random()' return?",
+  opts: ["Random number between 0 and 1", "Random integer", "Random string", "Random boolean"],
+  ans: 0
+},
+{
+  id: 135,
+  cat: "HTML",
+  q: "Which HTML tag defines a division or section?",
+  opts: ["<section>", "<div>", "<span>", "<part>"],
+  ans: 1
+},
+{
+  id: 136,
+  cat: "CSS",
+  q: "What does the CSS property 'border-radius' control?",
+  opts: ["Border roundness", "Border thickness", "Border color", "Border style"],
+  ans: 0
+},
+{
+  id: 137,
+  cat: "JavaScript",
+  q: "Which JavaScript method converts a string to uppercase?",
+  opts: ["toUpperCase()", "upperCase()", "convertUpper()", "toUpper()"],
+  ans: 0
+},
+{
+  id: 138,
+  cat: "HTML",
+  q: "What does the HTML <code> tag do?",
+  opts: ["Defines computer code", "Creates a code editor", "Adds comments", "Validates code"],
+  ans: 0
+},
+{
+  id: 139,
+  cat: "CSS",
+  q: "Which CSS property sets text decoration?",
+  opts: ["text-decoration", "font-decoration", "decoration", "style-decoration"],
+  ans: 0
+},
+{
+  id: 140,
+  cat: "JavaScript",
+  q: "What does the JavaScript method 'split()' do?",
+  opts: ["Splits string into array", "Splits array into string", "Divides numbers", "Separates objects"],
+  ans: 0
+},
+{
+  id: 141,
+  cat: "HTML",
+  q: "Which HTML tag defines an unordered list?",
+  opts: ["<ol>", "<ul>", "<li>", "<list>"],
+  ans: 1
+},
+{
+  id: 142,
+  cat: "CSS",
+  q: "What does the CSS property 'opacity' control?",
+  opts: ["Element transparency", "Element visibility", "Element color", "Element size"],
+  ans: 0
+},
+{
+  id: 143,
+  cat: "JavaScript",
+  q: "Which JavaScript method adds elements to beginning of array?",
+  opts: ["unshift()", "push()", "addFirst()", "prepend()"],
+  ans: 0
+},
+{
+  id: 144,
+  cat: "HTML",
+  q: "What does the HTML <small> tag do?",
+  opts: ["Makes text smaller", "Hides text", "Creates small element", "Reduces image size"],
+  ans: 0
+},
+{
+  id: 145,
+  cat: "CSS",
+  q: "Which CSS property sets element width?",
+  opts: ["width", "size-width", "element-width", "w"],
+  ans: 0
+},
+{
+  id: 146,
+  cat: "JavaScript",
+  q: "What does the JavaScript method 'join()' do?",
+  opts: ["Joins array elements into string", "Joins two arrays", "Joins strings", "Joins objects"],
+  ans: 0
+},
+{
+  id: 147,
+  cat: "HTML",
+  q: "Which HTML tag defines an ordered list?",
+  opts: ["<ul>", "<ol>", "<li>", "<list>"],
+  ans: 1
+},
+{
+  id: 148,
+  cat: "CSS",
+  q: "What does the CSS property 'height' control?",
+  opts: ["Element height", "Element width", "Element depth", "Element size"],
+  ans: 0
+},
+{
+  id: 149,
+  cat: "JavaScript",
+  q: "Which JavaScript method removes first element from array?",
+  opts: ["shift()", "pop()", "removeFirst()", "deleteFirst()"],
+  ans: 0
+},
+{
+  id: 150,
+  cat: "HTML",
+  q: "What does the HTML <em> tag do?",
+  opts: ["Emphasizes text (italic)", "Makes text bold", "Adds underline", "Marks text"],
+  ans: 0
+},
+{
+  id: 151,
+  cat: "CSS",
+  q: "Which CSS property controls element display type?",
+  opts: ["display", "type", "visibility", "show"],
+  ans: 0
+},
+{
+  id: 152,
+  cat: "JavaScript",
+  q: "What does the JavaScript method 'indexOf()' return?",
+  opts: ["Position of element in array/string", "Length of array", "Index of object", "Number of elements"],
+  ans: 0
+},
+{
+  id: 153,
+  cat: "HTML",
+  q: "Which HTML tag defines a table cell?",
+  opts: ["<td>", "<tr>", "<table>", "<cell>"],
+  ans: 0
+},
+{
+  id: 154,
+  cat: "CSS",
+  q: "What does the CSS property 'float' do?",
+  opts: ["Floats element left/right", "Makes element transparent", "Changes element position", "Hides element"],
+  ans: 0
+},
+{
+  id: 155,
+  cat: "JavaScript",
+  q: "Which JavaScript method rounds number to nearest integer?",
+  opts: ["Math.round()", "Math.floor()", "Math.ceil()", "Math.int()"],
+  ans: 0
+},
+{
+  id: 156,
+  cat: "HTML",
+  q: "What does the HTML <cite> tag define?",
+  opts: ["Title of creative work", "Citation needed", "Code citation", "Book reference"],
+  ans: 0
+},
+{
+  id: 157,
+  cat: "CSS",
+  q: "Which CSS property sets border style?",
+  opts: ["border-style", "style-border", "border-type", "type-border"],
+  ans: 0
+},
+{
+  id: 158,
+  cat: "JavaScript",
+  q: "What does the JavaScript method 'concat()' do?",
+  opts: ["Joins two or more arrays", "Concatenates strings", "Connects functions", "Combines objects"],
+  ans: 0
+},
+{
+  id: 159,
+  cat: "HTML",
+  q: "Which HTML tag defines a table?",
+  opts: ["<table>", "<tr>", "<td>", "<tab>"],
+  ans: 0
+},
+{
+  id: 160,
+  cat: "CSS",
+  q: "What does the CSS property 'position: absolute;' do?",
+  opts: ["Positions relative to nearest positioned ancestor", "Positions relative to viewport", "Positions relative to document", "Positions fixed"],
+  ans: 0
+},
+{
+  id: 161,
+  cat: "JavaScript",
+  q: "Which JavaScript method converts string to number?",
+  opts: ["parseInt()", "toNumber()", "convertNumber()", "stringToNum()"],
+  ans: 0
+},
+{
+  id: 162,
+  cat: "HTML",
+  q: "What does the HTML <blockquote> tag define?",
+  opts: ["Block-level quotation", "Inline quotation", "Code block", "Text block"],
+  ans: 0
+},
+{
+  id: 163,
+  cat: "CSS",
+  q: "Which CSS property controls text overflow?",
+  opts: ["text-overflow", "overflow-text", "text-wrap", "wrap-text"],
+  ans: 0
+},
+{
+  id: 164,
+  cat: "JavaScript",
+  q: "What does the JavaScript method 'slice()' do?",
+  opts: ["Extracts section of array/string", "Cuts array in half", "Removes section", "Splits array"],
+  ans: 0
+},
+{
+  id: 165,
+  cat: "HTML",
+  q: "Which HTML tag defines form input?",
+  opts: ["<input>", "<form>", "<textarea>", "<field>"],
+  ans: 0
+},
+{
+  id: 166,
+  cat: "CSS",
+  q: "What does the CSS property 'box-shadow' create?",
+  opts: ["Shadow effect around element", "Box around element", "Shadow inside element", "3D box effect"],
+  ans: 0
+},
+{
+  id: 167,
+  cat: "JavaScript",
+  q: "Which JavaScript method returns absolute value?",
+  opts: ["Math.abs()", "Math.absolute()", "absolute()", "abs()"],
+  ans: 0
+},
+{
+  id: 168,
+  cat: "HTML",
+  q: "What does the HTML <kbd> tag indicate?",
+  opts: ["Keyboard input", "Code block", "Keyboard shortcut", "Input field"],
+  ans: 0
+},
+{
+  id: 169,
+  cat: "CSS",
+  q: "Which CSS property controls element visibility?",
+  opts: ["visibility", "display", "opacity", "show"],
+  ans: 0
+},
+{
+  id: 170,
+  cat: "JavaScript",
+  q: "What does the JavaScript method 'toFixed()' do?",
+  opts: ["Formats number with decimals", "Fixes number", "Rounds number", "Converts to fixed point"],
+  ans: 0
+},
+{
+  id: 171,
+  cat: "HTML",
+  q: "Which HTML tag defines a text area?",
+  opts: ["<textarea>", "<input>", "<text>", "<area>"],
+  ans: 0
+},
+{
+  id: 172,
+  cat: "CSS",
+  q: "What does the CSS property 'transition' control?",
+  opts: ["Smooth property changes", "Element transitions", "Page transitions", "Animation transitions"],
+  ans: 0
+},
+{
+  id: 173,
+  cat: "JavaScript",
+  q: "Which JavaScript method returns square root?",
+  opts: ["Math.sqrt()", "Math.squareRoot()", "sqrt()", "root()"],
+  ans: 0
+},
+{
+  id: 174,
+  cat: "HTML",
+  q: "What does the HTML <samp> tag define?",
+  opts: ["Sample output", "Code sample", "Sample input", "Example"],
+  ans: 0
+},
+{
+  id: 175,
+  cat: "CSS",
+  q: "Which CSS property controls text direction?",
+  opts: ["direction", "text-direction", "writing-mode", "dir"],
+  ans: 0
+},
+{
+  id: 176,
+  cat: "JavaScript",
+  q: "What does the JavaScript method 'Math.max()' return?",
+  opts: ["Largest of given numbers", "Maximum array value", "Math maximum", "Highest number"],
+  ans: 0
+},
+{
+  id: 177,
+  cat: "HTML",
+  q: "Which HTML tag defines a button?",
+  opts: ["<button>", "<input>", "<btn>", "<click>"],
+  ans: 0
+},
+{
+  id: 178,
+  cat: "CSS",
+  q: "What does the CSS property 'animation' control?",
+  opts: ["Keyframe animations", "Element animations", "Page animations", "Transition animations"],
+  ans: 0
+},
+{
+  id: 179,
+  cat: "JavaScript",
+  q: "Which JavaScript method returns smallest number?",
+  opts: ["Math.min()", "Math.smallest()", "min()", "smallest()"],
+  ans: 0
+},
+{
+  id: 180,
+  cat: "HTML",
+  q: "What does the HTML <var> tag define?",
+  opts: ["Variable", "Variant text", "Various text", "Value"],
+  ans: 0
+},
+{
+  id: 181,
+  cat: "CSS",
+  q: "Which CSS property controls element stacking?",
+  opts: ["z-index", "stack-order", "layer", "position-index"],
+  ans: 0
+},
+{
+  id: 182,
+  cat: "JavaScript",
+  q: "What does the JavaScript method 'Math.pow()' do?",
+  opts: ["Returns base to exponent power", "Powers number", "Calculates power", "Exponentiates"],
+  ans: 0
+},
+{
+  id: 183,
+  cat: "HTML",
+  q: "Which HTML tag defines a select dropdown?",
+  opts: ["<select>", "<option>", "<dropdown>", "<list>"],
+  ans: 0
+},
+{
+  id: 184,
+  cat: "CSS",
+  q: "What does the CSS property 'transform' do?",
+  opts: ["Applies 2D/3D transformations", "Transforms element", "Changes element type", "Alters element"],
+  ans: 0
+},
+{
+  id: 185,
+  cat: "JavaScript",
+  q: "Which JavaScript method checks if array includes value?",
+  opts: ["includes()", "contains()", "has()", "inArray()"],
+  ans: 0
+},
+{
+  id: 186,
+  cat: "HTML",
+  q: "What does the HTML <time> tag define?",
+  opts: ["Time/date", "Timestamp", "Time duration", "Clock time"],
+  ans: 0
+},
+{
+  id: 187,
+  cat: "CSS",
+  q: "Which CSS property controls element resizing?",
+  opts: ["resize", "size-resize", "element-resize", "scale"],
+  ans: 0
+},
+{
+  id: 188,
+  cat: "JavaScript",
+  q: "What does the JavaScript method 'Math.ceil()' do?",
+  opts: ["Rounds up to nearest integer", "Rounds down", "Rounds normally", "Ceilings number"],
+  ans: 0
+},
+{
+  id: 189,
+  cat: "HTML",
+  q: "Which HTML tag defines a label?",
+  opts: ["<label>", "<l>", "<name>", "<title>"],
+  ans: 0
+},
+{
+  id: 190,
+  cat: "CSS",
+  q: "What does the CSS property 'filter' apply?",
+  opts: ["Visual effects like blur", "CSS filters", "Image filters", "Element filters"],
+  ans: 0
+},
+{
+  id: 191,
+  cat: "JavaScript",
+  q: "Which JavaScript method returns integer part of number?",
+  opts: ["Math.trunc()", "Math.int()", "truncate()", "integer()"],
+  ans: 0
+},
+{
+  id: 192,
+  cat: "HTML",
+  q: "What does the HTML <output> tag define?",
+  opts: ["Calculation result", "Output element", "Result display", "Output field"],
+  ans: 0
+},
+{
+  id: 193,
+  cat: "CSS",
+  q: "Which CSS property controls grid layout?",
+  opts: ["display: grid;", "grid-display", "layout: grid;", "grid-layout"],
+  ans: 0
+},
+{
+  id: 194,
+  cat: "JavaScript",
+  q: "What does the JavaScript method 'Math.floor()' do?",
+  opts: ["Rounds down to nearest integer", "Rounds up", "Floors number", "Returns floor value"],
+  ans: 0
+},
+{
+  id: 195,
+  cat: "HTML",
+  q: "Which HTML tag defines a progress bar?",
+  opts: ["<progress>", "<meter>", "<bar>", "<loading>"],
+  ans: 0
+},
+{
+  id: 196,
+  cat: "CSS",
+  q: "What does the CSS property 'gap' control?",
+  opts: ["Space between grid/flex items", "Element gaps", "Margin gaps", "Padding gaps"],
+  ans: 0
+},
+{
+  id: 197,
+  cat: "JavaScript",
+  q: "Which JavaScript method returns exponential value?",
+  opts: ["Math.exp()", "exponential()", "Math.e()", "exp()"],
+  ans: 0
+},
+{
+  id: 198,
+  cat: "HTML",
+  q: "What does the HTML <meter> tag define?",
+  opts: ["Scalar measurement", "Meter element", "Measurement scale", "Gauge"],
+  ans: 0
+},
+{
+  id: 199,
+  cat: "CSS",
+  q: "Which CSS property controls column layout?",
+  opts: ["column-count", "columns", "multi-column", "col-count"],
+  ans: 0
+},
+{
+  id: 200,
+  cat: "JavaScript",
+  q: "What does the JavaScript method 'Math.log()' return?",
+  opts: ["Natural logarithm", "Logarithm base 10", "Log value", "Logarithmic value"],
+  ans: 0
+},
+{
+  id: 201,
+  cat: "HTML",
+  q: "Which HTML tag is used to create a horizontal rule?",
+  opts: ["<hr>", "<line>", "<rule>", "<hline>"],
+  ans: 0
+},
+{
+  id: 202,
+  cat: "CSS",
+  q: "What does the CSS property 'clip-path' do?",
+  opts: ["Clips element to shape", "Creates path for clipping", "Defines clip region", "Cuts element shape"],
+  ans: 0
+},
+{
+  id: 203,
+  cat: "JavaScript",
+  q: "Which JavaScript method creates array from array-like object?",
+  opts: ["Array.from()", "Array.create()", "new Array()", "Array.make()"],
+  ans: 0
+},
+{
+  id: 204,
+  cat: "HTML",
+  q: "What does the HTML <wbr> tag indicate?",
+  opts: ["Word break opportunity", "Word break", "Line break", "Break word"],
+  ans: 0
+},
+{
+  id: 205,
+  cat: "CSS",
+  q: "Which CSS property controls scroll behavior?",
+  opts: ["scroll-behavior", "behavior-scroll", "smooth-scroll", "scroll-type"],
+  ans: 0
+},
+{
+  id: 206,
+  cat: "JavaScript",
+  q: "What does the JavaScript method 'Object.keys()' return?",
+  opts: ["Array of object's keys", "Object keys", "Key array", "Property names"],
+  ans: 0
+},
+{
+  id: 207,
+  cat: "HTML",
+  q: "Which HTML tag defines a data list?",
+  opts: ["<datalist>", "<data>", "<list>", "<options>"],
+  ans: 0
+},
+{
+  id: 208,
+  cat: "CSS",
+  q: "What does the CSS property 'mix-blend-mode' control?",
+  opts: ["How element blends with background", "Color mixing", "Blend mode", "Element blending"],
+  ans: 0
+},
+{
+  id: 209,
+  cat: "JavaScript",
+  q: "Which JavaScript method freezes object?",
+  opts: ["Object.freeze()", "freeze()", "Object.lock()", "lockObject()"],
+  ans: 0
+},
+{
+  id: 210,
+  cat: "HTML",
+  q: "What does the HTML <ruby> tag define?",
+  opts: ["Ruby annotation", "Ruby text", "Annotation", "Small text above"],
+  ans: 0
+},
+{
+  id: 211,
+  cat: "CSS",
+  q: "Which CSS property controls backdrop filter?",
+  opts: ["backdrop-filter", "filter-backdrop", "background-filter", "blur-backdrop"],
+  ans: 0
+},
+{
+  id: 212,
+  cat: "JavaScript",
+  q: "What does the JavaScript method 'Object.values()' return?",
+  opts: ["Array of object's values", "Object values", "Value array", "Property values"],
+  ans: 0
+},
+{
+  id: 213,
+  cat: "HTML",
+  q: "Which HTML tag defines a template?",
+  opts: ["<template>", "<pattern>", "<layout>", "<model>"],
+  ans: 0
+},
+{
+  id: 214,
+  cat: "CSS",
+  q: "What does the CSS property 'aspect-ratio' control?",
+  opts: ["Width to height ratio", "Element ratio", "Size ratio", "Proportion"],
+  ans: 0
+},
+{
+  id: 215,
+  cat: "JavaScript",
+  q: "Which JavaScript method seals object?",
+  opts: ["Object.seal()", "seal()", "Object.close()", "closeObject()"],
+  ans: 0
+},
+{
+  id: 216,
+  cat: "HTML",
+  q: "What does the HTML <slot> tag define?",
+  opts: ["Placeholder in web component", "Slot element", "Component slot", "Placeholder slot"],
+  ans: 0
+},
+{
+  id: 217,
+  cat: "CSS",
+  q: "Which CSS property controls overscroll behavior?",
+  opts: ["overscroll-behavior", "scroll-overshoot", "overflow-scroll", "bounce-behavior"],
+  ans: 0
+},
+{
+  id: 218,
+  cat: "JavaScript",
+  q: "What does the JavaScript method 'Object.entries()' return?",
+  opts: ["Array of key-value pairs", "Object entries", "Entry array", "Key-value array"],
+  ans: 0
+},
+{
+  id: 219,
+  cat: "HTML",
+  q: "Which HTML tag defines a details disclosure?",
+  opts: ["<details>", "<disclosure>", "<summary>", "<info>"],
+  ans: 0
+},
+{
+  id: 220,
+  cat: "CSS",
+  q: "What does the CSS property 'scroll-snap-type' control?",
+  opts: ["Scroll snapping behavior", "Snap scrolling", "Scroll snap", "Snap type"],
+  ans: 0
+},
+{
+  id: 221,
+  cat: "JavaScript",
+  q: "Which JavaScript method creates object from prototype?",
+  opts: ["Object.create()", "createObject()", "new Object()", "Object.new()"],
+  ans: 0
+},
+{
+  id: 222,
+  cat: "HTML",
+  q: "What does the HTML <summary> tag define?",
+  opts: ["Summary for <details>", "Text summary", "Summary element", "Details summary"],
+  ans: 0
+},
+{
+  id: 223,
+  cat: "CSS",
+  q: "Which CSS property controls scroll margin?",
+  opts: ["scroll-margin", "margin-scroll", "scroll-padding", "snap-margin"],
+  ans: 0
+},
+{
+  id: 224,
+  cat: "JavaScript",
+  q: "What does the JavaScript method 'Object.assign()' do?",
+  opts: ["Copies properties to target object", "Assigns object", "Creates assignment", "Merges objects"],
+  ans: 0
+},
+{
+  id: 225,
+  cat: "HTML",
+  q: "Which HTML tag defines a dialog box?",
+  opts: ["<dialog>", "<modal>", "<popup>", "<window>"],
+  ans: 0
+},
+{
+  id: 226,
+  cat: "CSS",
+  q: "What does the CSS property 'scroll-padding' control?",
+  opts: ["Padding for scroll snap", "Scroll area padding", "Padding during scroll", "Snap padding"],
+  ans: 0
+},
+{
+  id: 227,
+  cat: "JavaScript",
+  q: "Which JavaScript method prevents extensions?",
+  opts: ["Object.preventExtensions()", "preventExtensions()", "Object.lockExtensions()", "lockExtensions()"],
+  ans: 0
+},
+{
+  id: 228,
+  cat: "HTML",
+  q: "What does the HTML <menu> tag define?",
+  opts: ["List of commands", "Navigation menu", "Menu element", "Command list"],
+  ans: 0
+},
+{
+  id: 229,
+  cat: "CSS",
+  q: "Which CSS property controls logical block size?",
+  opts: ["block-size", "size-block", "logical-height", "height-block"],
+  ans: 0
+},
+{
+  id: 230,
+  cat: "JavaScript",
+  q: "What does the JavaScript method 'Object.is()' do?",
+  opts: ["Compares two values", "Checks if object", "Tests object", "Compares objects"],
+  ans: 0
+},
+{
+  id: 231,
+  cat: "HTML",
+  q: "Which HTML tag defines a map area?",
+  opts: ["<area>", "<map>", "<region>", "<zone>"],
+  ans: 0
+},
+{
+  id: 232,
+  cat: "CSS",
+  q: "What does the CSS property 'inline-size' control?",
+  opts: ["Logical inline size", "Inline element size", "Width for inline", "Size inline"],
+  ans: 0
+},
+{
+  id: 233,
+  cat: "JavaScript",
+  q: "Which JavaScript method checks if property exists?",
+  opts: ["Object.hasOwn()", "hasOwnProperty()", "propertyExists()", "hasProperty()"],
+  ans: 0
+},
+{
+  id: 234,
+  cat: "HTML",
+  q: "What does the HTML <map> tag define?",
+  opts: ["Image map", "Map element", "Image coordinates", "Clickable map"],
+  ans: 0
+},
+{
+  id: 235,
+  cat: "CSS",
+  q: "Which CSS property controls logical margin?",
+  opts: ["margin-block", "block-margin", "logical-margin", "margin-logical"],
+  ans: 0
+},
+{
+  id: 236,
+  cat: "JavaScript",
+  q: "What does the JavaScript method 'Object.getPrototypeOf()' return?",
+  opts: ["Object's prototype", "Prototype object", "Parent prototype", "Class prototype"],
+  ans: 0
+},
+{
+  id: 237,
+  cat: "HTML",
+  q: "Which HTML tag defines a figure caption?",
+  opts: ["<figcaption>", "<caption>", "<figure>", "<imagecaption>"],
+  ans: 0
+},
+{
+  id: 238,
+  cat: "CSS",
+  q: "What does the CSS property 'margin-inline' control?",
+  opts: ["Logical inline margin", "Inline margin", "Margin for inline", "Inline spacing"],
+  ans: 0
+},
+{
+  id: 239,
+  cat: "JavaScript",
+  q: "Which JavaScript method sets object prototype?",
+  opts: ["Object.setPrototypeOf()", "setPrototype()", "prototype.set()", "setObjectPrototype()"],
+  ans: 0
+},
+{
+  id: 240,
+  cat: "HTML",
+  q: "What does the HTML <bdi> tag do?",
+  opts: ["Isolates bidirectional text", "Bidirectional isolation", "Text direction", "Isolate text"],
+  ans: 0
+},
+{
+  id: 241,
+  cat: "CSS",
+  q: "Which CSS property controls logical padding?",
+  opts: ["padding-block", "block-padding", "logical-padding", "padding-logical"],
+  ans: 0
+},
+{
+  id: 242,
+  cat: "JavaScript",
+  q: "What does the JavaScript method 'Object.defineProperty()' do?",
+  opts: ["Defines new property on object", "Creates property", "Defines object property", "Adds property"],
+  ans: 0
+},
+{
+  id: 243,
+  cat: "HTML",
+  q: "Which HTML tag defines bidirectional override?",
+  opts: ["<bdo>", "<bidioverride>", "<direction>", "<bd>"],
+  ans: 0
+},
+{
+  id: 244,
+  cat: "CSS",
+  q: "What does the CSS property 'padding-inline' control?",
+  opts: ["Logical inline padding", "Inline padding", "Padding for inline", "Inline internal spacing"],
+  ans: 0
+},
+{
+  id: 245,
+  cat: "JavaScript",
+  q: "Which JavaScript method defines multiple properties?",
+  opts: ["Object.defineProperties()", "defineProperties()", "Object.addProperties()", "addProperties()"],
+  ans: 0
+},
+{
+  id: 246,
+  cat: "HTML",
+  q: "What does the HTML <picture> tag do?",
+  opts: ["Container for multiple image sources", "Picture element", "Image container", "Responsive image"],
+  ans: 0
+},
+{
+  id: 247,
+  cat: "CSS",
+  q: "Which CSS property controls logical border?",
+  opts: ["border-block", "block-border", "logical-border", "border-logical"],
+  ans: 0
+},
+{
+  id: 248,
+  cat: "JavaScript",
+  q: "What does the JavaScript method 'Object.getOwnPropertyNames()' return?",
+  opts: ["Array of all property names", "Property names", "Own property names", "Names array"],
+  ans: 0
+},
+{
+  id: 249,
+  cat: "HTML",
+  q: "Which HTML tag defines a track for media?",
+  opts: ["<track>", "<media>", "<source>", "<subtitles>"],
+  ans: 0
+},
+{
+  id: 250,
+  cat: "CSS",
+  q: "What does the CSS property 'border-inline' control?",
+  opts: ["Logical inline border", "Inline border", "Border for inline", "Inline outline"],
+  ans: 0
+},
+{
+  id: 251,
+  cat: "JavaScript",
+  q: "Which JavaScript method gets property descriptor?",
+  opts: ["Object.getOwnPropertyDescriptor()", "getPropertyDescriptor()", "propertyDescriptor()", "getDescriptor()"],
+  ans: 0
+},
+{
+  id: 252,
+  cat: "HTML",
+  q: "What does the HTML <source> tag define?",
+  opts: ["Media source for <picture>, <audio>, <video>", "Source element", "Media source", "Resource source"],
+  ans: 0
+},
+{
+  id: 253,
+  cat: "CSS",
+  q: "Which CSS property controls logical inset?",
+  opts: ["inset", "logical-inset", "position-inset", "box-inset"],
+  ans: 0
+},
+{
+  id: 254,
+  cat: "JavaScript",
+  q: "What does the JavaScript method 'Object.getOwnPropertySymbols()' return?",
+  opts: ["Array of symbol properties", "Symbol properties", "Property symbols", "Symbols array"],
+  ans: 0
+},
+{
+  id: 255,
+  cat: "HTML",
+  q: "Which HTML tag defines embedded content?",
+  opts: ["<embed>", "<object>", "<include>", "<external>"],
+  ans: 0
+},
+{
+  id: 256,
+  cat: "CSS",
+  q: "What does the CSS property 'inset-block' control?",
+  opts: ["Logical block inset", "Block inset", "Inset for block", "Block positioning"],
+  ans: 0
+},
+{
+  id: 257,
+  cat: "JavaScript",
+  q: "Which JavaScript method prevents object modification?",
+  opts: ["Object.freeze()", "freezeObject()", "Object.immutable()", "makeImmutable()"],
+  ans: 0
+},
+{
+  id: 258,
+  cat: "HTML",
+  q: "What does the HTML <object> tag define?",
+  opts: ["Embedded object", "Object element", "External object", "Embed element"],
+  ans: 0
+},
+{
+  id: 259,
+  cat: "CSS",
+  q: "Which CSS property controls inset inline?",
+  opts: ["inset-inline", "inline-inset", "Inset for inline", "Inline positioning"],
+  ans: 0
+},
+{
+  id: 260,
+  cat: "JavaScript",
+  q: "What does the JavaScript method 'Object.isExtensible()' check?",
+  opts: ["If object can have new properties", "If extensible", "Extensibility", "Can extend object"],
+  ans: 0
+},
+{
+  id: 261,
+  cat: "HTML",
+  q: "Which HTML tag defines a parameter for object?",
+  opts: ["<param>", "<parameter>", "<value>", "<option>"],
+  ans: 0
+},
+{
+  id: 262,
+  cat: "CSS",
+  q: "What does the CSS property 'min-block-size' control?",
+  opts: ["Minimum logical block size", "Min block size", "Minimum for block", "Block min size"],
+  ans: 0
+},
+{
+  id: 263,
+  cat: "JavaScript",
+  q: "Which JavaScript method checks if sealed?",
+  opts: ["Object.isSealed()", "isSealed()", "sealed()", "checkSealed()"],
+  ans: 0
+},
+{
+  id: 264,
+  cat: "HTML",
+  q: "What does the HTML <noscript> tag do?",
+  opts: ["Content for non-JS browsers", "No script element", "Alternative content", "Script fallback"],
+  ans: 0
+},
+{
+  id: 265,
+  cat: "CSS",
+  q: "Which CSS property controls max block size?",
+  opts: ["max-block-size", "block-max-size", "Maximum for block", "Block max size"],
+  ans: 0
+},
+{
+  id: 266,
+  cat: "JavaScript",
+  q: "What does the JavaScript method 'Object.isFrozen()' check?",
+  opts: ["If object is frozen", "Frozen status", "Freeze check", "Check frozen"],
+  ans: 0
+},
+{
+  id: 267,
+  cat: "HTML",
+  q: "Which HTML tag defines a base URL?",
+  opts: ["<base>", "<url>", "<root>", "<linkbase>"],
+  ans: 0
+},
+{
+  id: 268,
+  cat: "CSS",
+  q: "What does the CSS property 'min-inline-size' control?",
+  opts: ["Minimum logical inline size", "Min inline size", "Minimum for inline", "Inline min size"],
+  ans: 0
+},
+{
+  id: 269,
+  cat: "JavaScript",
+  q: "Which JavaScript method creates object copy?",
+  opts: ["Object.assign({}, obj)", "copyObject()", "Object.copy()", "cloneObject()"],
+  ans: 0
+},
+{
+  id: 270,
+  cat: "HTML",
+  q: "What does the HTML <colgroup> tag define?",
+  opts: ["Table column group", "Column group", "Group of columns", "Table columns"],
+  ans: 0
+},
+{
+  id: 271,
+  cat: "CSS",
+  q: "Which CSS property controls max inline size?",
+  opts: ["max-inline-size", "inline-max-size", "Maximum for inline", "Inline max size"],
+  ans: 0
+},
+{
+  id: 272,
+  cat: "JavaScript",
+  q: "What does the JavaScript method 'JSON.parse()' do?",
+  opts: ["Parses JSON string to object", "Parses JSON", "Converts to JSON", "Reads JSON"],
+  ans: 0
+},
+{
+  id: 273,
+  cat: "HTML",
+  q: "Which HTML tag defines table column?",
+  opts: ["<col>", "<column>", "<td>", "<cell>"],
+  ans: 0
+},
+{
+  id: 274,
+  cat: "CSS",
+  q: "What does the CSS property 'overflow-block' control?",
+  opts: ["Overflow in block direction", "Block overflow", "Overflow for block", "Block scrolling"],
+  ans: 0
+},
+{
+  id: 275,
+  cat: "JavaScript",
+  q: "Which JavaScript method stringifies object to JSON?",
+  opts: ["JSON.stringify()", "stringify()", "toJSON()", "convertToJSON()"],
+  ans: 0
+},
+{
+  id: 276,
+  cat: "HTML",
+  q: "What does the HTML <caption> tag define?",
+  opts: ["Table caption", "Caption element", "Table title", "Table header"],
+  ans: 0
+},
+{
+  id: 277,
+  cat: "CSS",
+  q: "Which CSS property controls overflow inline?",
+  opts: ["overflow-inline", "inline-overflow", "Overflow for inline", "Inline scrolling"],
+  ans: 0
+},
+{
+  id: 278,
+  cat: "JavaScript",
+  q: "What does the JavaScript method 'Array.isArray()' check?",
+  opts: ["If value is array", "Array check", "Is array", "Check array"],
+  ans: 0
+},
+{
+  id: 279,
+  cat: "HTML",
+  q: "Which HTML tag defines table footer?",
+  opts: ["<tfoot>", "<footer>", "<tablefooter>", "<tfooter>"],
+  ans: 0
+},
+{
+  id: 280,
+  cat: "CSS",
+  q: "What does the CSS property 'text-decoration-thickness' control?",
+  opts: ["Thickness of text decoration", "Decoration thickness", "Text underline thickness", "Decoration line thickness"],
+  ans: 0
+},
+{
+  id: 281,
+  cat: "JavaScript",
+  q: "Which JavaScript method finds array element?",
+  opts: ["find()", "search()", "locate()", "findElement()"],
+  ans: 0
+},
+{
+  id: 282,
+  cat: "HTML",
+  q: "What does the HTML <thead> tag define?",
+  opts: ["Table header", "Table head", "Header section", "Table top"],
+  ans: 0
+},
+{
+  id: 283,
+  cat: "CSS",
+  q: "Which CSS property controls text underline offset?",
+  opts: ["text-underline-offset", "underline-offset", "text-decoration-offset", "decoration-offset"],
+  ans: 0
+},
+{
+  id: 284,
+  cat: "JavaScript",
+  q: "What does the JavaScript method 'findIndex()' return?",
+  opts: ["Index of first matching element", "Find index", "Element index", "Search index"],
+  ans: 0
+},
+{
+  id: 285,
+  cat: "HTML",
+  q: "Which HTML tag defines table body?",
+  opts: ["<tbody>", "<body>", "<tablebody>", "<tbody>"],
+  ans: 0
+},
+{
+  id: 286,
+  cat: "CSS",
+  q: "What does the CSS property 'text-decoration-skip-ink' control?",
+  opts: ["How underline interacts with glyphs", "Decoration skip", "Text skip ink", "Underline skipping"],
+  ans: 0
+},
+{
+  id: 287,
+  cat: "JavaScript",
+  q: "Which JavaScript method reduces array to single value?",
+  opts: ["reduce()", "combine()", "merge()", "accumulate()"],
+  ans: 0
+},
+{
+  id: 288,
+  cat: "HTML",
+  q: "What does the HTML <tfoot> tag define?",
+  opts: ["Table footer", "Table foot", "Footer section", "Table bottom"],
+  ans: 0
+},
+{
+  id: 289,
+  cat: "CSS",
+  q: "Which CSS property controls text decoration color?",
+  opts: ["text-decoration-color", "decoration-color", "text-color-decoration", "underline-color"],
+  ans: 0
+},
+{
+  id: 290,
+  cat: "JavaScript",
+  q: "What does the JavaScript method 'reduceRight()' do?",
+  opts: ["Reduces from right to left", "Right reduce", "Reduce reverse", "Backwards reduce"],
+  ans: 0
+},
+{
+  id: 291,
+  cat: "HTML",
+  q: "Which HTML element is used to group related elements in a form?",
+  opts: ["<tbody>, <thead>, <tfoot>", "<rowgroup>", "<rg>", "<group>"],
+  ans: 0
+},
+{
+  id: 292,
+  cat: "CSS",
+  q: "What does the CSS property 'text-emphasis' control?",
+  opts: ["Text emphasis marks", "Emphasis styling", "Text emphasis", "Emphasis decoration"],
+  ans: 0
+},
+{
+  id: 293,
+  cat: "JavaScript",
+  q: "Which JavaScript method creates array from arguments?",
+  opts: ["Array.of()", "Array.from()", "new Array()", "Array.create()"],
+  ans: 0
+},
+{
+  id: 294,
+  cat: "HTML",
+  q: "What does the HTML `<legend>` tag define?",
+  opts: ["Caption for `<fieldset>`", "Legend element", "Fieldset title", "Form legend"],
+  ans: 0
+},
+{
+  id: 295,
+  cat: "CSS",
+  q: "Which CSS property controls text emphasis position?",
+  opts: ["text-emphasis-position", "emphasis-position", "text-position-emphasis", "emphasize-position"],
+  ans: 0
+},
+{
+  id: 296,
+  cat: "JavaScript",
+  q: "What does the JavaScript method 'Array.fill()' do?",
+  opts: ["Fills array with static value", "Fill array", "Populate array", "Set array values"],
+  ans: 0
+},
+{
+  id: 297,
+  cat: "HTML",
+  q: "Which HTML tag defines an option group?",
+  opts: ["`<optgroup>`", "`<optiongroup>`", "`<group>`", "`<options>`"],
+  ans: 0
+},
+{
+  id: 298,
+  cat: "CSS",
+  q: "What does the CSS property 'text-underline-position' control?",
+  opts: ["Position of underline", "Underline position", "Text underline placement", "Decoration position"],
+  ans: 0
+},
+{
+  id: 299,
+  cat: "JavaScript",
+  q: "Which JavaScript method copies array portion?",
+  opts: ["copyWithin()", "copy()", "sliceCopy()", "arrayCopy()"],
+  ans: 0
+},
+{
+  id: 300,
+  cat: "HTML",
+  q: "What does the HTML `<keygen>` tag do?",
+  opts: ["Generates key pair (deprecated)", "Key generation", "Generate key", "Key element"],
+  ans: 0
+}
+];
 
-    // Function to format time (MM:SS)
-    function formatTime(seconds) {
-      const mins = Math.floor(seconds / 60);
-      const secs = seconds % 60;
-      return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-    }
+// ═══════════════════════════════════════════
+//   STATE
+// ═══════════════════════════════════════════
+let questions = [], answers = [], currentQ = 0;
+let timerInterval, timeLeft = 300, testOver = false;
 
-    // Function to start the timer
-    function startTimer() {
-      timerInterval = setInterval(() => {
-        timeLeft--;
-        timeDisplay.textContent = formatTime(timeLeft);
+// Shuffle & pick 10
+function shuffle(arr){for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]];}return arr;}
 
-        if (timeLeft <= 60) {
-            timerContainer.style.backgroundColor = '#f97316'; // Orange for last minute
-        }
-        if (timeLeft <= 0) {
-          clearInterval(timerInterval);
-          timerExpired = true;
-          submitTest();
-        }
-      }, 1000);
-    }
-    
-    // Function to select N random questions from the pool
-    function selectRandomQuestions(pool, num) {
-        const shuffled = [...pool].sort(() => 0.5 - Math.random());
-        return shuffled.slice(0, num).map((q, index) => ({...q, id: index + 1})); // Reset IDs for current test
-    }
+function init(){
+  questions = shuffle([...BANK]).slice(0,10);
+  answers = new Array(10).fill(null);
+  currentQ = 0;
+  buildQNav();
+  renderQ();
+  startTimer();
+}
 
-    // Function to render questions
-    function renderQuestions() {
-      questionsScreen.innerHTML = '';
-      testQuestions.forEach((q) => {
-        const questionCard = document.createElement('div');
-        questionCard.classList.add('question-card');
-        
-        let questionHTML = `
-          <div class="question-title">
-            <span class="question-number">${q.id}</span>
-            <span>${q.question}</span>
-        `;
+// ═══════════════════════════════════════════
+//   TIMER
+// ═══════════════════════════════════════════
+function startTimer(){
+  timerInterval = setInterval(()=>{
+    timeLeft--;
+    updateTimer();
+    if(timeLeft<=0){clearInterval(timerInterval);timeExpired();}
+  },1000);
+}
 
-        // If a code snippet exists, escape it and add it to the display
-        if (q.codeSnippet) {
-            const escapedCode = escapeHTML(q.codeSnippet);
-            questionHTML += `<pre class="question-code"><code>${escapedCode}</code></pre>`;
-        }
-        questionHTML += `</div><div class="options-container" id="options-${q.id}"></div>`;
-        
-        questionCard.innerHTML = questionHTML;
-        questionsScreen.appendChild(questionCard);
+function updateTimer(){
+  const m = Math.floor(timeLeft/60), s = timeLeft%60;
+  document.getElementById('timerDisplay').textContent = `${m}:${s.toString().padStart(2,'0')}`;
+  const tb = document.getElementById('timerBox');
+  tb.className = 'timer-box';
+  if(timeLeft<=30) tb.classList.add('danger');
+  else if(timeLeft<=90) tb.classList.add('warn');
+}
 
-        const optionsContainer = document.getElementById(`options-${q.id}`);
-        q.options.forEach((option) => {
-          const optionDiv = document.createElement('div');
-          optionDiv.classList.add('option');
-          optionDiv.setAttribute('data-question-id', q.id);
-          optionDiv.setAttribute('data-option-id', option.id);
-          optionDiv.innerHTML = `
-            <span class="option-label">${option.id.toUpperCase()}</span>
-            <span>${option.text}</span>
-          `;
-          optionDiv.addEventListener('click', () => selectOption(q.id, option.id));
-          optionsContainer.appendChild(optionDiv);
-        });
-      });
-    }
+function timeExpired(){
+  testOver = true;
+  showResult(false,'time');
+}
 
-    // Function to handle option selection
-    function selectOption(questionId, optionId) {
-      if (timerExpired) return;
-      userAnswers[questionId] = optionId;
-      
-      const options = document.querySelectorAll(`[data-question-id="${questionId}"]`);
-      options.forEach(opt => opt.classList.remove('selected'));
-      document.querySelector(`[data-question-id="${questionId}"][data-option-id="${optionId}"]`).classList.add('selected');
-    }
+// ═══════════════════════════════════════════
+//   RENDER
+// ═══════════════════════════════════════════
+function buildQNav(){
+  const nav = document.getElementById('qnav');
+  nav.innerHTML = '';
+  for(let i=0;i<10;i++){
+    const b = document.createElement('button');
+    b.className = 'qbtn';
+    b.textContent = i+1;
+    b.onclick = ()=>goTo(i);
+    b.id = `qb${i}`;
+    nav.appendChild(b);
+  }
+}
 
-    // Function to start the test
-    function startTest() {
-      testQuestions = selectRandomQuestions(ALL_QUESTIONS_POOL, NUMBER_OF_QUESTIONS_TO_PICK);
-      
-      welcomeScreen.classList.add('hidden');
-      questionsScreen.classList.remove('hidden');
-      submitFooter.classList.remove('hidden');
-      timerContainer.classList.remove('hidden');
-      renderQuestions();
-      startTimer();
-      timeDisplay.textContent = formatTime(TOTAL_TIME); // Set initial display time
-    }
+function renderQ(){
+  const q = questions[currentQ];
+  document.getElementById('qNumLabel').textContent = `Question ${String(currentQ+1).padStart(2,'0')} / 10`;
+  document.getElementById('qcount').textContent = `Q ${currentQ+1} of 10`;
+  document.getElementById('qCat').textContent = q.cat;
+  const diffEl = document.getElementById('qDiff');
+  diffEl.textContent = q.diff;
+  diffEl.className = 'q-diff ' + {Hard:'diff-hard',Med:'diff-med',Easy:'diff-easy'}[q.diff];
+  document.getElementById('qText').textContent = q.q;
 
-    // Function to submit the test
-    function submitTest() {
-      clearInterval(timerInterval);
-      questionsScreen.classList.add('hidden');
-      submitFooter.classList.add('hidden');
-      resultScreen.classList.remove('hidden');
-      timerContainer.style.backgroundColor = '#10b981'; // Green on completion
+  const ol = document.getElementById('optList');
+  ol.innerHTML = '';
+  q.opts.forEach((opt,i)=>{
+    const keys = ['A','B','C','D'];
+    const d = document.createElement('div');
+    d.className = 'opt';
+    if(answers[currentQ]===i) d.classList.add('selected');
+    d.innerHTML = `<div class="opt-key">${keys[i]}</div><div class="opt-text">${opt}</div><div class="opt-check"><i class="fas fa-check-circle"></i></div>`;
+    d.onclick = ()=>selectOpt(i);
+    ol.appendChild(d);
+  });
 
-      let correctAnswers = 0;
-      testQuestions.forEach(q => {
-        const userAnswerId = userAnswers[q.id];
-        const correctOption = q.options.find(opt => opt.isCorrect);
-        if (userAnswerId === correctOption.id) {
-          correctAnswers++;
-        }
-      });
+  // nav buttons
+  document.getElementById('btnPrev').style.display = currentQ===0 ? 'none' : '';
+  const isLast = currentQ===9;
+  document.getElementById('btnNext').style.display = isLast ? 'none' : '';
+  document.getElementById('btnSubmit').style.display = isLast ? '' : 'none';
 
-      const totalQuestions = testQuestions.length;
-      const scorePercentage = (correctAnswers / totalQuestions) * 100;
-      const timeTaken = TOTAL_TIME - timeLeft;
-      const resultMessage = timerExpired ? "Time's up! Here are your results." : "Test Submitted Successfully!";
-      const passMessage = scorePercentage >= 70 ? "Congratulations! You passed!" : "Keep practicing!";
+  const filled = answers.filter(a=>a!==null).length;
+  document.getElementById('qHint').textContent = filled < 10 ? `${10-filled} question${10-filled!==1?'s':''} remaining` : 'All questions answered!';
 
-      renderResult(correctAnswers, totalQuestions, scorePercentage, resultMessage, passMessage, timeTaken);
-    }
+  updateQNav();
+  updateProgress();
+}
 
-    // Function to render the result screen
-    function renderResult(correct, total, percentage, message, passMsg, timeTaken) {
-      let resultHTML = `
-        <div class="result-header">
-          <div class="result-score">${correct}/${total}</div>
-          <div class="result-message">${passMsg}</div>
-          <p class="result-details">${message}</p>
-        </div>
-        <div class="progress-bar">
-          <div class="progress-fill" style="width: ${percentage}%"></div>
-        </div>
-        <p>Your score: <strong>${percentage.toFixed(2)}%</strong></p>
-        <p>Time Taken: <strong>${formatTime(timeTaken)}</strong></p>
-        
-        <div class="community-links">
-      `;
+function updateQNav(){
+  for(let i=0;i<10;i++){
+    const b = document.getElementById(`qb${i}`);
+    b.className = 'qbtn';
+    if(answers[i]!==null) b.classList.add('answered');
+    if(i===currentQ) b.classList.add('current');
+  }
+  const filled = answers.filter(a=>a!==null).length;
+  document.getElementById('answeredCount').textContent = `${filled} / 10`;
+  document.getElementById('remainCount').textContent = 10 - filled;
+}
 
-      // Conditionally add the Discord link if the score is 100%
-      if (percentage === 100) {
-        resultHTML += `
-            <a href="https://discord.gg/5HfKBHYcGv" target="_blank" class="btn-secondary">
-                <i class="fab fa-discord"></i> Claim your reward on Discord!
-            </a>
-            <a href="https://chat.whatsapp.com/IR49ajzdEHzEbqGoMgwCs4" traget="_blank"class="btn-secondary">
-                <i class="fab fa-whatsapp"><i>
-        `;
-      }
+function updateProgress(){
+  const filled = answers.filter(a=>a!==null).length;
+  const pct = (filled/10)*100;
+  document.getElementById('progFill').style.width = pct+'%';
+  document.getElementById('progLabel').textContent = `${filled} / 10`;
+}
 
-      resultHTML += `
-           <div style="display: flex; justify-content: center; gap: 20px; margin-top: 30px;">
-              <button class="btn-primary" onclick="window.location.reload()" style="margin-right: 10px;">
-                  <i class="fas fa-redo"></i> Retake Test
-              </button>
-              <a href="x-academy.html" class="btn-secondary" style="margin-left: 10px;">
-                  <i class="fas fa-graduation-cap"></i> Go to X-Academy
-              </a>
-            </div>
-        </div>
-      `;
-      
-      resultScreen.innerHTML = resultHTML;
-    }
-  </script>
+function selectOpt(i){
+  if(testOver) return;
+  answers[currentQ] = i;
+  renderQ();
+}
+
+function navigate(dir){
+  const next = currentQ + dir;
+  if(next>=0 && next<10){currentQ=next;renderQ();}
+}
+
+function goTo(i){currentQ=i;renderQ();}
+
+// ═══════════════════════════════════════════
+//   SUBMIT
+// ═══════════════════════════════════════════
+function confirmSubmit(){
+  const filled = answers.filter(a=>a!==null).length;
+  if(filled<10){
+    showModal('⚠️','Unanswered Questions',`You have ${10-filled} unanswered question${10-filled!==1?'s':''}. Submit anyway?`,[
+      {label:'Review',cls:'mbt-o',fn:'closeModal()'},
+      {label:'Submit Anyway',cls:'mbt-g',fn:'submitTest()'},
+    ]);
+  } else {
+    showModal('📋','Submit Test?','You\'ve answered all 10 questions. Submit your final answers?',[
+      {label:'Review',cls:'mbt-o',fn:'closeModal()'},
+      {label:'Submit',cls:'mbt-g',fn:'submitTest()'},
+    ]);
+  }
+}
+
+function submitTest(){
+  closeModal();
+  clearInterval(timerInterval);
+  testOver = true;
+  // grade
+  let correct = 0;
+  questions.forEach((q,i)=>{ if(answers[i]===q.ans) correct++; });
+  const passed = correct === 10;
+  setTimeout(()=>showResult(passed,'submit',correct),300);
+}
+
+// ═══════════════════════════════════════════
+//   RESULT
+// ═══════════════════════════════════════════
+function showResult(passed, reason, correct=0){
+  const rs = document.getElementById('resultScreen');
+  const timeTaken = 300 - timeLeft;
+  const m = Math.floor(timeTaken/60), s = timeTaken%60;
+  const timeStr = `${m}m ${s}s`;
+
+  if(reason==='time'){
+    document.getElementById('rsIcon').textContent = '⏰';
+    document.getElementById('rsTitle').innerHTML = `<span style="color:var(--rd)">Time's Up</span>`;
+    document.getElementById('rsSub').textContent = 'The 5-minute limit has been reached. Review your answers and try again.';
+    document.getElementById('rsStats').innerHTML = `
+      <div class="rs-stat"><span class="rss-val" style="color:var(--rd);">${answers.filter(a=>a!==null).length}/10</span><div class="rss-label">Answered</div></div>
+      <div class="rs-stat"><span class="rss-val">5:00</span><div class="rss-label">Used</div></div>`;
+    document.getElementById('rsBtns').innerHTML = `<button class="rb rb-g" onclick="retryTest()"><i class="fas fa-redo"></i> Retry Test</button><a href="x-academy.html" class="rb rb-o"><i class="fas fa-book-open"></i> Study More</a>`;
+  } else if(passed){
+    document.getElementById('rsIcon').textContent = '🏆';
+    document.getElementById('rsTitle').innerHTML = `<span style="color:var(--g);">Perfect Score!</span>`;
+    document.getElementById('rsSub').textContent = 'Outstanding. You\'ve answered every question correctly. Your X-Developer access is pending review.';
+    document.getElementById('rsStats').innerHTML = `
+      <div class="rs-stat"><span class="rss-val" style="color:var(--g);">10/10</span><div class="rss-label">Correct</div></div>
+      <div class="rs-stat"><span class="rss-val">100%</span><div class="rss-label">Score</div></div>
+      <div class="rs-stat"><span class="rss-val">${timeStr}</span><div class="rss-label">Time Used</div></div>`;
+    document.getElementById('rsBtns').innerHTML = `<a href="hiring.html" class="rb rb-g"><i class="fas fa-arrow-right"></i> Apply Now</a><a href="index.html" class="rb rb-o"><i class="fas fa-home"></i> Home</a>`;
+    launchConfetti();
+  } else {
+    const pct = Math.round((correct/10)*100);
+    document.getElementById('rsIcon').textContent = '❌';
+    document.getElementById('rsTitle').innerHTML = `<span style="color:var(--rd)">Not Quite</span>`;
+    document.getElementById('rsSub').textContent = `You got ${correct} out of 10 correct (${pct}%). You need 100% to pass. Keep studying and try again!`;
+    document.getElementById('rsStats').innerHTML = `
+      <div class="rs-stat"><span class="rss-val" style="color:var(--rd);">${correct}/10</span><div class="rss-label">Correct</div></div>
+      <div class="rs-stat"><span class="rss-val">${pct}%</span><div class="rss-label">Score</div></div>
+      <div class="rs-stat"><span class="rss-val">${timeStr}</span><div class="rss-label">Time Used</div></div>`;
+    document.getElementById('rsBtns').innerHTML = `<button class="rb rb-g" onclick="retryTest()"><i class="fas fa-redo"></i> Retry</button><a href="x-academy.html" class="rb rb-o"><i class="fas fa-book-open"></i> Study More</a>`;
+  }
+
+  rs.classList.add('on');
+}
+
+function retryTest(){
+  document.getElementById('resultScreen').classList.remove('on');
+  timeLeft = 300;
+  testOver = false;
+  updateTimer();
+  clearInterval(timerInterval);
+  init();
+}
+
+// ═══════════════════════════════════════════
+//   CONFETTI
+// ═══════════════════════════════════════════
+function launchConfetti(){
+  const colors=['#39ff14','#00e8a2','#60a5fa','#fbbf24','#f0f0ff'];
+  for(let i=0;i<80;i++){
+    setTimeout(()=>{
+      const c = document.createElement('div');
+      c.className = 'confetti-piece';
+      const color = colors[Math.floor(Math.random()*colors.length)];
+      const x = Math.random()*100, size = 5+Math.random()*8;
+      c.style.cssText = `left:${x}vw;top:-10px;width:${size}px;height:${size}px;background:${color};transform:rotate(${Math.random()*360}deg);border-radius:${Math.random()>0.5?'50%':'2px'};`;
+      document.body.appendChild(c);
+      const dur = 2000+Math.random()*2000;
+      c.animate([{top:'-10px',opacity:1,transform:`rotate(0deg) translateX(0)`},{top:'110vh',opacity:0,transform:`rotate(${720+Math.random()*360}deg) translateX(${(Math.random()-.5)*200}px)`}],{duration:dur,easing:'ease-in',fill:'forwards'}).onfinish=()=>c.remove();
+    },Math.random()*1200);
+  }
+}
+
+// ═══════════════════════════════════════════
+//   FILE UPLOAD
+// ═══════════════════════════════════════════
+function handleFile(file){
+  if(!file) return;
+  const preview = document.getElementById('fzPreview');
+  document.getElementById('fzName').textContent = file.name;
+  const mb = (file.size/1024/1024).toFixed(2);
+  document.getElementById('fzSize').textContent = `${mb} MB`;
+  const ok = file.size >= 3*1024*1024;
+  document.getElementById('fzStatus').innerHTML = ok
+    ? `<div class="fzp-ok"><i class="fas fa-check-circle"></i> File meets requirement</div>`
+    : `<div class="fzp-warn"><i class="fas fa-times-circle"></i> File must be at least 3 MB</div>`;
+  preview.classList.add('show');
+}
+function handleDrop(e){
+  e.preventDefault();
+  document.getElementById('fileZone').classList.remove('drag');
+  const file = e.dataTransfer.files[0];
+  if(file) handleFile(file);
+}
+
+// ═══════════════════════════════════════════
+//   MODAL
+// ═══════════════════════════════════════════
+function showModal(ico,title,msg,btns){
+  document.getElementById('mico').textContent = ico;
+  document.getElementById('mtitle').textContent = title;
+  document.getElementById('mmsg').textContent = msg;
+  document.getElementById('mbtns').innerHTML = btns.map(b=>`<button class="mbt ${b.cls}" onclick="${b.fn}">${b.label}</button>`).join('');
+  document.getElementById('modal').classList.add('on');
+}
+function closeModal(){
+  const c=document.getElementById('mc');
+  c.style.cssText='transform:scale(.88);opacity:0;';
+  setTimeout(()=>{document.getElementById('modal').classList.remove('on');c.style.cssText='';},260);
+}
+
+// ═══════════════════════════════════════════
+//   KEYBOARD
+// ═══════════════════════════════════════════
+document.addEventListener('keydown',e=>{
+  if(testOver) return;
+  if(['1','2','3','4'].includes(e.key)) selectOpt(parseInt(e.key)-1);
+  else if(e.key==='ArrowRight'||e.key==='Enter') navigate(1);
+  else if(e.key==='ArrowLeft') navigate(-1);
+});
+
+// ── START ──
+init();
+</script>
 </body>
 </html>

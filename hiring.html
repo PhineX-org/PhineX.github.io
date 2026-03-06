@@ -3,306 +3,498 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hiring | PhineX</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Join Us | PhineX</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="icon" type="image/x-icon" href="PhineX (2).png">
+  <meta name="keywords" content="PhineX, about us, developer community, senior developers, software development, mentorship, tech talent, collaborative programming, software projects">
+  <meta name="author" content="AMG">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="index, follow">
+  <meta name="language" content="English">
+  <meta name="revised" content="2024-06-01">
+  <meta name="category" content="Technology, Community, Software Development">
+  <meta name="coverage" content="Worldwide">
+  <meta name="rating" content="General">
+  <meta name="distribution" content="Global">
+  <meta name="og:title" content="Join Us | PhineX">
+  <meta name="og:description" content="Interested in joining the PhineX team? We're hiring passionate developers to help build and maintain our platform. Check out our open positions and apply today to be part of our mission to create a vibrant community of senior developers.">
+  <meta name="og:image" content="PhineX (2).png">
+    <script src="bg3d.js"></script>
+  <meta name="description" content="Interested in joining the PhineX team? We're hiring passionate developers to help build and maintain our platform. Check out our open positions and apply today to be part of our mission to create a vibrant community of senior developers.">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="icon" type="image/png" class="icon" href="Phinex.png">
-  <!-- Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-</head>
-<body>
- <!-- Navigation -->
-<nav class="navbar">
-  <div class="nav-container">
-    <div class="logo">
-      <i class="fas fa-dragon"></i>
-      <span>PhineX</span>
-    </div>
-    <ul class="nav-menu" id="primary-navigation">
-      <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
-      <li><a href="hiring.html"><i class="fas fa-laptop-code"></i> Join Us</a></li>
-      <li><a href="x-academy.html"><i class="fas fa-graduation-cap"></i> X-Academy</a></li>
-      <li><a href="aboutus.html"><i class="fas fa-info-circle"></i> About Us</a></li>
-      <li><a href="bugreport.html"><i class="fas fa-exclamation-triangle"></i> Report Error</a></li>
-      <li><a href="redeemcode.html"><i class="fas fa-key"></i> Redeem Code</a></li>
-      <li><button id="logoutBtn" class="btn-outline hidden">Logout</button></li>
-    </ul>
-  </div>
-</nav>
-  <section class="search-section" id="search-section">
-  <div class="container">
-    <div class="search-box">
-      <div class="input-wrapper">
-        <i class="fas fa-search search-icon"></i>
-        <input type="text" id="mainSearch" placeholder="Search PhineX projects, news, or tutorials..." autocomplete="off">
-        <div id="predictionList" class="prediction-list"></div>
-      </div>
-      <div class="search-recommendations">
-        <span>Try:</span>
-        <button onclick="fillSearch('X-Academy')">X-Academy</button>
-        <button onclick="fillSearch('EG Portfolio')">EG Portfolio</button>
-        <button onclick="fillSearch('Join Us')">Join Us</button>
-        <button onclick="fillSearch('JavaScript')">JavaScript</button>
-        <button onclick="fillSearch('X-Academy test')">X-Academy test</button>
-        <button onclick="fillSearch('X-Developers')">X-Developers</button>
-        <button onclick="fillSearch('PhineX')">PhineX</button>
-        <button onclick="fillSearch('Projects')">Projects</button>
-        <button onclick="fillSearch('News')">News</button>
-      </div>
-    </div>
-  </div>
-</section>
-
-<div id="searchInfo" class="search-info container"></div>
-  <section class="hiring-hero">
-    <div class="redeem-icon">
-      <i class="fas fa-laptop-code"></i>
-    </div>
-    <div class="container">
-      <h1>Join our Programmers team !</h1>
-      <p style="padding: 10px 20px; margin-top: 10px;">Join Us and be part of our growing team.</p>
-      <a href="x-academy.html" class="btn-primary">
-        <i class="fas fa-graduation-cap"></i> Join X-Academy First
-      </a>
-      <a href="x-academy-pretest.html" class="btn-secondary" style="padding: 10px 20px; font-size: 18px; margin-left: 10px; margin-top: 20px;">
-        <i class="fas fa-laptop-code"></i> Join Our Developers Community
-      </a>
-    </div>
-  </section>
-
-  <!-- Section 1: Why PhineX -->
-<section class="hiring-benefits">
-  <div class="container">
-    <div class="section-header">
-      <i class="fas fa-star" style="color: yellow;"></i>
-      <h2>Why PhineX?</h2>
-      <p class="section-subtitle">Join our innovative community and unlock amazing opportunities</p>
-    </div>
-    
-    <div class="benefits-grid">
-      <div class="benefit-card">
-        <div class="benefit-icon" style="align-items: center;">
-          <i class="fas fa-dollar-sign"></i>
-        </div>
-        <h3>Earn Money Easily</h3>
-        <p>Participate in projects and receive a generous share of profits from successful ventures you contribute to.</p>
-      </div>
-      
-      <div class="benefit-card">
-        <div class="benefit-icon"style="align-items: center;">
-          <i class="fas fa-project-diagram"></i>
-        </div>
-        <h3>Diverse Projects</h3>
-        <p>Choose from existing projects or propose your own ideas to work on exciting challenges and innovations.</p>
-      </div>
-      
-      <div class="benefit-card">
-        <div class="benefit-icon"style="align-items: center;">
-          <i class="fas fa-users"></i>
-        </div>
-        <h3>Collaborative Community</h3>
-        <p>Work with talented developers, designers, and innovators in a supportive, skill-sharing environment.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- Section 2: Terms and Conditions -->
-<section class="hiring-benefits" style="background-color: #020068;">
-  <div class="container">
-    <div class="section-header">
-      <i class="fas fa-file-contract"></i>
-      <h2>Programming Terms & Conditions</h2>
-      <p class="section-subtitle">Requirements and pathways to join our community</p>
-    </div>
-    
-    <div class="requirements-grid">
-      <div class="requirement-card">
-        <div class="requirement-header">
-          <i class="fas fa-clipboard-check"></i>
-          <h3>Entry Test</h3>
-        </div>
-        <div class="requirement-caption" style="color: black;">
-        <p>You must achieve <strong>100%</strong> on our entry test. Unlimited retakes are allowed until you succeed.</p>
-        </div>
-      </div>
-      
-      <div class="requirement-card">
-        <div class="requirement-header">
-          <i class="fas fa-graduation-cap"></i>
-          <h3>Preparation Path</h3>
-        </div>
-          <div class="requirement-caption" style="color: black;">
-          <p>If you need improvement, join our <strong>@X-Academy</strong> community first to prepare for the test.</p>
-        </div>
-      </div>
-      
-      <div class="requirement-card">
-        <div class="requirement-header">
-          <i class="fas fa-key"></i>
-          <h3>Redeem Code Option</h3>
-        </div>
-        <div class="requirement-caption" style="color: black;">
-        <p>Already skilled? Use a redeem code to skip preparation if you have a valid code from our partners.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-  </section>
-  <!-- Mobile menu toggle -->
-  <button id="menuToggle" class="menu-toggle" aria-expanded="false" aria-label="Toggle navigation">
-    <i class="fas fa-bars"></i>
-  </button>
-
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
-    /* Mobile menu toggle styles */
-    .menu-toggle {
-      display: none;
-      position: fixed;
-      top: 14px;
-      right: 16px;
-      z-index: 9999;
-      background: transparent;
-      border: none;
-      color: #fff;
-      font-size: 1.5rem;
-      cursor: pointer;
-      padding: 6px;
+    :root {
+      --neon: #39ff14; --neon-dim: #39ff1440; --void: #050508;
+      --surface: #0d0d14; --card: #13131e; --border: #ffffff10;
+      --text: #f0f0ff; --muted: #7070a0;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { font-family:'DM Sans',sans-serif; background:var(--void); color:var(--text); overflow-x:hidden; }
+    h1,h2,h3,h4,.syne { font-family:'Syne',sans-serif; }
+
+    .grid-bg {
+      position:fixed; inset:0; pointer-events:none; z-index:0;
+      background-image: linear-gradient(rgba(57,255,20,0.03) 1px,transparent 1px), linear-gradient(90deg,rgba(57,255,20,0.03) 1px,transparent 1px);
+      background-size:60px 60px;
     }
 
-    /* small-screen layout: hide nav-menu by default, show toggle */
-    @media (max-width: 900px) {
-      .menu-toggle { display: inline-flex; align-items: center; justify-content: center; }
+    /* NAV */
+    nav {
+      position:fixed; top:0; left:0; right:0; z-index:100;
+      height:68px; background:rgba(5,5,8,0.9); backdrop-filter:blur(20px);
+      border-bottom:1px solid var(--border);
+    }
+    .nav-inner { max-width:1400px; margin:0 auto; padding:0 24px; height:100%; display:flex; align-items:center; gap:16px; }
+    .nav-logo { display:flex; align-items:center; gap:10px; text-decoration:none; }
+    .logo-icon { width:36px; height:36px; border-radius:9px; background:linear-gradient(135deg,#39ff14,#00cc88); display:flex; align-items:center; justify-content:center; box-shadow:0 0 20px rgba(57,255,20,0.3); }
+    .logo-icon i { color:#050508; font-size:16px; }
+    .logo-text { font-family:'Syne',sans-serif; font-size:20px; font-weight:800; color:#f0f0ff; }
+    .logo-text span { color:var(--neon); }
+    .nav-links { display:flex; gap:4px; margin-left:16px; }
+    .nav-link { padding:6px 14px; border-radius:8px; font-size:13px; color:var(--muted); text-decoration:none; transition:all 0.2s; }
+    .nav-link:hover, .nav-link.active { color:var(--text); background:rgba(255,255,255,0.06); }
+    .nav-cta { margin-left:auto; display:flex; align-items:center; gap:10px; }
+    .btn-neon { background:var(--neon); color:#050508; font-family:'Syne',sans-serif; font-weight:700; font-size:13px; padding:8px 18px; border-radius:9px; text-decoration:none; transition:all 0.2s; border:none; cursor:pointer; }
+    .btn-neon:hover { background:#50ff28; box-shadow:0 0 25px rgba(57,255,20,0.4); transform:translateY(-1px); }
 
-      .nav-menu {
-        display: none !important;
-        position: absolute;
-        top: 64px;
-        right: 12px;
-        background: rgba(0,0,0,0.9);
-        padding: 12px;
-        border-radius: 8px;
-        flex-direction: column;
-        gap: 8px;
-        min-width: 180px;
-        box-shadow: 0 8px 24px rgba(0,0,0,0.3);
-      }
+    /* 3D HERO */
+    .hero {
+      min-height:100vh; display:flex; align-items:center; justify-content:center;
+      padding:100px 24px 60px; position:relative; overflow:hidden;
+      perspective:1000px;
+    }
+    .hero-bg-orb {
+      position:absolute; border-radius:50%; filter:blur(80px); pointer-events:none;
+    }
+    .orb-1 { width:500px; height:500px; background:radial-gradient(circle,rgba(57,255,20,0.08),transparent); top:-100px; left:-100px; }
+    .orb-2 { width:400px; height:400px; background:radial-gradient(circle,rgba(100,0,255,0.06),transparent); bottom:-80px; right:-80px; }
 
-      .nav-menu.open {
-        display: flex !important;
-      }
+    .hero-3d-card {
+      position:absolute; right:5%; top:50%; transform:translateY(-50%);
+      width:340px;
+      transform-style:preserve-3d;
+      animation:float3d 6s ease-in-out infinite;
+    }
 
+    @keyframes float3d {
+      0%,100% { transform:translateY(-50%) rotateY(-15deg) rotateX(5deg); }
+      50% { transform:translateY(calc(-50% - 20px)) rotateY(-10deg) rotateX(2deg); }
+    }
+
+    .card-3d {
+      background:linear-gradient(135deg,#13131e,#1a1a2e);
+      border:1px solid rgba(57,255,20,0.2);
+      border-radius:20px; padding:28px;
+      box-shadow: 0 40px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(57,255,20,0.1), inset 0 1px 0 rgba(255,255,255,0.05);
+    }
+
+    .card-3d-header { display:flex; align-items:center; gap:10px; margin-bottom:20px; }
+    .card-dot { width:8px; height:8px; border-radius:50%; }
+
+    .code-line { font-family:monospace; font-size:12px; padding:6px 0; border-bottom:1px solid rgba(255,255,255,0.04); display:flex; gap:12px; }
+    .code-line:last-child { border-bottom:none; }
+    .ln { color:#334; min-width:20px; }
+    .kw { color:#39ff14; }
+    .str { color:#ff8c42; }
+    .fn { color:#8888ff; }
+    .cm { color:#556; }
+
+    .hero-content { max-width:580px; position:relative; z-index:2; }
+    .hero-tag { display:inline-flex; align-items:center; gap:8px; background:rgba(57,255,20,0.08); border:1px solid rgba(57,255,20,0.2); border-radius:100px; padding:5px 14px; font-size:11px; font-weight:700; color:var(--neon); letter-spacing:1px; margin-bottom:24px; animation:fadeUp 0.5s ease both; }
+    .pulse-dot { width:6px; height:6px; border-radius:50%; background:var(--neon); animation:blink 2s infinite; }
+    @keyframes blink { 0%,100%{opacity:1;}50%{opacity:0.3;} }
+
+    .hero-h1 { font-family:'Syne',sans-serif; font-size:clamp(2.8rem,6vw,5.5rem); font-weight:800; line-height:1.0; letter-spacing:-2px; animation:fadeUp 0.5s ease 0.1s both; }
+    .hero-h1 .accent { color:var(--neon); }
+    .hero-sub { font-size:15px; color:var(--muted); line-height:1.8; margin:20px 0 36px; animation:fadeUp 0.5s ease 0.2s both; }
+    .hero-btns { display:flex; gap:12px; flex-wrap:wrap; animation:fadeUp 0.5s ease 0.3s both; }
+    .btn-outline { display:inline-flex; align-items:center; gap:8px; background:transparent; border:1px solid rgba(255,255,255,0.15); color:var(--text); font-family:'Syne',sans-serif; font-weight:600; font-size:13px; padding:12px 22px; border-radius:10px; text-decoration:none; transition:all 0.25s; cursor:pointer; }
+    .btn-outline:hover { border-color:var(--neon); color:var(--neon); background:rgba(57,255,20,0.05); }
+
+    @keyframes fadeUp { from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);} }
+
+    /* STEPS */
+    .steps-section { padding:100px 24px; position:relative; z-index:1; }
+    .section-wrap { max-width:1200px; margin:0 auto; }
+    .section-tag { display:inline-flex; align-items:center; gap:6px; font-size:11px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--neon); margin-bottom:12px; }
+    .section-tag::before { content:''; display:block; width:20px; height:2px; background:var(--neon); }
+    .section-title { font-family:'Syne',sans-serif; font-size:clamp(2rem,4vw,3rem); font-weight:800; line-height:1.1; letter-spacing:-1px; margin-bottom:60px; }
+
+    .steps-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:2px; }
+    .step-card {
+      background:var(--card); border:1px solid var(--border); padding:40px 32px;
+      position:relative; overflow:hidden; transition:all 0.4s;
+      cursor:default;
+    }
+    .step-card:first-child { border-radius:20px 0 0 20px; }
+    .step-card:last-child { border-radius:0 20px 20px 0; }
+
+    .step-card::before {
+      content:''; position:absolute; inset:0;
+      background:linear-gradient(135deg,rgba(57,255,20,0.04),transparent);
+      opacity:0; transition:opacity 0.4s;
+    }
+    .step-card:hover { transform:translateY(-8px); border-color:rgba(57,255,20,0.25); z-index:2; }
+    .step-card:hover::before { opacity:1; }
+
+    .step-num { font-family:'Syne',sans-serif; font-size:60px; font-weight:800; color:rgba(57,255,20,0.08); line-height:1; margin-bottom:20px; transition:color 0.3s; }
+    .step-card:hover .step-num { color:rgba(57,255,20,0.18); }
+    .step-icon { width:48px; height:48px; border-radius:12px; background:rgba(57,255,20,0.08); border:1px solid rgba(57,255,20,0.15); display:flex; align-items:center; justify-content:center; font-size:20px; margin-bottom:20px; transition:all 0.3s; }
+    .step-card:hover .step-icon { background:rgba(57,255,20,0.15); box-shadow:0 0 20px rgba(57,255,20,0.15); }
+    .step-title { font-family:'Syne',sans-serif; font-size:18px; font-weight:700; margin-bottom:12px; }
+    .step-desc { font-size:13px; color:var(--muted); line-height:1.7; }
+    .step-link { display:inline-flex; align-items:center; gap:6px; font-size:12px; font-weight:600; color:var(--neon); margin-top:18px; text-decoration:none; transition:gap 0.2s; }
+    .step-link:hover { gap:10px; }
+
+    /* BENEFITS */
+    .benefits-section { padding:100px 24px; background:linear-gradient(180deg,transparent,rgba(57,255,20,0.02),transparent); position:relative; z-index:1; }
+    .benefits-grid { display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-top:60px; }
+    .benefit-card {
+      background:var(--card); border:1px solid var(--border); border-radius:20px; padding:32px;
+      display:flex; gap:20px; align-items:flex-start; transition:all 0.3s;
+    }
+    .benefit-card:hover { border-color:rgba(57,255,20,0.2); transform:translateX(6px); }
+    .benefit-icon-wrap { width:52px; height:52px; border-radius:14px; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:22px; }
+    .benefit-title { font-family:'Syne',sans-serif; font-size:16px; font-weight:700; margin-bottom:8px; }
+    .benefit-desc { font-size:13px; color:var(--muted); line-height:1.7; }
+
+    /* TERMS TABLE */
+    .terms-section { padding:80px 24px; position:relative; z-index:1; }
+    .terms-card { background:var(--card); border:1px solid var(--border); border-radius:20px; overflow:hidden; margin-top:48px; }
+    .terms-header { padding:24px 32px; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:12px; }
+    .terms-row { padding:20px 32px; display:grid; grid-template-columns:1fr 3fr 120px; gap:20px; align-items:center; border-bottom:1px solid var(--border); transition:background 0.2s; }
+    .terms-row:last-child { border-bottom:none; }
+    .terms-row:hover { background:rgba(57,255,20,0.03); }
+    .terms-label { font-family:'Syne',sans-serif; font-size:13px; font-weight:700; }
+    .terms-desc { font-size:13px; color:var(--muted); line-height:1.6; }
+    .terms-badge { display:inline-flex; align-items:center; gap:5px; padding:4px 11px; border-radius:100px; font-size:10px; font-weight:700; letter-spacing:0.5px; }
+    .badge-required { background:rgba(255,100,100,0.1); border:1px solid rgba(255,100,100,0.2); color:#ff6464; }
+    .badge-optional { background:rgba(57,255,20,0.08); border:1px solid rgba(57,255,20,0.15); color:var(--neon); }
+
+    /* CTA */
+    .cta-section { padding:100px 24px; position:relative; z-index:1; }
+    .cta-card {
+      max-width:900px; margin:0 auto;
+      background:linear-gradient(135deg,rgba(57,255,20,0.06),rgba(0,200,150,0.04));
+      border:1px solid rgba(57,255,20,0.15);
+      border-radius:28px; padding:64px; text-align:center;
+      position:relative; overflow:hidden;
+    }
+    .cta-card::before {
+      content:''; position:absolute; top:-60px; left:50%; transform:translateX(-50%);
+      width:300px; height:300px;
+      background:radial-gradient(circle,rgba(57,255,20,0.08),transparent);
+      pointer-events:none;
+    }
+    .cta-title { font-family:'Syne',sans-serif; font-size:clamp(2rem,4vw,3.5rem); font-weight:800; letter-spacing:-1px; margin-bottom:16px; }
+    .cta-sub { font-size:15px; color:var(--muted); margin-bottom:36px; max-width:500px; margin-left:auto; margin-right:auto; }
+    .cta-btns { display:flex; gap:14px; justify-content:center; flex-wrap:wrap; }
+
+    /* FOOTER */
+    footer { border-top:1px solid var(--border); padding:40px 24px; position:relative; z-index:1; }
+    .footer-inner { max-width:1200px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:16px; }
+    .footer-links { display:flex; gap:24px; }
+    .footer-links a { font-size:13px; color:var(--muted); text-decoration:none; transition:color 0.2s; }
+    .footer-links a:hover { color:var(--neon); }
+    .footer-copy { font-size:12px; color:var(--muted); }
+
+    /* Reveal */
+    .reveal { opacity:0; transform:translateY(28px); transition:opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.visible { opacity:1; transform:translateY(0); }
+    .reveal-delay-1 { transition-delay:0.1s; }
+    .reveal-delay-2 { transition-delay:0.2s; }
+    .reveal-delay-3 { transition-delay:0.3s; }
+
+    @media(max-width:1024px) { .hero-3d-card{display:none;} }
+    @media(max-width:1024px) {
+      .hero { padding:80px 20px 40px; }
+      .hero-h1 { font-size:clamp(2rem,5vw,3.8rem); }
+      .hero-sub { font-size:14px; }
+      .steps-grid { grid-template-columns:1fr; }
+      .benefits-grid { grid-template-columns:1fr; }
+      .terms-row { grid-template-columns:120px 1fr; gap:12px; }
+      .cta-card { padding:48px 32px; }
+    }
+    @media(max-width:768px) {
+      .nav-inner { padding:0 16px; gap:12px; }
+      .nav-links { display:none; }
+      .nav-cta { gap:8px; }
+      .nav-cta a { padding:6px 12px; font-size:12px; }
+      .hero { padding:70px 16px 30px; min-height:auto; }
+      .hero-h1 { font-size:clamp(1.8rem,4vw,2.8rem); }
+      .hero-sub { font-size:13px; }
+      .hero-btns { flex-direction:column; gap:10px; }
+      .hero-btns a { width:100%; text-align:center; padding:12px 16px; }
+      .steps-section { padding:60px 16px; }
+      .section-title { font-size:clamp(1.6rem,3vw,2.2rem); margin-bottom:40px; }
+      .step-card { padding:24px 16px; }
+      .step-num { font-size:36px; }
+      .step-title { font-size:15px; }
+      .step-desc { font-size:12px; }
+      .benefits-section { padding:60px 16px; }
+      .benefit-card { padding:20px; gap:14px; }
+      .benefit-title { font-size:14px; }
+      .benefit-desc { font-size:12px; }
+      .terms-section { padding:60px 16px; }
+      .terms-row { padding:16px 12px; grid-template-columns:1fr; }
+      .terms-header { padding:16px 12px; }
+      .terms-label { font-size:12px; }
+      .terms-desc { font-size:12px; }
+      .cta-section { padding:60px 16px; }
+      .cta-card { padding:32px 20px; }
+      .cta-title { font-size:clamp(1.5rem,3vw,2.2rem); }
+      .cta-sub { font-size:13px; }
+      .cta-btns { flex-direction:column; gap:10px; }
+      .cta-btns a { width:100%; padding:12px 16px; }
+    }
+    @media(max-width:600px) {
+      .nav-inner { padding:0 12px; }
+      .logo-text { font-size:16px; }
+      .hero-btns a { font-size:12px; }
+      .step-num { font-size:28px; }
+      .benefit-icon-wrap { width:40px; height:40px; font-size:18px; }
+      .terms-badge { font-size:9px; padding:3px 8px; }
     }
   </style>
+</head>
+<body>
+<div class="grid-bg"></div>
 
-  <script>
-    // Menu toggle behavior for mobile
-    (function () {
-      const toggle = document.getElementById('menuToggle');
-      const navMenu = document.querySelector('.nav-menu');
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <div class="logo-icon"><i class="fas fa-dragon"></i></div>
+      <span class="logo-text">Phine<span>X</span></span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="hiring.html" class="nav-link active">Join Us</a>
+      <a href="x-academy.html" class="nav-link">X-Academy</a>
+      <a href="aboutus.html" class="nav-link">About</a>
+      <a href="bugreport.html" class="nav-link">Report Bug</a>
+    </div>
+    <button class="pxs-trigger" aria-label="Open search"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg> Search</button>
+    <div class="nav-cta">
+      <a href="redeemcode.html" class="btn-outline" style="padding:7px 16px;font-size:12px;"><i class="fas fa-gift"></i> Redeem Code</a>
+      <a href="login.html" class="btn-neon"><i class="fas fa-sign-in-alt"></i> Sign In</a>
+    </div>
+  </div>
+</nav>
 
-      if (!toggle || !navMenu) return;
+<!-- HERO -->
+<section class="hero" id="hero" style="z-index:1;">
+  <div class="hero-bg-orb orb-1"></div>
+  <div class="hero-bg-orb orb-2"></div>
 
-      // ensure navMenu has an id for aria-controls
-      if (!navMenu.id) navMenu.id = 'navMenu';
+  <div class="hero-content">
+    <div class="hero-tag"><span class="pulse-dot"></span> Recruiting Now</div>
+    <h1 class="hero-h1">Join the<br><span class="accent">X-Developers</span><br>Team</h1>
+    <p class="hero-sub">Stop building alone. PhineX is a community of senior programmers collaborating on real projects — earning real profits. Pass the test or use a redeem code to join.</p>
+    <div class="hero-btns">
+      <a href="x-academy-pretest.html" class="btn-neon" style="display:inline-flex;align-items:center;gap:8px;padding:13px 24px;border-radius:11px;font-size:14px;">
+        <i class="fas fa-play-circle"></i> Take the Test
+      </a>
+      <a href="x-academy.html" class="btn-outline">
+        <i class="fas fa-graduation-cap"></i> Join X-Academy First
+      </a>
+    </div>
+  </div>
 
-      toggle.setAttribute('aria-controls', navMenu.id);
-
-      toggle.addEventListener('click', function (e) {
-        const opened = navMenu.classList.toggle('open');
-        toggle.setAttribute('aria-expanded', opened);
-      });
-
-      // Close menu when a link is clicked (mobile)
-      navMenu.addEventListener('click', function (e) {
-        const target = e.target.closest('a, button');
-        if (!target) return;
-        if (window.matchMedia('(max-width: 900px)').matches) {
-          navMenu.classList.remove('open');
-          toggle.setAttribute('aria-expanded', 'false');
-        }
-      });
-
-      // Close menu when clicking outside
-      document.addEventListener('click', function (e) {
-        if (window.matchMedia('(max-width: 900px)').matches) {
-          if (!e.target.closest('.nav-container') && !e.target.closest('#menuToggle')) {
-            if (navMenu.classList.contains('open')) {
-              navMenu.classList.remove('open');
-              toggle.setAttribute('aria-expanded', 'false');
-            }
-          }
-        }
-      });
-
-      // Optional: close on escape
-      document.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape' && navMenu.classList.contains('open')) {
-          navMenu.classList.remove('open');
-          toggle.setAttribute('aria-expanded', 'false');
-        }
-      });
-    })();
-  </script>
-  <!-- Footer -->
-<footer>
-  <div class="container">
-    <div class="footer-content">
-      <!-- Left Section: Logo and description -->
-      <div class="footer-section">
-        <div class="logo">
-          <i class="fas fa-dragon"></i>
-          <span>PhineX</span>
-        </div>
-        <p>Group of senior programmers</p>
+  <!-- 3D Floating Code Card -->
+  <div class="hero-3d-card" style="z-index:2;">
+    <div class="card-3d">
+      <div class="card-3d-header">
+        <div class="card-dot" style="background:#ff5f57;"></div>
+        <div class="card-dot" style="background:#febc2e;"></div>
+        <div class="card-dot" style="background:#28c840;"></div>
+        <span style="font-size:11px;color:var(--muted);margin-left:8px;">developer.js</span>
       </div>
-      
-      <!-- Middle Section: Quick Links -->
-      <div class="footer-section">
-        <h4>Quick Links</h4>
-        <ul>
-          <li><a href="index.html">Home</a></li>
-          <li><a href="hiring.html">Join Us</a></li>
-          <li><a href="x-academy.html">X-Academy</a></li>
-          <li><a href="aboutus.html">About Us</a></li>
-          <li><a href="redeemcode.html">Redeem Code</a></li>
-        </ul>
-      </div>
-      
-      <!-- Right Section: Social Links -->
-      <div class="footer-section">
-        <h4>Connect</h4>
-        <div class="social-links">
-          <a href="https://discord.gg/V2NDkCmhEm" class="discordlink"><i class="fab fa-discord"></i></a>
-          <a href="https://PhineX.github.io" class="githublink"><i class="fab fa-github"></i></a>
-          <a href="https://www.youtube.com/channel/UCslNCf9VtxpFH_gtA1VHFyQ" class="youtubelink"><i class="fab fa-youtube"></i></a>
-          <a href="https://chat.whatsapp.com/IuC3Gu6x5p61MORTnAuHJA" class="whatsapplink"><i class="fab fa-whatsapp"></i></a>
-          <a href="https://www.facebook.com/profile.php?id=61584765330775" class="btn-facebooklink"><i class="fab fa-facebook"></i></a>
-        </div>
+      <div class="code-line"><span class="ln">1</span><span class="kw">const</span> <span style="color:#e0e0ff;">developer</span> = {</div>
+      <div class="code-line"><span class="ln">2</span><span style="padding-left:14px;"><span class="str">name</span>: <span class="fn">'You'</span>,</span></div>
+      <div class="code-line"><span class="ln">3</span><span style="padding-left:14px;"><span class="str">team</span>: <span class="fn">'PhineX'</span>,</span></div>
+      <div class="code-line"><span class="ln">4</span><span style="padding-left:14px;"><span class="str">skills</span>: [<span class="fn">'HTML'</span>, <span class="fn">'JS'</span>],</span></div>
+      <div class="code-line"><span class="ln">5</span><span style="padding-left:14px;"><span class="str">earning</span>: <span class="kw">true</span></span></div>
+      <div class="code-line"><span class="ln">6</span>};</div>
+      <div class="code-line"><span class="ln">7</span><span class="cm">// Join us today ↓</span></div>
+      <div style="margin-top:16px;background:rgba(57,255,20,0.08);border:1px solid rgba(57,255,20,0.2);border-radius:10px;padding:12px 14px;font-family:monospace;font-size:12px;color:var(--neon);">
+        <i class="fas fa-check-circle"></i> &nbsp;✓ Test passed — Welcome!
       </div>
     </div>
-    
-    <!-- Footer Bottom -->
-    <div class="footer-bottom">
-      <div class="footer-bottom-content">
-        <div class="copyright">
-          <p>&copy; 2025 PhineX. All rights reserved.</p>
+  </div>
+</section>
+
+<!-- HOW TO JOIN -->
+<section class="steps-section" id="steps-section">
+  <div class="section-wrap">
+    <div class="reveal">
+      <div class="section-tag">Process</div>
+      <h2 class="section-title">3 Ways to Join</h2>
+    </div>
+    <div class="steps-grid">
+      <div class="step-card reveal reveal-delay-1">
+        <div class="step-num">01</div>
+        <div class="step-icon">🎓</div>
+        <div class="step-title">Train at X-Academy</div>
+        <p class="step-desc">Join our free learning community. Get trained by senior developers, practice real-world projects, and prepare for the entry test at your own pace.</p>
+        <a href="x-academy.html" class="step-link">Explore Academy <i class="fas fa-arrow-right" style="font-size:10px;"></i></a>
+      </div>
+      <div class="step-card reveal reveal-delay-2">
+        <div class="step-num">02</div>
+        <div class="step-icon">📋</div>
+        <div class="step-title">Pass the Entry Test</div>
+        <p class="step-desc">Score 100% on our developer assessment — 10 hard questions with unlimited retakes. It tests real HTML/CSS/JS knowledge, not memorization.</p>
+        <a href="x-academy-pretest.html" class="step-link">Take Pre-Assessment <i class="fas fa-arrow-right" style="font-size:10px;"></i></a>
+      </div>
+      <div class="step-card reveal reveal-delay-3">
+        <div class="step-num">03</div>
+        <div class="step-icon">🎁</div>
+        <div class="step-title">Use a Redeem Code</div>
+        <p class="step-desc">Already a senior dev? Get a redeem code from our partner programs or directly from the founder. Skip the test and join the team instantly.</p>
+        <a href="redeemcode.html" class="step-link">Redeem Code <i class="fas fa-arrow-right" style="font-size:10px;"></i></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BENEFITS -->
+<section class="benefits-section" id="benefits-section">
+  <div class="section-wrap">
+    <div class="reveal">
+      <div class="section-tag">Benefits</div>
+      <h2 class="section-title">Why Join PhineX?</h2>
+    </div>
+    <div class="benefits-grid">
+      <div class="benefit-card reveal reveal-delay-1">
+        <div class="benefit-icon-wrap" style="background:rgba(57,255,20,0.08);border:1px solid rgba(57,255,20,0.15);">💰</div>
+        <div>
+          <div class="benefit-title">Earn Money Easily</div>
+          <p class="benefit-desc">Participate in commercial projects and receive a generous share of profits from every successful venture you contribute to.</p>
         </div>
-        <div class="made-by">
-          <p>Made with <i class="fas fa-heart"></i> By : 
-            <a href="https://www.facebook.com/ahmd.aljwhry.495523" class="btn-facebooklink">
-              <i class="fas fa-laptop-code" style="margin-right: 10px;"></i> @Ahmed Al Gohary
-            </a>
-          </p>
+      </div>
+      <div class="benefit-card reveal reveal-delay-2">
+        <div class="benefit-icon-wrap" style="background:rgba(100,100,255,0.08);border:1px solid rgba(100,100,255,0.15);">🚀</div>
+        <div>
+          <div class="benefit-title">Diverse Projects</div>
+          <p class="benefit-desc">Choose from existing projects or propose your own ideas. Work on web apps, mobile apps, games, and platforms across every domain.</p>
+        </div>
+      </div>
+      <div class="benefit-card reveal reveal-delay-1">
+        <div class="benefit-icon-wrap" style="background:rgba(255,180,0,0.08);border:1px solid rgba(255,180,0,0.15);">🤝</div>
+        <div>
+          <div class="benefit-title">Real Collaboration</div>
+          <p class="benefit-desc">Work alongside talented developers in a real team environment. Code reviews, pair programming, and collaborative architecture decisions.</p>
+        </div>
+      </div>
+      <div class="benefit-card reveal reveal-delay-2">
+        <div class="benefit-icon-wrap" style="background:rgba(0,200,150,0.08);border:1px solid rgba(0,200,150,0.15);">📈</div>
+        <div>
+          <div class="benefit-title">Career Growth</div>
+          <p class="benefit-desc">Build a portfolio of real production projects. Get mentored by experienced devs and level up your skills with every project.</p>
         </div>
       </div>
     </div>
   </div>
+</section>
+
+<!-- TERMS -->
+<section class="terms-section" id="terms-section">
+  <div class="section-wrap">
+    <div class="reveal">
+      <div class="section-tag">Rules</div>
+      <h2 class="section-title">Terms & Requirements</h2>
+    </div>
+    <div class="terms-card reveal">
+      <div class="terms-header">
+        <i class="fas fa-file-contract" style="color:var(--neon);"></i>
+        <span class="syne" style="font-size:15px;font-weight:700;">Programming Team Terms</span>
+      </div>
+      <div class="terms-row">
+        <div class="terms-label">🎯 Entry Test</div>
+        <div class="terms-desc">Must achieve <strong>100%</strong> on the developer assessment. Unlimited retakes allowed until you pass. Questions are randomized from a pool of 100+.</div>
+        <span class="terms-badge badge-required">Required</span>
+      </div>
+      <div class="terms-row">
+        <div class="terms-label">📁 Project File</div>
+        <div class="terms-desc">Submit a project file &gt;3MB during the test — a real project you've built. This proves you have hands-on experience, not just theoretical knowledge.</div>
+        <span class="terms-badge badge-required">Required</span>
+      </div>
+      <div class="terms-row">
+        <div class="terms-label">🏫 X-Academy Path</div>
+        <div class="terms-desc">Not ready yet? Join X-Academy first to train and prepare. Our curriculum will get you test-ready in a structured, supported environment.</div>
+        <span class="terms-badge badge-optional">Optional</span>
+      </div>
+      <div class="terms-row">
+        <div class="terms-label">🎁 Redeem Code</div>
+        <div class="terms-desc">Senior developers with a valid partner code may skip the test entirely. Codes are distributed through workshops, partner programs, and special events.</div>
+        <span class="terms-badge badge-optional">Alternative</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="cta-section">
+  <div class="cta-card reveal">
+    <div class="section-tag" style="justify-content:center;">Ready?</div>
+    <h2 class="cta-title">Start Your Journey<br>with <span style="color:var(--neon);">PhineX</span></h2>
+    <p class="cta-sub">Take the first step. Either train at X-Academy, attempt the developer test, or reach out for a redeem code. We're waiting for you.</p>
+    <div class="cta-btns">
+      <a href="x-academy-pretest.html" class="btn-neon" style="display:inline-flex;align-items:center;gap:8px;padding:14px 28px;border-radius:12px;font-size:14px;">
+        <i class="fas fa-rocket"></i> Take the Test Now
+      </a>
+      <a href="https://www.facebook.com/A.Mo.Elgohary/" class="btn-outline" target="_blank">
+        <i class="fab fa-facebook"></i> Contact Founder
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <a href="index.html" class="nav-logo" style="text-decoration:none;">
+      <div class="logo-icon"><i class="fas fa-dragon"></i></div>
+      <span class="logo-text">Phine<span>X</span></span>
+    </a>
+    <div class="footer-links">
+      <a href="index.html">Home</a>
+      <a href="x-academy.html">X-Academy</a>
+      <a href="redeemcode.html">Redeem Code</a>
+      <a href="bugreport.html">Report Bug</a>
+      <a href="aboutus.html">About Us</a>
+    </div>
+    <p class="footer-copy">&copy; 2026 PhineX — All rights reserved.</p>
+  </div>
 </footer>
-  <script src="firebase-config.js"></script>
-  <script src="app.js"></script>
+
+<script>
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+},{threshold:0.12});
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+
+<!-- ═══════════════ GLOBAL UI ALERT ═══════════════ -->
+<div id="pxAlertOverlay" style="position:fixed;inset:0;z-index:99999;background:rgba(5,5,8,0.7);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;padding:20px;">
+  <div id="pxAlertCard" style="background:#13131e;border:1px solid rgba(255,255,255,0.08);border-radius:24px;padding:40px 36px;max-width:420px;width:100%;text-align:center;position:relative;box-shadow:0 40px 80px rgba(0,0,0,0.7);transform:scale(0.88);opacity:0;transition:transform 0.3s cubic-bezier(0.175,0.885,0.32,1.275),opacity 0.3s ease;">
+    <div id="pxAlertIcon" style="font-size:48px;margin-bottom:16px;line-height:1;"></div>
+    <div id="pxAlertTitle" style="font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:#f0f0ff;margin-bottom:8px;"></div>
+    <div id="pxAlertMsg" style="font-size:14px;color:#7070a0;line-height:1.7;margin-bottom:28px;"></div>
+    <div id="pxAlertBtns" style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;"></div>
+  </div>
+</div>
+<style>
+#pxAlertOverlay.show{display:flex;}
+#pxAlertOverlay.show #pxAlertCard{transform:scale(1);opacity:1;}
+</style>
+<script>
+window.PXAlert={_resolve:null,show({icon='ℹ️',title='',message='',type='info',buttons=[{label:'OK',value:true,primary:true}]}={}){return new Promise(resolve=>{this._resolve=resolve;const o=document.getElementById('pxAlertOverlay'),c=document.getElementById('pxAlertCard');document.getElementById('pxAlertIcon').textContent=icon;document.getElementById('pxAlertTitle').textContent=title;document.getElementById('pxAlertMsg').innerHTML=message;const cols={info:'rgba(57,255,20,0.25)',error:'rgba(255,68,68,0.25)',warning:'rgba(255,215,0,0.25)',success:'rgba(57,255,20,0.3)'};c.style.borderColor=cols[type]||cols.info;const be=document.getElementById('pxAlertBtns');be.innerHTML='';buttons.forEach(btn=>{const b=document.createElement('button');b.textContent=btn.label;const ip=btn.primary;b.style.cssText=ip?'background:#39ff14;color:#050508;font-family:Syne,sans-serif;font-weight:700;font-size:14px;padding:11px 28px;border-radius:11px;border:none;cursor:pointer;transition:all 0.2s;':'background:transparent;color:#f0f0ff;font-family:Syne,sans-serif;font-weight:600;font-size:14px;padding:11px 28px;border-radius:11px;border:1px solid rgba(255,255,255,0.12);cursor:pointer;transition:all 0.2s;';b.onmouseenter=()=>{b.style.transform='translateY(-1px)';if(ip)b.style.boxShadow='0 0 20px rgba(57,255,20,0.3)';};b.onmouseleave=()=>{b.style.transform='';b.style.boxShadow='';};b.onclick=()=>{this.hide();resolve(btn.value);};be.appendChild(b);});o.classList.add('show');document.addEventListener('keydown',this._keyHandler=(e)=>{if(e.key==='Escape'){this.hide();resolve(false);}});})},hide(){const o=document.getElementById('pxAlertOverlay'),c=document.getElementById('pxAlertCard');c.style.transform='scale(0.88)';c.style.opacity='0';setTimeout(()=>o.classList.remove('show'),300);document.removeEventListener('keydown',this._keyHandler);},info(t,m){return this.show({icon:'ℹ️',title:t,message:m,type:'info'})},success(t,m){return this.show({icon:'✅',title:t,message:m,type:'success'})},error(t,m){return this.show({icon:'❌',title:t,message:m,type:'error'})},warning(t,m){return this.show({icon:'⚠️',title:t,message:m,type:'warning'})},confirm(t,m){return this.show({icon:'🤔',title:t,message:m,type:'warning',buttons:[{label:'Cancel',value:false,primary:false},{label:'Confirm',value:true,primary:true}]})}};
+document.getElementById('pxAlertOverlay').addEventListener('click',function(e){if(e.target===this){PXAlert.hide();if(PXAlert._resolve)PXAlert._resolve(false);}});
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js"></script>
+<script src="phinex-search.js"></script>
+<script src="app.js"></script>
+
 </body>
 </html>

@@ -2,401 +2,756 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
   <title>About Us | PhineX</title>
-  <link rel="stylesheet" href="style.css">
-  <link rel="icon" type="image/png" class="icon" href="Phinex.png">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="icon" type="image/x-icon" href="PhineX (2).png">
+  <meta name="description" content="Learn about PhineX, a vibrant community of senior developers.">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+    #bgCanvas{position:fixed;inset:0;z-index:0;pointer-events:none;width:100%;height:100%;}
+    :root{--neon:#39ff14;--void:#050508;--card:#13131e;--border:#ffffff10;--text:#f0f0ff;--muted:#7070a0;}
+    *{margin:0;padding:0;box-sizing:border-box;}
+    html{scroll-behavior:smooth;}
+    body{font-family:'DM Sans',sans-serif;background:var(--void);color:var(--text);overflow-x:hidden;}
+    h1,h2,h3,h4,.syne{font-family:'Syne',sans-serif;}
+    .grid-bg{position:fixed;inset:0;pointer-events:none;z-index:1;background-image:linear-gradient(rgba(57,255,20,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(57,255,20,0.03) 1px,transparent 1px);background-size:60px 60px;}
+
+    /* ── NAV ── */
+    nav{position:fixed;top:0;left:0;right:0;z-index:100;height:64px;background:rgba(5,5,8,0.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
+    .nav-inner{max-width:1400px;margin:0 auto;padding:0 20px;height:100%;display:flex;align-items:center;gap:12px;}
+    .nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
+    .logo-icon{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,#39ff14,#00cc88);display:flex;align-items:center;justify-content:center;box-shadow:0 0 20px rgba(57,255,20,0.3);flex-shrink:0;}
+    .logo-icon i{color:#050508;font-size:15px;}
+    .logo-text{font-family:'Syne',sans-serif;font-size:19px;font-weight:800;color:#f0f0ff;}
+    .logo-text span{color:var(--neon);}
+    .nav-links{display:flex;gap:2px;margin-left:12px;}
+    .nav-link{padding:6px 12px;border-radius:8px;font-size:13px;color:var(--muted);text-decoration:none;transition:all 0.2s;white-space:nowrap;}
+    .nav-link:hover,.nav-link.active{color:var(--text);background:rgba(255,255,255,0.06);}
+    .nav-right{margin-left:auto;display:flex;align-items:center;gap:10px;}
+    .btn-neon{background:var(--neon);color:#050508;font-family:'Syne',sans-serif;font-weight:700;font-size:13px;padding:8px 16px;border-radius:9px;text-decoration:none;transition:all 0.2s;border:none;cursor:pointer;display:inline-flex;align-items:center;gap:7px;white-space:nowrap;}
+    .btn-neon:hover{background:#50ff28;box-shadow:0 0 25px rgba(57,255,20,0.4);transform:translateY(-1px);}
+    .btn-outline{display:inline-flex;align-items:center;gap:8px;background:transparent;border:1px solid rgba(255,255,255,0.15);color:var(--text);font-family:'Syne',sans-serif;font-weight:600;font-size:13px;padding:12px 20px;border-radius:10px;text-decoration:none;transition:all 0.25s;}
+    .btn-outline:hover{border-color:var(--neon);color:var(--neon);background:rgba(57,255,20,0.05);}
+
+    /* ── HAMBURGER ── */
+    .hamburger{display:none;flex-direction:column;justify-content:center;align-items:center;width:40px;height:40px;border-radius:10px;background:rgba(255,255,255,0.04);border:1px solid var(--border);cursor:pointer;gap:5px;transition:all 0.2s;flex-shrink:0;}
+    .hamburger:hover{background:rgba(255,255,255,0.08);border-color:rgba(57,255,20,0.3);}
+    .hamburger span{display:block;width:18px;height:2px;background:var(--text);border-radius:2px;transition:all 0.3s;}
+    .hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+    .hamburger.open span:nth-child(2){opacity:0;transform:scaleX(0);}
+    .hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+
+    /* ── MOBILE NAV DRAWER ── */
+    .mobile-nav{position:fixed;top:64px;left:0;right:0;z-index:99;background:rgba(5,5,8,0.97);backdrop-filter:blur(24px);border-bottom:1px solid var(--border);padding:16px 20px 20px;transform:translateY(-8px);opacity:0;pointer-events:none;transition:all 0.25s ease;}
+    .mobile-nav.open{transform:translateY(0);opacity:1;pointer-events:all;}
+    .mobile-nav-links{display:flex;flex-direction:column;gap:4px;margin-bottom:16px;}
+    .mobile-nav-link{padding:11px 14px;border-radius:10px;font-size:14px;color:var(--muted);text-decoration:none;transition:all 0.2s;display:flex;align-items:center;gap:10px;}
+    .mobile-nav-link:hover,.mobile-nav-link.active{color:var(--text);background:rgba(255,255,255,0.06);}
+    .mobile-nav-link i{width:16px;text-align:center;font-size:13px;}
+    .mobile-nav-footer{border-top:1px solid var(--border);padding-top:14px;}
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+    @keyframes blink{0%,100%{opacity:1;}50%{opacity:0.3;}}
+    @keyframes cardFloat{0%,100%{transform:translateY(0) rotateY(5deg) rotateX(-3deg);}50%{transform:translateY(-14px) rotateY(8deg) rotateX(-1deg);}}
+    @keyframes pulseGlow{0%,100%{opacity:0.5;}50%{opacity:1;}}
+    .reveal{opacity:0;transform:translateY(28px);transition:opacity 0.7s ease,transform 0.7s ease;}
+    .reveal.visible{opacity:1;transform:translateY(0);}
+    .reveal-delay-1{transition-delay:0.1s;}
+    .reveal-delay-2{transition-delay:0.2s;}
+    .reveal-delay-3{transition-delay:0.3s;}
+
+    /* ── SECTION HELPERS ── */
+    .section-tag{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--neon);margin-bottom:12px;}
+    .section-tag::before{content:'';display:block;width:20px;height:2px;background:var(--neon);}
+    .section-title{font-family:'Syne',sans-serif;font-size:clamp(1.8rem,4vw,3rem);font-weight:800;line-height:1.1;letter-spacing:-1px;margin-bottom:20px;}
+    .section-wrap{max-width:1200px;margin:0 auto;}
+
+    /* ── HERO ── */
+    .hero{min-height:calc(100svh - 64px);display:flex;align-items:center;padding:80px 20px 60px;position:relative;overflow:hidden;z-index:1;}
+    .hero-inner{max-width:1200px;margin:0 auto;width:100%;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;}
+
+    /* ── FOUNDER CARD ── */
+    .founder-card-wrap{perspective:1000px;display:flex;justify-content:center;}
+    .founder-card{width:min(320px, 90vw);background:linear-gradient(145deg,#13131e,#1a1a2e);border:1px solid rgba(57,255,20,0.2);border-radius:28px;padding:32px 24px;box-shadow:0 40px 80px rgba(0,0,0,0.7),0 0 0 1px rgba(57,255,20,0.08),inset 0 1px 0 rgba(255,255,255,0.05);animation:cardFloat 6s ease-in-out infinite;transform-style:preserve-3d;position:relative;}
+    .founder-avatar{width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,var(--neon),#00cc88);display:flex;align-items:center;justify-content:center;font-size:32px;margin:0 auto 18px;box-shadow:0 0 40px rgba(57,255,20,0.25);}
+    .founder-name{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;text-align:center;margin-bottom:4px;}
+    .founder-role{font-size:11px;color:var(--neon);text-align:center;font-weight:600;letter-spacing:1px;margin-bottom:18px;}
+    .founder-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:18px;}
+    .f-stat{background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center;}
+    .f-stat-num{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;color:var(--neon);}
+    .f-stat-label{font-size:10px;color:var(--muted);margin-top:2px;}
+    .founder-socials{display:flex;gap:8px;justify-content:center;}
+    .founder-social{width:36px;height:36px;border-radius:9px;background:rgba(255,255,255,0.04);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--muted);text-decoration:none;transition:all 0.2s;}
+    .founder-social:hover{border-color:var(--neon);color:var(--neon);}
+    .card-glow{position:absolute;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(57,255,20,0.06),transparent);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;animation:pulseGlow 3s ease-in-out infinite;}
+
+    /* ── MISSION ── */
+    .mission-section{padding:90px 20px;position:relative;z-index:1;}
+    .mission-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start;margin-top:50px;}
+    .mission-text p{font-size:15px;color:var(--muted);line-height:1.9;margin-bottom:16px;}
+    .mission-text strong{color:var(--text);}
+    .timeline{position:relative;padding-left:28px;}
+    .timeline::before{content:'';position:absolute;left:7px;top:0;bottom:0;width:2px;background:linear-gradient(to bottom,var(--neon),transparent);}
+    .timeline-item{position:relative;margin-bottom:28px;}
+    .timeline-item::before{content:'';position:absolute;left:-24px;top:6px;width:10px;height:10px;border-radius:50%;background:var(--neon);box-shadow:0 0 10px rgba(57,255,20,0.5);}
+    .timeline-date{font-size:11px;color:var(--neon);font-weight:700;letter-spacing:1px;margin-bottom:4px;}
+    .timeline-title{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;margin-bottom:6px;}
+    .timeline-desc{font-size:13px;color:var(--muted);line-height:1.6;}
+
+    /* ── VALUES ── */
+    .values-section{padding:80px 20px;background:linear-gradient(180deg,transparent,rgba(57,255,20,0.02),transparent);position:relative;z-index:1;}
+    .values-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:48px;}
+    .value-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:26px 20px;text-align:center;transition:all 0.3s;cursor:default;}
+    .value-card:hover{border-color:rgba(57,255,20,0.2);transform:translateY(-6px);box-shadow:0 20px 40px rgba(0,0,0,0.4);}
+    .value-emoji{font-size:32px;margin-bottom:14px;display:block;}
+    .value-title{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;margin-bottom:10px;}
+    .value-desc{font-size:12px;color:var(--muted);line-height:1.6;}
+
+    /* ── STATS ── */
+    .stats-section{padding:80px 20px;position:relative;z-index:1;}
+    .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:48px;}
+    .stat-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:32px 20px;text-align:center;transition:all 0.3s;position:relative;overflow:hidden;}
+    .stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,transparent,var(--neon),transparent);opacity:0;transition:opacity 0.3s;}
+    .stat-card:hover{border-color:rgba(57,255,20,0.2);transform:translateY(-4px);}
+    .stat-card:hover::before{opacity:1;}
+    .stat-num{font-family:'Syne',sans-serif;font-size:clamp(28px,5vw,42px);font-weight:800;color:var(--neon);line-height:1;}
+    .stat-label{font-size:11px;color:var(--muted);margin-top:8px;text-transform:uppercase;letter-spacing:0.5px;}
+
+    /* ── CONNECT ── */
+    .connect-section{padding:80px 20px;position:relative;z-index:1;}
+    .connect-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:48px;}
+    .connect-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:22px;transition:all 0.3s;text-decoration:none;color:inherit;display:flex;align-items:center;gap:16px;}
+    .connect-card:hover{border-color:rgba(57,255,20,0.2);transform:translateX(6px);}
+    .connect-icon{width:48px;height:48px;border-radius:13px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:20px;}
+    .connect-label{font-size:10px;color:var(--muted);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;}
+    .connect-name{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;}
+    .connect-arrow{margin-left:auto;color:var(--muted);transition:all 0.2s;flex-shrink:0;}
+    .connect-card:hover .connect-arrow{color:var(--neon);transform:translateX(4px);}
+
+    /* ── FOOTER ── */
+    footer{border-top:1px solid var(--border);padding:36px 20px;position:relative;z-index:1;}
+    .footer-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;}
+    .footer-links{display:flex;gap:20px;flex-wrap:wrap;}
+    .footer-links a{font-size:13px;color:var(--muted);text-decoration:none;transition:color 0.2s;}
+    .footer-links a:hover{color:var(--neon);}
+
+    /* ══════════════════════════════════════
+       RESPONSIVE BREAKPOINTS
+    ══════════════════════════════════════ */
+
+    /* ── Tablet / Small Desktop ── */
+    @media(max-width:1024px){
+      .hero-inner{grid-template-columns:1fr;gap:40px;}
+      .founder-card-wrap{order:-1;}
+      .mission-grid{grid-template-columns:1fr;}
+      .values-grid{grid-template-columns:repeat(2,1fr);}
+      .stats-grid{grid-template-columns:repeat(2,1fr);}
+      .connect-grid{grid-template-columns:repeat(2,1fr);}
     }
 
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      line-height: 1.6;
+    /* ── Mobile ── */
+    @media(max-width:768px){
+      .nav-links{display:none;}
+      .hamburger{display:flex;}
+      .hero{padding:76px 16px 48px;}
+      .hero-inner{gap:28px;}
+      .mission-section,.values-section,.stats-section,.connect-section{padding:60px 16px;}
+      .connect-grid{grid-template-columns:1fr;}
+      .footer-inner{flex-direction:column;align-items:flex-start;gap:20px;}
+      .footer-links{gap:14px;}
     }
 
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 20px;
+    /* ── Small Mobile ── */
+    @media(max-width:480px){
+      nav{height:60px;}
+      .mobile-nav{top:60px;}
+      .hero{min-height:calc(100svh - 60px);padding:68px 14px 40px;}
+      .values-grid{grid-template-columns:1fr 1fr;gap:12px;}
+      .stats-grid{grid-template-columns:1fr 1fr;gap:12px;}
+      .value-card{padding:20px 14px;}
+      .stat-card{padding:24px 14px;}
+      .connect-card{padding:16px;}
+      .connect-icon{width:40px;height:40px;font-size:17px;border-radius:10px;}
+      .founder-card{border-radius:22px;padding:26px 20px;}
+      .section-title{letter-spacing:-0.5px;}
+      .footer-links{gap:12px;}
+      footer{padding:28px 14px;}
     }
 
-    /* About Hero Section */
-    .about-hero {
-      padding: 60px 20px;
-      text-align: center;
+    /* ── Landscape mobile ── */
+    @media(max-width:768px) and (orientation:landscape){
+      .hero{min-height:auto;padding:80px 16px 40px;}
     }
 
-    .about-hero h1 {
-      font-size: clamp(2rem, 8vw, 3.5rem);
-      margin-bottom: 15px;
+    /* ── Touch: disable float anim to save battery ── */
+    @media(hover:none){
+      .founder-card{animation:none;transform:none !important;}
+      .value-card:hover,.stat-card:hover,.connect-card:hover{transform:none;}
     }
 
-    .about-hero .subtitle {
-      font-size: clamp(1rem, 4vw, 1.25rem);
-      opacity: 0.9;
+    /* ── Ultra-small (360px) ── */
+    @media(max-width:360px){
+      .nav-inner{padding:0 12px;}
+      .logo-text{font-size:17px;}
+      .hero{padding:64px 12px 32px;}
+      .section-title{font-size:1.5rem;}
+      .values-grid,.stats-grid{grid-template-columns:1fr;gap:10px;}
+      .value-card,.stat-card{padding:18px 14px;}
+      .connect-card{gap:10px;}
+      .btn-neon{padding:7px 12px;font-size:12px;}
+      .mission-section,.values-section,.stats-section,.connect-section{padding:48px 12px;}
+      footer{padding:22px 12px;}
+      .footer-links{flex-direction:column;gap:8px;}
     }
 
-    /* Mission Section */
-    .about-mission {
-      padding: 60px 20px;
+    /* ── Bigger tap targets on touch ── */
+    @media(max-width:480px){
+      .mobile-nav-link{padding:14px 14px;min-height:44px;}
+      .btn-neon{min-height:44px;padding:10px 16px;}
+      .hamburger{width:44px;height:44px;}
     }
-
-    .mission-content {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 40px;
-      align-items: center;
+    /* ── Ultra-small override: single column on 360px ── */
+    @media(max-width:360px){
+      .values-grid,.stats-grid{grid-template-columns:1fr !important;}
+      .section-title{font-size:1.4rem;}
+      .mission-section,.values-section,.stats-section,.connect-section{padding:40px 12px;}
+      .connect-name{font-size:13px;}
     }
-
-    .mission-text h2 {
-      font-size: clamp(1.5rem, 6vw, 2.5rem);
-      margin-bottom: 20px;
-    }
-
-    .mission-text p {
-      font-size: clamp(0.9rem, 2.5vw, 1.1rem);
-      margin-bottom: 15px;
-      line-height: 1.8;
-    }
-
-    .mission-stats {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 20px;
-    }
-
-    .stat {
-      padding: 25px;
-      border-radius: 10px;
-      text-align: center;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    }
-
-    .stat h3 {
-      font-size: clamp(1.5rem, 5vw, 2.5rem);
-      margin-bottom: 10px;
-    }
-
-    .stat p {
-      font-size: clamp(0.85rem, 2.5vw, 1rem);
-    }
-
-    /* Mobile menu toggle */
-    .menu-toggle {
-      display: none;
-      position: fixed;
-      top: 14px;
-      right: 16px;
-      z-index: 9999;
-      background: transparent;
-      border: none;
-      color: #fff;
-      font-size: 1.5rem;
-      cursor: pointer;
-      padding: 6px;
-    }
-
-    /* Tablet (768px - 900px) */
-    @media (max-width: 900px) {
-      .menu-toggle {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-      }
-
-      .nav-menu {
-        display: none !important;
-        position: absolute;
-        top: 64px;
-        right: 12px;
-        background: rgba(0, 0, 0, 0.95);
-        padding: 12px;
-        border-radius: 8px;
-        flex-direction: column;
-        gap: 8px;
-        min-width: 180px;
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
-      }
-
-      .nav-menu.open {
-        display: flex !important;
-      }
-
-      .mission-content {
-        grid-template-columns: 1fr;
-        gap: 30px;
-      }
-
-      .about-hero {
-        padding: 40px 20px;
-      }
-
-      .about-mission {
-        padding: 40px 20px;
-      }
-    }
-
-    /* Mobile (max 768px) */
-    @media (max-width: 768px) {
-      .about-hero {
-        padding: 30px 15px;
-      }
-
-      .about-hero h1 {
-        font-size: 1.75rem;
-      }
-
-      .about-hero .subtitle {
-        font-size: 1rem;
-      }
-
-      .about-mission {
-        padding: 30px 15px;
-      }
-
-      .mission-text h2 {
-        font-size: 1.5rem;
-      }
-
-      .mission-text p {
-        font-size: 0.95rem;
-      }
-
-      .mission-stats {
-        grid-template-columns: 1fr;
-      }
-
-      .stat {
-        padding: 20px;
-      }
-
-      .stat h3 {
-        font-size: 2rem;
-      }
-
-      .stat p {
-        font-size: 0.85rem;
-      }
-    }
-
-    /* Small mobile (max 480px) */
-    @media (max-width: 480px) {
-      .about-hero {
-        padding: 25px 12px;
-      }
-
-      .about-hero h1 {
-        font-size: 1.4rem;
-      }
-
-      .about-mission {
-        padding: 25px 12px;
-      }
-
-      .mission-text h2 {
-        font-size: 1.25rem;
-      }
-
-      .container {
-        padding: 0 15px;
-      }
-    }
+    /* ── Prevent any horizontal overflow ── */
+    body,html{max-width:100vw;overflow-x:hidden;}
+    *{min-width:0;}
+    img,video,canvas.non-bg{max-width:100%;height:auto;}
+  </style>
+  <style>
+    /* CSS fallback bg pulses if WebGL/Three.js unavailable */
+    @keyframes bgPulse{0%,100%{opacity:.4}50%{opacity:.7}}
+    .bg-fallback{position:fixed;inset:0;z-index:0;pointer-events:none;
+      background:radial-gradient(ellipse at 20% 50%,rgba(57,255,20,0.05) 0%,transparent 60%),
+                 radial-gradient(ellipse at 80% 20%,rgba(0,170,255,0.04) 0%,transparent 55%),
+                 radial-gradient(ellipse at 60% 80%,rgba(0,255,204,0.04) 0%,transparent 50%);
+      animation:bgPulse 4s ease-in-out infinite;display:none;}
+    body.no-webgl .bg-fallback{display:block;}
   </style>
 </head>
 <body>
-<!-- Navigation -->
-<nav class="navbar">
-  <div class="nav-container">
-    <div class="logo">
-      <i class="fas fa-dragon"></i>
-      <span>PhineX</span>
+<canvas id="bgCanvas"></canvas>
+<div class="bg-fallback"></div>
+<div class="grid-bg"></div>
+
+<!-- ── NAVBAR ── -->
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <div class="logo-icon"><i class="fas fa-dragon"></i></div>
+      <span class="logo-text">Phine<span>X</span></span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="hiring.html" class="nav-link">Join Us</a>
+      <a href="x-academy.html" class="nav-link">X-Academy</a>
+      <a href="aboutus.html" class="nav-link active">About</a>
+      <a href="bugreport.html" class="nav-link">Report Bug</a>
     </div>
-    <ul class="nav-menu" id="primary-navigation">
-      <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
-      <li><a href="hiring.html"><i class="fas fa-laptop-code"></i> Join Us</a></li>
-      <li><a href="x-academy.html"><i class="fas fa-graduation-cap"></i> X-Academy</a></li>
-      <li><a href="aboutus.html"><i class="fas fa-info-circle"></i> About Us</a></li>
-      <li><a href="bugreport.html"><i class="fas fa-exclamation-triangle"></i> Report Error</a></li>
-      <li><a href="redeemcode.html"><i class="fas fa-key"></i> Redeem Code</a></li>
-      <li><button id="logoutBtn" class="btn-outline hidden">Logout</button></li>
-    </ul>
+    <button class="pxs-trigger" aria-label="Open search"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg> Search</button>
+    <div class="nav-right">
+      <a href="login.html" class="btn-neon"><i class="fas fa-sign-in-alt"></i><span class="hide-xs"> Sign In</span></a>
+      <button class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    </div>
   </div>
 </nav>
-  <section class="search-section" id="search-section">
-  <div class="container">
-    <div class="search-box">
-      <div class="input-wrapper">
-        <i class="fas fa-search search-icon"></i>
-        <input type="text" id="mainSearch" placeholder="Search PhineX projects, news, or tutorials..." autocomplete="off">
-        <div id="predictionList" class="prediction-list"></div>
+
+<!-- ── MOBILE DRAWER ── -->
+<div class="mobile-nav" id="mobileNav" aria-hidden="true">
+  <div class="mobile-nav-links">
+    <a href="index.html" class="mobile-nav-link"><i class="fas fa-home"></i>Home</a>
+    <a href="hiring.html" class="mobile-nav-link"><i class="fas fa-users"></i>Join Us</a>
+    <a href="x-academy.html" class="mobile-nav-link"><i class="fas fa-graduation-cap"></i>X-Academy</a>
+    <a href="aboutus.html" class="mobile-nav-link active"><i class="fas fa-info-circle"></i>About</a>
+    <a href="bugreport.html" class="mobile-nav-link"><i class="fas fa-bug"></i>Report Bug</a>
+  </div>
+  <div class="mobile-nav-footer">
+    <a href="login.html" class="btn-neon" style="width:100%;justify-content:center;padding:12px;font-size:14px;border-radius:11px;">
+      <i class="fas fa-sign-in-alt"></i> Sign In to PhineX
+    </a>
+  </div>
+</div>
+
+<!-- ── HERO ── -->
+<section class="hero" id="hero" data-section="PhineX — Our Story">
+  <div style="position:absolute;top:20%;right:15%;width:400px;height:400px;background:radial-gradient(circle,rgba(57,255,20,0.05),transparent);border-radius:50%;pointer-events:none;"></div>
+  <div class="hero-inner" style="position:relative;z-index:2;">
+    <div>
+      <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(57,255,20,0.08);border:1px solid rgba(57,255,20,0.2);border-radius:100px;padding:5px 14px;font-size:11px;font-weight:700;color:var(--neon);letter-spacing:1px;margin-bottom:20px;animation:fadeUp 0.5s ease both;">
+        <span style="width:6px;height:6px;border-radius:50%;background:var(--neon);animation:blink 2s infinite;display:block;"></span>Est. November 2025
       </div>
-      <div class="search-recommendations">
-        <span>Try:</span>
-        <button onclick="fillSearch('X-Academy')">X-Academy</button>
-        <button onclick="fillSearch('EG Portfolio')">EG Portfolio</button>
-        <button onclick="fillSearch('Join Us')">Join Us</button>
-        <button onclick="fillSearch('JavaScript')">JavaScript</button>
-        <button onclick="fillSearch('X-Academy test')">X-Academy test</button>
-        <button onclick="fillSearch('X-Developers')">X-Developers</button>
-        <button onclick="fillSearch('PhineX')">PhineX</button>
-        <button onclick="fillSearch('Projects')">Projects</button>
-        <button onclick="fillSearch('News')">News</button>
+      <h1 style="font-family:'Syne',sans-serif;font-size:clamp(2.6rem,7vw,5.5rem);font-weight:800;line-height:1.0;letter-spacing:-2px;animation:fadeUp 0.5s ease 0.1s both;">About<br><span style="color:var(--neon);">PhineX</span><br>Team</h1>
+      <p style="font-size:clamp(13px,3.5vw,15px);color:var(--muted);line-height:1.8;margin:20px 0 30px;max-width:480px;animation:fadeUp 0.5s ease 0.2s both;">We are a specialized group of senior programmers united by one idea: building great software is better together. PhineX transforms individual coders into a collaborative force.</p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;animation:fadeUp 0.5s ease 0.3s both;">
+        <a href="hiring.html" class="btn-neon" style="padding:12px 22px;border-radius:11px;font-size:14px;"><i class="fas fa-users"></i> Join Our Team</a>
+        <a href="https://discord.gg/xBQ3ewVVHk" class="btn-outline" target="_blank" style="padding:11px 18px;font-size:13px;"><i class="fab fa-discord"></i> Discord</a>
+      </div>
+    </div>
+    <div class="founder-card-wrap" style="position:relative;">
+      <div class="card-glow"></div>
+      <div class="founder-card">
+        <div class="founder-avatar">👨‍💻</div>
+        <div class="founder-name">Ahmed Al Gohary</div>
+        <div class="founder-role">FOUNDER & LEAD DEV</div>
+        <div class="founder-stats">
+          <div class="f-stat"><div class="f-stat-num">5+</div><div class="f-stat-label">Projects</div></div>
+          <div class="f-stat"><div class="f-stat-num">10k+</div><div class="f-stat-label">Lines</div></div>
+          <div class="f-stat"><div class="f-stat-num">50+</div><div class="f-stat-label">Members</div></div>
+          <div class="f-stat"><div class="f-stat-num">2025</div><div class="f-stat-label">Founded</div></div>
+        </div>
+        <div class="founder-socials">
+          <a href="https://www.facebook.com/A.Mo.Elgohary/" class="founder-social" target="_blank"><i class="fab fa-facebook"></i></a>
+          <a href="https://github.com/PhineX" class="founder-social" target="_blank"><i class="fab fa-github"></i></a>
+          <a href="https://discord.gg/xBQ3ewVVHk" class="founder-social" target="_blank"><i class="fab fa-discord"></i></a>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
-<div id="searchInfo" class="search-info container"></div>
-  <section class="about-hero">
-    <div class="redeem-icon">
-      <i class="fas fa-info-circle"></i>
+<!-- ── MISSION ── -->
+<section class="mission-section">
+  <div class="section-wrap" id="mission" data-section="The PhineX Mission">
+    <div class="reveal">
+      <div class="section-tag">Our Story</div>
+      <h2 class="section-title">The PhineX Mission</h2>
     </div>
-    <div class="container">
-      <h1>About PhineX <i class="fas fa-dragon"></i></h1>
-      <p class="subtitle">Team of senior programmers</p>
-    </div>
-  </section>
-
-  <section class="about-mission">
-    <div class="container">
-      <div class="mission-content">
-        <div class="mission-text">
-          <h2>Who are we?</h2>
-          <p>
-            PhineX is a group founded by @A.Elgohary in 13/11/25. instead of programming alone taking months to build a project we decided to build a group of senior programmers to build projects faster and better that makes more profit than working alone.
-          <p>
-            We scout for the best programmers in our X-Academy and transform them into skilled developers to join our developers group. If you're a senior programmer, join our developers team to build more projects and grow PhineX into a major platform.
-          </p>
-          <p>
-            Our name represents the mythical phoenix - symbolizing transformation, rebirth, and rising to new heights. Just as the phoenix rises from its ashes, we help programmers transform their careers and reach new levels of success.
-          </p>
-        </div>
-        <div class="mission-stats">
-          <div class="stat">
-            <h3>1</h3>
-            <p>programmer</p>
+    <div class="mission-grid">
+      <div class="mission-text reveal reveal-delay-1">
+        <p>PhineX was founded by <strong>@A.Elgohary</strong> on <strong>November 13, 2025</strong> with a simple but powerful observation: building software alone takes months. Building it with a team of senior developers — it takes weeks.</p>
+        <p>Instead of isolated developers working in silos, we built a <strong>community-first model</strong> where experienced programmers collaborate, share expertise, and split profits fairly on every project.</p>
+        <p>Our name draws from the mythical <strong>Phoenix</strong> — the bird that rises transformed from the ashes. We believe every developer has untapped potential waiting to be unlocked through the right environment, mentors, and opportunities.</p>
+        <p>Today PhineX operates as both a <strong>development studio</strong> and a <strong>training academy</strong>, scouting talent through X-Academy and deploying the best into our X-Developers team.</p>
+      </div>
+      <div class="reveal reveal-delay-2">
+        <div class="timeline">
+          <div class="timeline-item">
+            <div class="timeline-date">NOV 2025</div>
+            <div class="timeline-title">PhineX Founded</div>
+            <p class="timeline-desc">@A.Elgohary creates the PhineX developer community with the vision of collaborative programming.</p>
           </div>
-          <div class="stat">
-            <h3>10000+</h3>
-            <p>code written</p>
+          <div class="timeline-item">
+            <div class="timeline-date">DEC 2025</div>
+            <div class="timeline-title">X-Academy Launched</div>
+            <p class="timeline-desc">Training academy opens, providing structured learning paths for aspiring developers.</p>
           </div>
-          <div class="stat">
-            <h3>5</h3>
-            <p>Apps and Website projects ready to launch</p>
+          <div class="timeline-item">
+            <div class="timeline-date">JAN 2026</div>
+            <div class="timeline-title">First Projects Ship</div>
+            <p class="timeline-desc">EG Portfolio and PhineX Platform go live. The X-Developers test system is deployed.</p>
           </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <button id="menuToggle" class="menu-toggle" aria-expanded="false" aria-label="Toggle navigation">
-    <i class="fas fa-bars"></i>
-  </button>
-
-  <script>
-    (function () {
-      const toggle = document.getElementById('menuToggle');
-      const navMenu = document.querySelector('.nav-menu');
-
-      if (!toggle || !navMenu) return;
-
-      if (!navMenu.id) navMenu.id = 'navMenu';
-      toggle.setAttribute('aria-controls', navMenu.id);
-
-      toggle.addEventListener('click', function (e) {
-        const opened = navMenu.classList.toggle('open');
-        toggle.setAttribute('aria-expanded', opened);
-      });
-
-      navMenu.addEventListener('click', function (e) {
-        const target = e.target.closest('a, button');
-        if (!target) return;
-        if (window.matchMedia('(max-width: 900px)').matches) {
-          navMenu.classList.remove('open');
-          toggle.setAttribute('aria-expanded', 'false');
-        }
-      });
-
-      document.addEventListener('click', function (e) {
-        if (window.matchMedia('(max-width: 900px)').matches) {
-          if (!e.target.closest('.nav-container') && !e.target.closest('#menuToggle')) {
-            if (navMenu.classList.contains('open')) {
-              navMenu.classList.remove('open');
-              toggle.setAttribute('aria-expanded', 'false');
-            }
-          }
-        }
-      });
-
-      document.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape' && navMenu.classList.contains('open')) {
-          navMenu.classList.remove('open');
-          toggle.setAttribute('aria-expanded', 'false');
-        }
-      });
-    })();
-  </script>
-    <!-- Footer -->
-<footer>
-  <div class="container">
-    <div class="footer-content">
-      <!-- Left Section: Logo and description -->
-      <div class="footer-section">
-        <div class="logo">
-          <i class="fas fa-dragon"></i>
-          <span>PhineX</span>
-        </div>
-        <p>Group of senior programmers</p>
-      </div>
-      
-      <!-- Middle Section: Quick Links -->
-      <div class="footer-section">
-        <h4>Quick Links</h4>
-        <ul>
-          <li><a href="index.html">Home</a></li>
-          <li><a href="hiring.html">Join Us</a></li>
-          <li><a href="x-academy.html">X-Academy</a></li>
-          <li><a href="aboutus.html">About Us</a></li>
-          <li><a href="redeemcode.html">Redeem Code</a></li>
-        </ul>
-      </div>
-      
-      <!-- Right Section: Social Links -->
-      <div class="footer-section">
-        <h4>Connect</h4>
-        <div class="social-links">
-          <a href="https://discord.gg/V2NDkCmhEm" class="discordlink"><i class="fab fa-discord"></i></a>
-          <a href="https://PhineX.github.io" class="githublink"><i class="fab fa-github"></i></a>
-          <a href="https://www.youtube.com/channel/UCslNCf9VtxpFH_gtA1VHFyQ" class="youtubelink"><i class="fab fa-youtube"></i></a>
-          <a href="https://chat.whatsapp.com/IuC3Gu6x5p61MORTnAuHJA" class="whatsapplink"><i class="fab fa-whatsapp"></i></a>
-          <a href="https://www.facebook.com/profile.php?id=61584765330775" class="btn-facebooklink"><i class="fab fa-facebook"></i></a>
-        </div>
-      </div>
-    </div>
-    
-    <!-- Footer Bottom -->
-    <div class="footer-bottom">
-      <div class="footer-bottom-content">
-        <div class="copyright">
-          <p>&copy; 2025 PhineX. All rights reserved.</p>
-        </div>
-        <div class="made-by">
-          <p>Made with <i class="fas fa-heart"></i> By : 
-            <a href="https://www.facebook.com/ahmd.aljwhry.495523" class="btn-facebooklink">
-              <i class="fas fa-laptop-code" style="margin-right: 10px;"></i> @Ahmed Al Gohary
-            </a>
-          </p>
+          <div class="timeline-item">
+            <div class="timeline-date">2026 →</div>
+            <div class="timeline-title">Scaling Up</div>
+            <p class="timeline-desc">Multi-language support, settings engine, and expanded project pipeline launching in 2026.</p>
+          </div>
         </div>
       </div>
     </div>
   </div>
+</section>
+
+<!-- ── VALUES ── -->
+<section class="values-section">
+  <div class="section-wrap" id="culture" data-section="What We Stand For">
+    <div class="reveal">
+      <div class="section-tag">Culture</div>
+      <h2 class="section-title">What We Stand For</h2>
+    </div>
+    <div class="values-grid">
+      <div class="value-card reveal reveal-delay-1">
+        <span class="value-emoji">🤝</span>
+        <div class="value-title">Collaboration</div>
+        <p class="value-desc">We build together. No hero coders — every project is a team effort with shared credit and shared gains.</p>
+      </div>
+      <div class="value-card reveal reveal-delay-2">
+        <span class="value-emoji">⚡</span>
+        <div class="value-title">Speed</div>
+        <p class="value-desc">Teams move faster than individuals. We ship in weeks what others take months to complete alone.</p>
+      </div>
+      <div class="value-card reveal reveal-delay-3">
+        <span class="value-emoji">🏆</span>
+        <div class="value-title">Quality</div>
+        <p class="value-desc">Senior developers set the bar. Every line of code is reviewed, every project meets production standards.</p>
+      </div>
+      <div class="value-card reveal">
+        <span class="value-emoji">📈</span>
+        <div class="value-title">Growth</div>
+        <p class="value-desc">We invest in people. From complete beginners in X-Academy to senior developers earning on projects.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── STATS ── -->
+<section class="stats-section">
+  <div class="section-wrap" id="numbers" data-section="PhineX by the Numbers">
+    <div class="reveal">
+      <div class="section-tag">Numbers</div>
+      <h2 class="section-title">PhineX by the Numbers</h2>
+    </div>
+    <div class="stats-grid">
+      <div class="stat-card reveal reveal-delay-1"><div class="stat-num">50+</div><div class="stat-label">Active Developers</div></div>
+      <div class="stat-card reveal reveal-delay-2"><div class="stat-num">5</div><div class="stat-label">Projects Ready to Launch</div></div>
+      <div class="stat-card reveal reveal-delay-3"><div class="stat-num">10k+</div><div class="stat-label">Lines of Code Written</div></div>
+      <div class="stat-card reveal"><div class="stat-num">7</div><div class="stat-label">Languages Supported</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CONNECT ── -->
+<section class="connect-section">
+  <div class="section-wrap" id="social" data-section="Connect With Us">
+    <div class="reveal">
+      <div class="section-tag">Social</div>
+      <h2 class="section-title">Connect With Us</h2>
+    </div>
+    <div class="connect-grid">
+      <a href="https://discord.gg/xBQ3ewVVHk" class="connect-card reveal reveal-delay-1" target="_blank">
+        <div class="connect-icon" style="background:rgba(88,101,242,0.1);border:1px solid rgba(88,101,242,0.2);"><i class="fab fa-discord" style="color:#5865f2;"></i></div>
+        <div><div class="connect-label">Community</div><div class="connect-name">Discord Server</div></div>
+        <i class="fas fa-arrow-right connect-arrow"></i>
+      </a>
+      <a href="https://www.facebook.com/profile.php?id=61584765330775" class="connect-card reveal reveal-delay-2" target="_blank">
+        <div class="connect-icon" style="background:rgba(24,119,242,0.1);border:1px solid rgba(24,119,242,0.2);"><i class="fab fa-facebook" style="color:#1877f2;"></i></div>
+        <div><div class="connect-label">Social</div><div class="connect-name">Facebook Page</div></div>
+        <i class="fas fa-arrow-right connect-arrow"></i>
+      </a>
+      <a href="https://github.com/PhineX-org" class="connect-card reveal reveal-delay-3" target="_blank">
+        <div class="connect-icon" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);"><i class="fab fa-github" style="color:#fff;"></i></div>
+        <div><div class="connect-label">Code</div><div class="connect-name">GitHub Organization</div></div>
+        <i class="fas fa-arrow-right connect-arrow"></i>
+      </a>
+      <a href="https://www.youtube.com/channel/UCslNCf9VtxpFH_gtA1VHFyQ" class="connect-card reveal reveal-delay-1" target="_blank">
+        <div class="connect-icon" style="background:rgba(255,0,0,0.08);border:1px solid rgba(255,0,0,0.15);"><i class="fab fa-youtube" style="color:#ff0000;"></i></div>
+        <div><div class="connect-label">Videos</div><div class="connect-name">YouTube Channel</div></div>
+        <i class="fas fa-arrow-right connect-arrow"></i>
+      </a>
+      <a href="https://chat.whatsapp.com/IuC3Gu6x5p61MORTnAuHJA" class="connect-card reveal reveal-delay-2" target="_blank">
+        <div class="connect-icon" style="background:rgba(37,211,102,0.08);border:1px solid rgba(37,211,102,0.15);"><i class="fab fa-whatsapp" style="color:#25d366;"></i></div>
+        <div><div class="connect-label">Messaging</div><div class="connect-name">WhatsApp Group</div></div>
+        <i class="fas fa-arrow-right connect-arrow"></i>
+      </a>
+      <a href="/cdn-cgi/l/email-protection#7a0a1213141f023a090f0a0a15080e54191517" class="connect-card reveal reveal-delay-3">
+        <div class="connect-icon" style="background:rgba(57,255,20,0.08);border:1px solid rgba(57,255,20,0.15);"><i class="fas fa-envelope" style="color:var(--neon);"></i></div>
+        <div><div class="connect-label">Email</div><div class="connect-name"><span class="__cf_email__" data-cfemail="47372f2e29223f07343237372835336924282a">ae8171889@gmail.com</span></div></div>
+        <i class="fas fa-arrow-right connect-arrow"></i>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-inner">
+    <a href="index.html" class="nav-logo" style="text-decoration:none;">
+      <div class="logo-icon"><i class="fas fa-dragon"></i></div>
+      <span class="logo-text">Phine<span>X</span></span>
+    </a>
+    <div class="footer-links">
+      <a href="index.html">Home</a>
+      <a href="hiring.html">Join Us</a>
+      <a href="x-academy.html">X-Academy</a>
+      <a href="bugreport.html">Report Bug</a>
+    </div>
+    <p style="font-size:12px;color:var(--muted);">&copy; 2026 PhineX — Made with ❤️ by Ahmed Al Gohary</p>
+  </div>
 </footer>
-  <script src="firebase-config.js"></script>
-  <script src="app.js"></script>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+
+<script>
+/* ── Hamburger toggle ── */
+const hamburger  = document.getElementById('hamburger');
+const mobileNav  = document.getElementById('mobileNav');
+hamburger.addEventListener('click', () => {
+  const open = hamburger.classList.toggle('open');
+  mobileNav.classList.toggle('open', open);
+  hamburger.setAttribute('aria-expanded', open);
+  mobileNav.setAttribute('aria-hidden', !open);
+  document.body.style.overflow = open ? 'hidden' : '';
+});
+/* close drawer when a link is tapped */
+mobileNav.querySelectorAll('a').forEach(a => {
+  a.addEventListener('click', () => {
+    hamburger.classList.remove('open');
+    mobileNav.classList.remove('open');
+    document.body.style.overflow = '';
+  });
+});
+/* close on outside tap */
+document.addEventListener('click', e => {
+  if (mobileNav.classList.contains('open') && !mobileNav.contains(e.target) && !hamburger.contains(e.target)) {
+    hamburger.classList.remove('open');
+    mobileNav.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+});
+
+/* ── Scroll reveals ── */
+const obs = new IntersectionObserver(e => e.forEach(x => {
+  if (x.isIntersecting) x.target.classList.add('visible');
+}), { threshold: 0.10 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
+
+<script>
+/* ── 3D Background — robust loader ── */
+(function loadAndInitBG() {
+  const canvas = document.getElementById('bgCanvas');
+  if (!canvas) return;
+
+  /* 1. WebGL support check */
+  function hasWebGL() {
+    try {
+      const c = document.createElement('canvas');
+      return !!(c.getContext('webgl') || c.getContext('experimental-webgl'));
+    } catch(e){ return false; }
+  }
+  if (!hasWebGL()) { document.body.classList.add('no-webgl'); return; }
+
+  /* 2. Load Three.js dynamically, then init — multi-CDN fallback */
+  const CDNS = [
+    'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js',
+    'https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js',
+    'https://unpkg.com/three@0.128.0/build/three.min.js'
+  ];
+  function tryLoad(urls) {
+    if (!urls.length) { document.body.classList.add('no-webgl'); canvas.style.display='none'; return; }
+    const s = document.createElement('script');
+    s.src = urls[0];
+    s.onload  = initThreeBG;
+    s.onerror = () => tryLoad(urls.slice(1));
+    document.head.appendChild(s);
+  }
+  tryLoad(CDNS);
+
+  function initThreeBG() {
+  if (typeof THREE === 'undefined') { document.body.classList.add('no-webgl'); return; }
+  try {
+
+  /* Detect mobile for performance scaling */
+  const isMobile   = window.innerWidth <= 768 || ('ontouchstart' in window);
+  const isLowPower = isMobile && window.innerWidth <= 480;
+
+  const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: !isMobile });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobile ? 1.5 : 2));
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setClearColor(0x000000, 0);
+
+  const scene  = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+  camera.position.z = 55;
+
+  /* ── Mouse + Touch tracking ── */
+  const mouse = { x: 0, y: 0, px: 0, py: 0 };
+
+  window.addEventListener('mousemove', e => {
+    mouse.px = (e.clientX / window.innerWidth  - 0.5) * 2;
+    mouse.py = (e.clientY / window.innerHeight - 0.5) * 2;
+  });
+  window.addEventListener('touchmove', e => {
+    const t = e.touches[0];
+    mouse.px = (t.clientX / window.innerWidth  - 0.5) * 2;
+    mouse.py = (t.clientY / window.innerHeight - 0.5) * 2;
+  }, { passive: true });
+
+  /* ── Particle count scales with device ── */
+  const N  = isLowPower ? 60 : isMobile ? 90 : 160;
+  const SX = 90, SY = 65, SZ = 50;
+  const pos = new Float32Array(N * 3);
+  const vel = [];
+  for (let i = 0; i < N; i++) {
+    pos[i*3]   = (Math.random() - 0.5) * SX;
+    pos[i*3+1] = (Math.random() - 0.5) * SY;
+    pos[i*3+2] = (Math.random() - 0.5) * SZ;
+    vel.push({ x:(Math.random()-.5)*.021, y:(Math.random()-.5)*.016, z:(Math.random()-.5)*.01 });
+  }
+  const ptGeo = new THREE.BufferGeometry();
+  ptGeo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+  scene.add(new THREE.Points(ptGeo, new THREE.PointsMaterial({
+    color: 0x39ff14, size: isMobile ? .6 : .45, transparent: true, opacity: .75,
+    blending: THREE.AdditiveBlending, depthWrite: false
+  })));
+
+  /* ── Connection lines (skip on low-power) ── */
+  const MAX_SEG = N * 8;
+  const lPos = new Float32Array(MAX_SEG * 6), lCol = new Float32Array(MAX_SEG * 6);
+  const lGeo = new THREE.BufferGeometry();
+  lGeo.setAttribute('position', new THREE.BufferAttribute(lPos, 3));
+  lGeo.setAttribute('color',    new THREE.BufferAttribute(lCol, 3));
+  const lMesh = new THREE.LineSegments(lGeo, new THREE.LineBasicMaterial({
+    vertexColors: true, transparent: true, opacity: isLowPower ? .2 : .35,
+    blending: THREE.AdditiveBlending, depthWrite: false
+  }));
+  scene.add(lMesh);
+  const CONN = isMobile ? 10 : 13;
+  const C1 = new THREE.Color(0x39ff14), C2 = new THREE.Color(0x00ffcc);
+
+  function updateNet() {
+    let idx = 0;
+    for (let i = 0; i < N; i++) {
+      if (Math.abs(pos[i*3])   > SX/2) vel[i].x *= -1;
+      if (Math.abs(pos[i*3+1]) > SY/2) vel[i].y *= -1;
+      if (Math.abs(pos[i*3+2]) > SZ/2) vel[i].z *= -1;
+      pos[i*3]   += vel[i].x; pos[i*3+1] += vel[i].y; pos[i*3+2] += vel[i].z;
+      for (let j = i+1; j < N && idx < MAX_SEG; j++) {
+        const dx = pos[i*3]-pos[j*3], dy = pos[i*3+1]-pos[j*3+1], dz = pos[i*3+2]-pos[j*3+2];
+        const d  = Math.sqrt(dx*dx + dy*dy + dz*dz);
+        if (d < CONN) {
+          const a = 1 - d/CONN, c = d < CONN*.5 ? C2 : C1;
+          lPos.set([pos[i*3],pos[i*3+1],pos[i*3+2], pos[j*3],pos[j*3+1],pos[j*3+2]], idx*6);
+          lCol.set([c.r*a,c.g*a,c.b*a, c.r*a,c.g*a,c.b*a], idx*6);
+          idx++;
+        }
+      }
+    }
+    for (let k = idx; k < MAX_SEG; k++) lPos.fill(0, k*6, k*6+6);
+    lGeo.attributes.position.needsUpdate = true;
+    lGeo.attributes.color.needsUpdate    = true;
+    lGeo.setDrawRange(0, idx * 2);
+    ptGeo.attributes.position.needsUpdate = true;
+  }
+
+  /* ── Wireframe shapes (fewer on mobile) ── */
+  const mk = (GeoFn, color, opacity) => new THREE.MeshBasicMaterial({
+    color, wireframe: true, transparent: true, opacity,
+    blending: THREE.AdditiveBlending, depthWrite: false
+  });
+  const shapeDefs = [
+    { geo: new THREE.SphereGeometry(13,10,10),            mat: mk(null,0x39ff14,.06),  pos:[-30,14,-20], sp:[.0005,.0008,.0004] },
+    { geo: new THREE.DodecahedronGeometry(9,1),           mat: mk(null,0x00ffcc,.05),  pos:[32,-10,-14], sp:[.0007,.0005,.0006] },
+    { geo: new THREE.TorusKnotGeometry(6,1.4,80,10,3,5), mat: mk(null,0x00aaff,.038), pos:[5,23,-26],   sp:[.0005,.0007,.0003] },
+    { geo: new THREE.TetrahedronGeometry(10,2),           mat: mk(null,0x39ff14,.045), pos:[-19,-16,-9], sp:[.0006,.0008,.0005] },
+  ].filter((_, i) => isLowPower ? i < 2 : true);  /* only 2 shapes on very small screens */
+
+  const shapes = shapeDefs.map(d => {
+    const m = new THREE.Mesh(d.geo, d.mat);
+    m.position.set(...d.pos);
+    scene.add(m);
+    return { m, sp: d.sp };
+  });
+
+  /* ── Pulsing rings ── */
+  const rGroup = new THREE.Group(); rGroup.position.set(0, 0, -35);
+  [[24,0x39ff14,.05],[36,0x00ffcc,.032],[50,0x00aaff,.02]].forEach(([r,c,o]) => {
+    const g = new THREE.RingGeometry(r, r+.15, isMobile ? 64 : 100);
+    const m = new THREE.MeshBasicMaterial({ color:c, transparent:true, opacity:o,
+      blending:THREE.AdditiveBlending, depthWrite:false, side:THREE.DoubleSide });
+    const ring = new THREE.Mesh(g, m); ring.rotation.x = Math.PI/2; rGroup.add(ring);
+  });
+  scene.add(rGroup);
+
+  /* ── Breathing orb ── */
+  const orbMat = new THREE.MeshBasicMaterial({ color:0x39ff14, transparent:true, opacity:.04,
+    blending:THREE.AdditiveBlending, depthWrite:false });
+  const orb = new THREE.Mesh(new THREE.SphereGeometry(3.5, isMobile?16:32, isMobile?16:32), orbMat);
+  orb.position.set(0, 0, -5); scene.add(orb);
+
+  /* ── Star field ── */
+  const starCount = isLowPower ? 300 : isMobile ? 500 : 700;
+  const sp2 = new Float32Array(starCount * 3);
+  for (let i = 0; i < starCount; i++) {
+    sp2[i*3]=(Math.random()-.5)*280; sp2[i*3+1]=(Math.random()-.5)*180;
+    sp2[i*3+2]=-80+Math.random()*-110;
+  }
+  const sGeo = new THREE.BufferGeometry();
+  sGeo.setAttribute('position', new THREE.BufferAttribute(sp2, 3));
+  scene.add(new THREE.Points(sGeo, new THREE.PointsMaterial({
+    color:0x39ff14, size: isMobile?.22:.15, transparent:true, opacity:.18,
+    blending:THREE.AdditiveBlending, depthWrite:false
+  })));
+
+  /* ── Animation loop ── */
+  /* On mobile, use gyroscope if available for camera follow */
+  let gyro = { x: 0, y: 0 };
+  if (isMobile && window.DeviceOrientationEvent) {
+    window.addEventListener('deviceorientation', e => {
+      if (e.gamma != null) {
+        gyro.y = Math.max(-1, Math.min(1, e.gamma / 30));
+        gyro.x = Math.max(-1, Math.min(1, (e.beta - 45) / 40));
+      }
+    }, { passive: true });
+  }
+
+  let t = 0;
+  function animate() {
+    requestAnimationFrame(animate); t += .01;
+    /* camera: mouse on desktop, gyro on mobile */
+    const cx = isMobile ? gyro.y : mouse.px;
+    const cy = isMobile ? gyro.x : mouse.py;
+    mouse.x += (cx - mouse.x) * .045;
+    mouse.y += (cy - mouse.y) * .045;
+    camera.position.x += ( mouse.x * 5 - camera.position.x) * .04;
+    camera.position.y += (-mouse.y * 4 - camera.position.y) * .04;
+    camera.lookAt(0, 0, 0);
+
+    updateNet();
+    shapes.forEach(({ m, sp }) => { m.rotation.x+=sp[0]; m.rotation.y+=sp[1]; m.rotation.z+=sp[2]; });
+    rGroup.rotation.z += .0014;
+    rGroup.children.forEach((r, i) => { r.material.opacity = .025 + Math.sin(t + i*1.3) * .016; });
+    const s = 1 + Math.sin(t*.7) * .15;
+    orb.scale.set(s, s, s); orbMat.opacity = .03 + Math.sin(t*.7) * .02;
+    renderer.render(scene, camera);
+  }
+  animate();
+
+  /* resize */
+  window.addEventListener('resize', () => {
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+  });
+  } catch(err) {
+    console.warn('PhineX 3D bg error:', err);
+    document.body.classList.add('no-webgl');
+    canvas.style.display = 'none';
+  }
+  } // end initThreeBG
+})();
+</script>
+
+<!-- hide Sign In text on very small screens -->
+<style>
+  @media(max-width:360px){ .hide-xs{ display:none; } }
+
+/* ══ MOBILE OVERHAUL ══ */
+body{overflow-x:hidden!important;}
+*{min-width:0;word-break:break-word;box-sizing:border-box;}
+img,canvas,video,iframe{max-width:100%;}
+@media(max-width:768px){
+  footer{padding:28px 16px 20px!important;}
+  .footer-inner{flex-direction:column!important;gap:20px!important;align-items:center!important;text-align:center!important;}
+  .footer-links{flex-wrap:wrap!important;justify-content:center!important;gap:10px 18px!important;}
+  .connect-grid{grid-template-columns:1fr!important;}
+  .curriculum-grid{grid-template-columns:1fr!important;}
+  .paths-grid{grid-template-columns:1fr!important;}
+  .settings-layout{grid-template-columns:1fr!important;}
+  .themes-grid{grid-template-columns:1fr 1fr!important;}
+  .lang-grid{grid-template-columns:1fr!important;}
+  .sbar{grid-template-columns:1fr 1fr!important;}
+  .hero-inner{grid-template-columns:1fr!important;}
+  .hero-inner>*:last-child{display:none!important;}
+  .wrap{grid-template-columns:1fr!important;}
+  .rp{display:none!important;}
+  .lp{padding:56px 20px 40px!important;}
+  h1,.h1{letter-spacing:-2px!important;}
+}
+@media(max-width:480px){
+  .stats-grid,.stat-grid,.stats-row{grid-template-columns:1fr 1fr!important;flex-direction:row!important;flex-wrap:wrap!important;}
+  .page-title,.hero h1{font-size:clamp(2rem,10vw,3rem)!important;}
+  nav,.nav-inner,.nw{padding-left:12px!important;padding-right:12px!important;}
+}
+
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js"></script>
+<script src="phinex-search.js"></script>
 </body>
 </html>

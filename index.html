@@ -3,576 +3,705 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta property="og:image" content="Phinex.png">
-  <link rel="icon" type="image/png" class="icon" href="Phinex.png">
-  <title>PhineX</title>
-  <link rel="stylesheet" href="style.css">
+  <title>PhineX — Community of Senior Developers</title>
+  <link rel="icon" type="image/x-icon" href="PhineX (2).png">
+  <meta name="keywords" content="PhineX, home, developer community, senior developers, software development, mentorship, tech talent, collaborative programming, software projects">
+  <meta name="author" content="AMG">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="index, follow">
+  <meta name="language" content="English">
+  <meta name="revised" content="2025-06-01">
+  <meta name="category" content="Technology, Community, Software Development">
+  <meta name="coverage" content="Worldwide">
+  <meta name="rating" content="General">
+  <meta name="distribution" content="Global">
+  <meta name="og:title" content="Home | PhineX">
+  <meta name="og:description" content="Welcome to PhineX, the collaborative developer community.">
+  <meta name="og:image" content="PhineX (2).png">
+  <meta name="description" content="Welcome to PhineX, the collaborative developer community where senior programmers build real projects and earn real profits.">
+  
+  <!-- ─── Firebase Compat SDK ─── -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js"></script>
+  <script src="phinex-search.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <!-- Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --neon:#39ff14;--neon-dim:#39ff1440;--void:#050508;
+      --surface:#0d0d14;--card:#13131e;--border:#ffffff10;
+      --text:#f0f0ff;--muted:#7070a0;
+    }
+    *{margin:0;padding:0;box-sizing:border-box;}
+    html{scroll-behavior:smooth;}
+    body{font-family:'DM Sans',sans-serif;background:var(--void);color:var(--text);overflow-x:hidden;}
+    h1,h2,h3,h4,.logo-text{font-family:'Syne',sans-serif;}
+
+    /* 3D canvas */
+    #bgCanvas{position:fixed;inset:0;z-index:0;pointer-events:none;width:100%;height:100%;}
+
+    /* Subtle grid overlay */
+    .grid-bg{position:fixed;inset:0;pointer-events:none;z-index:1;background-image:linear-gradient(rgba(57,255,20,0.018) 1px,transparent 1px),linear-gradient(90deg,rgba(57,255,20,0.018) 1px,transparent 1px);background-size:60px 60px;}
+
+    /* NAVBAR */
+    #navbar{position:fixed;top:0;left:0;right:0;z-index:1000;height:68px;background:transparent;backdrop-filter:blur(20px);border-bottom:1px solid var(--border);transition:all 0.3s ease;}
+    #navbar.scrolled{border-bottom-color:var(--neon-dim);box-shadow:0 0 30px rgba(57,255,20,0.05);}
+    .nav-inner{max-width:1400px;margin:0 auto;padding:0 24px;height:100%;display:flex;align-items:center;gap:20px;}
+    .nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0;}
+    .logo-icon-wrap{width:38px;height:38px;background:linear-gradient(135deg,#39ff14,#00cc88);border-radius:10px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;box-shadow:0 0 20px rgba(57,255,20,0.3);}
+    .logo-icon-wrap::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,transparent 40%,rgba(255,255,255,0.15));}
+    .logo-icon-wrap i{color:#050508;font-size:18px;z-index:1;}
+    .logo-text{font-size:22px;font-weight:800;letter-spacing:-0.5px;color:#f0f0ff;}
+    .logo-text span{color:var(--neon);}
+    #pagesBtn{flex-shrink:0;display:flex;align-items:center;gap:7px;background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;padding:0 14px;height:40px;cursor:pointer;transition:all 0.2s;white-space:nowrap;}
+    #pagesBtn:hover{border-color:var(--neon);color:var(--neon);background:rgba(57,255,20,0.05);}
+    #pagesPanel{position:absolute;top:calc(100% + 8px);right:24px;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:12px;width:300px;box-shadow:0 20px 60px rgba(0,0,0,0.7),0 0 0 1px rgba(57,255,20,0.1);display:none;z-index:200;}
+    #pagesPanel.active{display:block;animation:dropIn 0.2s ease;}
+    .pages-header{padding:4px 8px 10px;font-size:10px;font-weight:700;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase;border-bottom:1px solid var(--border);margin-bottom:8px;}
+    .page-item{display:flex;align-items:center;gap:12px;padding:10px;border-radius:10px;cursor:pointer;text-decoration:none;color:var(--text);transition:all 0.15s;}
+    .page-item:hover{background:rgba(57,255,20,0.07);color:var(--neon);}
+    .page-item i{width:28px;text-align:center;font-size:14px;color:var(--muted);transition:color 0.15s;}
+    .page-item:hover i{color:var(--neon);}
+    .page-item span{font-size:13px;font-weight:500;}
+    .nav-login{flex-shrink:0;display:flex;align-items:center;gap:7px;background:var(--neon);border:none;border-radius:10px;color:#050508;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;padding:0 16px;height:40px;cursor:pointer;text-decoration:none;transition:all 0.2s;box-shadow:0 0 20px rgba(57,255,20,0.2);}
+    .nav-login:hover{background:#50ff28;box-shadow:0 0 30px rgba(57,255,20,0.4);transform:translateY(-1px);}
+    #mobileToggle{display:none;background:none;border:1px solid var(--border);border-radius:8px;padding:8px;cursor:pointer;color:var(--text);}
+
+    /* HERO */
+    #hero{min-height:100vh;position:relative;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden;padding:100px 24px 60px;}
+    .hero-glow{position:absolute;top:20%;left:50%;transform:translate(-50%,-50%);width:600px;height:600px;background:radial-gradient(circle,rgba(57,255,20,0.05) 0%,transparent 70%);pointer-events:none;}
+    .hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(57,255,20,0.08);border:1px solid rgba(57,255,20,0.2);border-radius:100px;padding:6px 14px;font-size:12px;font-weight:600;color:var(--neon);letter-spacing:0.5px;margin-bottom:28px;animation:fadeUp 0.6s ease both;}
+    .hero-badge span.dot{width:6px;height:6px;border-radius:50%;background:var(--neon);box-shadow:0 0 8px var(--neon);animation:blink 2s infinite;}
+    @keyframes blink{0%,100%{opacity:1;}50%{opacity:0.3;}}
+    .hero-title{font-family:'Syne',sans-serif;font-size:clamp(3rem,8vw,7rem);font-weight:800;line-height:1.0;letter-spacing:-2px;animation:fadeUp 0.6s ease 0.1s both;}
+    .hero-title .line-accent{color:var(--neon);}
+    .hero-sub{font-size:clamp(1rem,2vw,1.25rem);color:var(--muted);max-width:600px;margin:24px auto 40px;line-height:1.7;animation:fadeUp 0.6s ease 0.2s both;}
+    .hero-actions{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;animation:fadeUp 0.6s ease 0.3s both;}
+    .btn-primary-hero{display:inline-flex;align-items:center;gap:8px;background:var(--neon);color:#050508;font-family:'Syne',sans-serif;font-weight:700;font-size:14px;padding:14px 28px;border-radius:12px;text-decoration:none;box-shadow:0 0 30px rgba(57,255,20,0.25);transition:all 0.25s;}
+    .btn-primary-hero:hover{transform:translateY(-3px);box-shadow:0 10px 40px rgba(57,255,20,0.4);}
+    .btn-outline-hero{display:inline-flex;align-items:center;gap:8px;background:transparent;border:1px solid rgba(255,255,255,0.15);color:var(--text);font-family:'Syne',sans-serif;font-weight:600;font-size:14px;padding:14px 28px;border-radius:12px;text-decoration:none;transition:all 0.25s;}
+    .btn-outline-hero:hover{border-color:var(--neon);color:var(--neon);background:rgba(57,255,20,0.05);transform:translateY(-3px);}
+    .stats-row{display:flex;gap:0;justify-content:center;margin-top:70px;border:1px solid var(--border);border-radius:16px;overflow:hidden;max-width:700px;margin-left:auto;margin-right:auto;animation:fadeUp 0.6s ease 0.4s both;backdrop-filter:blur(10px);background:rgba(5,5,8,0.55);}
+    .stat-item{flex:1;padding:20px 16px;text-align:center;border-right:1px solid var(--border);background:rgba(255,255,255,0.02);transition:background 0.2s;}
+    .stat-item:hover{background:rgba(57,255,20,0.04);}
+    .stat-item:last-child{border-right:none;}
+    .stat-num{font-family:'Syne',sans-serif;font-size:26px;font-weight:800;color:var(--neon);}
+    .stat-label{font-size:11px;color:var(--muted);margin-top:3px;text-transform:uppercase;letter-spacing:0.5px;}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);}}
+
+    /* SECTION HEADERS */
+    .section-tag{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--neon);margin-bottom:12px;}
+    .section-tag::before{content:'';display:block;width:20px;height:2px;background:var(--neon);}
+    .section-title{font-family:'Syne',sans-serif;font-size:clamp(2rem,4vw,3rem);font-weight:800;line-height:1.1;letter-spacing:-1px;}
+
+    /* NEWS */
+    #news{padding:100px 0;position:relative;overflow:hidden;}
+    .news-header{max-width:1400px;margin:0 auto;padding:0 24px;margin-bottom:48px;}
+    .news-track-wrap{position:relative;overflow:hidden;mask-image:linear-gradient(90deg,transparent,black 8%,black 92%,transparent);-webkit-mask-image:linear-gradient(90deg,transparent,black 8%,black 92%,transparent);}
+    .news-track{display:flex;gap:24px;animation:newsScroll 40s linear infinite;width:max-content;padding:20px 0;}
+    .news-track:hover{animation-play-state:paused;}
+    @keyframes newsScroll{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
+    .news-card{width:360px;flex-shrink:0;background:var(--card);border:1px solid var(--border);border-radius:18px;overflow:hidden;cursor:pointer;transition:all 0.3s ease;position:relative;}
+    .news-card:hover{border-color:rgba(57,255,20,0.3);transform:translateY(-6px);box-shadow:0 20px 50px rgba(0,0,0,0.5),0 0 0 1px rgba(57,255,20,0.1);}
+    .news-img-wrap{position:relative;height:200px;overflow:hidden;}
+    .news-img-wrap img{width:100%;height:100%;object-fit:cover;transition:transform 0.6s ease;}
+    .news-card:hover .news-img-wrap img{transform:scale(1.05);}
+    .news-img-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(13,13,20,0.9) 0%,transparent 60%);}
+    .news-category{position:absolute;top:12px;left:12px;background:var(--neon);color:#050508;font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;padding:3px 9px;border-radius:100px;}
+    .news-body{padding:20px;}
+    .news-meta{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--muted);margin-bottom:10px;}
+    .news-meta span{display:flex;align-items:center;gap:4px;}
+    .news-title{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;line-height:1.4;color:var(--text);margin-bottom:10px;display:-webkit-box;-webkit-line-clamp:2;line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+    .news-desc{font-size:13px;color:var(--muted);line-height:1.6;display:-webkit-box;-webkit-line-clamp:3;line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}
+    .news-card-footer{padding:14px 20px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+    .news-read-more{font-size:12px;font-weight:600;color:var(--neon);display:flex;align-items:center;gap:5px;text-decoration:none;transition:gap 0.2s;}
+    .news-card:hover .news-read-more{gap:9px;}
+
+    /* FEATURES */
+    #features{padding:100px 0;}
+    .features-inner{max-width:1400px;margin:0 auto;padding:0 24px;}
+    .features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:60px;}
+    .feat-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:32px;transition:all 0.3s;position:relative;overflow:hidden;}
+    .feat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--neon),transparent);opacity:0;transition:opacity 0.3s;}
+    .feat-card:hover{border-color:rgba(57,255,20,0.2);transform:translateY(-4px);}
+    .feat-card:hover::before{opacity:1;}
+    .feat-icon{width:52px;height:52px;border-radius:14px;background:rgba(57,255,20,0.08);border:1px solid rgba(57,255,20,0.15);display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:22px;transition:all 0.3s;}
+    .feat-card:hover .feat-icon{background:rgba(57,255,20,0.15);box-shadow:0 0 20px rgba(57,255,20,0.15);}
+    .feat-title{font-family:'Syne',sans-serif;font-size:18px;font-weight:700;margin-bottom:12px;}
+    .feat-desc{font-size:14px;color:var(--muted);line-height:1.7;}
+    .feat-link{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--neon);margin-top:20px;text-decoration:none;transition:gap 0.2s;}
+    .feat-link:hover{gap:10px;}
+
+    /* PROJECTS */
+    #projects{padding:100px 0;position:relative;overflow:hidden;}
+    .projects-header{max-width:1400px;margin:0 auto;padding:0 24px;display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:48px;flex-wrap:wrap;gap:20px;}
+    .projects-track-wrap{position:relative;overflow:hidden;mask-image:linear-gradient(90deg,transparent,black 6%,black 94%,transparent);-webkit-mask-image:linear-gradient(90deg,transparent,black 6%,black 94%,transparent);}
+    .projects-track{display:flex;gap:28px;animation:projectsScroll 35s linear infinite;width:max-content;padding:20px;}
+    .projects-track:hover{animation-play-state:paused;}
+    @keyframes projectsScroll{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
+    .project-card{width:420px;flex-shrink:0;background:var(--card);border:1px solid var(--border);border-radius:22px;overflow:hidden;cursor:pointer;position:relative;transition:all 0.4s ease;}
+    .project-card:hover{border-color:rgba(57,255,20,0.25);transform:translateY(-8px) scale(1.01);box-shadow:0 30px 70px rgba(0,0,0,0.6),0 0 0 1px rgba(57,255,20,0.1);}
+    .project-img-wrap{height:240px;position:relative;overflow:hidden;background:linear-gradient(135deg,#0d1a0d,#0a0a1a);}
+    .project-img-wrap img{width:100%;height:100%;object-fit:cover;transition:transform 0.6s ease;opacity:0.85;}
+    .project-card:hover .project-img-wrap img{transform:scale(1.07);opacity:1;}
+    .project-logo-overlay{position:absolute;inset:0;background:linear-gradient(to top,var(--card) 0%,transparent 50%);}
+    .project-big-icon{width:80px;height:80px;border-radius:20px;background:rgba(57,255,20,0.08);border:2px solid rgba(57,255,20,0.2);display:flex;align-items:center;justify-content:center;font-size:36px;backdrop-filter:blur(10px);position:absolute;top:20px;right:20px;transition:all 0.3s;}
+    .project-card:hover .project-big-icon{background:rgba(57,255,20,0.15);box-shadow:0 0 30px rgba(57,255,20,0.2);}
+    .live-badge{position:absolute;top:16px;left:16px;display:flex;align-items:center;gap:6px;background:rgba(5,5,8,0.8);backdrop-filter:blur(8px);border:1px solid rgba(57,255,20,0.3);border-radius:100px;padding:4px 10px;font-size:10px;font-weight:700;color:var(--neon);letter-spacing:0.5px;}
+    .live-dot{width:6px;height:6px;border-radius:50%;background:var(--neon);box-shadow:0 0 6px var(--neon);animation:blink 1.5s infinite;}
+    .project-body{padding:26px;}
+    .project-stack{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;}
+    .stack-tag{font-size:10px;font-weight:700;letter-spacing:0.5px;padding:3px 9px;border-radius:100px;background:rgba(57,255,20,0.07);border:1px solid rgba(57,255,20,0.15);color:var(--neon);}
+    .project-title{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;margin-bottom:10px;letter-spacing:-0.5px;}
+    .project-desc{font-size:13px;color:var(--muted);line-height:1.7;display:-webkit-box;-webkit-line-clamp:3;line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}
+    .project-footer{padding:18px 26px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+    .project-link{display:inline-flex;align-items:center;gap:7px;background:var(--neon);color:#050508;font-family:'Syne',sans-serif;font-weight:700;font-size:12px;padding:8px 16px;border-radius:8px;text-decoration:none;transition:all 0.2s;}
+    .project-link:hover{background:#50ff28;box-shadow:0 0 20px rgba(57,255,20,0.3);}
+    .project-views{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:5px;}
+
+    /* FOOTER */
+    footer{border-top:1px solid var(--border);padding:60px 24px 30px;position:relative;z-index:2;}
+    .footer-inner{max-width:1400px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;}
+    .footer-brand p{font-size:13px;color:var(--muted);line-height:1.7;margin:14px 0 20px;max-width:240px;}
+    .social-row{display:flex;gap:10px;}
+    .social-btn{width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,0.05);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--muted);text-decoration:none;transition:all 0.2s;}
+    .social-btn:hover{border-color:var(--neon);color:var(--neon);background:rgba(57,255,20,0.07);}
+    .footer-col h4{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:16px;}
+    .footer-col a{display:block;font-size:13px;color:var(--muted);text-decoration:none;margin-bottom:10px;transition:color 0.2s;}
+    .footer-col a:hover{color:var(--neon);}
+    .footer-bottom{max-width:1400px;margin:40px auto 0;padding-top:24px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;}
+    .footer-bottom p{font-size:12px;color:var(--muted);}
+    .footer-bottom a{color:var(--neon);text-decoration:none;}
+    #backToTop{position:fixed;bottom:28px;right:28px;width:44px;height:44px;border-radius:12px;background:transparent;color:var(--neon);border:none;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;box-shadow:0 0 20px rgba(57,255,20,0.3);opacity:0;transform:translateY(10px);transition:all 0.3s;z-index:500;overlay: auto;}
+    #backToTop.visible{opacity:1;transform:translateY(0);overlay: auto;}
+    #backToTop:hover{background:transparent;box-shadow:0 0 30px rgb(37, 244, 0);transform:translateY(-3px);}
+    .reveal{opacity:0;transform:translateY(30px);transition:opacity 0.7s ease,transform 0.7s ease;}
+    .reveal.visible{opacity:1;transform:translateY(0);}
+    .reveal-delay-1{transition-delay:0.1s;}.reveal-delay-2{transition-delay:0.2s;}.reveal-delay-3{transition-delay:0.3s;}
+    .eljasus-btn {
+    display: inline-block;
+    padding: 16px 32px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #00ffff;
+    text-decoration: none;
+    border: 2px solid #00ffff;
+    border-radius: 10px;
+    background: black;
+    letter-spacing: 1px;
+    position: relative;
+    overflow: hidden;
+    transition: 0.4s;
+    box-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff inset;
+}
+
+/* Hover glow */
+.eljasus-btn:hover {
+    color: black;
+    background: #00ffff;
+    box-shadow:
+        0 0 10px #00ffff,
+        0 0 30px #00ffff,
+        0 0 60px #00ffff;
+    transform: scale(1.08);
+}
+
+/* Animated glow pulse */
+@keyframes cyanPulse {
+    0% {
+        box-shadow: 0 0 10px #00ffff;
+    }
+    50% {
+        box-shadow: 0 0 25px #00ffff;
+    }
+    100% {
+        box-shadow: 0 0 10px #00ffff;
+    }
+}
+
+.eljasus-btn {
+    animation: cyanPulse 2s infinite;
+}
+    @media(max-width:1024px){.features-grid{grid-template-columns:repeat(2,1fr);}.footer-inner{grid-template-columns:1fr 1fr;}}
+    @media(max-width:768px){#mobileToggle{display:flex;}.features-grid{grid-template-columns:1fr;}.footer-inner{grid-template-columns:1fr 1fr;gap:28px;}.stats-row{flex-direction:column;}.stat-item{border-right:none;border-bottom:1px solid var(--border);}.stat-item:last-child{border-bottom:none;}}
+
+    /* LOADER */
+    @keyframes spinCube{0%{transform:rotateX(0) rotateY(0);}25%{transform:rotateX(90deg) rotateY(90deg);}50%{transform:rotateX(180deg) rotateY(180deg);}75%{transform:rotateX(270deg) rotateY(90deg);}100%{transform:rotateX(360deg) rotateY(360deg);}}
+    @keyframes orbitRing{to{transform:rotate(360deg);}}
+    @keyframes loaderPulse{0%,100%{transform:translate(-50%,-50%) scale(1);opacity:0.6;}50%{transform:translate(-50%,-50%) scale(1.2);opacity:1;}}
+  </style>
 </head>
 <body>
-  <!-- Navigation -->
-<nav class="navbar">
-  <div class="nav-container">
-    <div class="logo">
-      <i class="fas fa-dragon"></i>
-      <span>PhineX</span>
-      <div class="input-wrapper">
-        <i class="fas fa-search search-icon" id="searchSubmit" style="cursor: pointer;"></i>
-        <input type="text" id="mainSearch" placeholder="Search PhineX projects..." autocomplete="off">
-        <div id="predictionList" class="prediction-list"></div>
-      </div>
-      <ul class="nav-menu" id="primary-navigation">
-        <li><a href="hiring.html"><i class="fas fa-laptop-code"></i> <span data-i18n="nav_join">Join Us</span></a></li>
-        <li><a href="x-academy.html"><i class="fas fa-graduation-cap"></i> <span data-i18n="nav_academy">X-Academy</span></a></li>
-        <li><a href="bugreport.html"><i class="fas fa-bug"></i> <span data-i18n="nav_bug">Report Bug</span></a></li>
-        <li><a href="redeemcode.html"><i class="fas fa-gift"></i> <span data-i18n="nav_redeem">Redeem Code</span></a></li>
-        <li><a href="aboutus.html"><i class="fas fa-info-circle"></i> <span data-i18n="nav_about">About Us</span></a></li>
-        <li><button id="logoutBtn" class="btn-outline hidden" data-i18n="nav_logout">Logout</button></li>
-      </ul>
+
+<!-- THREE.JS CANVAS (z=0, behind everything) -->
+<canvas id="bgCanvas"></canvas>
+
+<!-- LOADING SCREEN -->
+<div id="pxLoader" style="position:fixed;inset:0;z-index:9999;background:#050508;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity 0.6s ease,visibility 0.6s ease;">
+  <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(57,255,20,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(57,255,20,0.04) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;"></div>
+  <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:500px;height:500px;background:radial-gradient(circle,rgba(57,255,20,0.07),transparent);border-radius:50%;pointer-events:none;animation:loaderPulse 2s ease-in-out infinite;"></div>
+  <div style="perspective:600px;margin-bottom:36px;">
+    <div style="width:64px;height:64px;position:relative;transform-style:preserve-3d;animation:spinCube 2.4s ease-in-out infinite;">
+      <div style="position:absolute;inset:0;background:linear-gradient(135deg,#39ff14,#00cc88);border-radius:12px;transform:translateZ(32px);opacity:0.95;box-shadow:0 0 30px rgba(57,255,20,0.5);"></div>
+      <div style="position:absolute;inset:0;background:linear-gradient(135deg,#20cc00,#007744);border-radius:12px;transform:rotateY(180deg) translateZ(32px);opacity:0.7;"></div>
+      <div style="position:absolute;inset:0;background:linear-gradient(135deg,#2de010,#00aa66);border-radius:12px;transform:rotateY(90deg) translateZ(32px);opacity:0.8;"></div>
+      <div style="position:absolute;inset:0;background:linear-gradient(135deg,#1ab000,#005533);border-radius:12px;transform:rotateY(-90deg) translateZ(32px);opacity:0.6;"></div>
+      <div style="position:absolute;inset:0;background:linear-gradient(135deg,#39ff14,#00ee88);border-radius:12px;transform:rotateX(90deg) translateZ(32px);opacity:0.85;"></div>
+      <div style="position:absolute;inset:0;background:linear-gradient(135deg,#0d7700,#003322);border-radius:12px;transform:rotateX(-90deg) translateZ(32px);opacity:0.5;"></div>
+      <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;transform:translateZ(33px);font-size:28px;color:#050508;">🐉</div>
     </div>
+  </div>
+  <div style="position:absolute;top:50%;left:50%;margin:-80px 0 0 -80px;width:160px;height:160px;border-radius:50%;border:1px solid rgba(57,255,20,0.15);animation:orbitRing 3s linear infinite;pointer-events:none;"><div style="position:absolute;top:-4px;left:50%;margin-left:-4px;width:8px;height:8px;border-radius:50%;background:var(--neon);box-shadow:0 0 12px rgba(57,255,20,0.8);"></div></div>
+  <div style="position:absolute;top:50%;left:50%;margin:-110px 0 0 -110px;width:220px;height:220px;border-radius:50%;border:1px solid rgba(57,255,20,0.07);animation:orbitRing 5s linear infinite reverse;pointer-events:none;"><div style="position:absolute;top:-3px;left:50%;margin-left:-3px;width:6px;height:6px;border-radius:50%;background:rgba(57,255,20,0.6);box-shadow:0 0 8px rgba(57,255,20,0.5);"></div></div>
+  <div style="position:relative;z-index:2;text-align:center;">
+    <div style="font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:#f0f0ff;letter-spacing:-1px;margin-bottom:6px;">Phine<span style="color:#39ff14;">X</span></div>
+    <div style="font-size:12px;color:#7070a0;letter-spacing:2px;text-transform:uppercase;margin-bottom:24px;">Loading platform...</div>
+    <div style="width:200px;height:2px;background:rgba(255,255,255,0.06);border-radius:2px;overflow:hidden;margin:0 auto;"><div id="loaderBar" style="height:100%;width:0%;background:linear-gradient(90deg,#39ff14,#00cc88);border-radius:2px;transition:width 0.3s ease;box-shadow:0 0 10px rgba(57,255,20,0.6);"></div></div>
+    <div id="loaderPercent" style="font-size:11px;color:#7070a0;margin-top:8px;font-family:'Syne',sans-serif;font-weight:700;">0%</div>
+  </div>
+</div>
+
+<div class="grid-bg"></div>
+
+<!-- NAVBAR -->
+<nav id="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo"><div class="logo-icon-wrap"><i class="fas fa-dragon"></i></div><span class="logo-text">Phine<span>X</span></span></a>
+    <button class="pxs-trigger" aria-label="Open search"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg> Search</button>
+    <div style="flex:1;"></div>
+    <div style="position:relative;">
+      <button id="pagesBtn"><i class="fas fa-th-large" style="font-size:12px;"></i> Pages <i class="fas fa-chevron-down" id="pagesBtnChevron" style="font-size:10px;transition:transform 0.2s;"></i></button>
+      <div id="pagesPanel">
+        <div class="pages-header">All Pages</div>
+        <a href="index.html" class="page-item"><i class="fas fa-home"></i><span>Home</span></a>
+        <a href="hiring.html" class="page-item"><i class="fas fa-laptop-code"></i><span>Join Us</span></a>
+        <a href="x-academy.html" class="page-item"><i class="fas fa-graduation-cap"></i><span>X-Academy</span></a>
+        <a href="bugreport.html" class="page-item"><i class="fas fa-bug"></i><span>Report Bug</span></a>
+        <a href="redeemcode.html" class="page-item"><i class="fas fa-gift"></i><span>Redeem Code</span></a>
+        <a href="aboutus.html" class="page-item"><i class="fas fa-info-circle"></i><span>About Us</span></a>
+        <a href="settings.html" class="page-item"><i class="fas fa-cog"></i><span>Settings</span></a>
+      </div>
+    </div>
+    <a href="login.html" class="nav-login"><i class="fas fa-sign-in-alt" style="font-size:13px;"></i> Sign In</a>
+    <button id="mobileToggle"><i class="fas fa-bars"></i></button>
+  </div>
+  <div id="mobileMenu" style="display:none;background:var(--surface);border-top:1px solid var(--border);padding:16px 24px;">
+    <a href="hiring.html" style="display:block;padding:10px 0;color:var(--text);text-decoration:none;font-size:14px;border-bottom:1px solid var(--border);">Join Us</a>
+    <a href="x-academy.html" style="display:block;padding:10px 0;color:var(--text);text-decoration:none;font-size:14px;border-bottom:1px solid var(--border);">X-Academy</a>
+    <a href="bugreport.html" style="display:block;padding:10px 0;color:var(--text);text-decoration:none;font-size:14px;border-bottom:1px solid var(--border);">Report Bug</a>
+    <a href="redeemcode.html" style="display:block;padding:10px 0;color:var(--text);text-decoration:none;font-size:14px;border-bottom:1px solid var(--border);">Redeem Code</a>
+    <a href="aboutus.html" style="display:block;padding:10px 0;color:var(--text);text-decoration:none;font-size:14px;">About Us</a>
   </div>
 </nav>
 
-<section class="news-section slider-context">
-  <div class="container">
-    <div class="slider-container">
-      <div class="news-slider" id="news-container">
-        
-        <div class="news-card-slide">
-          <img src="EG-portfolio.png" alt="New Project">
-          <div class="news-content-box">
-            <h3 class="slide-title" data-i18n="slide1_title">EG Portfolio</h3>
-            <p class="slide-description" data-i18n="slide1_desc">PhineX has deployed a new web-site showcase with advanced UI/UX designs.</p>
-            <a href="https://ahmedelgoharymessi-dot.github.io/Portfolio.github.io/" class="btn-primary slide-btn">
-              <span data-i18n="slide1_btn">View Live</span> <i class="fas fa-eye"></i>
-            </a>
-          </div>
-        </div>
-
-        <div class="news-card-slide">
-          <img src="PhineX.png" alt="X-Developers">
-          <div class="news-content-box">
-            <h3 class="slide-title" data-i18n="slide2_title">Join X-Developers</h3>
-            <p class="slide-description" data-i18n="slide2_desc">Collaborate with senior devs and earn money on global projects.</p>
-            <div class="btn-group">
-              <a href="hiring.html" class="btn-primary slide-btn" data-i18n="slide2_btn1">Join Team</a>
-              <a href="redeemcode.html" class="btn-secondary slide-btn">
-                <span data-i18n="slide2_btn2">Redeem Code</span> <i class="fas fa-gift"></i>
-              </a>
-            </div>
-          </div>
-        </div>
-
-        <div class="news-card-slide">
-          <img src="PhineX.png" alt="PhineX Update">
-          <div class="news-content-box">
-            <h3 class="slide-title" data-i18n="slide3_title">X-Academy</h3>
-            <p class="slide-description" data-i18n="slide3_desc">Randomized testing and live timers are now active for all students.</p>
-            <a href="x-academy.html" class="btn-primary slide-btn">
-              <span data-i18n="slide3_btn">Start Learning</span> <i class="fas fa-graduation-cap"></i>
-            </a>
-          </div>
-        </div>
-
-        <div class="news-card-slide">
-          <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=2070" alt="Support">
-          <div class="news-content-box">
-            <h3 class="slide-title" data-i18n="slide4_title">Found a Bug?</h3>
-            <p class="slide-description" data-i18n="slide4_desc">Help us improve the PhineX ecosystem by reporting errors to our dev team.</p>
-            <a href="bugreport.html" class="btn-secondary slide-btn">
-              <span data-i18n="slide4_btn">Report Error</span> <i class="fas fa-bug"></i>
-            </a>
-          </div>
-        </div>
-
-        <div class="news-card-slide">
-          <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=2070" alt="About Us">
-          <div class="news-content-box">
-            <h3 class="slide-title" data-i18n="slide5_title">Who we are</h3>
-            <p class="slide-description" data-i18n="slide5_desc">Discover the vision behind PhineX and our mission for 2026.</p>
-            <a href="aboutus.html" class="btn-primary slide-btn">
-              <span data-i18n="slide5_btn">About Us</span> <i class="fas fa-info-circle"></i>
-            </a>
-          </div>
-        </div>
-
-      </div>
+<!-- HERO -->
+<section id="hero" style="position:relative;z-index:2;">
+  <div class="hero-glow"></div>
+  <div style="position:relative;z-index:2;max-width:900px;margin:0 auto;">
+    <div class="hero-badge"><span class="dot"></span>Now Recruiting Senior Developers</div>
+    <h1 class="hero-title">Build The<br>Future Of<br><span class="line-accent">Web Tech</span></h1>
+    <p class="hero-sub">PhineX is a community of senior developers building real-world projects together. Collaborate, learn, earn, and grow — faster than working alone.</p>
+    <div class="hero-actions">
+      <a href="#features" class="btn-primary-hero"><i class="fas fa-rocket"></i>Explore Features</a>
+      <a href="hiring.html" class="btn-outline-hero"><i class="fas fa-users"></i>Join Our Team</a>
+      <a href="https://phinex-org.github.io/ElJasus-The_ULTIMATE_Edition/" target="_blank" class="eljasus-btn">
+      ElJasus
+      </a>
+    </div>
+    <div class="stats-row">
+      <div class="stat-item"><div class="stat-num">50+</div><div class="stat-label">Needed Devs</div></div>
+      <div class="stat-item"><div class="stat-num">100+</div><div class="stat-label">Projects</div></div>
+      <div class="stat-item"><div class="stat-num">7</div><div class="stat-label">Languages</div></div>
+      <div class="stat-item"><div class="stat-num">24/7</div><div class="stat-label">Support</div></div>
     </div>
   </div>
 </section>
 
-  <!-- Features Section -->
-  <section class="features">
-    <div class="container">
-      <h2>Why Choose PhineX?</h2>
-      <div class="features-grid">
-        <div class="feature-card">
-          <i class="fas fa-laptop-code"></i>
-          <h3><a href="https://discord.gg/eDfb3uvY" style="color: rgb(255, 255, 255); text-decoration: none;">Develop in-groups</a></h3>
-          <p>Instead of programming alone, join our group to collaborate and build amazing projects together in less time!</p>
-        </div>
-        <div class="feature-card">
-          <i class="fas fa-users"></i>
-          <h3><a href="https://discord.gg/Zr5CppHg" style="color: rgb(255, 255, 255); text-decoration: none;">Learn more</a></h3>
-          <p>If you are still learning, join our community to grow your skills and knowledge.</p>
-        </div>
-        <div class="feature-card">
-          <i class="fas fa-dollar-sign"></i>
-          <h3><a href="https://discord.gg/eDfb3uvY" style="color: rgb(255, 255, 255); text-decoration: none;">Opportunities</a></h3>
-          <p>More projects to participate in and earn from.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-  <section class="projects-section" id="projects-section">
-  <div class="container">
-    <h2 class="section-title"><i class="fas fa-star"></i> Featured Innovation</h2>
-    
-    <div class="featured-card">
-      <div class="project-visual">
-        <div class="logo-glow"></div>
-        <img src="EG-portfolio.png" alt="EGX Logo" class="egx-logo">
-      </div>
-      
-      <div class="project-details">
-        <div class="badge">Live Production</div>
-        <h3>EG Portfolio</h3>
-        <p>A professional digital showcase featuring advanced UI/UX designs, interactive elements, and personal project highlights. Built to demonstrate high-level web development capabilities.</p>
-        
-        <ul class="tech-tags">
-          <li><i class="fab fa-html5"></i> HTML5</li>
-          <li><i class="fab fa-css3-alt"></i> CSS3</li>
-          <li><i class="fab fa-js"></i> JavaScript</li>
-          <li><i class="fab fa-github"></i> GitHub Pages</li>
-        </ul>
+<!-- NEWS -->
+<section id="news" style="position:relative;z-index:2;">
+  <div class="news-header"><div class="reveal"><div class="section-tag">Latest</div><h2 class="section-title">PhineX Updates</h2></div></div>
+  <div class="news-track-wrap"><div class="news-track" id="newsTrack"></div></div>
+</section>
 
-        <a href="https://ahmedelgoharymessi-dot.github.io/Portfolio.github.io/" target="_blank" class="project-btn">
-          Explore Project <i class="fas fa-external-link-alt"></i>
-        </a>
-      </div>
+<!-- FEATURES -->
+<section id="features" style="position:relative;z-index:2;">
+  <div class="features-inner">
+    <div class="reveal"><div class="section-tag">Why Us</div><h2 class="section-title">Why Choose PhineX?</h2></div>
+    <div class="features-grid">
+      <div class="feat-card reveal reveal-delay-1"><div class="feat-icon">💻</div><div class="feat-title">Collaborative Development</div><p class="feat-desc">Stop building alone. Join a team of experienced developers and ship projects faster, better, and with more impact.</p><a href="https://discord.gg/xBQ3ewVVHk" class="feat-link" target="_blank">Join the server <i class="fas fa-arrow-right"></i></a></div>
+      <div class="feat-card reveal reveal-delay-2"><div class="feat-icon">🎓</div><div class="feat-title">Continuous Learning</div><p class="feat-desc">Grow through hands-on practice alongside seasoned mentors. Our X-Academy turns learners into professionals.</p><a href="x-academy.html" class="feat-link">Explore Academy <i class="fas fa-arrow-right"></i></a></div>
+      <div class="feat-card reveal reveal-delay-3"><div class="feat-icon">💰</div><div class="feat-title">Earning Opportunities</div><p class="feat-desc">Participate in real revenue-generating projects and earn your share. More projects, more income, more experience.</p><a href="hiring.html" class="feat-link">Learn more <i class="fas fa-arrow-right"></i></a></div>
     </div>
   </div>
 </section>
-  <!-- Footer -->
-  <footer>
-    <div class="container">
-      <div class="footer-content">
-        <div class="footer-section">
-          <div class="logo">
-            <i class="fas fa-dragon"></i>
-            <span>PhineX</span>
-          </div>
-          <p>Group of senior programmers</p>
-        </div>
-        <div class="footer-section">
-          <h4>Quick Links</h4>
-          <ul>
-            <li><a href="index.html">Home</a></li>
-            <li><a href="hiring.html">Join Us</a></li>
-            <li><a href="x-academy.html">X-Academy</a></li>
-            <li><a href="aboutus.html">About</a></li>
-            <li><a href="login.html">Login</a></li>
-            <li><a href="signup.html">Signup</a></li>
-            <li><a href="redeemcode.html">Redeem Code</a></li>
-          </ul>
-        </div>
-        <!-- Right Section: Social Links -->
-      <div class="footer-section">
-        <h4>Connect</h4>
-        <div class="social-links">
-          <a href="https://discord.gg/V2NDkCmhEm" class="discordlink"><i class="fab fa-discord"></i></a>
-          <a href="https://PhineX.github.io" class="githublink"><i class="fab fa-github"></i></a>
-          <a href="https://www.youtube.com/channel/UCslNCf9VtxpFH_gtA1VHFyQ" class="youtubelink"><i class="fab fa-youtube"></i></a>
-          <a href="https://chat.whatsapp.com/IuC3Gu6x5p61MORTnAuHJA" class="whatsapplink"><i class="fab fa-whatsapp"></i></a>
-          <a href="https://www.facebook.com/profile.php?id=61584765330775" class="btn-facebooklink"><i class="fab fa-facebook"></i></a>
-        </div>
-      </div>
-      </div>
-      
-      <div class="footer-bottom">
-        <p>&copy; 2025 PhineX. All rights reserved.</p>
-        <p>Made with <i class="fas fa-heart"></i> By : <a href="https://www.facebook.com/ahmd.aljwhry.495523" class="btn-facebooklink"><i class="fas fa-laptop-code" style="margin-right: 10px;"></i>@Ahmed Al Gohary</a></p>
+
+<!-- PROJECTS -->
+<section id="projects" style="position:relative;z-index:2;">
+  <div class="projects-header">
+    <div class="reveal"><div class="section-tag">Our Work</div><h2 class="section-title">Featured Projects</h2></div>
+    <a href="https://www.github.com/PhineX-org" target="_blank" class="btn-outline-hero" style="margin:0;"><i class="fab fa-github"></i>View All</a>
+  </div>
+  <div class="projects-track-wrap"><div class="projects-track" id="projectsTrack"></div></div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <a href="index.html" class="nav-logo" style="text-decoration:none;"><div class="logo-icon-wrap"><i class="fas fa-dragon"></i></div><span class="logo-text">Phine<span>X</span></span></a>
+      <p>A community of senior programmers building innovative solutions together since 2025.</p>
+      <div class="social-row">
+        <a href="https://discord.gg/xBQ3ewVVHk" class="social-btn" target="_blank"><i class="fab fa-discord"></i></a>
+        <a href="https://www.github.com/PhineX-org" class="social-btn" target="_blank"><i class="fab fa-github"></i></a>
+        <a href="https://www.youtube.com/channel/UCslNCf9VtxpFH_gtA1VHFyQ" class="social-btn" target="_blank"><i class="fab fa-youtube"></i></a>
+        <a href="https://chat.whatsapp.com/IuC3Gu6x5p61MORTnAuHJA" class="social-btn" target="_blank"><i class="fab fa-whatsapp"></i></a>
+        <a href="https://www.facebook.com/profile.php?id=61584765330775" class="social-btn" target="_blank"><i class="fab fa-facebook"></i></a>
       </div>
     </div>
-  </footer>
+    <div class="footer-col"><h4 style="color: var(--neon);">Platform</h4><a href="index.html">Home</a><a href="hiring.html">Join Us</a><a href="x-academy.html">X-Academy</a><a href="aboutus.html">About Us</a></div>
+    <div class="footer-col"><h4 style="color: var(--neon);">Resources</h4><a href="login.html">Login</a><a href="signup.html">Sign Up</a><a href="redeemcode.html">Redeem Code</a><a href="bugreport.html">Report Bug</a></div>
+    <div class="footer-col"><h4 style="color: var(--neon);">Community</h4><a href="https://discord.gg/xBQ3ewVVHk" target="_blank">Discord Server</a><a href="https://chat.whatsapp.com/IuC3Gu6x5p61MORTnAuHJA" target="_blank">WhatsApp Group</a><a href="https://www.facebook.com/profile.php?id=61584765330775" target="_blank">Facebook Page</a><a href="https://www.github.com/PhineX-org" target="_blank">Github Account</a></div>
+  </div>
+  <div class="footer-bottom"><p>&copy; 2026 PhineX. All rights reserved.</p><p>Made with ❤️ by <a href="https://www.facebook.com/A.Mo.Elgohary/" target="_blank">Ahmed Al Gohary</a></p></div>
+</footer>
 
-  <script src="firebase-config.js"></script>
-  <script src="app.js"></script>
-  <!-- Mobile menu toggle -->
-  <button id="menuToggle" class="menu-toggle" aria-expanded="false" aria-label="Toggle navigation">
-    <i class="fas fa-bars"></i>
-  </button>
+<button id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})"><i class="fas fa-arrow-up"></i></button>
 
-  <style>
-    /* --- News Slider Section --- */
-.news-section {
-    padding: 60px 0;
-    overflow: hidden; /* Prevents horizontal scroll on the page */
-}
+<!-- ═══════════════════════════════════════════════════
+     THREE.JS NEON PARTICLE NETWORK BACKGROUND
+═══════════════════════════════════════════════════ -->
+<script>
+(function initThreeBG() {
+  const canvas   = document.getElementById('bgCanvas');
+  const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setClearColor(0x000000, 0);
 
-.slider-container {
-    width: 100%;
-    overflow-x: auto; /* Enable touch/scroll */
-    scroll-behavior: smooth;
-    padding-bottom: 20px;
-}
+  const scene  = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+  camera.position.z = 55;
 
-/* Custom Scrollbar for the Slider */
-.slider-container::-webkit-scrollbar {
-    height: 6px;
-}
-.slider-container::-webkit-scrollbar-thumb {
-    background: var(--primary);
-    border-radius: 10px;
-}
+  // Colour palette
+  const C_NEON  = new THREE.Color(0x39ff14);
+  const C_CYAN  = new THREE.Color(0x00ffcc);
+  const C_BLUE  = new THREE.Color(0x00aaff);
 
-.news-slider {
-    display: flex;
-    gap: 25px;
-    padding: 10px;
-}
+  // Mouse
+  const mouse = { x: 0, y: 0, px: 0, py: 0 };
+  window.addEventListener('mousemove', e => {
+    mouse.px = (e.clientX / window.innerWidth  - 0.5) * 2;
+    mouse.py = (e.clientY / window.innerHeight - 0.5) * 2;
+  });
 
-/* --- The News Card --- */
-.news-card-slide {
-    flex: 0 0 350px; /* Fixed width for cards */
-    background: var(--card-bg) !important;
-    border: 1px solid var(--border-color) !important;
-    border-radius: 20px;
-    overflow: hidden;
-    position: relative;
-    
-    /* Soft Reset Transition */
-    transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1), 
-                box-shadow 0.6s cubic-bezier(0.23, 1, 0.32, 1);
-}
+  /* ── 1. PARTICLE NETWORK ── */
+  const N   = 170;
+  const SX  = 95, SY = 70, SZ = 55;
+  const pos = new Float32Array(N * 3);
+  const vel = [];
 
-/* Soft Hover Effect */
-.news-card-slide:hover {
-    transform: translateY(-12px);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-    border-color: var(--primary) !important;
-}
+  for (let i = 0; i < N; i++) {
+    pos[i*3]   = (Math.random() - 0.5) * SX;
+    pos[i*3+1] = (Math.random() - 0.5) * SY;
+    pos[i*3+2] = (Math.random() - 0.5) * SZ;
+    vel.push({
+      x: (Math.random() - 0.5) * 0.022,
+      y: (Math.random() - 0.5) * 0.016,
+      z: (Math.random() - 0.5) * 0.010,
+    });
+  }
 
-/* --- Technical Image Styling --- */
-.news-card-slide img {
-    width: 100%;
-    height: 200px;
-    object-fit: cover; /* Ensures technical images aren't stretched */
-    border-bottom: 1px solid var(--border-color);
-    transition: transform 0.5s ease;
-}
+  const ptGeo = new THREE.BufferGeometry();
+  ptGeo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+  const ptMat = new THREE.PointsMaterial({
+    color: 0x39ff14, size: 0.5,
+    transparent: true, opacity: 0.8,
+    blending: THREE.AdditiveBlending, depthWrite: false,
+  });
+  scene.add(new THREE.Points(ptGeo, ptMat));
 
-.news-card-slide:hover img {
-    transform: scale(1.05); /* Slight zoom on technical bg */
-}
+  // Lines
+  const MAX_SEG  = N * 10;
+  const lPos = new Float32Array(MAX_SEG * 6);
+  const lCol = new Float32Array(MAX_SEG * 6);
+  const lGeo = new THREE.BufferGeometry();
+  lGeo.setAttribute('position', new THREE.BufferAttribute(lPos, 3));
+  lGeo.setAttribute('color',    new THREE.BufferAttribute(lCol, 3));
+  const lMesh = new THREE.LineSegments(lGeo, new THREE.LineBasicMaterial({
+    vertexColors: true, transparent: true, opacity: 0.4,
+    blending: THREE.AdditiveBlending, depthWrite: false,
+  }));
+  scene.add(lMesh);
+  const CONN = 13;
 
-/* --- Content Styling --- */
-.news-content-box {
-    padding: 25px;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
+  function updateNet() {
+    let idx = 0;
+    for (let i = 0; i < N; i++) {
+      // bounce
+      if (Math.abs(pos[i*3])   > SX/2) vel[i].x *= -1;
+      if (Math.abs(pos[i*3+1]) > SY/2) vel[i].y *= -1;
+      if (Math.abs(pos[i*3+2]) > SZ/2) vel[i].z *= -1;
+      pos[i*3]   += vel[i].x;
+      pos[i*3+1] += vel[i].y;
+      pos[i*3+2] += vel[i].z;
 
-.slide-title {
-    color: var(--text-color) !important;
-    font-size: 1.4rem;
-    font-weight: 700;
-    margin: 0;
-}
-
-.slide-description {
-    color: var(--text-color) !important;
-    opacity: 0.8;
-    font-size: 0.95rem;
-    line-height: 1.6;
-    margin-bottom: 10px;
-}
-
-/* --- Button Grouping --- */
-.btn-group {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-}
-
-.slide-btn {
-    text-decoration: none;
-    padding: 10px 18px;
-    border-radius: 10px;
-    font-size: 0.9rem;
-    font-weight: 600;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    transition: 0.3s;
-}
-
-/* Primary Button Styling */
-.btn-primary.slide-btn {
-    background: var(--primary) !important;
-    color: var(--bg-color) !important;
-}
-
-/* Secondary Button Styling */
-.btn-secondary.slide-btn {
-    background: transparent !important;
-    border: 1px solid var(--primary) !important;
-    color: var(--primary) !important;
-}
-
-.slide-btn:hover {
-    filter: brightness(1.2);
-    transform: scale(1.05);
-}
-    /* Mobile menu toggle styles */
-    .menu-toggle {
-      display: none;
-      position: fixed;
-      top: 14px;
-      right: 16px;
-      z-index: 9999;
-      background: transparent;
-      border: none;
-      color: #fff;
-      font-size: 1.5rem;
-      cursor: pointer;
-      padding: 6px;
-    }
-
-    /* small-screen layout: hide nav-menu by default, show toggle */
-    @media (max-width: 2900px) {
-      .menu-toggle { display: inline-flex; align-items: center; justify-content: center; }
-
-      .nav-menu {
-        display: none !important;
-        position: absolute;
-        top: 64px;
-        right: 12px;
-        background: rgba(0,0,0,0.9);
-        padding: 12px;
-        border-radius: 8px;
-        flex-direction: column;
-        gap: 8px;
-        min-width: 180px;
-        box-shadow: 0 8px 24px rgba(0,0,0,0.3);
-      }
-
-      .nav-menu.open {
-        display: flex !important;
-      }
-
-      .nav-menu li a, .nav-menu li button {
-        color: #fff;
-      }
-    }
-  </style>
-
-  <script>
-    // Menu toggle behavior for mobile
-    (function () {
-      const toggle = document.getElementById('menuToggle');
-      const navMenu = document.querySelector('.nav-menu');
-
-      if (!toggle || !navMenu) return;
-
-      // ensure navMenu has an id for aria-controls
-      if (!navMenu.id) navMenu.id = 'navMenu';
-
-      toggle.setAttribute('aria-controls', navMenu.id);
-
-      toggle.addEventListener('click', function (e) {
-        const opened = navMenu.classList.toggle('open');
-        toggle.setAttribute('aria-expanded', opened);
-      });
-
-      // Close menu when a link is clicked (mobile)
-      navMenu.addEventListener('click', function (e) {
-        const target = e.target.closest('a, button');
-        if (!target) return;
-        if (window.matchMedia('(max-width: 900px)').matches) {
-          navMenu.classList.remove('open');
-          toggle.setAttribute('aria-expanded', 'false');
+      for (let j = i+1; j < N && idx < MAX_SEG; j++) {
+        const dx = pos[i*3]-pos[j*3], dy = pos[i*3+1]-pos[j*3+1], dz = pos[i*3+2]-pos[j*3+2];
+        const d  = Math.sqrt(dx*dx+dy*dy+dz*dz);
+        if (d < CONN) {
+          const a = (1 - d/CONN);
+          const c = d < CONN*0.5 ? C_CYAN : C_NEON;
+          lPos.set([pos[i*3],pos[i*3+1],pos[i*3+2],pos[j*3],pos[j*3+1],pos[j*3+2]], idx*6);
+          lCol.set([c.r*a,c.g*a,c.b*a,c.r*a,c.g*a,c.b*a], idx*6);
+          idx++;
         }
-      });
+      }
+    }
+    for (let k = idx; k < MAX_SEG; k++) lPos.fill(0, k*6, k*6+6);
+    lGeo.attributes.position.needsUpdate = true;
+    lGeo.attributes.color.needsUpdate    = true;
+    lGeo.setDrawRange(0, idx * 2);
+    ptGeo.attributes.position.needsUpdate = true;
+  }
 
-      // Close menu when clicking outside
-      document.addEventListener('click', function (e) {
-        if (window.matchMedia('(max-width: 900px)').matches) {
-          if (!e.target.closest('.nav-container') && !e.target.closest('#menuToggle')) {
-            if (navMenu.classList.contains('open')) {
-              navMenu.classList.remove('open');
-              toggle.setAttribute('aria-expanded', 'false');
-            }
+  /* ── 2. FLOATING WIREFRAME SHAPES ── */
+  const wMats = [
+    new THREE.MeshBasicMaterial({ color:0x39ff14, wireframe:true, transparent:true, opacity:0.065, blending:THREE.AdditiveBlending, depthWrite:false }),
+    new THREE.MeshBasicMaterial({ color:0x00ffcc, wireframe:true, transparent:true, opacity:0.05,  blending:THREE.AdditiveBlending, depthWrite:false }),
+    new THREE.MeshBasicMaterial({ color:0x00aaff, wireframe:true, transparent:true, opacity:0.038, blending:THREE.AdditiveBlending, depthWrite:false }),
+    new THREE.MeshBasicMaterial({ color:0x39ff14, wireframe:true, transparent:true, opacity:0.045, blending:THREE.AdditiveBlending, depthWrite:false }),
+  ];
+
+  const shapes = [
+    { m: new THREE.Mesh(new THREE.IcosahedronGeometry(14,1), wMats[0]), sp:[0.0005,0.0009,0.0004], fp:[-32,12,-18] },
+    { m: new THREE.Mesh(new THREE.TorusGeometry(10,0.5,8,48),  wMats[1]), sp:[0.0008,0,0.0007],      fp:[30,-9,-12] },
+    { m: new THREE.Mesh(new THREE.OctahedronGeometry(9,1),     wMats[2]), sp:[0.0006,0.0007,0.0003],  fp:[4,22,-28] },
+    { m: new THREE.Mesh(new THREE.TorusKnotGeometry(5.5,1.2,90,12), wMats[3]), sp:[0.0004,0.0006,0.0005], fp:[-18,-18,-8] },
+  ];
+
+  shapes.forEach(({ m, fp }) => { m.position.set(...fp); scene.add(m); });
+
+  /* ── 3. PULSING RINGS ── */
+  const rGroup = new THREE.Group();
+  rGroup.position.set(0, 0, -35);
+  [[24,0x39ff14,0.05],[36,0x00ffcc,0.032],[50,0x00aaff,0.02]].forEach(([r,c,o]) => {
+    const g = new THREE.RingGeometry(r, r+0.15, 100);
+    const m = new THREE.MeshBasicMaterial({ color:c, transparent:true, opacity:o, blending:THREE.AdditiveBlending, depthWrite:false, side:THREE.DoubleSide });
+    const ring = new THREE.Mesh(g, m);
+    ring.rotation.x = Math.PI/2;
+    rGroup.add(ring);
+  });
+  scene.add(rGroup);
+
+  /* ── 4. CENTRAL GLOWING ORB ── */
+  const orbGeo = new THREE.SphereGeometry(3.5, 32, 32);
+  const orbMat = new THREE.MeshBasicMaterial({ color:0x39ff14, transparent:true, opacity:0.045, blending:THREE.AdditiveBlending, depthWrite:false });
+  const orb = new THREE.Mesh(orbGeo, orbMat);
+  orb.position.set(0, 0, -5);
+  scene.add(orb);
+
+  /* ── 5. DEEP STAR FIELD ── */
+  const starPos = new Float32Array(800 * 3);
+  for (let i = 0; i < 800; i++) {
+    starPos[i*3]   = (Math.random()-0.5)*300;
+    starPos[i*3+1] = (Math.random()-0.5)*200;
+    starPos[i*3+2] = -80 + Math.random() * -120;
+  }
+  const starGeo = new THREE.BufferGeometry();
+  starGeo.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
+  scene.add(new THREE.Points(starGeo, new THREE.PointsMaterial({
+    color:0x39ff14, size:0.18, transparent:true, opacity:0.22,
+    blending:THREE.AdditiveBlending, depthWrite:false,
+  })));
+
+  /* ── ANIMATE ── */
+  let t = 0;
+  function animate() {
+    requestAnimationFrame(animate);
+    t += 0.01;
+
+    // Smooth mouse parallax
+    mouse.x += (mouse.px - mouse.x) * 0.045;
+    mouse.y += (mouse.py - mouse.y) * 0.045;
+    camera.position.x += (mouse.x * 7  - camera.position.x) * 0.04;
+    camera.position.y += (-mouse.y * 5 - camera.position.y) * 0.04;
+    camera.lookAt(0, 0, 0);
+
+    updateNet();
+
+    // Rotate shapes
+    shapes.forEach(({ m, sp }) => { m.rotation.x += sp[0]; m.rotation.y += sp[1]; m.rotation.z += sp[2]; });
+
+    // Pulse rings
+    rGroup.rotation.z += 0.0014;
+    rGroup.children.forEach((r, i) => { r.material.opacity = (0.025 + Math.sin(t + i*1.3) * 0.016); });
+
+    // Breathe orb
+    const s = 1 + Math.sin(t*0.7) * 0.15;
+    orb.scale.set(s, s, s);
+    orbMat.opacity = 0.03 + Math.sin(t*0.7)*0.02;
+
+    renderer.render(scene, camera);
+  }
+  animate();
+
+  window.addEventListener('resize', () => {
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+  });
+})();
+</script>
+
+<!-- PAGE SCRIPTS -->
+<script>
+const NEWS_DATA = [
+  { category:'Launch',   date:'Mar 2025', title:'EG Portfolio Goes Live in Production',            desc:'PhineX has deployed a professional digital showcase featuring advanced UI/UX designs, interactive elements, and personal project highlights.',                                                            img:'https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?w=800&q=80', href:'https://PhineX-org.github.io/Portfolio.github.io/'  },
+  { category:'Academy',  date:'Apr 2025', title:'X-Academy Randomized Testing System Live',        desc:'New randomized question pools and live countdown timers are now active for all X-Academy students, making assessments fairer and more rigorous.',                                                         img:'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&q=80', href:'x-academy.html'        },
+  { category:'Community',date:'May 2025', title:'Join X-Developers — Collaborative Projects Open', desc:'We are actively recruiting senior developers to collaborate on global projects. Earn a share of profits while building remarkable software.',                                                             img:'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&q=80', href:'hiring.html'           },
+  { category:'Launch',   date:'Jul 2026', title:'The first project multiplayer game is live',      desc:'PhineX Launches First Multiplayer Game only for arab, this game is a revolutionary experience for PhineX projects development, where the game has a gorgeous gameplay and impressive UI Design.', img:'C:\\Users\\hp\\OneDrive - MOE Student S3M\\Desktop\\ElJasus - The ULTIMATE EDITION\\ElJasus2.png"',    href:'https://phinex-org.github.io/ElJasus-The_ULTIMATE_Edition/'         },
+  { category:'Feature',  date:'Mar 2026', title:'Advanced Bug Reporting System Launched',          desc:'Our new error reporting system lets developers submit issues with screenshots and video attachments directly to the PhineX dev team.',                                                                    img:'https://images.unsplash.com/photo-1504639725590-34d0984388bd?w=800&q=80', href:'bugreport.html'        },
+];
+const PROJECTS_DATA = [
+  { title:'EG Portfolio',      desc:'A professional digital showcase featuring advanced UI/UX designs, interactive elements, and personal project highlights.',                                                            stack:['HTML5','CSS3','JavaScript','GitHub Pages'], icon:'🌐', status:'Live', href:'https://PhineX-org.github.io/Portfolio.github.io/', views:'2.4k', img:'https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?w=800&q=80' },
+  { title:'PhineX Platform',   desc:'The main PhineX community website — a hub for developers to collaborate, learn, and access resources. Features Firebase auth, theme engine, and multi-language support.',           stack:['HTML','CSS','JavaScript','Firebase'],       icon:'🐉', status:'Live', href:'index.html',    views:'5.1k', img:'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&q=80' },
+  { title:'El-Jasus',          desc:'Multiplayer online game for family and friends — test your acting skills and detective sense. Built with JavaScript and Firebase for real-time play.',                               stack:['JavaScript','Firebase','Tailwind'],         icon:'🕵️', status:'Live', href:'https://phinex-org.github.io/ElJasus-The_ULTIMATE_Edition/',                                                    views:'1.8k', img:'C:\\Users\\hp\\OneDrive - MOE Student S3M\\Desktop\\ElJasus - The ULTIMATE EDITION\\ElJasus2.png"' },
+  { title:'Bug Report System', desc:'A full-featured issue tracker allowing developers to submit bugs with media attachments. Reports are stored in Firebase and reviewed by the core team.',                              stack:['Firebase','Tailwind','JavaScript'],         icon:'🐛', status:'Live', href:'bugreport.html',                                                    views:'920',  img:'https://images.unsplash.com/photo-1504639725590-34d0984388bd?w=800&q=80' },
+];
+
+function buildNews() {
+  document.getElementById('newsTrack').innerHTML = [...NEWS_DATA,...NEWS_DATA].map(n=>`
+    <div class="news-card" onclick="window.open('${n.href}','_blank')">
+      <div class="news-img-wrap"><img src="${n.img}" alt="${n.title}" loading="lazy"><div class="news-img-overlay"></div><span class="news-category">${n.category}</span></div>
+      <div class="news-body"><div class="news-meta"><span><i class="fas fa-calendar" style="font-size:10px;"></i> ${n.date}</span><span style="color:var(--border)">·</span><span>PhineX Team</span></div><div class="news-title">${n.title}</div><div class="news-desc">${n.desc}</div></div>
+      <div class="news-card-footer"><a href="${n.href}" class="news-read-more" onclick="event.stopPropagation()">Read more <i class="fas fa-arrow-right" style="font-size:10px;"></i></a><span style="font-size:11px;color:var(--muted);"><i class="fas fa-clock" style="font-size:9px;margin-right:4px;"></i>3 min read</span></div>
+    </div>`).join('');
+}
+
+function buildProjects() {
+  document.getElementById('projectsTrack').innerHTML = [...PROJECTS_DATA,...PROJECTS_DATA].map(p=>`
+    <div class="project-card">
+      <div class="project-img-wrap"><img src="${p.img}" alt="${p.title}" loading="lazy"><div class="project-logo-overlay"></div><div class="project-big-icon">${p.icon}</div><div class="live-badge"><div class="live-dot"></div>${p.status}</div></div>
+      <div class="project-body"><div class="project-stack">${p.stack.map(t=>`<span class="stack-tag">${t}</span>`).join('')}</div><div class="project-title">${p.title}</div><div class="project-desc">${p.desc}</div></div>
+      <div class="project-footer"><a href="${p.href}" class="project-link" target="_blank" onclick="event.stopPropagation()"><i class="fas fa-external-link-alt" style="font-size:11px;"></i>View Project</a><span class="project-views"><i class="fas fa-eye" style="font-size:10px;"></i>${p.views} views</span></div>
+    </div>`).join('');
+}
+buildNews(); buildProjects();
+
+// PAGES PANEL
+const pBtn=document.getElementById('pagesBtn'),pPanel=document.getElementById('pagesPanel'),chv=document.getElementById('pagesBtnChevron');
+pBtn.addEventListener('click',e=>{e.stopPropagation();const a=pPanel.classList.toggle('active');chv.style.transform=a?'rotate(180deg)':'';});
+document.addEventListener('click',e=>{if(!e.target.closest('#pagesBtn')&&!e.target.closest('#pagesPanel')){pPanel.classList.remove('active');chv.style.transform='';}});
+
+// SCROLL
+window.addEventListener('scroll',()=>{document.getElementById('navbar').classList.toggle('scrolled',window.scrollY>50);document.getElementById('backToTop').classList.toggle('visible',window.scrollY>300);});
+
+// MOBILE MENU
+document.getElementById('mobileToggle').addEventListener('click',()=>{const m=document.getElementById('mobileMenu');m.style.display=m.style.display==='none'?'block':'none';});
+
+// REVEAL
+const obs=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');}),{threshold:0.15});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+// LOADER
+(function(){
+  const bar=document.getElementById('loaderBar'),pct=document.getElementById('loaderPercent'),loader=document.getElementById('pxLoader');
+  let p=0;
+  const tick=setInterval(()=>{p+=Math.random()*18+4;if(p>=100){p=100;clearInterval(tick);}bar.style.width=p+'%';pct.textContent=Math.round(p)+'%';if(p>=100)setTimeout(()=>{loader.style.opacity='0';loader.style.visibility='hidden';loader.style.pointerEvents='none';},300);},120);
+  window.addEventListener('load',()=>{clearInterval(tick);bar.style.width='100%';pct.textContent='100%';setTimeout(()=>{loader.style.opacity='0';loader.style.visibility='hidden';loader.style.pointerEvents='none';},400);});
+})();
+</script>
+
+<!-- PXAlert -->
+<div id="pxAlertOverlay" style="position:fixed;inset:0;z-index:99999;background:rgba(5,5,8,0.7);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;padding:20px;">
+  <div id="pxAlertCard" style="background:#13131e;border:1px solid rgba(255,255,255,0.08);border-radius:24px;padding:40px 36px;max-width:420px;width:100%;text-align:center;box-shadow:0 40px 80px rgba(0,0,0,0.7);transform:scale(0.88);opacity:0;transition:transform 0.3s cubic-bezier(0.175,0.885,0.32,1.275),opacity 0.3s ease;">
+    <div id="pxAlertIcon" style="font-size:48px;margin-bottom:16px;line-height:1;"></div>
+    <div id="pxAlertTitle" style="font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:#f0f0ff;margin-bottom:8px;"></div>
+    <div id="pxAlertMsg" style="font-size:14px;color:#7070a0;line-height:1.7;margin-bottom:28px;"></div>
+    <div id="pxAlertBtns" style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;"></div>
+  </div>
+</div>
+<style>#pxAlertOverlay.show{display:flex;}#pxAlertOverlay.show #pxAlertCard{transform:scale(1);opacity:1;}</style>
+
+<!-- ═══════════════════════════════════════════════════
+     FIREBASE AUTH CHECK
+═══════════════════════════════════════════════════ -->
+<script>
+// Initialize Firebase with same config as login.html
+const firebaseConfig = {
+  apiKey:            "AIzaSyBrRYcCZXuVz6sX-nKnWs7SaPXirNymlF8",
+  authDomain:        "phinex-b5823.firebaseapp.com",
+  databaseURL:       "https://phinex-b5823-default-rtdb.firebaseio.com",
+  projectId:        "phinex-b5823",
+  storageBucket:     "phinex-b5823.firebasestorage.app",
+  messagingSenderId: "481103836570",
+  appId:             "1:481103836570:web:2b9f7e8041e0c885d3b623",
+  measurementId:     "G-CB05BGEE7L"
+};
+
+if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+
+// Monitor authentication state
+auth.onAuthStateChanged(user => {
+  const loginBtn = document.querySelector('.nav-login');
+  
+  if (user) {
+    // User is logged in - show user info and hide Sign In button
+    const displayName = user.displayName || user.email.split('@')[0];
+    loginBtn.innerHTML = `<i class="fas fa-user-circle" style="font-size:16px;"></i> ${displayName}`;
+    loginBtn.style.background = 'transparent';
+    loginBtn.style.border = '1px solid rgba(255,255,255,0.2)';
+    loginBtn.style.color = '#ffffff';
+    loginBtn.href = 'javascript:void(0)';
+    loginBtn.onclick = e => {
+      e.preventDefault();
+      // Show user menu on click (optional)
+      const dropdown = document.createElement('div');
+      dropdown.style.cssText = 'position:absolute;top:68px;right:24px;background:#13131e;border:1px solid rgba(255,255,255,0.1);border-radius:12px;box-shadow:0 10px 40px rgba(0,0,0,0.5);z-index:100;min-width:200px;';
+      dropdown.innerHTML = `
+        <div style="padding:12px 16px;border-bottom:1px solid rgba(255,255,255,0.1);">
+          <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:2px;">${user.displayName || 'User'}</div>
+          <div style="font-size:11px;color:var(--text);">${user.email}</div>
+        </div>
+        <a href="settings.html" style="display:block;padding:10px 16px;color:var(--text);text-decoration:none;font-size:13px;transition:all 0.2s;border-bottom:1px solid rgba(255,255,255,0.1);">⚙️ Settings</a>
+        <div onclick="auth.signOut().then(() => window.location.href='index.html').catch(err => console.error(err));" style="padding:10px 16px;color:var(--red);font-size:13px;cursor:pointer;transition:all 0.2s;">🚪 Sign Out</div>
+      `;
+      
+      // Remove any existing dropdown
+      document.querySelectorAll('[data-user-dropdown]').forEach(el => el.remove());
+      dropdown.setAttribute('data-user-dropdown', 'true');
+      document.body.appendChild(dropdown);
+      
+      // Close dropdown when clicking elsewhere
+      setTimeout(() => {
+        document.addEventListener('click', function closeDropdown(e) {
+          if (!e.target.closest('.nav-login') && !e.target.closest('[data-user-dropdown]')) {
+            dropdown.remove();
+            document.removeEventListener('click', closeDropdown);
           }
-        }
-      });
-
-      // Optional: close on escape
-      document.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape' && navMenu.classList.contains('open')) {
-          navMenu.classList.remove('open');
-          toggle.setAttribute('aria-expanded', 'false');
-        }
-      });
-    })();
-    
-    // ===== WELCOME MODAL INTERACTIONS =====
-document.addEventListener('DOMContentLoaded', () => {
-    const modalBody = document.getElementById('modalBody');
-    const readCheck = document.getElementById('readCheck');
-    const closeModalBtn = document.getElementById('closeModalBtn');
-    const welcomeModal = document.getElementById('welcomeModal');
-
-    // 1. Detect if user scrolled to the bottom
-    modalBody.onscroll = function() {
-        // If (scrolled amount + visible height) >= total height
-        if (modalBody.offsetHeight + modalBody.scrollTop >= modalBody.scrollHeight - 5) {
-            readCheck.disabled = false;
-        }
+        });
+      }, 0);
     };
-
-    // 2. Detect if checkbox is checked to show X button
-    readCheck.addEventListener('change', () => {
-        if (readCheck.checked) {
-            closeModalBtn.style.display = 'block';
-        } else {
-            closeModalBtn.style.display = 'none';
-        }
-    });
-
-    // 3. Close modal function
-    closeModalBtn.onclick = () => {
-        welcomeModal.style.display = 'none';
-        // Optional: Save to localStorage so it doesn't appear every time
-        localStorage.setItem('phinex_welcome_read', 'true');
-    };
-
+  } else {
+    // User is NOT logged in - show Sign In button
+    loginBtn.innerHTML = '<i class="fas fa-sign-in-alt" style="font-size:13px;"></i> Sign In';
+    loginBtn.href = 'login.html';
+    loginBtn.onclick = null;
+    loginBtn.style.background = 'var(--neon)';
+    loginBtn.style.border = 'none';
+  }
 });
-function applyLanguage(lang) {
-    const t = translations[lang];
-    if (!t) return;
+</script>
 
-    document.querySelectorAll('[data-i18n]').forEach(el => {
-        const key = el.getAttribute('data-i18n');
-        if (t[key]) {
-            // Use innerHTML so <strong> tags work
-            el.innerHTML = t[key]; 
-            
-            // Handle placeholders for inputs if necessary
-            if (el.tagName === 'INPUT') {
-                el.placeholder = t[key].replace(/<[^>]*>?/gm, ''); // Strip HTML for placeholder
-            }
-        }
-    });
-
-    // Handle RTL for Arabic
-    document.documentElement.dir = (lang === 'ar') ? 'rtl' : 'ltr';
-    document.documentElement.lang = lang;
-    
-    // Save preference
-    localStorage.setItem('phinex_lang', lang);
-
-    // Sync the dropdown if it exists
-    const selector = document.querySelector('.modal-lang-select');
-    if(selector) selector.value = lang;
-}
-  </script>
-<div id="welcomeModal" class="modal-overlay">
-    <div class="modal-content">
-        
-        <div class="modal-header-top">
-    <h2 data-i18n="modal_title">Up Coming Update <i class="fas fa-exclamation-triangle"></i></h2>
-    
-    <div class="lang-wrapper">
-        <i class="fas fa-globe lang-icon"></i>
-        <select class="modal-lang-select" onchange="applyLanguage(this.value)">
-            <option value="en"><img src="https://flagcdn.com/w40/us.png" alt="English" class="img"> English</option>
-            <option value="ar"><img src="https://flagcdn.com/w40/ar.png" alt="Arabic" class="icon"> العربية</option>
-            <option value="es"><img src="https://flagcdn.com/w40/es.png" alt="Spanish" class="icon"> Español</option>
-            <option value="fr"><img src="https://flagcdn.com/w40/fr.png" alt="French" class="icon"> Français</option>
-            <option value="de"><img src="https://flagcdn.com/w40/de.png" alt="German" class="icon"> Deutsch</option>
-            <option value="it"><img src="https://flagcdn.com/w40/it.png" alt="Italian" class="icon"> Italiano</option>
-            <option value="pt"><img src="https://flagcdn.com/w40/pt.png" alt="Portuguese" class="icon"> Português</option>
-        </select>
-    </div>
-</div>
-        
-        <div class="modal-body" id="modalBody">
-            <p style="margin-bottom: 20px;" data-i18n="modal_intro">New features are coming soon!</p>
-            
-            <p style="margin-bottom: 15px;" data-i18n="modal_huge">
-                <strong>Huge improvements</strong> are on the way on our <strong>largest update ever!</strong>
-            </p>
-            
-            <p style="margin-bottom: 10px;" data-i18n="modal_include">The New feautures include:</p>
-            
-            <ol>
-                <li style="margin-bottom: 7px;">
-                    <strong data-i18n="li_settings">settings section :</strong><i class="fas fa-cog" style="margin-left: 10px; margin-right: 10px;"></i>
-                </li>
-                <li style="margin-bottom: 7px;">
-                    <strong data-i18n="li_themes">themes list (light and dark)</strong><i class="fas fa-palette" style="margin-left: 10px; margin-right: 10px;"></i>
-                </li>
-                <li style="margin-bottom: 7px;">
-                    <strong data-i18n="li_new_lang">New languages list</strong><i class="fas fa-language" style="margin-left: 10px; margin-right: 10px;"></i>
-                </li>
-                <li style="margin-bottom: 20px;">
-                    <strong data-i18n="li_lang_names">English - Arabic - Spanish - French - German - Italian - Portuguese</strong>
-                </li>
-                <li style="margin-bottom: 20px;">
-                    <strong data-i18n="li_search">Improvements in the search engine</strong><i class="fas fa-search" style="margin-left: 10px; margin-right: 10px;"></i>
-                </li>
-                <li style="margin-bottom: 20px;">
-                    <strong data-i18n="li_news">Lastest news section</strong><i class="fas fa-newspaper" style="margin-left: 10px; margin-right: 10px;"></i>
-                </li>
-                <li style="margin-bottom: 7px;">
-                    <strong data-i18n="li_projects">Projects section previews all project we have made</strong><i class="fas fa-external-link-alt" style="margin-left: 10px; margin-right: 10px;"></i>
-                </li>
-                <li style="margin-bottom: 7px;" data-i18n="li_more">And much more...</li>
-            </ol>
-            
-            <p data-i18n="modal_date">The update will come out about <strong>May 2026 - July 2026.</strong></p>
-            
-            <p data-i18n="modal_check">Check out our</p>
-            
-            <p>
-                <a href="https://www.facebook.com/profile.php?id=61584765330775" class="btn-facebooklink">
-                    <i class="fab fa-facebook" style="margin-left: 10px; margin-right: 10px;"></i><span data-i18n="btn_facebook">Facebook Page</span>
-                </a>
-            </p>
-            
-            <p data-i18n="modal_or">Or</p>
-            
-            <p>
-                <a href="https://discord.gg/V2NDkCmhEm" class="btn-facebooklink">
-                    <i class="fab fa-discord" style="margin-left: 10px; margin-right: 10px;"></i><span data-i18n="btn_discord">Our Discord Server</span>
-                </a>
-            </p>
-            
-            <p data-i18n="modal_info">for more information.</p>
-            <p data-i18n="update_error"><strong>Note: Many errors have occured due to the last update, but its functionaly works perfectly</strong></p>
-        </div>
-        
-        <div class="modal-footer">
-            <label class="check-container">
-            <input type="checkbox" id="readCheck" class="real-checkbox" disabled>
-            <span class="custom-checkbox"></span>
-            <span class="label-text" data-i18n="modal_read_confirm">I have read this message</span>
-        </label>
-            <button id="closeModalBtn" class="close-x-btn">&times;</button>
-        </div>
-    </div>
-</div>
+<script>
+window.PXAlert={_resolve:null,show({icon='ℹ️',title='',message='',type='info',buttons=[{label:'OK',value:true,primary:true}]}={}){return new Promise(resolve=>{this._resolve=resolve;const o=document.getElementById('pxAlertOverlay'),c=document.getElementById('pxAlertCard');document.getElementById('pxAlertIcon').textContent=icon;document.getElementById('pxAlertTitle').textContent=title;document.getElementById('pxAlertMsg').innerHTML=message;const cols={info:'rgba(57,255,20,0.25)',error:'rgba(255,68,68,0.25)',warning:'rgba(255,215,0,0.25)',success:'rgba(57,255,20,0.3)'};c.style.borderColor=cols[type]||cols.info;const be=document.getElementById('pxAlertBtns');be.innerHTML='';buttons.forEach(btn=>{const b=document.createElement('button');b.textContent=btn.label;const ip=btn.primary;b.style.cssText=ip?'background:#39ff14;color:#050508;font-family:Syne,sans-serif;font-weight:700;font-size:14px;padding:11px 28px;border-radius:11px;border:none;cursor:pointer;':'background:transparent;color:#f0f0ff;font-family:Syne,sans-serif;font-weight:600;font-size:14px;padding:11px 28px;border-radius:11px;border:1px solid rgba(255,255,255,0.12);cursor:pointer;';b.onclick=()=>{this.hide();resolve(btn.value);};be.appendChild(b);});o.classList.add('show');document.addEventListener('keydown',this._keyHandler=(e)=>{if(e.key==='Escape'){this.hide();resolve(false);}});})},hide(){const o=document.getElementById('pxAlertOverlay'),c=document.getElementById('pxAlertCard');c.style.transform='scale(0.88)';c.style.opacity='0';setTimeout(()=>o.classList.remove('show'),300);document.removeEventListener('keydown',this._keyHandler);},info(t,m){return this.show({icon:'ℹ️',title:t,message:m,type:'info'})},success(t,m){return this.show({icon:'✅',title:t,message:m,type:'success'})},error(t,m){return this.show({icon:'❌',title:t,message:m,type:'error'})},warning(t,m){return this.show({icon:'⚠️',title:t,message:m,type:'warning'})},confirm(t,m){return this.show({icon:'🤔',title:t,message:m,type:'warning',buttons:[{label:'Cancel',value:false,primary:false},{label:'Confirm',value:true,primary:true}]})}};
+document.getElementById('pxAlertOverlay').addEventListener('click',function(e){if(e.target===this){PXAlert.hide();if(PXAlert._resolve)PXAlert._resolve(false);}});
+</script>
 </body>
 </html>
-
-
-
-
-

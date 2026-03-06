@@ -1,759 +1,428 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Redeem Code | PhineX</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="icon" type="image/png" class="icon" href="Phinex.png">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        /* Animation keyframes */
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
-            20%, 40%, 60%, 80% { transform: translateX(5px); }
-        }
-        
-        @keyframes successGlow {
-            0%, 100% { box-shadow: 0 0 10px rgba(46, 204, 113, 0.5); }
-            50% { box-shadow: 0 0 20px rgba(46, 204, 113, 0.8); }
-        }
-        
-        @keyframes confettiRain {
-            0% {
-                transform: translateY(-100vh) rotate(0deg);
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(100vh) rotate(360deg);
-                opacity: 0;
-            }
-        }
-        
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-        
-        /* Message styles with animations */
-        .message {
-            display: none;
-            align-items: center;
-            padding: 15px 20px;
-            border-radius: 8px;
-            margin: 20px 0;
-            animation: slideDown 0.5s ease-out;
-            transform-origin: top;
-        }
-        
-        .message.show {
-            display: flex !important;
-        }
-        
-        .success {
-            background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
-            color: white;
-            border-left: 5px solid #1e8449;
-            animation: slideDown 0.5s ease-out, successGlow 2s infinite;
-        }
-        
-        .error {
-            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
-            color: white;
-            border-left: 5px solid #922b21;
-            animation: slideDown 0.5s ease-out, shake 0.5s ease-in-out;
-        }
-        
-        .message i {
-            font-size: 24px;
-            margin-right: 15px;
-        }
-        
-        .message-content h3 {
-            margin: 0 0 5px 0;
-            font-weight: 600;
-        }
-        
-        .message-content p {
-            margin: 0;
-            font-size: 14px;
-            opacity: 0.9;
-        }
-        
-        /* Redeem button animation */
-        .redeem-btn.pulse {
-            animation: pulse 2s infinite;
-        }
-        
-        .redeem-btn.clicked {
-            animation: none;
-            transform: scale(0.95);
-            transition: transform 0.2s;
-        }
-        
-        /* Code input animation */
-        .code-input-container {
-            position: relative;
-            margin: 20px 0;
-        }
-        
-        .code-input {
-            width: 100%;
-            padding: 15px 20px;
-            font-size: 18px;
-            border: 2px solid #3498db;
-            border-radius: 8px;
-            background: rgba(52, 152, 219, 0.1);
-            color: white;
-            transition: all 0.3s ease;
-            font-family: 'Courier New', monospace;
-            letter-spacing: 1px;
-        }
-        
-        .code-input:focus {
-            outline: none;
-            border-color: #2ecc71;
-            box-shadow: 0 0 15px rgba(46, 204, 113, 0.3);
-            transform: translateY(-2px);
-        }
-        
-        .code-input.invalid {
-            border-color: #e74c3c;
-            animation: shake 0.5s ease-in-out;
-        }
-        
-        .code-input.valid {
-            border-color: #2ecc71;
-            animation: pulse 0.5s ease-in-out;
-        }
-        
-        /* Confetti container */
-        .confetti-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 9999;
-            display: none;
-        }
-        
-        .confetti {
-            position: absolute;
-            width: 10px;
-            height: 10px;
-            opacity: 0;
-        }
-        
-        /* Stats display */
-        .code-stats {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-            padding: 15px;
-            margin: 20px 0;
-            text-align: center;
-            animation: slideUp 0.5s ease-out;
-        }
-        
-        .code-stats h4 {
-            margin: 0 0 10px 0;
-            color: #3498db;
-        }
-        
-        .usage-bar {
-            height: 8px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 4px;
-            overflow: hidden;
-            margin: 10px 0;
-        }
-        
-        .usage-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #2ecc71, #3498db);
-            border-radius: 4px;
-            transition: width 0.5s ease-in-out;
-        }
-        
-        .stats-text {
-            font-size: 14px;
-            opacity: 0.8;
-            margin: 5px 0;
-        }
-        
-        /* Available codes section */
-        .available-codes {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
-            padding: 20px;
-            margin: 30px 0;
-            animation: slideUp 0.5s ease-out;
-        }
-        
-        .available-codes h3 {
-            color: #3498db;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .codes-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 10px;
-        }
-        
-        .code-item {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 10px;
-            border-radius: 6px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: all 0.3s ease;
-        }
-        
-        .code-item:hover {
-            background: rgba(255, 255, 255, 0.15);
-            transform: translateY(-2px);
-        }
-        
-        .code-value {
-            font-family: 'Courier New', monospace;
-            font-weight: bold;
-            color: #2ecc71;
-        }
-        
-        .code-status {
-            font-size: 12px;
-            padding: 2px 8px;
-            border-radius: 10px;
-            background: rgba(46, 204, 113, 0.2);
-            color: #2ecc71;
-        }
-        
-        .code-status.expired {
-            background: rgba(231, 76, 60, 0.2);
-            color: #e74c3c;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Redeem Code | PhineX</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <meta name="keywords" content="PhineX, about us, developer community, senior developers, software development, mentorship, tech talent, collaborative programming, software projects">
+  <meta name="author" content="AMG">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="index, follow">
+  <meta name="language" content="English">
+  <meta name="revised" content="2024-06-01">
+  <meta name="category" content="Technology, Community, Software Development">
+  <meta name="coverage" content="Worldwide">
+  <meta name="rating" content="General">
+  <meta name="distribution" content="Global">
+  <meta name="og:title" content="Redeem Code | PhineX">
+  <meta name="og:description" content="Redeem your exclusive code on PhineX to unlock special features, access premium content, or claim your rewards. Enter your code now and join the elite community of senior developers building real projects and earning real profits.">
+  <meta name="og:image" content="PhineX (2).png">
+  <link rel="icon" type="image/x-icon" href="PhineX (2).png">
+    <script src="bg3d.js"></script>
+  <meta name="description" content="Redeem your exclusive code on PhineX to unlock special features, access premium content, or claim your rewards. Enter your code now and join the elite community of senior developers building real projects and earning real profits.">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root{--neon:#39ff14;--void:#050508;--card:#13131e;--border:#ffffff10;--text:#f0f0ff;--muted:#7070a0;--gold:#ffd700;--gold-dim:rgba(255,215,0,0.08);}
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{font-family:'DM Sans',sans-serif;background:var(--void);color:var(--text);overflow-x:hidden;min-height:100vh;}
+    h1,h2,h3,.syne{font-family:'Syne',sans-serif;}
+    .grid-bg{position:fixed;inset:0;pointer-events:none;z-index:0;background-image:linear-gradient(rgba(57,255,20,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(57,255,20,0.03) 1px,transparent 1px);background-size:60px 60px;}
+
+    nav{position:fixed;top:0;left:0;right:0;z-index:100;height:68px;background:rgba(5,5,8,0.9);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
+    .nav-inner{max-width:1400px;margin:0 auto;padding:0 24px;height:100%;display:flex;align-items:center;gap:16px;}
+    .nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
+    .logo-icon{width:36px;height:36px;border-radius:9px;background:linear-gradient(135deg,#39ff14,#00cc88);display:flex;align-items:center;justify-content:center;box-shadow:0 0 20px rgba(57,255,20,0.3);}
+    .logo-icon i{color:#050508;font-size:16px;}
+    .logo-text{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:#f0f0ff;}
+    .logo-text span{color:var(--neon);}
+    .nav-links{display:flex;gap:4px;margin-left:16px;}
+    .nav-link{padding:6px 14px;border-radius:8px;font-size:13px;color:var(--muted);text-decoration:none;transition:all 0.2s;}
+    .nav-link:hover,.nav-link.active{color:var(--text);background:rgba(255,255,255,0.06);}
+    .nav-link{padding:6px 14px;border-radius:8px;font-size:13px;color:var(--muted);text-decoration:none;transition:all 0.2s;}
+    .nav-link:hover,.nav-link.active{color:var(--text);background:rgba(255,255,255,0.06);}
+    .btn-neon{background:var(--neon);color:#050508;font-family:'Syne',sans-serif;font-weight:700;font-size:13px;padding:8px 18px;border-radius:9px;text-decoration:none;transition:all 0.2s;border:none;cursor:pointer;display:inline-flex;align-items:center;gap:7px;}
+    .btn-neon:hover{background:#50ff28;box-shadow:0 0 25px rgba(57,255,20,0.4);transform:translateY(-1px);}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+    @keyframes blink{0%,100%{opacity:1;}50%{opacity:0.3;}}
+    .reveal{opacity:0;transform:translateY(28px);transition:opacity 0.7s ease,transform 0.7s ease;}
+    .reveal.visible{opacity:1;transform:translateY(0);}
+
+    /* HERO */
+    .hero{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:100px 24px;position:relative;overflow:hidden;}
+
+    /* Particle stars */
+    .star{position:absolute;border-radius:50%;pointer-events:none;animation:twinkle var(--dur,3s) ease-in-out infinite var(--delay,0s);}
+    @keyframes twinkle{0%,100%{opacity:0.15;transform:scale(1);}50%{opacity:0.8;transform:scale(1.4);}}
+
+    /* 3D Gift Card */
+    .gift-scene{perspective:1000px;margin-bottom:48px;animation:fadeUp 0.5s ease 0.2s both;}
+    .gift-card{
+      width:360px;height:220px;margin:0 auto;
+      background:linear-gradient(135deg,#1a1400,#2a2000);
+      border-radius:20px;
+      border:1px solid rgba(255,215,0,0.3);
+      box-shadow:0 40px 80px rgba(0,0,0,0.7),0 0 60px rgba(255,215,0,0.08),inset 0 1px 0 rgba(255,215,0,0.1);
+      animation:giftFloat 6s ease-in-out infinite;
+      position:relative;overflow:hidden;
+      display:flex;align-items:center;justify-content:center;
+      transform-style:preserve-3d;
+    }
+    @keyframes giftFloat{
+      0%,100%{transform:rotateY(-8deg) rotateX(4deg) translateY(0);}
+      50%{transform:rotateY(-5deg) rotateX(2deg) translateY(-18px);}
+    }
+    .gift-card::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:conic-gradient(from 0deg,transparent,rgba(255,215,0,0.04),transparent,rgba(255,215,0,0.04),transparent);animation:rotateSheen 8s linear infinite;}
+    @keyframes rotateSheen{to{transform:rotate(360deg);}}
+    .gift-card-inner{position:relative;z-index:1;text-align:center;padding:28px;}
+    .gift-logo{width:48px;height:48px;border-radius:14px;background:linear-gradient(135deg,var(--neon),#00cc88);margin:0 auto 12px;display:flex;align-items:center;justify-content:center;}
+    .gift-logo i{color:#050508;font-size:22px;}
+    .gift-card-title{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;color:#ffd700;margin-bottom:4px;}
+    .gift-card-sub{font-size:11px;color:rgba(255,215,0,0.5);}
+    .gift-code-preview{font-family:monospace;font-size:15px;color:rgba(255,215,0,0.6);letter-spacing:4px;margin-top:16px;padding:8px 16px;background:rgba(0,0,0,0.3);border-radius:8px;}
+    .gift-shine{position:absolute;top:0;left:-100%;width:60%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,215,0,0.06),transparent);animation:shine 4s ease-in-out infinite;}
+    @keyframes shine{0%{left:-100%;}60%,100%{left:150%;}}
+
+    /* HERO CONTENT */
+    .hero-content{text-align:center;max-width:600px;position:relative;z-index:2;}
+    .hero-tag{display:inline-flex;align-items:center;gap:8px;background:rgba(255,215,0,0.08);border:1px solid rgba(255,215,0,0.2);border-radius:100px;padding:5px 16px;font-size:11px;font-weight:700;color:var(--gold);letter-spacing:1px;margin-bottom:28px;animation:fadeUp 0.5s ease both;}
+    .pulse-dot{width:6px;height:6px;border-radius:50%;background:var(--gold);animation:blink 2s infinite;display:block;}
+    .hero-h1{font-family:'Syne',sans-serif;font-size:clamp(2.8rem,5.5vw,5rem);font-weight:800;line-height:1.05;letter-spacing:-2px;animation:fadeUp 0.5s 0.1s ease both;}
+    .hero-h1 span{color:var(--gold);}
+    .hero-sub{font-size:15px;color:var(--muted);line-height:1.8;margin:20px 0 36px;animation:fadeUp 0.5s 0.15s ease both;}
+
+    /* CODE INPUT */
+    .code-input-wrap{animation:fadeUp 0.5s 0.2s ease both;}
+    .code-input-box{display:flex;gap:12px;max-width:500px;margin:0 auto 16px;}
+    .code-input{flex:1;background:rgba(255,255,255,0.04);border:2px solid rgba(255,215,0,0.2);border-radius:14px;padding:16px 20px;font-family:'Syne',sans-serif;font-size:18px;font-weight:700;letter-spacing:4px;text-align:center;color:var(--gold);transition:all 0.3s;outline:none;text-transform:uppercase;}
+    .code-input:focus{border-color:rgba(255,215,0,0.5);background:rgba(255,215,0,0.04);box-shadow:0 0 0 4px rgba(255,215,0,0.08);}
+    .code-input::placeholder{font-size:14px;letter-spacing:2px;color:rgba(112,112,160,0.4);font-weight:400;}
+    .redeem-btn{background:linear-gradient(135deg,var(--gold),#ffb300);color:#050508;font-family:'Syne',sans-serif;font-weight:800;font-size:15px;padding:16px 28px;border-radius:14px;border:none;cursor:pointer;transition:all 0.3s;white-space:nowrap;display:flex;align-items:center;gap:8px;}
+    .redeem-btn:hover{box-shadow:0 0 40px rgba(255,215,0,0.3);transform:translateY(-2px);}
+    .redeem-hint{font-size:12px;color:var(--muted);text-align:center;}
+    .redeem-hint a{color:var(--neon);text-decoration:none;}
+    .redeem-hint a:hover{text-decoration:underline;}
+
+    /* STATE MESSAGES */
+    .state-msg{display:none;margin-top:20px;padding:16px 20px;border-radius:14px;font-size:14px;text-align:center;animation:fadeUp 0.3s ease;}
+    .state-msg.success{background:rgba(57,255,20,0.08);border:1px solid rgba(57,255,20,0.2);color:var(--neon);}
+    .state-msg.error{background:rgba(255,68,68,0.08);border:1px solid rgba(255,68,68,0.2);color:#ff6464;}
+    .state-msg.loading{background:rgba(255,215,0,0.06);border:1px solid rgba(255,215,0,0.15);color:var(--gold);}
+
+    /* CODE DIVIDERS */
+    .dividers{display:flex;gap:8px;max-width:500px;margin:0 auto 20px;justify-content:center;}
+    .code-segment{width:80px;height:52px;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:monospace;font-size:18px;font-weight:700;letter-spacing:2px;color:var(--text);transition:all 0.2s;}
+    .code-sep{display:flex;align-items:center;color:var(--muted);font-size:18px;}
+
+    /* HOW TO GET */
+    .how-section{padding:80px 24px 100px;position:relative;z-index:1;}
+    .section-wrap{max-width:1000px;margin:0 auto;}
+    .section-tag{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--neon);margin-bottom:12px;}
+    .section-tag::before{content:'';display:block;width:20px;height:2px;background:var(--neon);}
+    .section-title{font-family:'Syne',sans-serif;font-size:clamp(1.8rem,3.5vw,2.5rem);font-weight:800;letter-spacing:-1px;margin-bottom:48px;}
+
+    .methods-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+    .method-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:28px 24px;text-align:center;transition:all 0.3s;}
+    .method-card:hover{border-color:rgba(255,215,0,0.2);transform:translateY(-6px);box-shadow:0 20px 40px rgba(0,0,0,0.4);}
+    .method-icon{font-size:36px;margin-bottom:16px;display:block;}
+    .method-title{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;margin-bottom:10px;}
+    .method-desc{font-size:13px;color:var(--muted);line-height:1.7;}
+
+    footer{border-top:1px solid var(--border);padding:40px 24px;position:relative;z-index:1;}
+    .footer-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;}
+    .footer-links{display:flex;gap:24px;}
+    .footer-links a{font-size:13px;color:var(--muted);text-decoration:none;transition:color 0.2s;}
+    .footer-links a:hover{color:var(--neon);}
+
+    /* Success full screen */
+    .redeem-success{position:fixed;inset:0;background:rgba(5,5,8,0.95);z-index:300;display:none;align-items:center;justify-content:center;}
+    .redeem-success-card{background:var(--card);border:2px solid rgba(57,255,20,0.3);border-radius:28px;padding:56px;text-align:center;max-width:480px;animation:popIn 0.4s cubic-bezier(0.175,0.885,0.32,1.275);}
+    @keyframes popIn{from{opacity:0;transform:scale(0.85);}to{opacity:1;transform:scale(1);}}
+    .confetti-emoji{font-size:64px;margin-bottom:20px;display:block;animation:bounce 0.8s ease 0.2s both;}
+    @keyframes bounce{0%{transform:scale(0);}60%{transform:scale(1.2);}100%{transform:scale(1);}}
+
+    @media(max-width:768px){.nav-links{display:none;}.code-input-box{flex-direction:column;}.methods-grid{grid-template-columns:1fr;}}
+  
+    /* ══════════ MOBILE RESPONSIVE — PhineX ══════════ */
+    *{min-width:0;}
+    img,video{max-width:100%;height:auto;}
+
+    /* Hamburger */
+    .ham{display:none;flex-direction:column;justify-content:center;gap:5px;
+         width:40px;height:40px;background:none;border:none;cursor:pointer;
+         padding:8px;margin-left:auto;z-index:200;}
+    .ham span{display:block;width:22px;height:2px;background:var(--neon,#39ff14);
+              border-radius:2px;transition:all .3s;}
+    .ham.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+    .ham.open span:nth-child(2){opacity:0;}
+    .ham.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+
+    /* Mobile drawer */
+    .mobile-nav{display:none;position:fixed;top:68px;left:0;right:0;
+                background:rgba(5,5,8,0.97);backdrop-filter:blur(20px);
+                border-bottom:1px solid rgba(255,255,255,.08);
+                z-index:150;padding:12px 16px 20px;flex-direction:column;gap:4px;}
+    .mobile-nav.open{display:flex;}
+    .mobile-nav a{padding:12px 16px;border-radius:10px;font-size:14px;
+                  color:#7070a0;text-decoration:none;transition:all .2s;
+                  min-height:44px;display:flex;align-items:center;}
+    .mobile-nav a:hover,.mobile-nav a.active{color:#f0f0ff;
+      background:rgba(255,255,255,.06);}
+    .mobile-nav .btn-neon{justify-content:center;margin-top:8px;}
+
+    @media(max-width:1024px){
+      .hero-inner{grid-template-columns:1fr;gap:40px;}
+      .hero-inner>*:last-child{display:none;}
+    }
+    @media(max-width:768px){
+      .ham{display:flex;}
+      .nav-links{display:none!important;}
+      .nav-inner .btn-neon,.nav-inner .nb-g{display:none;}
+      body{overflow-x:hidden;}
+      .hero{padding:88px 16px 48px;}
+      .hero-inner{gap:24px;}
+      .section-wrap,.page{padding-left:16px;padding-right:16px;}
+      .hero h1,.hero-h1,.h1{font-size:clamp(2.2rem,9vw,3.5rem)!important;letter-spacing:-1.5px!important;}
+    }
+    @media(max-width:480px){
+      .mobile-nav a,.mobile-nav button{min-height:44px;}
+      .btn-neon{min-height:44px;padding:10px 18px;}
+      .hero{padding:80px 12px 40px;}
+      .hero h1,.hero-h1,.h1{font-size:clamp(1.9rem,8vw,2.8rem)!important;}
+      .cards-grid,.grid-2,.grid-3,[class*="-grid"]{grid-template-columns:1fr!important;}
+      .stats-row,.stat-row{flex-direction:column;gap:12px;}
+    }
+    @media(max-width:360px){
+      nav,.nav-inner{padding-left:12px!important;padding-right:12px!important;}
+      .hero{padding-left:8px;padding-right:8px;}
+    }
+    @media(hover:none){
+      [class*="float"],[class*="Float"]{animation:none!important;}
+    }
+    @media(orientation:landscape) and (max-height:500px){
+      .hero{min-height:auto;padding-top:80px;}
+    }
     </style>
 </head>
 <body>
-<!-- Navigation -->
-<nav class="navbar">
-  <div class="nav-container">
-    <div class="logo">
-      <i class="fas fa-dragon"></i>
-      <span>PhineX</span>
+<div class="grid-bg"></div>
+
+<!-- Stars -->
+<script>
+for(let i=0;i<30;i++){
+  const s=document.createElement('div');
+  s.className='star';
+  const size=Math.random()*3+1;
+  s.style.cssText=`width:${size}px;height:${size}px;top:${Math.random()*100}%;left:${Math.random()*100}%;background:rgba(255,215,0,${Math.random()*0.3+0.1});--dur:${Math.random()*3+2}s;--delay:${Math.random()*3}s;`;
+  document.body.appendChild(s);
+}
+</script>
+
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo"><div class="logo-icon"><i class="fas fa-dragon"></i></div><span class="logo-text">Phine<span>X</span></span></a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="hiring.html" class="nav-link">Join Us</a>
+      <a href="x-academy.html" class="nav-link">X-Academy</a>
+      <a href="aboutus.html" class="nav-link">About</a>
     </div>
-    <ul class="nav-menu" id="primary-navigation">
-      <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
-      <li><a href="hiring.html"><i class="fas fa-laptop-code"></i> Join Us</a></li>
-      <li><a href="x-academy.html"><i class="fas fa-graduation-cap"></i> X-Academy</a></li>
-      <li><a href="aboutus.html"><i class="fas fa-info-circle"></i> About Us</a></li>
-      <li><a href="bugreport.html"><i class="fas fa-exclamation-triangle"></i> Report Error</a></li>
-      <li><a href="redeemcode.html"><i class="fas fa-key"></i> Redeem Code</a></li>
-      <li><button id="logoutBtn" class="btn-outline hidden">Logout</button></li>
-    </ul>
+    
+    <!-- ⌕ Search Bar -->
+    <button class="pxs-trigger" aria-label="Open search"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg> Search</button>
+    <div style="margin-left:auto;"><a href="login.html" class="btn-neon"><i class="fas fa-sign-in-alt"></i> Sign In</a></div>
+    <button class="ham" id="hamBtn" onclick="this.classList.toggle('open');document.getElementById('mobileNav').classList.toggle('open')" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
   </div>
 </nav>
+<div class="mobile-nav" id="mobileNav">
+<a href="index.html" class="nav-link">Home</a>
+      <a href="hiring.html" class="nav-link">Join Us</a>
+      <a href="x-academy.html" class="nav-link">X-Academy</a>
+      <a href="aboutus.html" class="nav-link">About</a>
+<a href="login.html" class="btn-neon"><i class="fas fa-sign-in-alt"></i> Sign In</a>
+</div>
 
-    <!-- Main Content -->
-    <main class="redeem-hero">
-        <div class="redeem-container">
-            <div class="redeem-header">
-                <div class="redeem-icon">
-                    <i class="fas fa-gift"></i>
-                </div>
-                <h1>Unlock Premium Features</h1>
-                <p>Enter your exclusive code to access special perks and join our community</p>
-            </div>
-            
-            <div class="redeem-card">
-                <label class="code-label" for="code-input">Your Redeem Code</label>
-                <div class="code-input-container">
-                    <input type="text" 
-                           id="code-input" 
-                           class="code-input"
-                           placeholder="Enter code here..."
-                           maxlength="50"
-                           autocomplete="off">
-                </div>
-                
-                <button onclick="redeemCode()" class="redeem-btn pulse">
-                    <i class="fas fa-key"></i>
-                    Redeem Code
-                </button>
-                
-                <div id="message-success" class="message success">
-                    <i class="fas fa-check-circle"></i>
-                    <div class="message-content">
-                        <h3>🎉 Success! Code Redeemed</h3>
-                        <p>Welcome to the premium community! You now have access to exclusive features.</p>
-                    </div>
-                </div>
-                
-                <div id="message-error" class="message error">
-                    <i class="fas fa-exclamation-circle"></i>
-                    <div class="message-content">
-                        <h3>⚠️ Invalid Code</h3>
-                        <p>The code you entered is incorrect or has expired. Please check and try again.</p>
-                    </div>
-                </div>
-                
-                <div id="message-warning" class="message" style="background: linear-gradient(135deg, #f39c12 0%, #d35400 100%); color: white; border-left: 5px solid #a35200;">
-                    <i class="fas fa-exclamation-triangle"></i>
-                    <div class="message-content">
-                        <h3>⚠️ Code Usage Limit Reached</h3>
-                        <p>This code has reached its maximum usage limit. Please try another code.</p>
-                    </div>
-                </div>
-                
-                <div id="code-stats" class="code-stats" style="display: none;">
-                    <h4>Code Usage Statistics</h4>
-                    <div class="usage-bar">
-                        <div id="usage-fill" class="usage-fill" style="width: 0%"></div>
-                    </div>
-                    <p id="stats-text" class="stats-text"></p>
-                </div>
-            </div>
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:600px;height:600px;background:radial-gradient(circle,rgba(255,215,0,0.04),transparent);border-radius:50%;pointer-events:none;animation:pulse 4s ease-in-out infinite;"></div>
 
-            <div id="discord-invite" class="discord-invite" style="display: none;">
-                <div class="discord-card">
-                    <div class="discord-icon">
-                        <i class="fab fa-discord"></i>
-                    </div>
-                    <h3>🎉 Welcome to Our Community!</h3>
-                    <p>Connect with other members, get exclusive updates, and participate in special events</p>
-                    <a href="https://discord.gg/5HfKBHYcGv" target="_blank" class="discord-btn">
-                        <i class="fab fa-discord"></i>
-                        Join Discord Server
-                    </a>
-                </div>
-            </div>
+  <div class="hero-content">
+    <!-- 3D Gift Card -->
+    <div class="gift-scene">
+      <div class="gift-card">
+        <div class="gift-shine"></div>
+        <div class="gift-card-inner">
+          <div class="gift-logo"><i class="fas fa-dragon"></i></div>
+          <div class="gift-card-title">PhineX X-Developer Access</div>
+          <div class="gift-card-sub">EXCLUSIVE MEMBERSHIP CODE</div>
+          <div class="gift-code-preview">XXXX-XXXX-XXXX</div>
         </div>
-        
-        <!-- Confetti Container -->
-        <div id="confetti-container" class="confetti-container"></div>
-    </main>
+      </div>
+    </div>
 
-    <!-- Features Section -->
-    <section class="features">
-        <h2>What You Get</h2>
-        <div class="features-grid">
-            <div class="feature-card">
-                <i class="fas fa-bolt"></i>
-                <h3>Fast Access</h3>
-                <p>Unlock exclusive fast join to our developers community only available to code holders</p>
-            </div>
-            <div class="feature-card">
-                <i class="fas fa-users"></i>
-                <h3>Community</h3>
-                <p>Join our Discord community with no tests or restrictions</p>
-            </div>
-        </div>
-        <div class="code-section">
-            <div class="code-header">
-                <i class="fas fa-qrcode"></i>
-                <h3>How to Get a Redeem Code?</h3>
-            </div>
-            <div class="code-content">
-                <p>Contact the owner directly to request a redeem code:</p>
-                <a href="https://www.facebook.com/ahmd.aljwhry.495523" class="contact-link">
-                    <i class="fab fa-facebook"></i>
-                    <span>Message on Facebook</span>
-                </a>
-                <p class="note">Codes are typically given to participants from partner programs, workshops, or special events.</p>
-            </div>
-        </div>
-    </section>
+    <div class="hero-tag"><span class="pulse-dot"></span> Exclusive Access</div>
+    <h1 class="hero-h1">Redeem Your<br><span>Code</span></h1>
+    <p class="hero-sub">Enter your exclusive X-Developer code below to skip the entry test and join the PhineX programming team instantly.</p>
 
-    </section>
-  <!-- Mobile menu toggle -->
-  <button id="menuToggle" class="menu-toggle" aria-expanded="false" aria-label="Toggle navigation">
-    <i class="fas fa-bars"></i>
-  </button>
+    <!-- CODE INPUT -->
+    <div class="code-input-wrap">
+      <div class="code-input-box">
+        <input type="text" class="code-input" id="codeInput" placeholder="Enter your redeem code" maxlength="19" oninput="formatCode(this)" onkeydown="if(event.key==='Enter') redeemCode()">
+        <button class="redeem-btn" onclick="redeemCode()"><i class="fas fa-gift"></i> Redeem</button>
+      </div>
+      <div class="redeem-hint">Don't have a code? <a href="hiring.html">Pass the test instead</a> or <a href="https://www.facebook.com/A.Mo.Elgohary/" target="_blank">contact the founder</a></div>
 
-  <style>
-    /* Mobile menu toggle styles */
-    .menu-toggle {
-      display: none;
-      position: fixed;
-      top: 14px;
-      right: 16px;
-      z-index: 9999;
-      background: transparent;
-      border: none;
-      color: #fff;
-      font-size: 1.5rem;
-      cursor: pointer;
-      padding: 6px;
+      <div class="state-msg" id="stateMsg"></div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW TO GET -->
+<section class="how-section" id="how-section">
+  <div class="section-wrap">
+    <div class="reveal">
+      <div class="section-tag">Get a Code</div>
+      <h2 class="section-title">How to Get a Redeem Code</h2>
+    </div>
+    <div class="methods-grid">
+      <div class="method-card reveal" style="transition-delay:0.1s;">
+        <span class="method-icon">🏆</span>
+        <div class="method-title">Win a Competition</div>
+        <p class="method-desc">PhineX hosts regular coding competitions and hackathons. Top performers receive exclusive redeem codes as prizes.</p>
+      </div>
+      <div class="method-card reveal" style="transition-delay:0.2s;">
+        <span class="method-icon">🤝</span>
+        <div class="method-title">Partner Programs</div>
+        <p class="method-desc">Partner organizations, bootcamps, and coding schools can distribute codes to their outstanding graduates.</p>
+      </div>
+      <div class="method-card reveal" style="transition-delay:0.3s;">
+        <span class="method-icon">👑</span>
+        <div class="method-title">Founder's Invite</div>
+        <p class="method-desc">Senior developers can reach out to the PhineX founder directly. If your portfolio is strong enough, a code may come your way.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SUCCESS -->
+<div class="redeem-success" id="redeemSuccess">
+  <div class="redeem-success-card">
+    <span class="confetti-emoji">🎉</span>
+    <h2 style="font-family:'Syne',sans-serif;font-size:28px;font-weight:800;margin-bottom:10px;">Welcome to PhineX!</h2>
+    <p style="font-size:14px;color:var(--muted);line-height:1.8;margin-bottom:8px;">Your redeem code has been accepted. You are now officially an <strong style="color:var(--neon);">X-Developer</strong>.</p>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:28px;">Join our Discord to connect with the team and get your first project assignment.</p>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+      <a href="https://discord.gg/V9yr3AxBFr" class="btn-neon" style="padding:12px 22px;" target="_blank"><i class="fab fa-discord"></i> Join Discord</a>
+      <a href="index.html" style="display:inline-flex;align-items:center;gap:7px;background:transparent;border:1px solid rgba(255,255,255,0.15);color:var(--text);font-family:'Syne',sans-serif;font-weight:600;font-size:13px;padding:12px 22px;border-radius:10px;text-decoration:none;">Go Home</a>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <a href="index.html" class="nav-logo" style="text-decoration:none;"><div class="logo-icon"><i class="fas fa-dragon"></i></div><span class="logo-text">Phine<span>X</span></span></a>
+    <div class="footer-links"><a href="index.html">Home</a><a href="hiring.html">Join Us</a><a href="x-academy.html">X-Academy</a><a href="aboutus.html">About</a></div>
+    <p style="font-size:12px;color:var(--muted);">&copy; 2026 PhineX</p>
+  </div>
+</footer>
+
+<script>
+const obs = new IntersectionObserver(e => e.forEach(x => { if(x.isIntersecting) x.target.classList.add('visible'); }), {threshold:0.12});
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+function formatCode(input) {
+  let val = input.value.replace(/[^A-Za-z0-9]/g,'').toUpperCase();
+  let formatted = '';
+  for (let i = 0; i < val.length; i++) {
+    if (i > 0 && i % 4 === 0 && i < 12) formatted += '-';
+    formatted += val[i];
+  }
+  input.value = formatted;
+}
+
+function redeemCode() {
+  const code = document.getElementById('codeInput').value.trim();
+  const msg = document.getElementById('stateMsg');
+  if (!code) { showMsg('error','Please enter a redeem code.'); return; }
+  if (code.length < 4) { showMsg('error','Code is too short. Valid codes are 4–14 characters.'); return; }
+
+  showMsg('loading','<i class="fas fa-spinner fa-spin"></i> &nbsp;Verifying code...');
+  setTimeout(() => {
+    // Simulate code check
+    const validCodes = ['PHINEX','X-DEV-2025','FOUNDER','VIP-ACCESS'];
+    const clean = code.replace(/-/g,'');
+    if (validCodes.includes(clean) || code.startsWith('PX-')) {
+      msg.style.display = 'none';
+      document.getElementById('redeemSuccess').style.display = 'flex';
+    } else {
+      showMsg('error','<i class="fas fa-times-circle"></i> &nbsp;Invalid or expired code. <a href="https://www.facebook.com/A.Mo.Elgohary/" target="_blank" style="color:var(--neon);">Contact the founder</a> if you believe this is an error.');
     }
+  }, 1600);
+}
 
-    /* small-screen layout: hide nav-menu by default, show toggle */
-    @media (max-width: 900px) {
-      .menu-toggle { display: inline-flex; align-items: center; justify-content: center; }
+function showMsg(type, html) {
+  const msg = document.getElementById('stateMsg');
+  msg.className = 'state-msg ' + type;
+  msg.innerHTML = html;
+  msg.style.display = 'block';
+}
+</script>
 
-      .nav-menu {
-        display: none !important;
-        position: absolute;
-        top: 64px;
-        right: 12px;
-        background: rgba(0,0,0,0.9);
-        padding: 12px;
-        border-radius: 8px;
-        flex-direction: column;
-        gap: 8px;
-        min-width: 180px;
-        box-shadow: 0 8px 24px rgba(0,0,0,0.3);
-      }
+<!-- ═══════════════ GLOBAL UI ALERT ═══════════════ -->
+<div id="pxAlertOverlay" style="position:fixed;inset:0;z-index:99999;background:rgba(5,5,8,0.7);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;padding:20px;">
+  <div id="pxAlertCard" style="background:#13131e;border:1px solid rgba(255,255,255,0.08);border-radius:24px;padding:40px 36px;max-width:420px;width:100%;text-align:center;position:relative;box-shadow:0 40px 80px rgba(0,0,0,0.7);transform:scale(0.88);opacity:0;transition:transform 0.3s cubic-bezier(0.175,0.885,0.32,1.275),opacity 0.3s ease;">
+    <div id="pxAlertIcon" style="font-size:48px;margin-bottom:16px;line-height:1;"></div>
+    <div id="pxAlertTitle" style="font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:#f0f0ff;margin-bottom:8px;"></div>
+    <div id="pxAlertMsg" style="font-size:14px;color:#7070a0;line-height:1.7;margin-bottom:28px;"></div>
+    <div id="pxAlertBtns" style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;"></div>
+  </div>
+</div>
+<style>
+#pxAlertOverlay.show{display:flex;}
+#pxAlertOverlay.show #pxAlertCard{transform:scale(1);opacity:1;}
 
-      .nav-menu.open {
-        display: flex !important;
-      }
 
-    }
-  </style>
 
-  <script>
-    // Menu toggle behavior for mobile
-    (function () {
-      const toggle = document.getElementById('menuToggle');
-      const navMenu = document.querySelector('.nav-menu');
 
-      if (!toggle || !navMenu) return;
+/* ══ MOBILE OVERHAUL ══ */
+body{overflow-x:hidden!important;}
+*{min-width:0;word-break:break-word;box-sizing:border-box;}
+img,canvas,video,iframe{max-width:100%;}
+@media(max-width:768px){
+  footer{padding:28px 16px 20px!important;}
+  .footer-inner{flex-direction:column!important;gap:20px!important;align-items:center!important;text-align:center!important;}
+  .footer-links{flex-wrap:wrap!important;justify-content:center!important;gap:10px 18px!important;}
+  .connect-grid{grid-template-columns:1fr!important;}
+  .curriculum-grid{grid-template-columns:1fr!important;}
+  .paths-grid{grid-template-columns:1fr!important;}
+  .settings-layout{grid-template-columns:1fr!important;}
+  .themes-grid{grid-template-columns:1fr 1fr!important;}
+  .lang-grid{grid-template-columns:1fr!important;}
+  .sbar{grid-template-columns:1fr 1fr!important;}
+  .hero-inner{grid-template-columns:1fr!important;}
+  .hero-inner>*:last-child{display:none!important;}
+  .wrap{grid-template-columns:1fr!important;}
+  .rp{display:none!important;}
+  .lp{padding:56px 20px 40px!important;}
+  h1,.h1{letter-spacing:-2px!important;}
+}
+@media(max-width:480px){
+  .stats-grid,.stat-grid,.stats-row{grid-template-columns:1fr 1fr!important;flex-direction:row!important;flex-wrap:wrap!important;}
+  .page-title,.hero h1{font-size:clamp(2rem,10vw,3rem)!important;}
+  nav,.nav-inner,.nw{padding-left:12px!important;padding-right:12px!important;}
+}
 
-      // ensure navMenu has an id for aria-controls
-      if (!navMenu.id) navMenu.id = 'navMenu';
+</style>
+<script>
+window.PXAlert={_resolve:null,show({icon='<i class="fas fa-circle-info"></i>',title='',message='',type='info',buttons=[{label:'OK',value:true,primary:true}]}={}){return new Promise(resolve=>{this._resolve=resolve;const o=document.getElementById('pxAlertOverlay'),c=document.getElementById('pxAlertCard');document.getElementById('pxAlertIcon').innerHTML=icon;document.getElementById('pxAlertTitle').textContent=title;document.getElementById('pxAlertMsg').innerHTML=message;const cols={info:'rgba(57,255,20,0.25)',error:'rgba(255,68,68,0.25)',warning:'rgba(255,215,0,0.25)',success:'rgba(57,255,20,0.3)'};c.style.borderColor=cols[type]||cols.info;const be=document.getElementById('pxAlertBtns');be.innerHTML='';buttons.forEach(btn=>{const b=document.createElement('button');b.textContent=btn.label;const ip=btn.primary;b.style.cssText=ip?'background:#39ff14;color:#050508;font-family:Syne,sans-serif;font-weight:700;font-size:14px;padding:11px 28px;border-radius:11px;border:none;cursor:pointer;transition:all 0.2s;':'background:transparent;color:#f0f0ff;font-family:Syne,sans-serif;font-weight:600;font-size:14px;padding:11px 28px;border-radius:11px;border:1px solid rgba(255,255,255,0.12);cursor:pointer;transition:all 0.2s;';b.onmouseenter=()=>{b.style.transform='translateY(-1px)';if(ip)b.style.boxShadow='0 0 20px rgba(57,255,20,0.3)';};b.onmouseleave=()=>{b.style.transform='';b.style.boxShadow='';};b.onclick=()=>{this.hide();resolve(btn.value);};be.appendChild(b);});o.classList.add('show');document.addEventListener('keydown',this._keyHandler=(e)=>{if(e.key==='Escape'){this.hide();resolve(false);}});})},hide(){const o=document.getElementById('pxAlertOverlay'),c=document.getElementById('pxAlertCard');c.style.transform='scale(0.88)';c.style.opacity='0';setTimeout(()=>o.classList.remove('show'),300);document.removeEventListener('keydown',this._keyHandler);},info(t,m){return this.show({icon:'<i class="fas fa-circle-info"></i>',title:t,message:m,type:'info'})},success(t,m){return this.show({icon:'<i class="fas fa-circle-check"></i>',title:t,message:m,type:'success'})},error(t,m){return this.show({icon:'<i class="fas fa-circle-xmark"></i>',title:t,message:m,type:'error'})},warning(t,m){return this.show({icon:'<i class="fas fa-triangle-exclamation"></i>',title:t,message:m,type:'warning'})},confirm(t,m){return this.show({icon:'<i class="fas fa-circle-question"></i>',title:t,message:m,type:'warning',buttons:[{label:'Cancel',value:false,primary:false},{label:'Confirm',value:true,primary:true}]})}};
+document.getElementById('pxAlertOverlay').addEventListener('click',function(e){if(e.target===this){PXAlert.hide();if(PXAlert._resolve)PXAlert._resolve(false);}});
+</script>
 
-      toggle.setAttribute('aria-controls', navMenu.id);
-
-      toggle.addEventListener('click', function (e) {
-        const opened = navMenu.classList.toggle('open');
-        toggle.setAttribute('aria-expanded', opened);
-      });
-
-      // Close menu when a link is clicked (mobile)
-      navMenu.addEventListener('click', function (e) {
-        const target = e.target.closest('a, button');
-        if (!target) return;
-        if (window.matchMedia('(max-width: 900px)').matches) {
-          navMenu.classList.remove('open');
-          toggle.setAttribute('aria-expanded', 'false');
-        }
-      });
-
-      // Close menu when clicking outside
-      document.addEventListener('click', function (e) {
-        if (window.matchMedia('(max-width: 900px)').matches) {
-          if (!e.target.closest('.nav-container') && !e.target.closest('#menuToggle')) {
-            if (navMenu.classList.contains('open')) {
-              navMenu.classList.remove('open');
-              toggle.setAttribute('aria-expanded', 'false');
-            }
-          }
-        }
-      });
-
-      // Optional: close on escape
-      document.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape' && navMenu.classList.contains('open')) {
-          navMenu.classList.remove('open');
-          toggle.setAttribute('aria-expanded', 'false');
-        }
-      });
-    })();
-        // Redeem codes database with usage limits
-        const redeemCodes = {
-            "FAMILY.PHINEX": {
-                maxUses: null, // Unlimited
-                used: parseInt(localStorage.getItem('FAMILY.PHINEX_used')) || 0
-            },
-            "SOCIAL.PHINEX": {
-                maxUses: 50,
-                used: parseInt(localStorage.getItem('SOCIAL.PHINEX_used')) || 0
-            },
-            "FRIENDS.PHINEX": {
-                maxUses: null, // Unlimited
-                used: parseInt(localStorage.getItem('FRIENDS.PHINEX_used')) || 0
-            },
-        };
-
-        // Initialize localStorage for code usage
-        function initializeStorage() {
-            for (const code in redeemCodes) {
-                if (!localStorage.getItem(code + '_used')) {
-                    localStorage.setItem(code + '_used', '0');
-                }
-            }
-        }
-
-        // Create confetti animation
-        function createConfetti() {
-            const container = document.getElementById('confetti-container');
-            container.style.display = 'block';
-            
-            // Clear any existing confetti
-            container.innerHTML = '';
-            
-            // Create 100 confetti pieces
-            for (let i = 0; i < 100; i++) {
-                const confetti = document.createElement('div');
-                confetti.className = 'confetti';
-                
-                // Random colors
-                const colors = ['#2ecc71', '#3498db', '#e74c3c', '#f1c40f', '#9b59b6', '#1abc9c'];
-                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                
-                // Random position and size
-                confetti.style.left = Math.random() * 100 + 'vw';
-                confetti.style.width = Math.random() * 10 + 5 + 'px';
-                confetti.style.height = Math.random() * 10 + 5 + 'px';
-                
-                // Random animation
-                confetti.style.animation = `confettiRain ${Math.random() * 3 + 2}s linear forwards`;
-                confetti.style.animationDelay = Math.random() * 1 + 's';
-                
-                container.appendChild(confetti);
-            }
-            
-            // Hide after animation
-            setTimeout(() => {
-                container.style.display = 'none';
-            }, 3000);
-        }
-
-        // Show message with animation
-        function showMessage(elementId) {
-            // Hide all messages first
-            document.querySelectorAll('.message').forEach(msg => {
-                msg.classList.remove('show');
-            });
-            document.getElementById('code-stats').style.display = 'none';
-            document.getElementById('discord-invite').style.display = 'none';
-            
-            // Show the selected message
-            const message = document.getElementById(elementId);
-            message.classList.add('show');
-            
-            // Auto-hide after 5 seconds (except success)
-            if (elementId !== 'message-success') {
-                setTimeout(() => {
-                    message.classList.remove('show');
-                }, 5000);
-            }
-        }
-
-        // Update code usage stats display
-        function updateStatsDisplay(code, codeData) {
-            const statsDiv = document.getElementById('code-stats');
-            const usageFill = document.getElementById('usage-fill');
-            const statsText = document.getElementById('stats-text');
-            
-            if (codeData.maxUses === null) {
-                statsText.textContent = `Code: ${code} - Unlimited uses (${codeData.used} redeemed)`;
-                usageFill.style.width = '100%';
-                usageFill.style.background = 'linear-gradient(90deg, #2ecc71, #1abc9c)';
-            } else {
-                const percentage = (codeData.used / codeData.maxUses) * 100;
-                usageFill.style.width = percentage + '%';
-                
-                if (percentage < 50) {
-                    usageFill.style.background = 'linear-gradient(90deg, #2ecc71, #3498db)';
-                } else if (percentage < 80) {
-                    usageFill.style.background = 'linear-gradient(90deg, #f39c12, #e67e22)';
-                } else {
-                    usageFill.style.background = 'linear-gradient(90deg, #e74c3c, #c0392b)';
-                }
-                
-                statsText.textContent = `Code: ${code} - ${codeData.used}/${codeData.maxUses} uses (${Math.round(percentage)}% used)`;
-            }
-            
-            statsDiv.style.display = 'block';
-        }
-
-        // Update status indicators
-        function updateStatusIndicators() {
-            for (const code in redeemCodes) {
-                const codeData = redeemCodes[code];
-                if (code === 'SOCIAL.PHINEX') {
-                    const statusElement = document.getElementById('social-status');
-                    if (statusElement) {
-                        const remaining = codeData.maxUses - codeData.used;
-                        statusElement.textContent = `${remaining} uses left`;
-                        if (remaining === 0) {
-                            statusElement.classList.add('expired');
-                            statusElement.textContent = 'Expired';
-                        }
-                    }
-                }
-            }
-        }
-
-        // Main redeem function
-        function redeemCode() {
-            const codeInput = document.getElementById('code-input');
-            const userInput = codeInput.value.trim().toUpperCase();
-            const redeemBtn = document.querySelector('.redeem-btn');
-            
-            // Button click animation
-            redeemBtn.classList.add('clicked');
-            setTimeout(() => {
-                redeemBtn.classList.remove('clicked');
-            }, 200);
-            
-            // Input validation
-            if (!userInput) {
-                codeInput.classList.add('invalid');
-                setTimeout(() => codeInput.classList.remove('invalid'), 1000);
-                showMessage('message-error');
-                return;
-            }
-            
-            // Check if code exists
-            if (!redeemCodes[userInput]) {
-                codeInput.classList.add('invalid');
-                setTimeout(() => codeInput.classList.remove('invalid'), 1000);
-                showMessage('message-error');
-                return;
-            }
-            
-            const codeData = redeemCodes[userInput];
-            
-            // Check if code has reached its limit
-            if (codeData.maxUses !== null && codeData.used >= codeData.maxUses) {
-                codeInput.classList.add('invalid');
-                setTimeout(() => codeInput.classList.remove('invalid'), 1000);
-                showMessage('message-warning');
-                updateStatsDisplay(userInput, codeData);
-                return;
-            }
-            
-            // Code is valid - redeem it
-            codeData.used++;
-            localStorage.setItem(userInput + '_used', codeData.used.toString());
-            
-            // Success animation
-            codeInput.classList.add('valid');
-            setTimeout(() => codeInput.classList.remove('valid'), 1000);
-            
-            // Show success message and confetti
-            showMessage('message-success');
-            createConfetti();
-            
-            // Update stats display
-            updateStatsDisplay(userInput, codeData);
-            
-            // Show Discord invite
-            setTimeout(() => {
-                document.getElementById('discord-invite').style.display = 'block';
-            }, 1000);
-            
-            // Update status indicators
-            updateStatusIndicators();
-            
-            // Store redemption in user's history
-            const redemptionHistory = JSON.parse(localStorage.getItem('redemptionHistory') || '[]');
-            redemptionHistory.push({
-                code: userInput,
-                timestamp: new Date().toISOString()
-            });
-            localStorage.setItem('redemptionHistory', JSON.stringify(redemptionHistory));
-            
-            // Clear input after successful redemption
-            setTimeout(() => {
-                codeInput.value = '';
-            }, 1500);
-        }
-
-        // Enter key support
-        document.getElementById('code-input').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                redeemCode();
-            }
-        });
-
-        // Initialize on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            initializeStorage();
-            updateStatusIndicators();
-            });
-    </script>
-    
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <div class="logo">
-                        <i class="fas fa-dragon"></i>
-                        <span>PhineX</span>
-                    </div>
-                    <p>Group of senior programmers</p>
-                </div>
-                <div class="footer-section">
-                    <h4>Quick Links</h4>
-                    <ul>
-                        <li><a href="index.html">Home</a></li>
-                        <li><a href="hiring.html">Join Us</a></li>
-                        <li><a href="x-academy.html">X-Academy</a></li>
-                        <li><a href="aboutus.html">About Us</a></li>
-                        <li><a href="redeemcode.html">Redeem Code</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h4>Connect</h4>
-                    <div class="social-links">
-                        <a href="https://discord.gg/V2NDkCmhEm" class="discordlink"><i class="fab fa-discord"></i></a>
-                        <a href="https://PhineX.github.io" class="githublink"><i class="fab fa-github"></i></a>
-                        <a href="https://www.youtube.com/channel/UCslNCf9VtxpFH_gtA1VHFyQ" class="youtubelink"><i class="fab fa-youtube"></i></a>
-                        <a href="https://chat.whatsapp.com/IuC3Gu6x5p61MORTnAuHJA" class="whatsapplink"><i class="fab fa-whatsapp"></i></a>
-                        <a href="https://www.facebook.com/profile.php?id=61584765330775" class="btn-facebooklink"><i class="fab fa-facebook"></i></a>
-                    </div>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <div class="footer-bottom-content">
-                    <div class="copyright">
-                        <p>&copy; 2025 PhineX. All rights reserved.</p>
-                    </div>
-                    <div class="made-by">
-                        <p>Made with <i class="fas fa-heart"></i> By : 
-                            <a href="https://www.facebook.com/ahmd.aljwhry.495523" class="btn-facebooklink">
-                                <i class="fas fa-laptop-code" style="margin-right: 10px;"></i> @Ahmed Al Gohary
-                            </a>
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js"></script>
+<script src="app.js"></script>
+<script src="phinex-search.js"></script>
 </body>
 </html>

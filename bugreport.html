@@ -1,947 +1,945 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Error Report System | PhineX</title>
-<!-- Font Awesome for icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-<link rel="stylesheet" href="style.css"/>
-<link rel="icon" type="image/png" class="icon" href="Phinex.png">
-<!-- Google Fonts -->
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --primary: #8b5cf6;
-    --primary-dark: #7c3aed;
-    --primary-light: #a78bfa;
-    --secondary: #10b981;
-    --danger: #ef4444;
-    --warning: #f59e0b;
-    --dark-bg: #0f172a;
-    --card-bg: #1e293b;
-    --card-border: #334155;
-    --text-primary: #f1f5f9;
-    --text-secondary: #94a3b8;
-    --hover-bg: #2d3748;
-    --success: #10b981;
-    --glass: rgba(30, 41, 59, 0.7);
-    --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
-    --radius: 12px;
-  }
-
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    transition: all 0.3s ease;
-  }
-
-  body {
-    font-family: 'Inter', sans-serif;
-    background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
-    color: var(--text-primary);
-    min-height: 100vh;
-    line-height: 1.6;
-  }
-.card-switcher [data-card="view"] {
-  display: none !important;
-}
-
-
-
-  /* Main Container */
-  .page-container {
-    max-width: 1200px;
-    margin: 2rem auto;
-    padding: 0 2rem;
-  }
-
-  /* Card Switcher */
-  .card-switcher {
-    display: flex;
-    gap: 1rem;
-    margin-bottom: 2rem;
-    background: var(--card-bg);
-    padding: 1rem;
-    border-radius: var(--radius);
-    border: 1px solid var(--card-border);
-  }
-
-  .switcher-btn {
-    padding: 0.75rem 1.5rem;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: 600;
-    font-size: 0.95rem;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .switcher-btn.btn-secondary {
-    background: var(--hover-bg);
-    color: var(--text-secondary);
-  }
-
-  .switcher-btn.btn-secondary:hover,
-  .switcher-btn.btn-secondary.active {
-    background: var(--primary);
-    color: white;
-  }
-
-  .switcher-btn.btn-primary {
-    background: var(--primary);
-    color: white;
-  }
-
-  /* Cards */
-  .cards {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-  }
-
-  .card {
-    background: var(--card-bg);
-    border: 1px solid var(--card-border);
-    border-radius: var(--radius);
-    padding: 2rem;
-    box-shadow: var(--shadow);
-  }
-
-  .card h2 {
-    color: var(--text-primary);
-    margin-bottom: 1.5rem;
-    font-size: 1.8rem;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .card h2 i {
-    color: var(--primary);
-  }
-
-  /* Form Styles */
-  .form-group {
-    margin-bottom: 1.5rem;
-  }
-
-  label {
-    display: block;
-    margin-bottom: 0.5rem;
-    color: var(--text-secondary);
-    font-weight: 600;
-    font-size: 0.95rem;
-  }
-
-  input[type="text"],
-  input[type="email"],
-  textarea {
-    width: 100%;
-    padding: 0.875rem;
-    background: rgba(15, 23, 42, 0.5);
-    border: 2px solid var(--card-border);
-    border-radius: 8px;
-    color: var(--text-primary);
-    font-family: 'Inter', sans-serif;
-    font-size: 1rem;
-  }
-
-  input[type="text"]:focus,
-  input[type="email"]:focus,
-  textarea:focus {
-    outline: none;
-    border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
-  }
-
-  textarea {
-    min-height: 120px;
-    resize: vertical;
-  }
-
-  /* File Upload Area */
-  .file-area {
-    border: 2px dashed var(--card-border);
-    border-radius: 8px;
-    padding: 2rem;
-    text-align: center;
-    cursor: pointer;
-    background: rgba(15, 23, 42, 0.3);
-  }
-
-  .file-area:hover,
-  .file-area.dragover {
-    border-color: var(--primary);
-    background: rgba(139, 92, 246, 0.05);
-  }
-
-  .file-area p {
-    color: var(--text-secondary);
-    margin-bottom: 0.5rem;
-  }
-
-  .file-area span {
-    color: var(--primary);
-    font-size: 0.9rem;
-  }
-
-  .file-preview {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-    margin-top: 1rem;
-  }
-
-  .file-item {
-    position: relative;
-    width: 100px;
-    height: 100px;
-    background: rgba(15, 23, 42, 0.5);
-    border-radius: 8px;
-    overflow: hidden;
-    border: 1px solid var(--card-border);
-  }
-
-  .file-item img,
-  .file-item video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
-  .remove-btn {
-    position: absolute;
-    top: 5px;
-    right: 5px;
-    background: var(--danger);
-    color: white;
-    border: none;
-    border-radius: 50%;
-    width: 24px;
-    height: 24px;
-    cursor: pointer;
-    font-size: 14px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  /* Buttons */
-  .btn-primary {
-    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-    color: white;
-    padding: 0.875rem 1.75rem;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: 600;
-    font-size: 1rem;
-  }
-
-  .btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(139, 92, 246, 0.4);
-  }
-
-  /* Messages */
-  .message {
-    padding: 1rem;
-    border-radius: 8px;
-    margin-top: 1.5rem;
-    display: none;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .message.show {
-    display: flex;
-    animation: slideIn 0.3s ease;
-  }
-
-  .message.success {
-    background: rgba(16, 185, 129, 0.1);
-    border: 1px solid var(--success);
-    color: var(--success);
-  }
-
-  .message.error {
-    background: rgba(239, 68, 68, 0.1);
-    border: 1px solid var(--danger);
-    color: var(--danger);
-  }
-
-  @keyframes slideIn {
-    from {
-      opacity: 0;
-      transform: translateY(-10px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  /* Table Styles */
-  table {
-    width: 100%;
-    border-collapse: separate;
-    border-spacing: 0;
-    margin-top: 1.5rem;
-  }
-
-  th {
-    background: rgba(15, 23, 42, 0.5);
-    color: var(--text-secondary);
-    font-weight: 600;
-    padding: 1rem;
-    text-align: left;
-    border-bottom: 1px solid var(--card-border);
-  }
-
-  td {
-    padding: 1rem;
-    border-bottom: 1px solid var(--card-border);
-    color: var(--text-primary);
-  }
-
-  tr:hover {
-    background: rgba(15, 23, 42, 0.3);
-  }
-
-  /* Status Badges */
-  .status-badge {
-    padding: 0.25rem 0.75rem;
-    border-radius: 20px;
-    font-size: 0.875rem;
-    font-weight: 600;
-  }
-
-  .status-pending {
-    background: rgba(245, 158, 11, 0.1);
-    color: var(--warning);
-  }
-
-  .status-resolved {
-    background: rgba(16, 185, 129, 0.1);
-    color: var(--success);
-  }
-
-  /* Action Buttons */
-  .action-btn {
-    padding: 0.5rem 1rem;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: 500;
-    font-size: 0.875rem;
-  }
-
-  .action-btn.resolve {
-    background: rgba(16, 185, 129, 0.1);
-    color: var(--success);
-  }
-
-  .action-btn.resolve:hover {
-    background: var(--success);
-    color: white;
-  }
-
-  .action-btn.delete {
-    background: rgba(239, 68, 68, 0.1);
-    color: var(--danger);
-    margin-left: 0.5rem;
-  }
-
-  .action-btn.delete:hover {
-    background: var(--danger);
-    color: white;
-  }
-
-  /* Hidden class */
-  .hidden {
-    display: none;
-  }
-
-  /* Responsive Design */
-  @media (max-width: 768px) {
-    .nav-menu {
-      display: none;
-    }
-    
-    .nav-container {
-      padding: 0 1rem;
-    }
-    
-    .page-container {
-      padding: 0 1rem;
-    }
-    
-    .card-switcher {
-      flex-direction: column;
-    }
-    
-    .switcher-btn {
-      width: 100%;
-      justify-content: center;
-    }
-    
-    .card {
-      padding: 1.5rem;
-    }
-    
-    table {
-      display: block;
-      overflow-x: auto;
-    }
-  }
-</style>
-</head>
-<body>
-<!-- Navigation -->
-<nav class="navbar">
-  <div class="nav-container">
-    <div class="logo">
-      <i class="fas fa-dragon"></i>
-      <span>PhineX</span>
-    </div>
-    <ul class="nav-menu" id="primary-navigation">
-      <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
-      <li><a href="hiring.html"><i class="fas fa-laptop-code"></i> Join Us</a></li>
-      <li><a href="x-academy.html"><i class="fas fa-graduation-cap"></i> X-Academy</a></li>
-      <li><a href="aboutus.html"><i class="fas fa-info-circle"></i> About Us</a></li>
-      <li><a href="bugreport.html"><i class="fas fa-exclamation-triangle"></i> Report Error</a></li>
-      <li><a href="redeemcode.html"><i class="fas fa-key"></i> Redeem Code</a></li>
-      <li><button id="logoutBtn" class="btn-outline hidden">Logout</button></li>
-    </ul>
-  </div>
-</nav>
- <!-- Mobile menu toggle -->
-  <button id="menuToggle" class="menu-toggle" aria-expanded="false" aria-label="Toggle navigation">
-    <i class="fas fa-bars"></i>
-  </button>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Report a Bug | PhineX</title>
+  <link rel="icon" type="image/x-icon" href="Phinex - Copy2.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <script src="bg3d.js"></script>
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
 
   <style>
-    /* Mobile menu toggle styles */
-    .menu-toggle {
-      display: none;
-      position: fixed;
-      top: 14px;
-      right: 16px;
-      z-index: 9999;
-      background: transparent;
-      border: none;
-      color: #fff;
-      font-size: 1.5rem;
-      cursor: pointer;
-      padding: 6px;
+    :root{--neon:#39ff14;--void:#050508;--card:#13131e;--border:#ffffff10;--text:#f0f0ff;--muted:#7070a0;--red:#ff4444;--orange:#ff9632;--yellow:#ffd700;}
+    *{margin:0;padding:0;box-sizing:border-box;}
+    html{scroll-behavior:smooth;}
+    body{font-family:'DM Sans',sans-serif;background:var(--void);color:var(--text);overflow-x:hidden;min-height:100vh;}
+    h1,h2,h3,h4{font-family:'Syne',sans-serif;}
+    .grid-bg{position:fixed;inset:0;pointer-events:none;z-index:0;background-image:linear-gradient(rgba(57,255,20,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(57,255,20,0.03) 1px,transparent 1px);background-size:60px 60px;}
+    nav{position:fixed;top:0;left:0;right:0;z-index:100;height:68px;background:rgba(5,5,8,0.9);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
+    .nav-inner{max-width:1400px;margin:0 auto;padding:0 24px;height:100%;display:flex;align-items:center;gap:16px;}
+    .nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
+    .logo-icon{width:36px;height:36px;border-radius:9px;background:linear-gradient(135deg,#39ff14,#00cc88);display:flex;align-items:center;justify-content:center;box-shadow:0 0 20px rgba(57,255,20,0.3);}
+    .logo-icon i{color:#050508;font-size:16px;}
+    .logo-text{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:#f0f0ff;}
+    .logo-text span{color:var(--neon);}
+    .nav-links{display:flex;gap:4px;margin-left:16px;}
+    .nav-link{padding:6px 14px;border-radius:8px;font-size:13px;color:var(--muted);text-decoration:none;transition:all 0.2s;}
+    .nav-link:hover,.nav-link.active{color:var(--text);background:rgba(255,255,255,0.06);}
+    .btn-neon{background:var(--neon);color:#050508;font-family:'Syne',sans-serif;font-weight:700;font-size:13px;padding:8px 18px;border-radius:9px;text-decoration:none;transition:all 0.2s;border:none;cursor:pointer;display:inline-flex;align-items:center;gap:7px;}
+    .btn-neon:hover{background:#50ff28;box-shadow:0 0 25px rgba(57,255,20,0.4);transform:translateY(-1px);}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+    @keyframes blink{0%,100%{opacity:1;}50%{opacity:0.3;}}
+    .reveal{opacity:0;transform:translateY(28px);transition:opacity 0.7s ease,transform 0.7s ease;}
+    .reveal.visible{opacity:1;transform:translateY(0);}
+    .reveal-delay-1{transition-delay:0.1s;}.reveal-delay-2{transition-delay:0.2s;}
+    .hero{min-height:52vh;display:flex;align-items:center;padding:100px 24px 60px;position:relative;overflow:hidden;}
+    .hero-inner{max-width:1100px;margin:0 auto;width:100%;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;}
+    .bug-scene{perspective:900px;display:flex;justify-content:flex-end;}
+    .bug-card{width:260px;background:linear-gradient(145deg,#1a0808,#210f0f);border:1px solid rgba(255,68,68,0.2);border-radius:22px;padding:28px 24px;box-shadow:0 40px 80px rgba(0,0,0,0.7),inset 0 1px 0 rgba(255,255,255,0.04);animation:bugFloat 5s ease-in-out infinite;}
+    @keyframes bugFloat{0%,100%{transform:rotateY(-10deg) rotateX(3deg) translateY(0);}50%{transform:rotateY(-7deg) rotateX(1deg) translateY(-14px);}}
+    .bug-header{display:flex;align-items:center;gap:10px;margin-bottom:20px;}
+    .bug-severity{width:8px;height:8px;border-radius:50%;background:var(--red);box-shadow:0 0 8px rgba(255,68,68,0.6);animation:blink 1.5s infinite;}
+    .bug-card-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;}
+    .bug-meta{font-size:11px;color:var(--muted);}
+    .bug-item{padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.04);display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted);}
+    .bug-item:last-child{border-bottom:none;}
+    .bug-item i{width:16px;text-align:center;}
+    .bug-tag{font-size:10px;font-weight:700;padding:2px 8px;border-radius:100px;margin-left:auto;}
+    .tag-critical{background:rgba(255,68,68,0.12);border:1px solid rgba(255,68,68,0.2);color:var(--red);}
+    .tag-resolved{background:rgba(57,255,20,0.08);border:1px solid rgba(57,255,20,0.15);color:var(--neon);}
+    .tag-pending{background:rgba(255,150,50,0.08);border:1px solid rgba(255,150,50,0.15);color:var(--orange);}
+    .form-section{padding:60px 24px 100px;position:relative;z-index:1;}
+    .form-wrap{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 380px;gap:28px;align-items:start;}
+    .form-card{background:var(--card);border:1px solid var(--border);border-radius:22px;overflow:hidden;}
+    .form-card-header{padding:24px 32px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;}
+    .form-card-body{padding:32px;}
+    .form-group{margin-bottom:22px;}
+    .form-label{font-size:12px;font-weight:700;color:var(--muted);letter-spacing:0.5px;text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:6px;}
+    .required-dot{color:var(--red);font-size:14px;line-height:1;}
+    .form-input{width:100%;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:11px;padding:13px 16px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--text);transition:all 0.2s;outline:none;}
+    .form-input:focus{border-color:rgba(57,255,20,0.4);background:rgba(57,255,20,0.03);box-shadow:0 0 0 3px rgba(57,255,20,0.08);}
+    .form-input::placeholder{color:rgba(112,112,160,0.6);}
+    select.form-input option{background:#13131e;}
+    textarea.form-input{resize:vertical;min-height:130px;}
+    #pagesBtn{flex-shrink:0;display:flex;align-items:center;gap:7px;background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;padding:0 14px;height:40px;cursor:pointer;transition:all 0.2s;white-space:nowrap;}
+    #pagesBtn:hover{border-color:var(--neon);color:var(--neon);background:rgba(57,255,20,0.05);}
+    #pagesPanel{position:absolute;top:calc(100% + 8px);right:24px;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:12px;width:300px;box-shadow:0 20px 60px rgba(0,0,0,0.7),0 0 0 1px rgba(57,255,20,0.1);display:none;z-index:200;}
+    #pagesPanel.active{display:block;animation:dropIn 0.2s ease;}
+    .pages-header{padding:4px 8px 10px;font-size:10px;font-weight:700;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase;border-bottom:1px solid var(--border);margin-bottom:8px;}
+    .page-item{display:flex;align-items:center;gap:12px;padding:10px;border-radius:10px;cursor:pointer;text-decoration:none;color:var(--text);transition:all 0.15s;}
+    .page-item:hover{background:rgba(57,255,20,0.07);color:var(--neon);}
+    .page-item i{width:28px;text-align:center;font-size:14px;color:var(--muted);transition:color 0.15s;}
+    .page-item:hover i{color:var(--neon);}
+    .page-item span{font-size:13px;font-weight:500;}
+    .severity-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
+    .severity-btn{padding:10px 8px;border-radius:10px;border:1px solid var(--border);background:transparent;cursor:pointer;text-align:center;transition:all 0.2s;font-family:'DM Sans',sans-serif;}
+    .severity-btn:hover{border-color:rgba(255,255,255,0.2);}
+    .severity-btn.selected{border-width:2px;}
+    .severity-btn.critical.selected{border-color:var(--red);background:rgba(255,68,68,0.08);}
+    .severity-btn.high.selected{border-color:var(--orange);background:rgba(255,150,50,0.08);}
+    .severity-btn.medium.selected{border-color:var(--yellow);background:rgba(255,215,0,0.08);}
+    .severity-btn.low.selected{border-color:var(--neon);background:rgba(57,255,20,0.08);}
+    .severity-emoji{font-size:22px;display:block;margin-bottom:4px;}
+    .severity-label{font-size:11px;font-weight:600;}
+    .file-drop{border:2px dashed var(--border);border-radius:12px;padding:32px;text-align:center;cursor:pointer;transition:all 0.2s;}
+    .file-drop:hover,.file-drop.over{border-color:rgba(57,255,20,0.4);background:rgba(57,255,20,0.03);}
+    .file-drop i{font-size:28px;color:var(--muted);margin-bottom:10px;display:block;}
+    .file-drop p{font-size:13px;color:var(--muted);}
+    .file-drop span{color:var(--neon);}
+    .submit-btn{width:100%;padding:14px;border-radius:12px;background:var(--neon);color:#050508;font-family:'Syne',sans-serif;font-weight:700;font-size:15px;border:none;cursor:pointer;transition:all 0.3s;display:flex;align-items:center;justify-content:center;gap:10px;}
+    .submit-btn:hover{background:#50ff28;box-shadow:0 0 40px rgba(57,255,20,0.35);transform:translateY(-2px);}
+    .submit-btn:disabled{opacity:0.5;cursor:not-allowed;transform:none;}
+    .info-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:26px;margin-bottom:20px;}
+    .info-title{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px;}
+    .info-item{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);font-size:13px;align-items:flex-start;}
+    .info-item:last-child{border-bottom:none;}
+    .info-item i{color:var(--neon);margin-top:2px;font-size:12px;width:14px;flex-shrink:0;}
+    .info-item-text{color:var(--muted);line-height:1.6;}
+    .bug-row{padding:14px 0;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;font-size:13px;}
+    .bug-row:last-child{border-bottom:none;}
+    .bug-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+    .bug-row-title{flex:1;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:160px;}
+    .bug-row-tag{font-size:10px;font-weight:700;padding:2px 8px;border-radius:100px;white-space:nowrap;}
+    .success-overlay{position:fixed;inset:0;background:rgba(5,5,8,0.92);z-index:200;display:none;align-items:center;justify-content:center;}
+    .success-card{background:var(--card);border:1px solid rgba(57,255,20,0.3);border-radius:28px;padding:56px 48px;text-align:center;max-width:480px;animation:popIn 0.4s cubic-bezier(0.175,0.885,0.32,1.275);}
+    @keyframes popIn{from{opacity:0;transform:scale(0.85);}to{opacity:1;transform:scale(1);}}
+    .success-icon{font-size:56px;margin-bottom:20px;display:block;}
+
+    /* ─── AUTH WALL ─── */
+    .auth-wall{
+      position:fixed;inset:0;z-index:500;
+      background:rgba(5,5,8,0.97);
+      backdrop-filter:blur(20px);
+      display:flex;align-items:center;justify-content:center;
+      padding:20px;
     }
-
-    /* small-screen layout: hide nav-menu by default, show toggle */
-    @media (max-width: 900px) {
-      .menu-toggle { display: inline-flex; align-items: center; justify-content: center; }
-
-      .nav-menu {
-        display: none !important;
-        position: absolute;
-        top: 64px;
-        right: 12px;
-        background: rgba(0,0,0,0.9);
-        padding: 12px;
-        border-radius: 8px;
-        flex-direction: column;
-        gap: 8px;
-        min-width: 180px;
-        box-shadow: 0 8px 24px rgba(0,0,0,0.3);
-      }
-
-      .nav-menu.open {
-        display: flex !important;
-      }
-
-      .nav-menu li a, .nav-menu li button {
-        color: #fff;
-      }
+    .auth-wall-card{
+      background:var(--card);
+      border:1px solid rgba(255,68,68,0.25);
+      border-radius:28px;padding:56px 48px;
+      text-align:center;max-width:480px;width:100%;
+      animation:popIn 0.4s cubic-bezier(0.175,0.885,0.32,1.275);
+      box-shadow:0 40px 80px rgba(0,0,0,0.7);
     }
-  </style>
+    .auth-wall-card .icon{font-size:60px;margin-bottom:20px;display:block;}
+    .auth-wall-card h2{font-family:'Syne',sans-serif;font-size:26px;font-weight:800;margin-bottom:10px;}
+    .auth-wall-card p{font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:28px;}
+    .user-chip{
+      display:inline-flex;align-items:center;gap:8px;
+      background:rgba(57,255,20,0.08);border:1px solid rgba(57,255,20,0.2);
+      border-radius:100px;padding:6px 14px;
+      font-size:13px;color:var(--neon);font-weight:600;
+      margin-bottom:24px;
+    }
+    .user-chip i{font-size:11px;}
 
-  <script>
-    // Menu toggle behavior for mobile
-    (function () {
-      const toggle = document.getElementById('menuToggle');
-      const navMenu = document.querySelector('.nav-menu');
+    /* ─── REDEEM CODE MODAL ─── */
+    .redeem-modal-overlay{position:fixed;inset:0;z-index:600;background:rgba(5,5,8,0.92);backdrop-filter:blur(12px);display:none;align-items:center;justify-content:center;padding:20px;}
+    .redeem-modal-overlay.show{display:flex;animation:fadeIn 0.3s ease;}
+    @keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+    .redeem-modal-card{background:var(--card);border:1px solid rgba(255,215,0,0.25);border-radius:24px;padding:40px 36px;max-width:420px;width:100%;box-shadow:0 40px 80px rgba(0,0,0,0.8);transform:scale(0.9);opacity:0;transition:transform 0.3s cubic-bezier(0.175,0.885,0.32,1.275),opacity 0.3s;}
+    .redeem-modal-overlay.show .redeem-modal-card{transform:scale(1);opacity:1;}
+    .redeem-modal-card h2{font-family:'Syne',sans-serif;font-size:24px;font-weight:800;margin-bottom:10px;color:#ffd700;}
+    .redeem-modal-card p{font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:24px;}
+    .redeem-modal-input{width:100%;background:rgba(255,255,255,0.03);border:1px solid rgba(255,215,0,0.25);border-radius:11px;padding:14px 16px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--text);outline:none;transition:all 0.2s;margin-bottom:16px;text-transform:uppercase;letter-spacing:2px;text-align:center;}
+    .redeem-modal-input:focus{border-color:rgba(255,215,0,0.5);background:rgba(255,215,0,0.04);box-shadow:0 0 0 3px rgba(255,215,0,0.08);}
+    .redeem-modal-input::placeholder{color:rgba(112,112,160,0.5);}
+    .redeem-msg{font-size:12px;line-height:1.6;padding:12px 14px;border-radius:10px;margin-bottom:16px;display:none;align-items:flex-start;gap:8px;}
+    .redeem-msg.show{display:flex;}
+    .redeem-msg i{flex-shrink:0;font-size:13px;margin-top:2px;}
+    .redeem-msg.error{background:rgba(255,68,68,0.08);border:1px solid rgba(255,68,68,0.2);color:#ff6464;}
+    .redeem-msg.success{background:rgba(57,255,20,0.08);border:1px solid rgba(57,255,20,0.2);color:var(--neon);}
+    .redeem-msg.info{background:rgba(255,215,0,0.08);border:1px solid rgba(255,215,0,0.2);color:#ffd700;}
+    .redeem-modal-btns{display:flex;gap:10px;justify-content:center;}
+    .redeem-modal-cancel{background:transparent;border:1px solid rgba(255,255,255,0.12);color:var(--muted);font-family:'Syne',sans-serif;font-weight:600;font-size:13px;padding:11px 24px;border-radius:10px;cursor:pointer;transition:all 0.2s;}
+    .redeem-modal-cancel:hover{border-color:rgba(255,255,255,0.25);color:var(--text);}
+    .redeem-modal-btn{background:linear-gradient(135deg,#ffd700,#ffb300);color:#050508;font-family:'Syne',sans-serif;font-weight:700;font-size:13px;padding:11px 24px;border-radius:10px;border:none;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:6px;}
+    .redeem-modal-btn:hover{box-shadow:0 0 30px rgba(255,215,0,0.3);transform:translateY(-1px);}
+    .redeem-modal-btn:disabled{opacity:0.5;cursor:not-allowed;transform:none;}
 
-      if (!toggle || !navMenu) return;
+    footer{border-top:1px solid var(--border);padding:40px 24px;position:relative;z-index:1;}
+    .footer-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;}
+    .footer-links{display:flex;gap:24px;}
+    .footer-links a{font-size:13px;color:var(--muted);text-decoration:none;transition:color 0.2s;}
+    .footer-links a:hover{color:var(--neon);}
+    @media(max-width:1024px){.hero-inner{grid-template-columns:1fr;}.bug-scene{display:none;}.form-wrap{grid-template-columns:1fr;}}
+    @media(max-width:768px){.nav-links{display:none;}.severity-grid{grid-template-columns:repeat(2,1fr);}}
+  
+    /* ══════════ MOBILE RESPONSIVE — PhineX ══════════ */
+    *{min-width:0;}
+    img,video{max-width:100%;height:auto;}
 
-      // ensure navMenu has an id for aria-controls
-      if (!navMenu.id) navMenu.id = 'navMenu';
+    /* Hamburger */
+    .ham{display:none;flex-direction:column;justify-content:center;gap:5px;
+         width:40px;height:40px;background:none;border:none;cursor:pointer;
+         padding:8px;margin-left:auto;z-index:200;}
+    .ham span{display:block;width:22px;height:2px;background:var(--neon,#39ff14);
+              border-radius:2px;transition:all .3s;}
+    .ham.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+    .ham.open span:nth-child(2){opacity:0;}
+    .ham.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
 
-      toggle.setAttribute('aria-controls', navMenu.id);
+    /* Mobile drawer */
+    .mobile-nav{display:none;position:fixed;top:68px;left:0;right:0;
+                background:rgba(5,5,8,0.97);backdrop-filter:blur(20px);
+                border-bottom:1px solid rgba(255,255,255,.08);
+                z-index:150;padding:12px 16px 20px;flex-direction:column;gap:4px;}
+    .mobile-nav.open{display:flex;}
+    .mobile-nav a{padding:12px 16px;border-radius:10px;font-size:14px;
+                  color:#7070a0;text-decoration:none;transition:all .2s;
+                  min-height:44px;display:flex;align-items:center;}
+    .mobile-nav a:hover,.mobile-nav a.active{color:#f0f0ff;
+      background:rgba(255,255,255,.06);}
+    .mobile-nav .btn-neon{justify-content:center;margin-top:8px;}
 
-      toggle.addEventListener('click', function (e) {
-        const opened = navMenu.classList.toggle('open');
-        toggle.setAttribute('aria-expanded', opened);
-      });
+    @media(max-width:1024px){
+      .hero-inner{grid-template-columns:1fr;gap:40px;}
+      .hero-inner>*:last-child{display:none;}
+    }
+    @media(max-width:768px){
+      .ham{display:flex;}
+      .nav-links{display:none!important;}
+      .nav-inner .btn-neon,.nav-inner .nb-g{display:none;}
+      body{overflow-x:hidden;}
+      .hero{padding:88px 16px 48px;}
+      .hero-inner{gap:24px;}
+      .section-wrap,.page{padding-left:16px;padding-right:16px;}
+      .hero h1,.hero-h1,.h1{font-size:clamp(2.2rem,9vw,3.5rem)!important;letter-spacing:-1.5px!important;}
+    }
+    @media(max-width:480px){
+      .mobile-nav a,.mobile-nav button{min-height:44px;}
+      .btn-neon{min-height:44px;padding:10px 18px;}
+      .hero{padding:80px 12px 40px;}
+      .hero h1,.hero-h1,.h1{font-size:clamp(1.9rem,8vw,2.8rem)!important;}
+      .cards-grid,.grid-2,.grid-3,[class*="-grid"]{grid-template-columns:1fr!important;}
+      .stats-row,.stat-row{flex-direction:column;gap:12px;}
+    }
+    @media(max-width:360px){
+      nav,.nav-inner{padding-left:12px!important;padding-right:12px!important;}
+      .hero{padding-left:8px;padding-right:8px;}
+    }
+    @media(hover:none){
+      [class*="float"],[class*="Float"]{animation:none!important;}
+    }
+    @media(orientation:landscape) and (max-height:500px){
+      .hero{min-height:auto;padding-top:80px;}
+    }
+    </style>
+</head>
+<body>
+<div class="grid-bg"></div>
 
-      // Close menu when a link is clicked (mobile)
-      navMenu.addEventListener('click', function (e) {
-        const target = e.target.closest('a, button');
-        if (!target) return;
-        if (window.matchMedia('(max-width: 900px)').matches) {
-          navMenu.classList.remove('open');
-          toggle.setAttribute('aria-expanded', 'false');
-        }
-      });
-
-      // Close menu when clicking outside
-      document.addEventListener('click', function (e) {
-        if (window.matchMedia('(max-width: 900px)').matches) {
-          if (!e.target.closest('.nav-container') && !e.target.closest('#menuToggle')) {
-            if (navMenu.classList.contains('open')) {
-              navMenu.classList.remove('open');
-              toggle.setAttribute('aria-expanded', 'false');
-            }
-          }
-        }
-      });
-
-      // Optional: close on escape
-      document.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape' && navMenu.classList.contains('open')) {
-          navMenu.classList.remove('open');
-          toggle.setAttribute('aria-expanded', 'false');
-        }
-      });
-    })();
-  </script>
- 
-<div class="page-container">
-  <div class="card-switcher">
-    <button class="switcher-btn btn-secondary active" data-card="report">
-      <i class="fas fa-exclamation-triangle"></i> Report Error
-    </button>
-    <button class="switcher-btn btn-secondary" data-card="redeem">
-      <i class="fas fa-key"></i> Redeem Code
-    </button>
-    <button class="switcher-btn btn-primary" data-card="view" style="display:none;">
-      <i class="fas fa-list"></i> View Reports
-    </button>
-  </div>
-
-  <div class="cards">
-    <!-- Report Error Card -->
-    <div class="card" id="card-report">
-      <h2><i class="fas fa-exclamation-triangle"></i> Report an Error</h2>
-      <div class="form-group">
-        <label for="title">Error Title *</label>
-        <input type="text" id="title" placeholder="Briefly describe the issue" required />
-      </div>
-      <div class="form-group">
-        <label for="description">Detailed Description *</label>
-        <textarea id="description" placeholder="Provide details about the error, steps to reproduce, and any relevant information..." required></textarea>
-      </div>
-      <div class="form-group">
-        <label>Upload Media (Optional)</label>
-        <div class="file-area" id="fileArea">
-          <p><i class="fas fa-cloud-upload-alt"></i> Drag & Drop or Click to Upload</p>
-          <span>Supports images and videos up to 10MB</span>
-          <input type="file" id="fileInput" multiple accept="image/*,video/*" style="display: none;">
-        </div>
-        <div class="file-preview" id="filePreview"></div>
-      </div>
-      <div class="form-group">
-        <label for="email">Contact Email (Optional)</label>
-        <input type="email" id="email" placeholder="Your email for response" />
-      </div>
-      <button id="submitReport" class="btn-primary">
-        <i class="fas fa-paper-plane"></i> Submit Error Report
-      </button>
-      <div id="message" class="message"></div>
-    </div>
-
-    <!-- Redeem Code Card -->
-    <div class="card" id="card-redeem" style="display:none;">
-      <h2><i class="fas fa-key"></i> Redeem Admin Code</h2>
-      <div class="form-group">
-        <label for="adminCode">Admin Access Code</label>
-        <input type="text" id="adminCode" placeholder="Enter admin code" />
-      </div>
-      <button id="btnRedeem" class="btn-primary">
-        <i class="fas fa-unlock"></i> Redeem Code
-      </button>
-      <div id="redeemMessage" class="message"></div>
-    </div>
-
-    <!-- View Reports Card -->
-    <div class="card" id="card-view" style="display:none;">
-      <h2><i class="fas fa-list-alt"></i> Error Reports</h2>
-      <div style="overflow-x: auto;">
-        <table>
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Title</th>
-              <th>Description</th>
-              <th>Media</th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody id="reportsBody">
-            <!-- Dynamic report rows go here -->
-          </tbody>
-        </table>
-      </div>
-      <button id="clearReports" class="action-btn delete" style="margin-top: 20px;">
-        <i class="fas fa-trash"></i> Clear All Reports
-      </button>
+<!-- ─── AUTH WALL (shown until logged in) ─── -->
+<div class="auth-wall" id="authWall">
+  <div class="auth-wall-card">
+    <span class="icon">🔐</span>
+    <h2>Sign In Required</h2>
+    <p>You must be signed in to submit a bug report. Your report will be linked to your account.</p>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+      <a href="login.html" class="btn-neon"><i class="fas fa-sign-in-alt"></i> Sign In</a>
+      <a href="index.html" style="display:inline-flex;align-items:center;gap:7px;background:transparent;border:1px solid rgba(255,255,255,0.15);color:var(--text);font-family:'Syne',sans-serif;font-weight:600;font-size:13px;padding:10px 20px;border-radius:10px;text-decoration:none;">Back to Home</a>
     </div>
   </div>
 </div>
 
-<script>
-  // Constants and Variables
-  const STORAGE_KEY = 'phinex_reports';
-  const ADMIN_KEY = 'phinex_admin';
-  const validAdminCodes = ['ADMIN.PHINEX.2025', 'SUPPORT.PHINEX'];
-  let hasAdmin = localStorage.getItem(ADMIN_KEY) === 'true';
-  let uploadedFiles = [];
-
-  // Initialize
-  document.addEventListener('DOMContentLoaded', function() {
-    // Show View Reports button only if admin
-if (hasAdmin) {
-  document.querySelector('[data-card="view"]').style.display = 'flex';
-}
-    document.querySelectorAll('.switcher-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    const cardType = btn.getAttribute('data-card');
-    
-    // Prevent switching to View Reports without admin access
-    if (cardType === 'view' && !hasAdmin) {
-      showMessage('message', 'Admin access required to view reports', 'error');
-      return;
-    }
-    
-    // Update button states
-    document.querySelectorAll('.switcher-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    
-    // Hide all cards
-    document.querySelectorAll('.card').forEach(card => card.style.display = 'none');
-    
-    // Show selected card
-    const cardId = 'card-' + cardType;
-    document.getElementById(cardId).style.display = 'block';
-  });
-});
-
-    // Show View Reports button if admin
-    if (hasAdmin) {
-      document.querySelector('[data-card="view"]').style.display = 'flex';
-    }
-
-    // File upload handling
-    const fileArea = document.getElementById('fileArea');
-    const fileInput = document.getElementById('fileInput');
-
-    fileArea.addEventListener('click', () => fileInput.click());
-    fileInput.addEventListener('change', () => handleFiles(fileInput.files));
-    
-    fileArea.addEventListener('dragover', e => {
-      e.preventDefault();
-      fileArea.classList.add('dragover');
-    });
-    
-    fileArea.addEventListener('dragleave', () => {
-      fileArea.classList.remove('dragover');
-    });
-    
-    fileArea.addEventListener('drop', e => {
-      e.preventDefault();
-      fileArea.classList.remove('dragover');
-      handleFiles(e.dataTransfer.files);
-    });
-
-    // Submit report
-    document.getElementById('submitReport').addEventListener('click', submitReport);
-    
-    // Redeem code (corrected ID)
-    document.getElementById('btnRedeem').addEventListener('click', redeemCode);
-    
-    // Clear reports
-    document.getElementById('clearReports').addEventListener('click', clearAllReports);
-  });
-
-  // Functions
-  function handleFiles(files) {
-    for (let file of files) {
-      if (file.size > 10 * 1024 * 1024) {
-        showMessage('message', `File "${file.name}" exceeds 10MB limit`, 'error');
-        continue;
-      }
-      
-      const reader = new FileReader();
-      reader.onload = () => {
-        uploadedFiles.push({
-          name: file.name,
-          type: file.type,
-          data: reader.result,
-          size: file.size
-        });
-        renderPreviews();
-      };
-      reader.readAsDataURL(file);
-    }
-  }
-
-  function renderPreviews() {
-    const container = document.getElementById('filePreview');
-    container.innerHTML = '';
-    
-    uploadedFiles.forEach((file, index) => {
-      const div = document.createElement('div');
-      div.className = 'file-item';
-      
-      if (file.type.startsWith('image/')) {
-        div.innerHTML = `<img src="${file.data}" alt="${file.name}">`;
-      } else if (file.type.startsWith('video/')) {
-        div.innerHTML = `<video controls><source src="${file.data}" type="${file.type}"></video>`;
-      } else {
-        div.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;height:100%;">
-                          <i class="fas fa-file" style="font-size:2rem;color:var(--text-secondary);"></i>
-                        </div>`;
-      }
-      
-      const delBtn = document.createElement('button');
-      delBtn.className = 'remove-btn';
-      delBtn.innerHTML = '<i class="fas fa-times"></i>';
-      delBtn.onclick = () => {
-        uploadedFiles.splice(index, 1);
-        renderPreviews();
-      };
-      
-      div.appendChild(delBtn);
-      container.appendChild(div);
-    });
-  }
-
-  function submitReport() {
-    const title = document.getElementById('title').value.trim();
-    const description = document.getElementById('description').value.trim();
-    const email = document.getElementById('email').value.trim();
-
-    if (!title || !description) {
-      showMessage('message', 'Please fill all required fields', 'error');
-      return;
-    }
-
-    const report = {
-      id: Date.now(),
-      title,
-      description,
-      email: email || 'Not provided',
-      media: [...uploadedFiles],
-      status: 'pending',
-      timestamp: new Date().toISOString()
-    };
-
-    let reports = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-    reports.unshift(report); // Add to beginning
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(reports));
-
-    showMessage('message', 'Report submitted successfully!', 'success');
-
-    // Reset form
-    document.getElementById('title').value = '';
-    document.getElementById('description').value = '';
-    document.getElementById('email').value = '';
-    uploadedFiles = [];
-    renderPreviews();
-
-    // Refresh reports if admin
-    if (hasAdmin) {
-      loadReports();
-    }
-  }
-
-  function redeemCode() {
-  const code = document.getElementById('adminCode').value.trim().toUpperCase();
-  if (validAdminCodes.includes(code)) {
-    localStorage.setItem(ADMIN_KEY, 'true');
-    hasAdmin = true;
-    // Show View Reports button
-    document.querySelector('[data-card="view"]').style.display = 'flex';
-    
-    // Optional: Automatically switch to View Reports tab after successful redeem
-    document.querySelector('[data-card="view"]').classList.add('active');
-    document.querySelectorAll('.switcher-btn').forEach(b => b.classList.remove('active'));
-    document.querySelector('[data-card="view"]').classList.add('active');
-    
-    // Hide all cards and show View Reports
-    document.querySelectorAll('.card').forEach(card => card.style.display = 'none');
-    document.getElementById('card-view').style.display = 'block';
-    
-    loadReports();
-    showMessage('redeemMessage', 'Admin access granted!', 'success');
-  } else {
-    showMessage('redeemMessage', 'Invalid code!', 'error');
-  }
-  document.getElementById('adminCode').value = '';
-}
-
-  function loadReports() {
-    const reports = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-    const tbody = document.getElementById('reportsBody');
-    
-    if (reports.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;color:var(--text-secondary);">No reports yet</td></tr>`;
-      return;
-    }
-
-    tbody.innerHTML = reports.map(report => {
-      // Media preview
-      let mediaHTML = '';
-      if (report.media && report.media.length > 0) {
-        report.media.slice(0, 2).forEach(m => {
-          if (m.type.startsWith('image/')) {
-            mediaHTML += `<img src="${m.data}" style="width:40px;height:40px;border-radius:4px;margin-right:5px;" title="${m.name}">`;
-          } else if (m.type.startsWith('video/')) {
-            mediaHTML += `<i class="fas fa-video" style="color:var(--primary);margin-right:5px;" title="${m.name}"></i>`;
-          }
-        });
-        if (report.media.length > 2) {
-          mediaHTML += `<span style="color:var(--text-secondary);">+${report.media.length - 2}</span>`;
-        }
-      } else {
-        mediaHTML = '<span style="color:var(--text-secondary);">None</span>';
-      }
-
-      // Format date
-      const date = new Date(report.timestamp);
-      const formattedDate = `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()}`;
-
-      return `
-        <tr>
-          <td style="font-family:monospace;color:var(--text-secondary);">${report.id.toString().slice(-6)}</td>
-          <td>${report.title}</td>
-          <td>${report.description.substring(0, 40)}${report.description.length > 40 ? '...' : ''}</td>
-          <td>${mediaHTML}</td>
-          <td><span class="status-badge status-${report.status}">${report.status}</span></td>
-          <td>
-            <button class="action-btn resolve" onclick="toggleStatus(${report.id})">
-              ${report.status === 'pending' ? 'Resolve' : 'Re-open'}
-            </button>
-            <button class="action-btn delete" onclick="deleteReport(${report.id})">
-              Delete
-            </button>
-          </td>
-        </tr>
-      `;
-    }).join('');
-  }
-
-  function toggleStatus(id) {
-    let reports = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-    const index = reports.findIndex(r => r.id === id);
-    
-    if (index !== -1) {
-      reports[index].status = reports[index].status === 'pending' ? 'resolved' : 'pending';
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(reports));
-      loadReports();
-    }
-  }
-
-  function deleteReport(id) {
-    if (confirm('Are you sure you want to delete this report?')) {
-      let reports = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-      reports = reports.filter(r => r.id !== id);
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(reports));
-      loadReports();
-    }
-  }
-
-  function clearAllReports() {
-    if (confirm('This will delete ALL reports. Are you sure?')) {
-      localStorage.setItem(STORAGE_KEY, '[]');
-      loadReports();
-    }
-  }
-
-  function showMessage(elementId, text, type) {
-    const el = document.getElementById(elementId);
-    const icon = type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle';
-    
-    el.innerHTML = `<i class="fas ${icon}"></i> ${text}`;
-    el.className = `message ${type} show`;
-    
-    setTimeout(() => {
-      el.className = 'message';
-    }, 4000);
-  }
-
-  // Expose functions to global scope for button onclick handlers
-  window.toggleStatus = toggleStatus;
-  window.deleteReport = deleteReport;
-</script>
-   <!-- Footer -->
-<footer>
-  <div class="container">
-    <div class="footer-content">
-      <!-- Left Section: Logo and description -->
-      <div class="footer-section">
-        <div class="logo">
-          <i class="fas fa-dragon"></i>
-          <span>PhineX</span>
-        </div>
-        <p>Group of senior programmers</p>
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo"><div class="logo-icon"><i class="fas fa-dragon"></i></div><span class="logo-text">Phine<span>X</span></span></a>
+    <button id="pagesBtn"><i class="fas fa-th-large" style="font-size:12px;"></i> Pages <i class="fas fa-chevron-down" id="pagesBtnChevron" style="font-size:10px;transition:transform 0.2s;"></i></button>
+      <div id="pagesPanel">
+        <div class="pages-header">All Pages</div>
+        <a href="index.html" class="page-item"><i class="fas fa-home"></i><span>Home</span></a>
+        <a href="hiring.html" class="page-item"><i class="fas fa-laptop-code"></i><span>Join Us</span></a>
+        <a href="x-academy.html" class="page-item"><i class="fas fa-graduation-cap"></i><span>X-Academy</span></a>
+        <a href="bugreport.html" class="page-item"><i class="fas fa-bug"></i><span>Report Bug</span></a>
+        <a href="redeemcode.html" class="page-item"><i class="fas fa-gift"></i><span>Redeem Code</span></a>
+        <a href="aboutus.html" class="page-item"><i class="fas fa-info-circle"></i><span>About Us</span></a>
+        <a href="settings.html" class="page-item"><i class="fas fa-cog"></i><span>Settings</span></a>
       </div>
-      
-      <!-- Middle Section: Quick Links -->
-      <div class="footer-section">
-        <h4>Quick Links</h4>
-        <ul>
-          <li><a href="index.html">Home</a></li>
-          <li><a href="hiring.html">Join Us</a></li>
-          <li><a href="x-academy.html">X-Academy</a></li>
-          <li><a href="aboutus.html">About Us</a></li>
-          <li><a href="redeemcode.html">Redeem Code</a></li>
-        </ul>
+    
+    <div style="margin-left:auto;display:flex;gap:10px;align-items:center;">
+      <button class="pxs-trigger" aria-label="Open search"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg> Search</button>
+      <!-- Logged-in user chip -->
+      <div id="navUserChip" style="display:none;align-items:center;gap:7px;background:rgba(57,255,20,0.06);border:1px solid rgba(57,255,20,0.15);border-radius:100px;padding:5px 13px;font-size:12px;color:var(--neon);">
+        <i class="fas fa-circle-user" style="font-size:11px;"></i>
+        <span id="navUserEmail" style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></span>
       </div>
-      
-      <!-- Right Section: Social Links -->
-      <div class="footer-section">
-        <h4>Connect</h4>
-        <div class="social-links">
-          <a href="https://discord.gg/V2NDkCmhEm" class="discordlink"><i class="fab fa-discord"></i></a>
-          <a href="https://PhineX.github.io" class="githublink"><i class="fab fa-github"></i></a>
-          <a href="https://www.youtube.com/channel/UCslNCf9VtxpFH_gtA1VHFyQ" class="youtubelink"><i class="fab fa-youtube"></i></a>
-          <a href="https://chat.whatsapp.com/IuC3Gu6x5p61MORTnAuHJA" class="whatsapplink"><i class="fab fa-whatsapp"></i></a>
-          <a href="https://www.facebook.com/profile.php?id=61584765330775" class="btn-facebooklink"><i class="fab fa-facebook"></i></a>
-        </div>
-      </div>
+      <button onclick="openRedeemModal()" style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:8px;font-size:12px;font-family:'Syne',sans-serif;font-weight:700;color:var(--muted);border:1px solid var(--border);background:transparent;cursor:pointer;transition:all 0.2s;" id="redeemCodeBtn" title="Redeem invite code"><i class="fas fa-gift"></i> Redeem</button>
+      <a href="admin.html" style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:8px;font-size:12px;font-family:'Syne',sans-serif;font-weight:700;color:var(--muted);border:1px solid var(--border);text-decoration:none;transition:all 0.2s;" onmouseenter="this.style.borderColor='rgba(57,255,20,0.3)';this.style.color='var(--neon)'" onmouseleave="this.style.borderColor='var(--border)';this.style.color='var(--muted)'"><i class="fas fa-shield-halved"></i> Admin</a>
+      <a href="login.html" class="btn-neon" id="signInBtn"><i class="fas fa-sign-in-alt"></i> Sign In</a>
     </div>
-    
-    <!-- Footer Bottom -->
-    <div class="footer-bottom">
-      <div class="footer-bottom-content">
-        <div class="copyright">
-          <p>&copy; 2025 PhineX. All rights reserved.</p>
-        </div>
-        <div class="made-by">
-          <p>Made with <i class="fas fa-heart"></i> By : 
-            <a href="https://www.facebook.com/ahmd.aljwhry.495523" class="btn-facebooklink">
-              <i class="fas fa-laptop-code" style="margin-right: 10px;"></i> @Ahmed Al Gohary
-            </a>
-          </p>
-        </div>
+    <button class="ham" id="hamBtn" onclick="this.classList.toggle('open');document.getElementById('mobileNav').classList.toggle('open')" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+<div class="mobile-nav" id="mobileNav">
+<a href="index.html" class="nav-link">Home</a>
+      <a href="hiring.html" class="nav-link">Join Us</a>
+      <a href="x-academy.html" class="nav-link">X-Academy</a>
+      <a href="aboutus.html" class="nav-link">About</a>
+      <a href="bugreport.html" class="nav-link active">Report Bug</a>
+<a href="login.html" class="btn-neon" id="signInBtn"><i class="fas fa-sign-in-alt"></i> Sign In</a>
+</div>
+
+<section class="hero" style="z-index:1;">
+  <div style="position:absolute;top:40%;left:10%;width:400px;height:400px;background:radial-gradient(circle,rgba(255,68,68,0.05),transparent);border-radius:50%;pointer-events:none;"></div>
+  <div class="hero-inner" style="position:relative;z-index:2;">
+    <div>
+      <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(255,68,68,0.08);border:1px solid rgba(255,68,68,0.2);border-radius:100px;padding:5px 14px;font-size:11px;font-weight:700;color:var(--red);letter-spacing:1px;margin-bottom:24px;animation:fadeUp 0.5s ease both;"><span style="width:6px;height:6px;border-radius:50%;background:var(--red);animation:blink 1.5s infinite;display:block;"></span>Bug Tracker Active</div>
+      <h1 style="font-family:'Syne',sans-serif;font-size:clamp(2.8rem,5.5vw,5rem);font-weight:800;line-height:1.0;letter-spacing:-2px;animation:fadeUp 0.5s 0.1s ease both;">Found a<br><span style="color:var(--red);">Bug</span>?<br>Report It.</h1>
+      <p style="font-size:15px;color:var(--muted);line-height:1.8;margin:22px 0;max-width:480px;animation:fadeUp 0.5s 0.2s ease both;">Help us improve PhineX. Every bug report is saved to our tracker and reviewed by the dev team. We take every report seriously.</p>
+    </div>
+    <div class="bug-scene">
+      <div class="bug-card">
+        <div class="bug-header"><div class="bug-severity"></div><div><div class="bug-card-title">Bug Tracker</div><div class="bug-meta">Live Reports</div></div></div>
+        <div class="bug-item"><i class="fas fa-tag" style="color:var(--red);"></i><span>Nav dropdown broken on Safari</span><span class="bug-tag tag-critical">CRITICAL</span></div>
+        <div class="bug-item"><i class="fas fa-tag" style="color:var(--orange);"></i><span>News carousel stutter</span><span class="bug-tag tag-pending">PENDING</span></div>
+        <div class="bug-item"><i class="fas fa-tag" style="color:var(--neon);"></i><span>Login redirect loop fixed</span><span class="bug-tag tag-resolved">RESOLVED</span></div>
+        <div style="margin-top:16px;background:rgba(57,255,20,0.05);border:1px solid rgba(57,255,20,0.15);border-radius:8px;padding:10px 12px;font-size:11px;color:var(--muted);display:flex;gap:6px;align-items:center;"><i class="fas fa-database" style="color:var(--neon);"></i>Reports saved to Firebase</div>
       </div>
     </div>
   </div>
-</footer>
-</body>
+</section>
 
+<section class="form-section" id="form-section">
+  <div class="form-wrap">
+    <div class="form-card reveal">
+      <div class="form-card-header">
+        <i class="fas fa-bug" style="color:var(--red);font-size:18px;"></i>
+        <div>
+          <div style="font-family:'Syne',sans-serif;font-size:16px;font-weight:700;">Submit Bug Report</div>
+          <div style="font-size:12px;color:var(--muted);">Fields marked <span style="color:var(--red);">*</span> are required</div>
+        </div>
+        <!-- User badge inside form -->
+        <div id="formUserBadge" style="margin-left:auto;display:none;align-items:center;gap:6px;background:rgba(57,255,20,0.06);border:1px solid rgba(57,255,20,0.15);border-radius:8px;padding:6px 12px;font-size:11px;color:var(--neon);max-width:220px;overflow:hidden;">
+          <i class="fas fa-circle-user" style="font-size:10px;flex-shrink:0;"></i>
+          <span id="formUserEmail" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></span>
+        </div>
+      </div>
+      <div class="form-card-body">
+        <div class="form-group">
+          <label class="form-label"><span class="required-dot">*</span> Bug Title</label>
+          <input type="text" id="bugTitle" class="form-input" placeholder="Brief description of the issue">
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+          <div class="form-group">
+            <label class="form-label"><span class="required-dot">*</span> Affected Page</label>
+            <select class="form-input" id="affectedPage">
+              <option value="" disabled selected>Select page</option>
+              <option>Homepage (index.html)</option><option>Login (login.html)</option>
+              <option>Sign Up</option><option>X-Academy</option><option>Join Us (hiring)</option>
+              <option>Redeem Code</option><option>Settings</option><option>Bug Report</option>
+              <option>About Us</option><option>Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Your Browser</label>
+            <select class="form-input" id="browserSelect">
+              <option value="" disabled selected>Select browser</option>
+              <option>Chrome</option><option>Firefox</option><option>Safari</option>
+              <option>Edge</option><option>Opera</option><option>Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label"><span class="required-dot">*</span> Severity</label>
+          <div class="severity-grid">
+            <button class="severity-btn critical" onclick="selectSeverity(this,'Critical')"><span class="severity-emoji">🔴</span><span class="severity-label" style="color:var(--red);">Critical</span></button>
+            <button class="severity-btn high" onclick="selectSeverity(this,'High')"><span class="severity-emoji">🟠</span><span class="severity-label" style="color:var(--orange);">High</span></button>
+            <button class="severity-btn medium selected" onclick="selectSeverity(this,'Medium')"><span class="severity-emoji">🟡</span><span class="severity-label" style="color:var(--yellow);">Medium</span></button>
+            <button class="severity-btn low" onclick="selectSeverity(this,'Low')"><span class="severity-emoji">🟢</span><span class="severity-label" style="color:var(--neon);">Low</span></button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label"><span class="required-dot">*</span> Steps to Reproduce</label>
+          <textarea class="form-input" id="stepsToReproduce" rows="5" placeholder="1. Go to...&#10;2. Click on...&#10;3. Scroll to...&#10;4. See error"></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Expected vs Actual Behavior</label>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+            <textarea class="form-input" id="expectedBehavior" rows="3" placeholder="What should happen..."></textarea>
+            <textarea class="form-input" id="actualBehavior" rows="3" placeholder="What actually happens..."></textarea>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Screenshot / Recording</label>
+          <div class="file-drop" id="fileDrop" onclick="document.getElementById('fileInput').click()" ondragover="event.preventDefault();this.classList.add('over');" ondragleave="this.classList.remove('over');" ondrop="handleDrop(event)">
+            <i class="fas fa-cloud-upload-alt"></i>
+            <p>Drag & drop a file here, or <span>browse</span></p>
+            <p style="font-size:11px;margin-top:6px;">PNG, JPG, GIF, MP4 · Max 10MB</p>
+          </div>
+          <input type="file" id="fileInput" style="display:none;" accept="image/*,video/*" onchange="showFile(this)">
+          <div id="filePreview" style="display:none;margin-top:10px;background:rgba(57,255,20,0.05);border:1px solid rgba(57,255,20,0.15);border-radius:10px;padding:12px 16px;font-size:13px;align-items:center;gap:10px;"></div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Additional Notes (optional)</label>
+          <input type="text" id="additionalNotes" class="form-input" placeholder="Any other details...">
+        </div>
+        <button class="submit-btn" id="submitBtn" onclick="submitReport()">
+          <i class="fas fa-paper-plane"></i> Submit Bug Report
+        </button>
+      </div>
+    </div>
+
+    <div>
+      <div class="info-card reveal reveal-delay-1">
+        <div class="info-title"><i class="fas fa-lightbulb" style="color:var(--yellow);"></i> Tips for Good Reports</div>
+        <div class="info-item"><i class="fas fa-check"></i><div class="info-item-text">Be specific about steps — more detail = faster fix.</div></div>
+        <div class="info-item"><i class="fas fa-check"></i><div class="info-item-text">Add a screenshot or recording if possible — speeds up resolution by 10×.</div></div>
+        <div class="info-item"><i class="fas fa-check"></i><div class="info-item-text">Note your device and browser version.</div></div>
+        <div class="info-item"><i class="fas fa-check"></i><div class="info-item-text">Check existing reports to avoid duplicates.</div></div>
+      </div>
+
+      <div class="info-card reveal reveal-delay-2">
+        <div class="info-title"><i class="fas fa-clock-rotate-left" style="color:var(--neon);"></i> Your Recent Reports</div>
+        <div id="recentReportsList"><div style="font-size:13px;color:var(--muted);text-align:center;padding:16px 0;"><i class="fas fa-spinner fa-spin" style="margin-right:6px;"></i>Loading...</div></div>
+      </div>
+
+      <div class="info-card reveal">
+        <div class="info-title"><i class="fas fa-shield-halved" style="color:var(--neon);"></i> Admin Dashboard</div>
+        <p style="font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:16px;">View all submitted reports, manage statuses, and track every bug in the admin panel.</p>
+        <a href="admin.html" style="display:flex;align-items:center;justify-content:center;gap:8px;background:rgba(57,255,20,0.07);border:1px solid rgba(57,255,20,0.2);border-radius:10px;padding:11px;font-size:13px;font-weight:700;color:var(--neon);text-decoration:none;transition:all 0.2s;font-family:'Syne',sans-serif;" onmouseenter="this.style.background='rgba(57,255,20,0.12)'" onmouseleave="this.style.background='rgba(57,255,20,0.07)'">
+          <i class="fas fa-chart-bar"></i> Open Admin Dashboard
+        </a>
+      </div>
+
+      <div class="info-card reveal">
+        <div class="info-title"><i class="fab fa-discord" style="color:#5865f2;"></i> Report via Discord</div>
+        <p style="font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:16px;">For urgent bugs, reach us directly in the #bug-reports channel.</p>
+        <a href="https://discord.gg/xBQ3ewVVHk" target="_blank" style="display:flex;align-items:center;justify-content:center;gap:8px;background:rgba(88,101,242,0.1);border:1px solid rgba(88,101,242,0.25);border-radius:10px;padding:11px;font-size:13px;font-weight:700;color:#7289da;text-decoration:none;font-family:'Syne',sans-serif;">
+          <i class="fab fa-discord"></i> Join Discord
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ REDEEM CODE MODAL ═══════ -->
+<div class="redeem-modal-overlay" id="redeemModal">
+  <div class="redeem-modal-card">
+    <div style="text-align:center;margin-bottom:20px;font-size:40px;">🎁</div>
+    <h2>Redeem Invite Code</h2>
+    <p>Enter your exclusive PhineX invite code to unlock admin status and join the elite developer network.</p>
+    
+    <div class="redeem-msg error" id="redeemErrorMsg"><i class="fas fa-exclamation-circle"></i><span id="redeemErrorText"></span></div>
+    <div class="redeem-msg success" id="redeemSuccessMsg"><i class="fas fa-check-circle"></i><span id="redeemSuccessText"></span></div>
+    <div class="redeem-msg info" id="redeemInfoMsg"><i class="fas fa-info-circle"></i><span id="redeemInfoText"></span></div>
+    
+    <input type="text" class="redeem-modal-input" id="redeemCodeInput" placeholder="XXXX-XXXX-XXXX" oninput="formatRedeemCode(this)" onkeydown="if(event.key==='Enter')submitRedeemCode()">
+    
+    <div class="redeem-modal-btns">
+      <button class="redeem-modal-cancel" onclick="closeRedeemModal()">Cancel</button>
+      <button class="redeem-modal-btn" id="redeemSubmitBtn" onclick="submitRedeemCode()"><i class="fas fa-check"></i> Redeem</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ REDEEM SUCCESS OVERLAY ═══════ -->
+<div class="success-overlay" id="redeemSuccessOverlay" style="display:none;">
+  <div class="success-card">
+    <span class="success-icon">🎉</span>
+    <h2 style="font-size:26px;font-weight:800;margin-bottom:10px;">Admin Status Unlocked!</h2>
+    <p style="font-size:14px;color:var(--muted);line-height:1.8;margin-bottom:14px;">Congratulations! Your code has been verified and your account has been upgraded to <strong style="color:var(--neon);">Admin</strong> status.</p>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:28px;">You can now access the admin dashboard and exclusive features.</p>
+    <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+      <a href="admin.html" style="display:inline-flex;align-items:center;gap:8px;background:var(--neon);color:#050508;font-family:'Syne',sans-serif;font-weight:700;font-size:13px;padding:12px 22px;border-radius:10px;text-decoration:none;transition:all 0.2s;border:none;cursor:pointer;" onmouseenter="this.style.boxShadow='0 0 30px rgba(57,255,20,0.4)'" onmouseleave="this.style.boxShadow=''"><i class="fas fa-chart-bar"></i> Open Admin Dashboard</a>
+      <button onclick="document.getElementById('redeemSuccessOverlay').style.display='none'" style="display:inline-flex;align-items:center;gap:8px;background:transparent;border:1px solid rgba(255,255,255,0.15);color:var(--text);font-family:'Syne',sans-serif;font-weight:600;font-size:13px;padding:12px 22px;border-radius:10px;cursor:pointer;">Back</button>
+    </div>
+  </div>
+</div>
+
+<!-- SUCCESS OVERLAY -->
+<div class="success-overlay" id="successOverlay">
+  <div class="success-card">
+    <span class="success-icon">🐛✅</span>
+    <h2 style="font-size:26px;font-weight:800;margin-bottom:10px;">Bug Reported!</h2>
+    <p style="font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:6px;">Report saved to our database. The dev team will investigate and track it to resolution.</p>
+    <p style="font-size:14px;color:var(--neon);font-family:'Syne',sans-serif;font-weight:700;margin-bottom:28px;">ID: <span id="newReportId"></span></p>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+      <button class="btn-neon" style="padding:11px 20px;" onclick="resetForm()">Submit Another</button>
+      <a href="admin.html" style="display:inline-flex;align-items:center;gap:7px;background:rgba(57,255,20,0.08);border:1px solid rgba(57,255,20,0.2);color:var(--neon);font-family:'Syne',sans-serif;font-weight:700;font-size:13px;padding:11px 20px;border-radius:10px;text-decoration:none;"><i class="fas fa-chart-bar"></i> Admin</a>
+      <a href="index.html" style="display:inline-flex;align-items:center;gap:7px;background:transparent;border:1px solid rgba(255,255,255,0.15);color:var(--text);font-family:'Syne',sans-serif;font-weight:600;font-size:13px;padding:11px 20px;border-radius:10px;text-decoration:none;">Home</a>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <a href="index.html" class="nav-logo" style="text-decoration:none;"><div class="logo-icon"><i class="fas fa-dragon"></i></div><span class="logo-text">Phine<span>X</span></span></a>
+    <div class="footer-links"><a href="index.html">Home</a><a href="hiring.html">Join Us</a><a href="x-academy.html">X-Academy</a><a href="aboutus.html">About</a></div>
+    <p style="font-size:12px;color:var(--muted);">&copy; 2026 PhineX</p>
+  </div>
+</footer>
+
+<!-- UI ALERT SYSTEM -->
+<div id="pxAlertOverlay" style="position:fixed;inset:0;z-index:99999;background:rgba(5,5,8,0.7);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;padding:20px;">
+  <div id="pxAlertCard" style="background:#13131e;border:1px solid rgba(255,255,255,0.08);border-radius:24px;padding:40px 36px;max-width:420px;width:100%;text-align:center;box-shadow:0 40px 80px rgba(0,0,0,0.7);transform:scale(0.88);opacity:0;transition:transform 0.3s cubic-bezier(0.175,0.885,0.32,1.275),opacity 0.3s ease;">
+    <div id="pxAlertIcon" style="font-size:48px;margin-bottom:16px;"></div>
+    <div id="pxAlertTitle" style="font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:#f0f0ff;margin-bottom:8px;"></div>
+    <div id="pxAlertMsg" style="font-size:14px;color:#7070a0;line-height:1.7;margin-bottom:28px;"></div>
+    <div id="pxAlertBtns" style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;"></div>
+  </div>
+</div>
+<style>
+
+/* ══ MOBILE OVERHAUL ══ */
+body{overflow-x:hidden!important;}
+*{min-width:0;word-break:break-word;box-sizing:border-box;}
+img,canvas,video,iframe{max-width:100%;}
+@media(max-width:768px){
+  footer{padding:28px 16px 20px!important;}
+  .footer-inner{flex-direction:column!important;gap:20px!important;align-items:center!important;text-align:center!important;}
+  .footer-links{flex-wrap:wrap!important;justify-content:center!important;gap:10px 18px!important;}
+  .connect-grid{grid-template-columns:1fr!important;}
+  .curriculum-grid{grid-template-columns:1fr!important;}
+  .paths-grid{grid-template-columns:1fr!important;}
+  .settings-layout{grid-template-columns:1fr!important;}
+  .themes-grid{grid-template-columns:1fr 1fr!important;}
+  .lang-grid{grid-template-columns:1fr!important;}
+  .sbar{grid-template-columns:1fr 1fr!important;}
+  .hero-inner{grid-template-columns:1fr!important;}
+  .hero-inner>*:last-child{display:none!important;}
+  .wrap{grid-template-columns:1fr!important;}
+  .rp{display:none!important;}
+  .lp{padding:56px 20px 40px!important;}
+  h1,.h1{letter-spacing:-2px!important;}
+}
+@media(max-width:480px){
+  .stats-grid,.stat-grid,.stats-row{grid-template-columns:1fr 1fr!important;flex-direction:row!important;flex-wrap:wrap!important;}
+  .page-title,.hero h1{font-size:clamp(2rem,10vw,3rem)!important;}
+  nav,.nav-inner,.nw{padding-left:12px!important;padding-right:12px!important;}
+}
+
+</style>
+
+<!-- firebase-config.js MUST init Firebase before this script -->
+<script src="firebase-config.js"></script>
+
+<script>
+// ═══════════════════════════════════════
+//  FIREBASE REFS
+// ═══════════════════════════════════════
+const db   = firebase.database();
+const auth = firebase.auth();
+let currentUser = null;
+let selectedSeverity = 'Medium';
+let attachedFileName = '';
+
+// ═══════════════════════════════════════
+//  AUTH STATE OBSERVER
+// ═══════════════════════════════════════
+auth.onAuthStateChanged(user => {
+  if (user) {
+    currentUser = user;
+    // Hide auth wall
+    document.getElementById('authWall').style.display = 'none';
+    // Show user chip in nav
+    const chip = document.getElementById('navUserChip');
+    chip.style.display = 'flex';
+    document.getElementById('navUserEmail').textContent = user.email;
+    // Show user badge in form header
+    const badge = document.getElementById('formUserBadge');
+    badge.style.display = 'flex';
+    document.getElementById('formUserEmail').textContent = user.email;
+    // Update sign-in button
+    const btn = document.getElementById('signInBtn');
+    btn.innerHTML = '<i class="fas fa-sign-out-alt"></i> Sign Out';
+    btn.onclick = () => auth.signOut().then(() => location.href = 'login.html');
+    
+    // Check admin status and manage redeem button
+    const redeemBtn = document.getElementById('redeemCodeBtn');
+    db.ref('users/' + user.uid + '/admin').once('value', snap => {
+      const isAdmin = snap.val() === true;
+      if (isAdmin) {
+        redeemBtn.style.display = 'none';
+      } else {
+        redeemBtn.style.display = 'inline-flex';
+        redeemBtn.style.borderColor = 'rgba(255,215,0,0.3)';
+        redeemBtn.style.color = '#ffd700';
+        redeemBtn.onmouseenter = function() { this.style.borderColor = 'rgba(255,215,0,0.5)'; this.style.background = 'rgba(255,215,0,0.04)'; };
+        redeemBtn.onmouseleave = function() { this.style.borderColor = 'rgba(255,215,0,0.3)'; this.style.background = 'transparent'; };
+      }
+    });
+    
+    // Load this user's recent reports
+    loadMyRecentReports(user.uid);
+  } else {
+    currentUser = null;
+    document.getElementById('authWall').style.display = 'flex';
+    document.getElementById('redeemCodeBtn').style.display = 'none';
+    document.getElementById('recentReportsList').innerHTML =
+      '<div style="font-size:13px;color:var(--muted);text-align:center;padding:16px 0;">Sign in to see your reports</div>';
+  }
+});
+
+// ═══════════════════════════════════════
+//  LOAD USER'S OWN RECENT REPORTS
+// ═══════════════════════════════════════
+function loadMyRecentReports(uid) {
+  // Safety timeout — clear "Loading..." after 8 s if Firebase never responds
+  const loadingTimeout = setTimeout(() => {
+    const el = document.getElementById('recentReportsList');
+    if (el && el.querySelector('.fa-spinner')) {
+      el.innerHTML = '<div style="font-size:13px;color:var(--muted);text-align:center;padding:16px 0;">No reports found</div>';
+    }
+  }, 8000);
+
+  db.ref('bugReports')
+    .orderByChild('uid')
+    .equalTo(uid)
+    .limitToLast(4)
+    .on('value', snap => {
+      clearTimeout(loadingTimeout);
+      const el = document.getElementById('recentReportsList');
+      if (!snap.exists()) {
+        el.innerHTML = '<div style="font-size:13px;color:var(--muted);text-align:center;padding:16px 0;">No reports submitted yet</div>';
+        return;
+      }
+      const cols = { Critical:'var(--red)', High:'var(--orange)', Medium:'var(--yellow)', Low:'var(--neon)' };
+      const tagCls = { Open:'tag-pending', Resolved:'tag-resolved', Closed:'tag-resolved', Investigating:'tag-pending' };
+      const reports = [];
+      snap.forEach(child => reports.unshift({ id: child.key, ...child.val() }));
+      el.innerHTML = reports.slice(0, 4).map(r => `
+        <div class="bug-row">
+          <div class="bug-dot" style="background:${cols[r.severity]||'var(--muted)'};"></div>
+          <div class="bug-row-title">${esc(r.title)}</div>
+          <span class="bug-row-tag ${tagCls[r.status]||'tag-pending'}">${r.status}</span>
+        </div>`).join('');
+    }, err => {
+      // Firebase error (e.g. permission denied or missing index) — stop the spinner
+      clearTimeout(loadingTimeout);
+      const el = document.getElementById('recentReportsList');
+      console.warn('loadMyRecentReports error:', err);
+      el.innerHTML = '<div style="font-size:13px;color:var(--muted);text-align:center;padding:16px 0;">Could not load reports</div>';
+    });
+}
+
+// PAGES PANEL
+const pBtn=document.getElementById('pagesBtn'),pPanel=document.getElementById('pagesPanel'),chv=document.getElementById('pagesBtnChevron');
+pBtn.addEventListener('click',e=>{e.stopPropagation();const a=pPanel.classList.toggle('active');chv.style.transform=a?'rotate(180deg)':'';});
+document.addEventListener('click',e=>{if(!e.target.closest('#pagesBtn')&&!e.target.closest('#pagesPanel')){pPanel.classList.remove('active');chv.style.transform='';}});
+
+// SCROLL
+window.addEventListener('scroll',()=>{document.getElementById('navbar').classList.toggle('scrolled',window.scrollY>50);document.getElementById('backToTop').classList.toggle('visible',window.scrollY>300);});
+
+
+// ═══════════════════════════════════════
+//  SEVERITY & FILE HELPERS
+// ═══════════════════════════════════════
+function selectSeverity(btn, sev) {
+  document.querySelectorAll('.severity-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  selectedSeverity = sev;
+}
+
+function showFile(input) {
+  const file = input.files[0]; if (!file) return;
+  attachedFileName = file.name;
+  const p = document.getElementById('filePreview');
+  p.style.display = 'flex';
+  p.innerHTML = `<i class="fas fa-file-image" style="color:var(--neon);"></i><span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${file.name}</span><span style="font-size:11px;color:var(--muted);flex-shrink:0;">${(file.size/1024/1024).toFixed(1)}MB</span><i class="fas fa-times" style="cursor:pointer;color:var(--muted);flex-shrink:0;" onclick="document.getElementById('filePreview').style.display='none';document.getElementById('fileInput').value='';attachedFileName='';"></i>`;
+}
+
+function handleDrop(e) {
+  e.preventDefault();
+  document.getElementById('fileDrop').classList.remove('over');
+  const file = e.dataTransfer.files[0];
+  if (file) { const dt = new DataTransfer(); dt.items.add(file); document.getElementById('fileInput').files = dt.files; showFile(document.getElementById('fileInput')); }
+}
+
+// Auto-detect browser
+const ua = navigator.userAgent;
+const bsel = document.getElementById('browserSelect');
+if (ua.includes('Edg')) bsel.value = 'Edge';
+else if (ua.includes('OPR')) bsel.value = 'Opera';
+else if (ua.includes('Chrome')) bsel.value = 'Chrome';
+else if (ua.includes('Firefox')) bsel.value = 'Firefox';
+else if (ua.includes('Safari')) bsel.value = 'Safari';
+
+// ═══════════════════════════════════════
+//  SUBMIT TO FIREBASE
+// ═══════════════════════════════════════
+async function submitReport() {
+  if (!currentUser) {
+    PXAlert.warning('Not Signed In', 'You must be signed in to submit a bug report.');
+    return;
+  }
+
+  const title  = document.getElementById('bugTitle').value.trim();
+  const page   = document.getElementById('affectedPage').value;
+  const steps  = document.getElementById('stepsToReproduce').value.trim();
+
+  if (!title) { PXAlert.warning('Missing Title', 'Please enter a brief bug title before submitting.'); return; }
+  if (!page)  { PXAlert.warning('Missing Page', 'Please select the affected page.'); return; }
+  if (!steps) { PXAlert.warning('Missing Steps', 'Please describe the steps to reproduce the bug.'); return; }
+
+  const submitBtn = document.getElementById('submitBtn');
+  submitBtn.disabled = true;
+  submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+
+  try {
+    // Generate sequential-style ID from push key
+    const newRef = db.ref('bugReports').push();
+    const reportId = 'BUG-' + newRef.key.slice(-6).toUpperCase();
+
+    const report = {
+      id:           reportId,
+      title,
+      page,
+      browser:      document.getElementById('browserSelect').value || 'Unknown',
+      severity:     selectedSeverity,
+      steps,
+      expected:     document.getElementById('expectedBehavior').value.trim(),
+      actual:       document.getElementById('actualBehavior').value.trim(),
+      notes:        document.getElementById('additionalNotes').value.trim(),
+      attachment:   attachedFileName || null,
+      status:       'Open',
+      timestamp:    new Date().toISOString(),
+      // ── User identity ──
+      uid:          currentUser.uid,
+      reporterEmail: currentUser.email,
+      displayName:  currentUser.displayName || null,
+      userAgent:    navigator.userAgent,
+    };
+
+    await newRef.set(report);
+
+    document.getElementById('newReportId').textContent = reportId;
+    document.getElementById('successOverlay').style.display = 'flex';
+
+  } catch (err) {
+    console.error(err);
+    PXAlert.error('Submission Failed', 'Could not save the report: ' + err.message);
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Bug Report';
+  }
+}
+
+function resetForm() {
+  document.getElementById('successOverlay').style.display = 'none';
+  ['bugTitle','stepsToReproduce','expectedBehavior','actualBehavior','additionalNotes'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('affectedPage').selectedIndex = 0;
+  document.getElementById('filePreview').style.display = 'none';
+  document.getElementById('fileInput').value = '';
+  attachedFileName = ''; selectedSeverity = 'Medium';
+  document.querySelectorAll('.severity-btn').forEach(b => b.classList.remove('selected'));
+  document.querySelector('.severity-btn.medium').classList.add('selected');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ═══════════════════════════════════════
+//  SCROLL REVEAL
+// ═══════════════════════════════════════
+const obs = new IntersectionObserver(e => e.forEach(x => { if (x.isIntersecting) x.target.classList.add('visible'); }), { threshold: 0.12 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+// ═══════════════════════════════════════
+//  PXALERT SYSTEM
+// ═══════════════════════════════════════
+window.PXAlert = {
+  _resolve: null,
+  show({ icon='ℹ️', title='', message='', type='info', buttons=[{label:'OK',value:true,primary:true}] } = {}) {
+    return new Promise(resolve => {
+      this._resolve = resolve;
+      const o = document.getElementById('pxAlertOverlay'), c = document.getElementById('pxAlertCard');
+      document.getElementById('pxAlertIcon').innerHTML = icon;
+      document.getElementById('pxAlertTitle').textContent = title;
+      document.getElementById('pxAlertMsg').innerHTML = message;
+      const cols = { info:'rgba(57,255,20,0.25)', error:'rgba(255,68,68,0.25)', warning:'rgba(255,215,0,0.25)', success:'rgba(57,255,20,0.3)' };
+      c.style.borderColor = cols[type] || cols.info;
+      const be = document.getElementById('pxAlertBtns'); be.innerHTML = '';
+      buttons.forEach(btn => {
+        const b = document.createElement('button'); b.textContent = btn.label;
+        const ip = btn.primary;
+        b.style.cssText = ip ? 'background:#39ff14;color:#050508;font-family:Syne,sans-serif;font-weight:700;font-size:14px;padding:11px 28px;border-radius:11px;border:none;cursor:pointer;' : 'background:transparent;color:#f0f0ff;font-family:Syne,sans-serif;font-weight:600;font-size:14px;padding:11px 28px;border-radius:11px;border:1px solid rgba(255,255,255,0.12);cursor:pointer;';
+        b.onclick = () => { this.hide(); resolve(btn.value); };
+        be.appendChild(b);
+      });
+      o.classList.add('show');
+      document.addEventListener('keydown', this._keyHandler = e => { if (e.key === 'Escape') { this.hide(); resolve(false); } });
+    });
+  },
+  hide() { const o=document.getElementById('pxAlertOverlay'),c=document.getElementById('pxAlertCard'); c.style.transform='scale(0.88)'; c.style.opacity='0'; setTimeout(()=>o.classList.remove('show'),300); document.removeEventListener('keydown',this._keyHandler); },
+  info(t,m) { return this.show({icon:'<i class="fas fa-circle-info"></i>',title:t,message:m,type:'info'}); },
+  success(t,m) { return this.show({icon:'<i class="fas fa-circle-check"></i>',title:t,message:m,type:'success'}); },
+  error(t,m) { return this.show({icon:'<i class="fas fa-circle-xmark"></i>',title:t,message:m,type:'error'}); },
+  warning(t,m) { return this.show({icon:'<i class="fas fa-triangle-exclamation"></i>',title:t,message:m,type:'warning'}); },
+};
+document.getElementById('pxAlertOverlay').addEventListener('click', function(e) { if (e.target===this) { PXAlert.hide(); if(PXAlert._resolve) PXAlert._resolve(false); } });
+
+// ═══════════════════════════════════════
+//  REDEEM CODE SYSTEM
+// ═══════════════════════════════════════
+
+function formatRedeemCode(input) {
+  let val = input.value.replace(/[^A-Za-z0-9]/g, '').toUpperCase();
+  let formatted = '';
+  for (let i = 0; i < val.length; i++) {
+    if (i > 0 && i % 4 === 0) formatted += '-';
+    formatted += val[i];
+  }
+  input.value = formatted;
+}
+
+function openRedeemModal() {
+  if (!currentUser) {
+    PXAlert.error('Not Signed In', 'Please sign in first to redeem a code.');
+    return;
+  }
+  document.getElementById('redeemModal').classList.add('show');
+  document.getElementById('redeemCodeInput').focus();
+  clearRedeemMessages();
+}
+
+function closeRedeemModal() {
+  document.getElementById('redeemModal').classList.remove('show');
+  document.getElementById('redeemCodeInput').value = '';
+  clearRedeemMessages();
+}
+
+function clearRedeemMessages() {
+  document.getElementById('redeemErrorMsg').classList.remove('show');
+  document.getElementById('redeemSuccessMsg').classList.remove('show');
+  document.getElementById('redeemInfoMsg').classList.remove('show');
+}
+
+function showRedeemMessage(type, text) {
+  clearRedeemMessages();
+  const msgEl = document.getElementById('redeem' + type.charAt(0).toUpperCase() + type.slice(1) + 'Msg');
+  const textEl = document.getElementById('redeem' + type.charAt(0).toUpperCase() + type.slice(1) + 'Text');
+  textEl.textContent = text;
+  msgEl.classList.add('show');
+}
+
+async function submitRedeemCode() {
+  const code = document.getElementById('redeemCodeInput').value.trim().replace(/-/g, '').toUpperCase();
+  
+  if (!code) {
+    showRedeemMessage('error', 'Please enter a code.');
+    return;
+  }
+  
+  if (!currentUser) {
+    showRedeemMessage('error', 'You must be signed in.');
+    return;
+  }
+
+  // Check if already admin
+  const userRef = db.ref('users/' + currentUser.uid);
+  const userSnap = await userRef.once('value');
+  const userData = userSnap.val() || {};
+  
+  if (userData.admin === true) {
+    showRedeemMessage('info', 'Your account is already upgraded to Admin status.');
+    setTimeout(closeRedeemModal, 2000);
+    return;
+  }
+
+  const btn = document.getElementById('redeemSubmitBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Verifying...';
+
+  try {
+    // Read the redeemCodes node — supports both:
+    //   string:  redeemCodes = "ADMIN26"
+    //   object:  redeemCodes = { ADMIN26: { used: false, ... } }
+    const codesSnap = await db.ref('redeemCodes').once('value');
+
+    if (!codesSnap.exists()) {
+      showRedeemMessage('error', 'Invalid or expired code. <a href="https://www.facebook.com/A.Mo.Elgohary/" target="_blank" style="color:var(--neon);text-decoration:underline;">Contact support</a> if this is an error.');
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fas fa-check"></i> Redeem';
+      return;
+    }
+
+    const codesVal = codesSnap.val();
+    let codeValid = false;
+    let codeRef = null;
+    let codeData = null;
+
+    if (typeof codesVal === 'string') {
+      // Simple string: redeemCodes = "ADMIN26"
+      codeValid = (codesVal.toUpperCase() === code);
+    } else if (typeof codesVal === 'object' && codesVal !== null) {
+      // Object map: redeemCodes/ADMIN26 = { used: false, ... }
+      if (codesVal[code] !== undefined) {
+        codeValid = true;
+        codeRef = db.ref('redeemCodes/' + code);
+        codeData = codesVal[code];
+      }
+    }
+
+    if (!codeValid) {
+      showRedeemMessage('error', 'Invalid or expired code. <a href="https://www.facebook.com/A.Mo.Elgohary/" target="_blank" style="color:var(--neon);text-decoration:underline;">Contact support</a> if this is an error.');
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fas fa-check"></i> Redeem';
+      return;
+    }
+
+    // If it's an object entry, check used/expiry flags
+    if (codeData && typeof codeData === 'object') {
+      if (codeData.used === true) {
+        showRedeemMessage('error', 'This code has already been redeemed by another user.');
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-check"></i> Redeem';
+        return;
+      }
+      if (codeData.expiresAt && new Date(codeData.expiresAt) < new Date()) {
+        showRedeemMessage('error', 'This code has expired.');
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-check"></i> Redeem';
+        return;
+      }
+      // Mark code as used
+      await codeRef.update({
+        used: true,
+        usedBy: currentUser.uid,
+        usedByEmail: currentUser.email,
+        redeemedAt: new Date().toISOString()
+      });
+    }
+
+    // Grant admin
+    await userRef.update({
+      admin: true,
+      upgradedAt: new Date().toISOString(),
+      upgradedVia: 'redeem_code'
+    });
+
+    btn.innerHTML = '<i class="fas fa-check"></i> Redeemed!';
+    showRedeemMessage('success', 'Code verified! Your account is now updated to Admin.');
+    
+    setTimeout(() => {
+      closeRedeemModal();
+      document.getElementById('redeemSuccessOverlay').style.display = 'flex';
+      auth.currentUser.reload();
+    }, 1500);
+
+  } catch (err) {
+    console.error('Redeem error:', err);
+    showRedeemMessage('error', 'An error occurred: ' + err.message);
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fas fa-check"></i> Redeem';
+  }
+}
+
+// Close redeem modal on overlay click
+document.getElementById('redeemModal').addEventListener('click', function(e) {
+  if (e.target === this) closeRedeemModal();
+});
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js"></script>
+<script src="phinex-search.js"></script>
+<script src="app.js"></script>
+</body>
 </html>

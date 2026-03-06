@@ -1,724 +1,576 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>X Developers — Pre-test Assessment</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <style>
-        /* Professional color scheme and typography */
-        :root {
-            --primary: #4f46e5;        /* Professional indigo */
-            --primary-dark: #4338ca;
-            --secondary: #0f172a;      /* Dark slate */
-            --accent: #06b6d4;         /* Cyan accent */
-            --bg: #f8fafc;             /* Light background */
-            --card: #ffffff;           /* White cards */
-            --text: #1e293b;           /* Dark text */
-            --text-muted: #64748b;     /* Muted text */
-            --border: #e2e8f0;         /* Light border */
-            --success: #10b981;        /* Success green */
-            --warning: #f59e0b;        /* Warning amber */
-            --radius-lg: 16px;
-            --radius-md: 12px;
-            --radius-sm: 8px;
-            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
-            --shadow-hover: 0 20px 40px -15px rgba(0, 0, 0, 0.1);
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-        }
-        
-        /* Dark mode support */
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --bg: #0f172a;
-                --card: #1e293b;
-                --text: #f1f5f9;
-                --text-muted: #94a3b8;
-                --border: #334155;
-                --secondary: #f8fafc;
-            }
-        }
-        
-        /* Reset and base styles */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        html, body {
-            height: 100%;
-            background: var(--bg);
-            color: var(--text);
-            line-height: 1.6;
-        }
-        
-       /* Default for all devices */
-body {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    background-image: 
-        radial-gradient(circle at 10% 20%, rgba(79, 70, 229, 0.05) 0%, transparent 20%),
-        radial-gradient(circle at 90% 80%, rgba(6, 182, 212, 0.05) 0%, transparent 20%);
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>X-Developer Assessment | PhineX Academy</title>
+<link rel="icon" type="image/png" href="PhineX (2).png">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<script>
+/* Three.js — multi-CDN fallback with ready callbacks */
+(function(){
+  var cdns=[
+    'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js',
+    'https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js',
+    'https://unpkg.com/three@0.128.0/build/three.min.js'
+  ];
+  var cbs=[];
+  window.onThreeReady=function(fn){ window.THREE?fn():cbs.push(fn); };
+  function tryNext(i){
+    if(i>=cdns.length){ console.warn('bg3d: Three.js failed on all CDNs'); return; }
+    var s=document.createElement('script');
+    s.src=cdns[i];
+    s.onload=function(){ cbs.forEach(function(f){f();}); cbs=[]; };
+    s.onerror=function(){ tryNext(i+1); };
+    document.head.appendChild(s);
+  }
+  tryNext(0);
+})();
+</script>
+<style>
+:root{
+  --g:#39ff14; --gd:rgba(57,255,20,0.14); --gd2:rgba(57,255,20,0.06);
+  --bg:#04040a; --s1:#0b0b14; --s2:#111120;
+  --bd:rgba(255,255,255,0.06); --bdg:rgba(57,255,20,0.18);
+  --tx:#eeeeff; --mu:#5c5c84; --go:#fbbf24;
 }
-@media (min-width: 1024px) {
-    body {
-        margin-top: 600px !important;
-    }
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--tx);min-height:100vh;overflow-x:hidden;}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;height:62px;background:rgba(4,4,10,.9);backdrop-filter:blur(28px);border-bottom:1px solid var(--bd);}
+.nw{max-width:1440px;margin:0 auto;padding:0 32px;height:100%;display:flex;align-items:center;gap:8px;}
+.logo{display:flex;align-items:center;gap:9px;text-decoration:none;flex-shrink:0;}
+.lb{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#39ff14,#00cc88);display:flex;align-items:center;justify-content:center;box-shadow:0 0 16px rgba(57,255,20,.35);}
+.lb i{color:#04040a;font-size:13px;}
+.ln{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:#eeeeff;}
+.ln b{color:var(--g);}
+.sep{width:1px;height:20px;background:var(--bd);margin:0 4px;}
+.crumb{display:flex;align-items:center;gap:5px;font-size:11.5px;color:var(--mu);}
+.crumb a{color:var(--mu);text-decoration:none;transition:color .18s;}
+.crumb a:hover{color:var(--g);}
+.crumb i{font-size:8px;}
+.nav-r{margin-left:auto;display:flex;gap:8px;}
+.nb{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:8px;font-family:'Syne',sans-serif;font-weight:700;font-size:12px;text-decoration:none;transition:all .18s;border:none;cursor:pointer;}
+.nb-o{background:transparent;color:var(--mu);border:1px solid var(--bd);}
+.nb-o:hover{border-color:var(--bdg);color:var(--g);}
+.nb-g{background:var(--g);color:#04040a;box-shadow:0 0 16px rgba(57,255,20,.2);}
+.nb-g:hover{background:#4dff28;box-shadow:0 0 26px rgba(57,255,20,.4);transform:translateY(-1px);}
+.wrap{display:grid;grid-template-columns:1fr 520px;min-height:100vh;padding-top:62px;position:relative;z-index:1;}
+.lp{padding:72px 60px 72px 72px;display:flex;flex-direction:column;justify-content:center;}
+@keyframes fu{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
+@keyframes blk{0%,100%{opacity:1;}50%{opacity:.15;}}
+.tag{display:inline-flex;align-items:center;gap:7px;background:var(--gd2);border:1px solid var(--bdg);border-radius:100px;padding:5px 13px;font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--g);margin-bottom:24px;width:fit-content;animation:fu .4s ease both;}
+.td{width:6px;height:6px;border-radius:50%;background:var(--g);box-shadow:0 0 7px var(--g);animation:blk 2s infinite;}
+.h1{font-family:'Syne',sans-serif;font-size:clamp(2.8rem,4.2vw,5rem);font-weight:800;line-height:.97;letter-spacing:-3px;margin-bottom:18px;animation:fu .4s .06s ease both;}
+.h1 s{text-decoration:none;color:transparent;-webkit-text-stroke:1.5px var(--g);filter:drop-shadow(0 0 24px rgba(57,255,20,.3));}
+.desc{font-size:14.5px;color:var(--mu);line-height:1.85;max-width:490px;margin-bottom:36px;animation:fu .4s .12s ease both;}
+.desc strong{color:var(--g);}
+.sbar{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--bd);border-radius:13px;overflow:hidden;margin-bottom:32px;animation:fu .4s .17s ease both;}
+.sc{padding:15px 12px;text-align:center;border-right:1px solid var(--bd);background:rgba(255,255,255,.01);transition:background .2s;}
+.sc:last-child{border:none;}
+.sc:hover{background:var(--gd2);}
+.sv{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--g);display:block;}
+.sl{font-size:9px;color:var(--mu);text-transform:uppercase;letter-spacing:.8px;margin-top:2px;}
+.rulebox{background:var(--s1);border:1px solid var(--bd);border-radius:14px;overflow:hidden;margin-bottom:20px;animation:fu .4s .22s ease both;}
+.rbhead{padding:12px 20px;border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:8px;font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:var(--mu);text-transform:uppercase;letter-spacing:.9px;}
+.rbhead i{color:var(--g);}
+.ri{display:flex;align-items:flex-start;gap:12px;padding:12px 20px;border-bottom:1px solid var(--bd);transition:background .2s;}
+.ri:last-child{border:none;}
+.ri:hover{background:rgba(57,255,20,.02);}
+.rnum{width:21px;height:21px;border-radius:5px;background:var(--gd2);border:1px solid var(--bdg);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:9.5px;font-weight:700;color:var(--g);margin-top:2px;}
+.rt{font-size:12.5px;color:var(--mu);line-height:1.65;}
+.rt b{color:var(--tx);}
+.warn{display:flex;gap:10px;background:rgba(251,191,36,.04);border:1px solid rgba(251,191,36,.15);border-radius:11px;padding:12px 15px;margin-bottom:20px;font-size:12px;color:rgba(251,191,36,.7);line-height:1.6;animation:fu .4s .26s ease both;}
+.warn i{color:var(--go);flex-shrink:0;margin-top:1px;}
+.warn b{color:var(--go);}
+.checks{margin-bottom:24px;animation:fu .4s .30s ease both;}
+.ck{display:flex;align-items:flex-start;gap:11px;padding:12px 15px;background:var(--s1);border:1px solid var(--bd);border-radius:10px;cursor:pointer;margin-bottom:8px;transition:all .2s;user-select:none;}
+.ck:hover{border-color:var(--bdg);}
+.ck.on{border-color:rgba(57,255,20,.3);background:rgba(57,255,20,.03);}
+.cbox{width:19px;height:19px;border-radius:5px;border:2px solid var(--bd);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s;margin-top:1px;}
+.ck.on .cbox{background:var(--g);border-color:var(--g);}
+.cbox i{font-size:9px;color:#04040a;display:none;}
+.ck.on .cbox i{display:block;}
+.cl{font-size:12.5px;color:var(--mu);line-height:1.55;}
+.cl b{color:var(--tx);}
+.cl a{color:var(--g);text-decoration:none;}
+.cta{display:flex;gap:10px;animation:fu .4s .34s ease both;}
+.bstart{display:inline-flex;align-items:center;gap:8px;background:var(--g);color:#04040a;font-family:'Syne',sans-serif;font-weight:800;font-size:14px;padding:14px 28px;border-radius:11px;border:none;cursor:pointer;text-decoration:none;transition:all .28s;opacity:.4;pointer-events:none;}
+.bstart.rdy{opacity:1;pointer-events:all;box-shadow:0 0 28px rgba(57,255,20,.25);}
+.bstart.rdy:hover{background:#52ff28;box-shadow:0 0 48px rgba(57,255,20,.45);transform:translateY(-2px);}
+.bsec{display:inline-flex;align-items:center;gap:7px;background:transparent;color:var(--tx);font-family:'Syne',sans-serif;font-weight:700;font-size:13px;padding:14px 20px;border-radius:11px;border:1px solid var(--bd);text-decoration:none;transition:all .2s;cursor:pointer;}
+.bsec:hover{border-color:var(--bdg);color:var(--g);}
+.hint{margin-top:14px;font-size:11.5px;color:var(--mu);}
+.hint i{color:var(--g);margin-right:4px;}
+.rp{display:flex;align-items:center;justify-content:center;padding:40px 32px;position:relative;overflow:hidden;border-left:1px solid var(--bd);}
+.rp::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 80% at 50% 50%,rgba(0,170,255,.025),transparent);}
+@keyframes rot{to{transform:rotate(360deg);}}
+@keyframes rotr{to{transform:rotate(-360deg);}}
+@keyframes cf{0%,100%{transform:rotateY(-9deg) rotateX(4deg) translateY(0);}50%{transform:rotateY(-4deg) rotateX(1deg) translateY(-18px);}}
+@keyframes sg{0%,100%{box-shadow:0 50px 100px rgba(0,0,0,.85),0 0 50px rgba(57,255,20,.05);}50%{box-shadow:0 50px 100px rgba(0,0,0,.85),0 0 80px rgba(57,255,20,.12);}}
+@keyframes sh{0%,60%{left:-100%;}100%{left:210%;}}
+.scene{position:relative;display:flex;flex-direction:column;align-items:center;gap:18px;}
+.rings-wrap{position:relative;display:flex;align-items:center;justify-content:center;}
+.ring{position:absolute;border-radius:50%;pointer-events:none;}
+.rg1{width:440px;height:440px;border:1px solid rgba(57,255,20,.07);animation:rot 18s linear infinite;}
+.rg1::before{content:'';position:absolute;top:-5px;left:50%;margin-left:-5px;width:10px;height:10px;border-radius:50%;background:var(--g);box-shadow:0 0 12px var(--g),0 0 24px var(--g);}
+.rg1::after{content:'';position:absolute;bottom:-4px;right:22%;width:7px;height:7px;border-radius:50%;background:rgba(57,255,20,.45);box-shadow:0 0 9px rgba(57,255,20,.5);}
+.rg2{width:340px;height:340px;border:1px solid rgba(57,255,20,.04);animation:rotr 28s linear infinite;}
+.rg3{width:230px;height:230px;border:1px dashed rgba(57,255,20,.025);animation:rot 42s linear infinite;}
+.card{width:290px;position:relative;z-index:2;background:linear-gradient(155deg,#141422 0%,#09090f 100%);border:1px solid rgba(57,255,20,.22);border-radius:24px;padding:26px 22px;overflow:hidden;animation:cf 8s ease-in-out infinite, sg 4s ease-in-out infinite;}
+.card-sheen{position:absolute;top:0;left:-100%;width:50%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.04),transparent);pointer-events:none;animation:sh 5s ease-in-out infinite;}
+.card::before{content:'';position:absolute;inset:-80%;width:260%;height:260%;background:conic-gradient(from 0deg,transparent 36%,rgba(57,255,20,.04),transparent 54%,rgba(57,255,20,.015),transparent);animation:rot 11s linear infinite;pointer-events:none;}
+.card::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 25% 15%,rgba(57,255,20,.07),transparent 55%);pointer-events:none;}
+.card-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px;position:relative;z-index:1;}
+.card-logo{display:flex;align-items:center;gap:8px;}
+.clogob{width:30px;height:30px;border-radius:7px;background:linear-gradient(135deg,#39ff14,#00cc88);display:flex;align-items:center;justify-content:center;box-shadow:0 0 12px rgba(57,255,20,.4);}
+.clogob i{color:#04040a;font-size:12px;}
+.cbn{font-family:'Syne',sans-serif;font-size:14px;font-weight:800;color:#eeeeff;}
+.cbn b{color:var(--g);}
+.cbadge{font-size:8.5px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--mu);background:rgba(255,255,255,.04);border:1px solid var(--bd);border-radius:5px;padding:3px 7px;}
+.chip{width:40px;height:30px;border-radius:5px;background:linear-gradient(135deg,#fbbf24,#d97706);box-shadow:0 2px 9px rgba(251,191,36,.3);display:grid;grid-template-columns:1fr 1fr;gap:1px;padding:3px;margin-bottom:16px;position:relative;z-index:1;}
+.chip div{background:rgba(0,0,0,.18);border-radius:1px;}
+.cnum{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:3px;color:rgba(255,255,255,.35);margin-bottom:18px;position:relative;z-index:1;}
+.clabel{font-size:8.5px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--mu);margin-bottom:3px;position:relative;z-index:1;}
+.ctitle{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;color:#eeeeff;margin-bottom:18px;position:relative;z-index:1;}
+.cgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;position:relative;z-index:1;margin-bottom:16px;}
+.cgi .cgl{font-size:8.5px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--mu);margin-bottom:2px;}
+.cgi .cgv{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:#eeeeff;}
+.cstatus{display:flex;align-items:center;gap:7px;background:rgba(57,255,20,.05);border:1px solid var(--bdg);border-radius:8px;padding:8px 11px;position:relative;z-index:1;}
+.csd{width:6px;height:6px;border-radius:50%;background:var(--g);box-shadow:0 0 7px var(--g);animation:blk 1.5s infinite;}
+.cst{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--g);}
+.term{width:290px;background:rgba(0,0,0,.7);border:1px solid rgba(255,255,255,.055);border-radius:13px;padding:15px 16px;backdrop-filter:blur(8px);}
+.tbar{display:flex;align-items:center;gap:5px;margin-bottom:11px;}
+.td2{width:8px;height:8px;border-radius:50%;}
+.tl{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--mu);margin-bottom:4px;line-height:1.5;}
+.tl .c{color:var(--g);}
+.tl .b{color:#60a5fa;}
+.tl .w{color:var(--go);}
+.tcur{display:inline-block;width:6px;height:11px;background:var(--g);animation:blk 1.2s infinite;border-radius:1px;margin-left:1px;vertical-align:middle;}
+#modal{position:fixed;inset:0;z-index:9999;background:rgba(4,4,10,.85);backdrop-filter:blur(12px);display:none;align-items:center;justify-content:center;padding:20px;}
+#modal.on{display:flex;}
+#mc{background:#0b0b14;border:1px solid rgba(57,255,20,.22);border-radius:22px;padding:38px 32px;max-width:380px;width:100%;text-align:center;box-shadow:0 40px 80px rgba(0,0,0,.7);transform:scale(.88);opacity:0;transition:transform .28s cubic-bezier(.175,.885,.32,1.275),opacity .28s;}
+#modal.on #mc{transform:scale(1);opacity:1;}
+#mico{font-size:42px;margin-bottom:12px;}
+#mtitle{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:#eeeeff;margin-bottom:7px;}
+#mmsg{font-size:13px;color:var(--mu);line-height:1.7;margin-bottom:22px;}
+.mbt{background:var(--g);color:#04040a;font-family:'Syne',sans-serif;font-weight:800;font-size:13px;padding:11px 26px;border-radius:9px;border:none;cursor:pointer;transition:all .2s;}
+.mbt:hover{background:#52ff28;box-shadow:0 0 20px rgba(57,255,20,.35);}
+@media(max-width:1100px){.wrap{grid-template-columns:1fr;}.rp{display:none;}.lp{padding:56px 28px;}}
+@media(max-width:600px){.sbar{grid-template-columns:1fr 1fr;}.sc{border-bottom:1px solid var(--bd);}.cta{flex-direction:column;}}
+
+
+/* ══ PX Search Bar ══ */
+.px-search-wrap{flex:1;max-width:240px;margin:0 8px;}
+.px-search-btn{width:100%;display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:7px 12px;cursor:pointer;color:rgba(255,255,255,0.35);font-size:12px;font-family:inherit;transition:all .2s;min-height:36px;white-space:nowrap;}
+.px-search-btn:hover{background:rgba(57,255,20,0.05);border-color:rgba(57,255,20,0.2);color:rgba(57,255,20,0.7);}
+.px-search-btn i{font-size:11px;flex-shrink:0;}
+.px-search-label{flex:1;text-align:left;}
+.px-search-kbd{font-size:9px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.1);border-radius:4px;padding:1px 5px;color:rgba(255,255,255,0.25);font-family:inherit;}
+/* ══ PX Search Overlay ══ */
+.pxs-overlay{position:fixed;inset:0;z-index:9999;background:rgba(4,4,10,.78);backdrop-filter:blur(14px);display:none;align-items:flex-start;justify-content:center;padding:80px 20px 20px;}
+.pxs-overlay.open{display:flex;}
+.pxs-modal{width:100%;max-width:520px;background:#0d0d18;border:1px solid rgba(57,255,20,.2);border-radius:18px;overflow:hidden;box-shadow:0 40px 80px rgba(0,0,0,.7);animation:pxsIn .18s ease;}
+@keyframes pxsIn{from{opacity:0;transform:translateY(-12px) scale(.97);}to{opacity:1;transform:none;}}
+.pxs-input-row{display:flex;align-items:center;gap:10px;padding:14px 18px;}
+.pxs-icon{color:rgba(57,255,20,.5);font-size:14px;flex-shrink:0;}
+.pxs-input{flex:1;background:none;border:none;outline:none;font-size:15px;color:#eeeeff;font-family:inherit;caret-color:#39ff14;}
+.pxs-input::placeholder{color:rgba(255,255,255,.25);}
+.pxs-esc{font-size:10px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:5px;padding:2px 7px;color:rgba(255,255,255,.3);font-family:inherit;flex-shrink:0;}
+.pxs-divider{height:1px;background:rgba(255,255,255,.06);}
+.pxs-results{max-height:320px;overflow-y:auto;padding:8px;}
+.pxs-results:empty::after{content:"No sections found";display:block;text-align:center;padding:28px;font-size:13px;color:rgba(255,255,255,.2);}
+.pxs-item{display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:10px;cursor:pointer;transition:background .14s;}
+.pxs-item:hover,.pxs-item.active{background:rgba(57,255,20,.07);}
+.pxs-item-icon{width:32px;height:32px;border-radius:8px;background:rgba(57,255,20,.06);border:1px solid rgba(57,255,20,.12);display:flex;align-items:center;justify-content:center;font-size:12px;color:rgba(57,255,20,.7);flex-shrink:0;}
+.pxs-item-label{font-size:13px;font-weight:500;color:#eeeeff;}
+.pxs-item-sub{font-size:11px;color:rgba(255,255,255,.3);margin-top:1px;}
+.pxs-item-arrow{margin-left:auto;color:rgba(255,255,255,.15);font-size:10px;}
+.pxs-footer{display:flex;gap:16px;padding:10px 18px;border-top:1px solid rgba(255,255,255,.05);font-size:10.5px;color:rgba(255,255,255,.25);}
+.pxs-footer kbd{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:4px;padding:1px 6px;font-family:inherit;margin-right:3px;}
+/* ══ MOBILE OVERHAUL ══ */
+body{overflow-x:hidden!important;}
+*{min-width:0;word-break:break-word;box-sizing:border-box;}
+img,canvas,video,iframe{max-width:100%;}
+@media(max-width:768px){
+  .px-search-wrap{max-width:36px!important;flex:0 0 36px;margin:0 4px;}
+  .px-search-label,.px-search-kbd{display:none!important;}
+  .px-search-btn{width:36px;height:36px;padding:0;justify-content:center;border-radius:9px;flex:0 0 36px;}
+  footer{padding:28px 16px 20px!important;}
+  .footer-inner{flex-direction:column!important;gap:20px!important;align-items:center!important;text-align:center!important;}
+  .footer-links{flex-wrap:wrap!important;justify-content:center!important;gap:10px 18px!important;}
+  .connect-grid{grid-template-columns:1fr!important;}
+  .curriculum-grid{grid-template-columns:1fr!important;}
+  .paths-grid{grid-template-columns:1fr!important;}
+  .settings-layout{grid-template-columns:1fr!important;}
+  .themes-grid{grid-template-columns:1fr 1fr!important;}
+  .lang-grid{grid-template-columns:1fr!important;}
+  .sbar{grid-template-columns:1fr 1fr!important;}
+  .hero-inner{grid-template-columns:1fr!important;}
+  .hero-inner>*:last-child{display:none!important;}
+  .wrap{grid-template-columns:1fr!important;}
+  .rp{display:none!important;}
+  .lp{padding:56px 20px 40px!important;}
+  h1,.h1{letter-spacing:-2px!important;}
 }
-/* Phones (portrait) */
-@media (max-width: 767px) {
-    body {
-        margin-top: 1150px;
-        margin-bottom: 1150px;
-    }
+@media(max-width:480px){
+  .stats-grid,.stat-grid,.stats-row{grid-template-columns:1fr 1fr!important;flex-direction:row!important;flex-wrap:wrap!important;}
+  .page-title,.hero h1{font-size:clamp(2rem,10vw,3rem)!important;}
+  nav,.nav-inner,.nw{padding-left:12px!important;padding-right:12px!important;}
 }
 
-/* Tablets and larger */
-@media (min-width: 768px) {
-    body {
-        margin-top: 400px;
-        margin-bottom: 500px;
-    }
-}
-@media (min-width: 320px) {
-    body {
-        margin-top: 1300px;
-    }
-}
-@media (min-width: 375px) {
-    body {
-        margin-top: 1300px;
-    }
-}
-        
-        /* Container */
-        .container {
-            width: 100%;
-            max-width: 1100px;
-            margin: 0 auto;
-        }
-        
-        /* Header */
-        .site-header {
-            display: flex;
-            align-items: center;
-            gap: 18px;
-            margin-bottom: 28px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid var(--border);
-        }
-        
-        .logo {
-            width: 70px;
-            height: 70px;
-            border-radius: var(--radius-md);
-            background: linear-gradient(135deg, var(--primary), var(--accent));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: var(--shadow);
-            overflow: hidden;
-            margin-bottom: 70px;
-        }
-        
-        .logo img {
-            width: 70px;
-            height: 70px;
-            object-fit: contain;
-            border-radius: 10000;
-        }
-        
-        .header-text h1 {
-            font-size: 28px;
-            font-weight: 700;
-            margin-bottom: 4px;
-            margin-left: 4px;
-            background: linear-gradient(90deg, var(--primary), var(--accent));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            animation-name: mymove-color;
-            animation-duration: 5s;
-            animation-iteration-count: infinite;
-            animation-direction: alternate-reverse;
-            animation-fill-mode: both;
-            border-radius: 10px;
-            align-items: center;
-            display: flex;
-            justify-content: center;
-            padding: 10px;
-        }
-        @keyframes mymove-color {
-  0% {
-    background-color: rgba(102, 255, 0, 0.1);
-    color: rgb(102, 255, 0);
-    box-shadow: 0 0 15px rgba(102, 255, 0, 0.3);
-    border: 2px solid rgba(102, 255, 0, 0.2);
-  }
-  25% {
-    background-color: rgba(0, 128, 0, 0.1);
-    color: rgb(255, 0, 0);
-    box-shadow: 0 0 15px rgba(0, 128, 0, 0.3);
-    border: 2px solid rgba(0, 128, 0, 0.2);
-  }
-  50% {
-    background-color: rgba(100, 100, 2, 0.1);
-    color: rgb(25, 0, 255);
-    box-shadow: 0 0 15px rgba(100, 100, 2, 0.3);
-    border: 2px solid rgba(100, 100, 2, 0.2);
-  }
-  75% {
-    background-color: rgba(224, 203, 106, 0.1);
-    color: rgb(255, 208, 0);
-    box-shadow: 0 0 15px rgba(224, 203, 106, 0.3);
-    border: 2px solid rgba(224, 203, 106, 0.2);
-  }
-  100% {
-    background-color: rgba(235, 194, 13, 0.1);
-    color: rgb(0, 0, 0);
-    box-shadow: 0 0 15px rgba(235, 194, 13, 0.3);
-    border: 2px solid rgba(235, 194, 13, 0.2);
-  }
-}
-        
-        .header-text p {
-            color: var(--text-muted);
-            font-size: 15px;
-            font-weight: 500;
-            border-radius: 10px;
-            align-items: center;
-            display: flex;
-            justify-content: center;
-            padding: 10px;
-        }
-        /* Main card */
-        .pretest-card {
-            background: var(--card);
-            border-radius: var(--radius-lg);
-            box-shadow: var(--shadow);
-            padding: 0;
-            overflow: hidden;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        
-        .pretest-card:hover {
-            box-shadow: var(--shadow-hover);
-        }
-        
-        /* Grid layout */
-        .pretest-grid {
-            display: grid;
-            grid-template-columns: 1fr 380px;
-            gap: 30px;
-            align-items: start;
-        }
-        
-        /* Content area */
-        .content-area {
-            padding: 32px;
-        }
-        
-        .test-title {
-            font-size: 24px;
-            font-weight: 700;
-            margin-bottom: 12px;
-            color: var(--text);
-        }
-        
-        .test-subtitle {
-            color: var(--text-muted);
-            font-size: 16px;
-            margin-bottom: 24px;
-        }
-        
-        /* Meta information */
-        .meta-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-            margin: 28px 0;
-        }
-        
-        .meta-item {
-            background: var(--bg);
-            border-radius: var(--radius-md);
-            padding: 18px;
-            border-left: 4px solid var(--primary);
-            transition: transform 0.2s ease;
-        }
-        
-        .meta-item:hover {
-            transform: translateY(-3px);
-        }
-        
-        .meta-item h3 {
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--text-muted);
-            margin-bottom: 8px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        
-        .meta-item p {
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--text);
-        }
-        
-        .meta-icon {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 36px;
-            height: 36px;
-            background: rgba(79, 70, 229, 0.1);
-            border-radius: 50%;
-            margin-bottom: 12px;
-            color: var(--primary);
-        }
-        
-        /* Instructions */
-        .instructions-section {
-            margin-top: 32px;
-            padding-top: 28px;
-            border-top: 1px solid var(--border);
-        }
-        
-        .instructions-section h3 {
-            font-size: 18px;
-            font-weight: 700;
-            margin-bottom: 18px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .instructions-section ul {
-            list-style: none;
-            padding-left: 0;
-        }
-        
-        .instructions-section li {
-            padding: 10px 0;
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-        }
-        
-        .instructions-section li i {
-            color: var(--primary);
-            margin-top: 4px;
-            flex-shrink: 0;
-        }
-        
-        .warning-note {
-            background: rgba(245, 158, 11, 0.1);
-            border-left: 4px solid var(--warning);
-            padding: 16px;
-            border-radius: var(--radius-sm);
-            margin: 20px 0;
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-        }
-        
-        .warning-note i {
-            color: var(--warning);
-            margin-top: 2px;
-        }
-        
-        /* Side panel */
-        .side-panel {
-            background: linear-gradient(160deg, var(--primary), var(--primary-dark));
-            color: white;
-            padding: 32px;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .side-panel::before {
-            content: '';
-            position: absolute;
-            top: -50px;
-            right: -50px;
-            width: 200px;
-            height: 200px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 50%;
-        }
-        
-        .side-panel::after {
-            content: '';
-            position: absolute;
-            bottom: -80px;
-            left: -80px;
-            width: 250px;
-            height: 250px;
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 50%;
-        }
-        
-        .side-panel-content {
-            position: relative;
-            z-index: 2;
-        }
-        
-        .ready-label {
-            font-size: 14px;
-            font-weight: 500;
-            color: rgba(255, 255, 255, 0.8);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 8px;
-        }
-        
-        .test-summary {
-            font-size: 32px;
-            font-weight: 800;
-            margin-bottom: 24px;
-            line-height: 1.2;
-        }
-        
-        .file-requirement {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: var(--radius-md);
-            padding: 16px;
-            margin: 24px 0;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        
-        .file-requirement i {
-            font-size: 20px;
-        }
-        
-        /* Buttons */
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            padding: 16px 28px;
-            border-radius: var(--radius-md);
-            font-weight: 600;
-            cursor: pointer;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            border: none;
-            font-size: 16px;
-            width: 100%;
-            margin-bottom: 12px;
-        }
-        
-        .btn-primary {
-            background: white;
-            color: var(--primary);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        }
-        
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-        }
-        
-        .btn-secondary {
-            background: transparent;
-            color: white;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-        }
-        
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: rgba(255, 255, 255, 0.5);
-        }
-        
-        /* Footer note */
-        .footer-note {
-            margin-top: 24px;
-            padding: 16px;
-            background: rgba(6, 182, 212, 0.1);
-            border-radius: var(--radius-md);
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-        }
-        
-        .footer-note i {
-            color: var(--accent);
-            margin-top: 3px;
-        }
-        
-        /* Responsive adjustments */
-        @media (max-width: 1024px) {
-            .pretest-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .side-panel {
-                order: -1;
-            }
-        }
-        
-        @media (max-width: 768px) {
-            .meta-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .test-summary {
-                font-size: 26px;
-            }
-            
-            .content-area, .side-panel {
-                padding: 24px;
-            }
-            
-            .site-header {
-                flex-direction: column;
-                text-align: center;
-                gap: 16px;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            body {
-                padding: 12px;
-            }
-            
-            .test-title {
-                font-size: 20px;
-            }
-            
-            .btn {
-                padding: 14px 20px;
-            }
-        }
-    </style>
+</style>
 </head>
 <body>
-    <div class="container">
-        <header class="site-header">
-            <div class="logo">
-                <img src="Phinex.png" alt="X Academy logo" width="70" height="70">
-            </div>
-            <div class="header-text">
-                <h1><i class="fas fa-graduation-cap" style="margin-right: 5px;"></i>X Developers</h1>
-                <p>Pre-test Assessment Center</p>
-            </div>
-        </header>
 
-        <main class="pretest-card">
-            <div class="pretest-grid">
-                <section class="content-area" aria-labelledby="pretest-title">
-                    <h1 id="pretest-title" class="test-title">Developers test</h1>
-                    <p class="test-subtitle">Review the assessment details below before starting. Ensure you have all required materials ready.</p>
-                    
-                    <div class="meta-grid">
-                        <div class="meta-item">
-                            <div class="meta-icon">
-                                <i class="fas fa-file-alt"></i>
-                            </div>
-                            <h3>Questions</h3>
-                            <p>10 + 1 File (>3MB)</p>
-                        </div>
-                        
-                        <div class="meta-item">
-                            <div class="meta-icon">
-                                <i class="far fa-clock"></i>
-                            </div>
-                            <h3>Duration</h3>
-                            <p>5 mins</p>
-                        </div>
-                        
-                        <div class="meta-item">
-                            <div class="meta-icon">
-                                <i class="fas fa-check-circle"></i>
-                            </div>
-                            <h3>Passing Score</h3>
-                            <p>100%</p>
-                        </div>
-                        
-                        <div class="meta-item">
-                            <div class="meta-icon">
-                                <i class="fas fa-tasks"></i>
-                            </div>
-                            <h3>Question Types</h3>
-                            <p>Multiple choice (a-b-c-d)</p>
-                        </div>
-                        
-                        <div class="meta-item">
-                            <div class="meta-icon">
-                                <i class="fas fa-redo"></i>
-                            </div>
-                            <h3>Allowed Attempts</h3>
-                            <p>Unlimited</p>
-                        </div>
-                        
-                        <div class="meta-item">
-                            <div class="meta-icon">
-                                <i class="fas fa-laptop-code"></i>
-                            </div>
-                            <h3>Assessment Type</h3>
-                            <p>Knowledge + Practical</p>
-                        </div>
-                    </div>
-                    
-                    <section class="instructions-section">
-                        <h3><i class="fas fa-list-check"></i> Assessment Instructions</h3>
-                        
-                        <div class="warning-note">
-                            <i class="fas fa-exclamation-triangle"></i>
-                            <div>
-                                <strong>Important:</strong> Do not refresh the page during the exam — this may end your session and result in loss of progress.
-                            </div>
-                        </div>
-                        
-                        <ul>
-                            <li>
-                                <i class="fas fa-chevron-right"></i>
-                                <div><strong>Prepare your project file</strong> (minimum > 3MB) before starting. You will need to upload it during the assessment.</div>
-                            </li>
-                            <li>
-                                <i class="fas fa-chevron-right"></i>
-                                <div><strong>Navigate freely</strong> between questions until submission. You can review and change answers at any time.</div>
-                            </li>
-                            <li>
-                                <i class="fas fa-chevron-right"></i>
-                                <div><strong>Ensure stable internet connection</strong> throughout the assessment to prevent disruptions.</div>
-                            </li>
-                            <li>
-                                <i class="fas fa-chevron-right"></i>
-                                <div><strong>Click "Begin Assessment"</strong> when you are ready to proceed to the test interface.</div>
-                            </li>
-                        </ul>
-                        
-                        <div class="footer-note">
-                            <i class="fas fa-info-circle"></i>
-                            <div>
-                                <strong>Note:</strong> The assessment will open in a new browser tab. Please ensure pop-ups are allowed for this site & the File upload isn't available for now.
-                            </div>
-                        </div>
-                    </section>
-                </section>
-                
-                <aside class="side-panel" aria-label="Start assessment panel">
-                    <div class="side-panel-content">
-                        <div class="ready-label">Ready to begin?</div>
-                        <h2 class="test-summary">10 Questions + File Submission</h2>
-                        
-                        <div class="file-requirement">
-                            <i class="fas fa-file-upload"></i>
-                            <div>
-                                <strong>File requirement:</strong> Prepare a project file (> 3 MB) for upload during the assessment.
-                            </div>
-                        </div>
-                        <div class="checkbox-requirement">
-                            <input type="checkbox" id="confirmCheckbox" required>
-                            <label for="confirmCheckbox">
-                                Terms & Conditions of programming community Requirements
-                            </label>
-                        </div>
-                        <div class="checkbox-requirement" style="margin-top: 10px;">
-                            <input type="checkbox" id="confirmCheckbox" required>
-                            <label for="confirmCheckbox" style="margin-top: 10px;">
-                                I Agree to the <a href="hiring.html"></a>I confirm that I have prepared a file of size > 3 mb
-                            </label>
-                        </div>
-                        <a href="x-academy-test.html" id="startBtn" class="btn btn-primary" target="_blank" style="margin-top: 10px;">
-                            <i class="fas fa-play-circle"></i>
-                            Begin Assessment
-                        </a>
-                        
-                        <a href="x-academy.html" class="btn btn-secondary">
-                            <i class="fas fa-arrow-left"></i>
-                            Back to X-Academy
-                        </a>
-                        
-                        <div style="margin-top: 24px; font-size: 14px; color: rgba(255, 255, 255, 0.7);">
-                            <p><i class="far fa-lightbulb"></i> <strong>Tip:</strong> Complete the assessment in one sitting for best results.</p>
-                        </div>
-                    </div>
-                </aside>
-            </div>
-        </main>
-    </div>
+<!-- ═══════════════ 3D NEURAL GATEWAY BACKGROUND ═══════════════ -->
+<canvas id="bg3d" style="position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;display:block;"></canvas>
 
-    <script>
-        // Replace the existing startBtn event listener with this updated version
-startBtn.addEventListener('click', function(e) {
-    const checkbox = document.getElementById('confirmCheckbox');
+<nav>
+  <div class="nw">
+    <a href="index.html" class="logo"><div class="lb"><i class="fas fa-dragon"></i></div><span class="ln">Phine<b>X</b></span></a>
+    <div class="sep"></div>
+    <div class="crumb"><a href="x-academy.html">X-Academy</a><i class="fas fa-chevron-right"></i><span style="color:var(--tx);">Pre-Test Briefing</span></div>
     
-    if (!checkbox.checked) {
-        e.preventDefault();
-        alert("Please confirm that you agree on the terms & conditions of programmers.");
-        
-        // Add visual feedback
-        checkbox.focus();
-        document.querySelector('.checkbox-requirement').style.background = 'rgba(255, 0, 0, 0.1)';
-        document.querySelector('.checkbox-requirement').style.border = '1px solid rgba(255, 0, 0, 0.3)';
-        
-        // Remove the highlight after a moment
-        setTimeout(() => {
-            document.querySelector('.checkbox-requirement').style.background = '';
-            document.querySelector('.checkbox-requirement').style.border = '';
-        }, 2000);
-        
-        return;
+    <!-- ⌕ Search Bar -->
+    <div class="px-search-wrap">
+      <button class="px-search-btn" id="pxSearchBtn" aria-label="Search sections">
+        <i class="fas fa-search"></i>
+        <span class="px-search-label">Search sections…</span>
+        <kbd class="px-search-kbd">⌘K</kbd>
+      </button>
+    </div>
+    <div class="nav-r">
+      <a href="x-academy.html" class="nb nb-o"><i class="fas fa-arrow-left"></i> Back</a>
+      <a href="login.html" class="nb nb-g"><i class="fas fa-sign-in-alt"></i> Sign In</a>
+    </div>
+  </div>
+</nav>
+
+<div class="wrap">
+  <div class="lp">
+    <div class="tag"><span class="td"></span> CERTIFICATION GATEWAY — LIVE</div>
+    <h1 class="h1">Are You<br><s>Ready</s> For<br>This?</h1>
+    <p class="desc">The X-Developer assessment draws 10 randomised questions from a pool of 400+. You need <strong>every single one correct</strong> to earn your place on the PhineX team. No partial credit. No exceptions.</p>
+    <div class="sbar">
+      <div class="sc"><span class="sv">10</span><div class="sl">Questions</div></div>
+      <div class="sc"><span class="sv">5 min</span><div class="sl">Time Limit</div></div>
+      <div class="sc"><span class="sv">100%</span><div class="sl">To Pass</div></div>
+      <div class="sc"><span class="sv">∞</span><div class="sl">Retries</div></div>
+    </div>
+    <div class="rulebox">
+      <div class="rbhead"><i class="fas fa-terminal"></i> Pre-Flight Rules</div>
+      <div class="ri"><div class="rnum">01</div><div class="rt"><b>Have a project file ready (&gt;3 MB)</b> before starting — you'll be asked to upload it as part of the assessment.</div></div>
+      <div class="ri"><div class="rnum">02</div><div class="rt"><b>Do not refresh or close the tab.</b> The 5-minute countdown begins the moment the test loads.</div></div>
+      <div class="ri"><div class="rnum">03</div><div class="rt"><b>Navigate between questions freely.</b> You may review and change any answer before final submission.</div></div>
+      <div class="ri"><div class="rnum">04</div><div class="rt"><b>Perfect score required.</b> One incorrect answer ends the attempt — retry as many times as you need.</div></div>
+    </div>
+    <div class="warn"><i class="fas fa-triangle-exclamation"></i><div><b>Pop-ups required:</b> The test opens in a new tab. Allow pop-ups for this site. File upload is in preview — questions are fully live.</div></div>
+    <div class="checks">
+      <div class="ck" id="ck1" onclick="tick('ck1')"><div class="cbox"><i class="fas fa-check"></i></div><div class="cl"><b>I agree</b> to the PhineX <a href="hiring.html">developer terms and community requirements</a>.</div></div>
+      <div class="ck" id="ck2" onclick="tick('ck2')"><div class="cbox"><i class="fas fa-check"></i></div><div class="cl"><b>I confirm</b> I have a project file &gt;3 MB ready and understand the 100% pass requirement.</div></div>
+    </div>
+    <div class="cta">
+      <a href="x-academy-test.html" id="startBtn" class="bstart" target="_blank"><i class="fas fa-bolt"></i> Launch Assessment</a>
+      <a href="x-academy.html" class="bsec"><i class="fas fa-book-open"></i> Study First</a>
+    </div>
+    <p class="hint"><i class="far fa-lightbulb"></i> Tip: Complete all X-Academy modules before attempting. Preparation is everything.</p>
+  </div>
+  <div class="rp">
+    <div class="scene">
+      <div class="rings-wrap">
+        <div class="ring rg1"></div><div class="ring rg2"></div><div class="ring rg3"></div>
+        <div class="card">
+          <div class="card-sheen"></div>
+          <div class="card-top"><div class="card-logo"><div class="clogob"><i class="fas fa-dragon"></i></div><span class="cbn">Phine<b>X</b></span></div><div class="cbadge">CERTIFICATION</div></div>
+          <div class="chip"><div></div><div></div><div></div><div></div><div></div><div></div></div>
+          <div class="cnum">XXXX &nbsp;·&nbsp; XXXX &nbsp;·&nbsp; XXXX</div>
+          <div class="clabel">Access Level</div>
+          <div class="ctitle">X-Developer Clearance</div>
+          <div class="cgrid">
+            <div class="cgi"><div class="cgl">Pool</div><div class="cgv">400+ Qs</div></div>
+            <div class="cgi"><div class="cgl">Score</div><div class="cgv" style="color:var(--g);">100%</div></div>
+            <div class="cgi"><div class="cgl">Timer</div><div class="cgv">5 min</div></div>
+            <div class="cgi"><div class="cgl">Difficulty</div><div class="cgv" style="color:#ff6868;">Hard</div></div>
+          </div>
+          <div class="cstatus"><div class="csd"></div><span class="cst">gateway.status = "OPEN"</span></div>
+        </div>
+      </div>
+      <div class="term">
+        <div class="tbar"><div class="td2" style="background:#ff5f57;"></div><div class="td2" style="background:#febc2e;"></div><div class="td2" style="background:#28c840;"></div><span style="font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--mu);margin-left:8px;">phinex ~ x-dev-gateway</span></div>
+        <div class="tl"><span class="c">$</span> init_assessment <span class="b">--candidate</span></div>
+        <div class="tl" style="color:rgba(57,255,20,.5);">&nbsp;↳ question_pool: <span class="c">400 loaded</span></div>
+        <div class="tl">&nbsp;↳ shuffle: <span class="c">true</span></div>
+        <div class="tl">&nbsp;↳ pass_threshold: <span class="w">100%</span></div>
+        <div class="tl">&nbsp;↳ timer: <span class="b">300s</span></div>
+        <div class="tl">&nbsp;↳ retries: <span class="c">unlimited</span></div>
+        <div class="tl"><span class="c">$</span> waiting<span class="tcur"></span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="modal" onclick="if(event.target===this)closeM()">
+  <div id="mc"><div id="mico">⚠️</div><div id="mtitle">Confirm First</div><div id="mmsg">Please tick both checkboxes to confirm you've read the rules and are prepared before launching.</div><button class="mbt" onclick="closeM()">Got It</button></div>
+</div>
+
+<script>
+const s={ck1:false,ck2:false};
+function tick(id){s[id]=!s[id];document.getElementById(id).classList.toggle('on',s[id]);document.getElementById('startBtn').classList.toggle('rdy',s.ck1&&s.ck2);}
+document.getElementById('startBtn').addEventListener('click',function(e){if(!this.classList.contains('rdy')){e.preventDefault();document.getElementById('modal').classList.add('on');}});
+function closeM(){const c=document.getElementById('mc');c.style.cssText='transform:scale(.88);opacity:0;';setTimeout(()=>{document.getElementById('modal').classList.remove('on');c.style.cssText='';},260);}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeM();});
+</script>
+
+<!-- ═══════════════ 3D NEURAL GATEWAY SCENE ═══════════════ -->
+<script>
+(function(){
+  function run3D(){
+
+  var W=innerWidth,H=innerHeight;
+  var scene=new THREE.Scene();
+  var cam=new THREE.PerspectiveCamera(65,W/H,0.1,300);
+  var ren=new THREE.WebGLRenderer({canvas:document.getElementById('bg3d'),antialias:true,alpha:true});
+  ren.setSize(W,H); ren.setPixelRatio(Math.min(devicePixelRatio,2));
+  cam.position.z=45;
+
+  // Neural nodes
+  var nodeCount=65;
+  var nodeMeshes=[];
+  var nodeGeo=new THREE.SphereGeometry(0.30,7,7);
+  for(var i=0;i<nodeCount;i++){
+    var intensity=Math.random();
+    var color=intensity>0.7?0x00ffcc:(intensity>0.4?0x00aaff:0x0044bb);
+    var mat=new THREE.MeshBasicMaterial({color:color,transparent:true,opacity:0.5+intensity*0.45});
+    var mesh=new THREE.Mesh(nodeGeo,mat);
+    mesh.position.set((Math.random()-.5)*85,(Math.random()-.5)*65,(Math.random()-.5)*55-5);
+    mesh.userData={
+      pulse:Math.random()*6.28,
+      ps:0.018+Math.random()*0.025,
+      bs:0.45+Math.random()*1.1,
+      vx:(Math.random()-.5)*0.013,
+      vy:(Math.random()-.5)*0.010
+    };
+    scene.add(mesh); nodeMeshes.push(mesh);
+  }
+
+  // Edges
+  var ev=[];
+  var DIST=24;
+  for(var i=0;i<nodeCount;i++)
+    for(var j=i+1;j<nodeCount;j++){
+      var d=nodeMeshes[i].position.distanceTo(nodeMeshes[j].position);
+      if(d<DIST){ev.push(nodeMeshes[i].position.x,nodeMeshes[i].position.y,nodeMeshes[i].position.z,nodeMeshes[j].position.x,nodeMeshes[j].position.y,nodeMeshes[j].position.z);}
     }
-    });
+  var eGeo=new THREE.BufferGeometry();
+  eGeo.setAttribute('position',new THREE.BufferAttribute(new Float32Array(ev),3));
+  scene.add(new THREE.LineSegments(eGeo,new THREE.LineBasicMaterial({color:0x0077cc,transparent:true,opacity:0.11})));
 
-    // Add real-time button state based on checkbox
-    const checkbox = document.getElementById('confirmCheckbox');
-    checkbox.addEventListener('change', function() {
-        if (this.checked) {
-            startBtn.classList.remove('disabled');
-        } else {
-            startBtn.classList.add('disabled');
-        }
-    });
+  // Signals
+  var signals=[];
+  for(var k=0;k<20;k++){
+    var sg=new THREE.Mesh(new THREE.SphereGeometry(0.20,5,5),new THREE.MeshBasicMaterial({color:0x00ffee,transparent:true,opacity:0.92}));
+    sg.userData={a:Math.floor(Math.random()*nodeCount),b:Math.floor(Math.random()*nodeCount),t:Math.random(),sp:0.007+Math.random()*0.009};
+    scene.add(sg); signals.push(sg);
+  }
 
-    // Initialize button state
-    startBtn.classList.add('disabled');
-        // Add some interactive elements
-        document.addEventListener('DOMContentLoaded', function() {
-            const startBtn = document.getElementById('startBtn');
-            
-            // Add confirmation before starting test
-            startBtn.addEventListener('click', function(e) {
-                if (!confirm("Are you ready to begin the assessment? Ensure you have your project file ready (> 3MB).")) {
-                    e.preventDefault();
-                }
-            });
-            
-            // Add hover effects to meta items
-            const metaItems = document.querySelectorAll('.meta-item');
-            metaItems.forEach(item => {
-                item.addEventListener('mouseenter', function() {
-                    this.style.boxShadow = '0 8px 20px rgba(0, 0, 0, 0.08)';
-                });
-                
-                item.addEventListener('mouseleave', function() {
-                    this.style.boxShadow = 'none';
-                });
-            });
-            
-            // Add current date to header (optional)
-            const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' };
-            const currentDate = new Date().toLocaleDateString('en-US', dateOptions);
-            
-            // Uncomment to add date to header
-            // const headerText = document.querySelector('.header-text p');
-            // headerText.innerHTML += ' | ' + currentDate;
-        });
-    </script>
+  // Grid lines
+  for(var r=-5;r<=5;r++){
+    var g1=new THREE.BufferGeometry();
+    var pp=[];for(var x=-55;x<=55;x+=3)pp.push(x,r*9,-32);
+    g1.setAttribute('position',new THREE.BufferAttribute(new Float32Array(pp),3));
+    scene.add(new THREE.Line(g1,new THREE.LineBasicMaterial({color:0x002255,transparent:true,opacity:0.07})));
+  }
+  for(var c=-9;c<=9;c++){
+    var g2=new THREE.BufferGeometry();
+    var pp2=[];for(var y=-45;y<=45;y+=3)pp2.push(c*11,y,-32);
+    g2.setAttribute('position',new THREE.BufferAttribute(new Float32Array(pp2),3));
+    scene.add(new THREE.Line(g2,new THREE.LineBasicMaterial({color:0x002255,transparent:true,opacity:0.055})));
+  }
+
+  // Stars
+  var sGeo=new THREE.BufferGeometry();
+  var sArr=new Float32Array(1000*3);
+  for(var i=0;i<1000*3;i++) sArr[i]=(Math.random()-.5)*260;
+  sGeo.setAttribute('position',new THREE.BufferAttribute(sArr,3));
+  scene.add(new THREE.Points(sGeo,new THREE.PointsMaterial({color:0x88ccff,size:0.17,transparent:true,opacity:0.25})));
+
+  // Outer ring
+  var bigRing=new THREE.Mesh(new THREE.TorusGeometry(28,0.07,4,90),new THREE.MeshBasicMaterial({color:0x0088cc,transparent:true,opacity:0.06}));
+  bigRing.rotation.x=0.8; scene.add(bigRing);
+
+  var mx=0,my=0;
+  document.addEventListener('mousemove',function(e){mx=(e.clientX/innerWidth-.5)*2;my=(e.clientY/innerHeight-.5)*2;});
+
+  (function loop(){
+    requestAnimationFrame(loop);
+    nodeMeshes.forEach(function(m){
+      m.userData.pulse+=m.userData.ps;
+      m.scale.setScalar(m.userData.bs*(0.82+0.28*Math.sin(m.userData.pulse)));
+      m.position.x+=m.userData.vx;
+      m.position.y+=m.userData.vy;
+      if(Math.abs(m.position.x)>46)m.userData.vx*=-1;
+      if(Math.abs(m.position.y)>35)m.userData.vy*=-1;
+    });
+    signals.forEach(function(sg){
+      sg.userData.t+=sg.userData.sp;
+      if(sg.userData.t>=1){sg.userData.t=0;sg.userData.a=Math.floor(Math.random()*nodeCount);sg.userData.b=Math.floor(Math.random()*nodeCount);}
+      sg.position.lerpVectors(nodeMeshes[sg.userData.a].position,nodeMeshes[sg.userData.b].position,sg.userData.t);
+    });
+    bigRing.rotation.z+=0.0006;
+    cam.position.x+=(mx*5-cam.position.x)*0.03;
+    cam.position.y+=(-my*4-cam.position.y)*0.03;
+    cam.lookAt(0,0,0);
+    ren.render(scene,cam);
+  })();
+
+  window.addEventListener('resize',function(){cam.aspect=innerWidth/innerHeight;cam.updateProjectionMatrix();ren.setSize(innerWidth,innerHeight);});
+  } // end run3D
+  if(window.onThreeReady) window.onThreeReady(run3D);
+  else if(window.THREE) run3D();
+  else { var _t=setInterval(function(){if(window.THREE){clearInterval(_t);run3D();}},50); }
+})();
+</script>
+
+<!-- ══ PHINEX SECTION SEARCH ══ -->
+<div id="pxSearch" class="pxs-overlay" role="dialog" aria-modal="true">
+  <div class="pxs-modal">
+    <div class="pxs-input-row">
+      <i class="fas fa-search pxs-icon"></i>
+      <input id="pxsInput" class="pxs-input" type="text" placeholder="Jump to a section…" autocomplete="off" spellcheck="false">
+      <kbd class="pxs-esc">Esc</kbd>
+    </div>
+    
+<script>
+
+/* ══ PX Section Search ══ */
+(function(){
+  var iconMap={
+    'hero':'<i class="fas fa-house"></i>',
+    'home':'<i class="fas fa-house"></i>',
+    'mission':'<i class="fas fa-bullseye"></i>',
+    'about':'<i class="fas fa-circle-info"></i>',
+    'numbers':'<i class="fas fa-chart-bar"></i>',
+    'stats':'<i class="fas fa-chart-bar"></i>',
+    'social':'<i class="fas fa-share-nodes"></i>',
+    'connect':'<i class="fas fa-share-nodes"></i>',
+    'curriculum':'<i class="fas fa-book-open"></i>',
+    'paths':'<i class="fas fa-code-branch"></i>',
+    'testimonial':'<i class="fas fa-quote-left"></i>',
+    'members':'<i class="fas fa-users"></i>',
+    'community':'<i class="fas fa-users"></i>',
+    'appearance':'<i class="fas fa-palette"></i>',
+    'language':'<i class="fas fa-globe"></i>',
+    'preferences':'<i class="fas fa-sliders-h"></i>',
+    'account':'<i class="fas fa-user-circle"></i>',
+    'bug':'<i class="fas fa-bug"></i>',
+    'login':'<i class="fas fa-sign-in-alt"></i>',
+    'sign':'<i class="fas fa-sign-in-alt"></i>',
+    'redeem':'<i class="fas fa-ticket"></i>',
+    'assessment':'<i class="fas fa-bolt"></i>',
+    'rules':'<i class="fas fa-list-check"></i>',
+    'culture':'<i class="fas fa-heart"></i>',
+    'default':'<i class="fas fa-angle-right"></i>'
+  };
+  function iconFor(text){
+    var t=(text||'').toLowerCase();
+    for(var k in iconMap){ if(k!=='default'&&t.indexOf(k)>=0) return iconMap[k]; }
+    return iconMap['default'];
+  }
+  function buildIndex(){
+    var items=[],seen={};
+    function add(el,label,sub,action){
+      label=(label||'').replace(/\s+/g,' ').trim();
+      if(!label||seen[label]||label.length>80) return;
+      seen[label]=true;
+      items.push({el:el,label:label,sub:sub||'Section',icon:iconFor(label),action:action||null});
+    }
+    // 1. Explicit data-section
+    document.querySelectorAll('[data-section]').forEach(function(el){
+      add(el,el.getAttribute('data-section'),'Section');
+    });
+    // 2. Settings sidebar items
+    document.querySelectorAll('.sidebar-item').forEach(function(el){
+      var oc=el.getAttribute('onclick')||'';
+      var m=oc.match(/switchTab\('([^']+)'\)/);
+      if(m){
+        var panel=document.getElementById('panel-'+m[1]);
+        if(panel) add(panel,el.textContent.trim(),'Settings',function(){el.click();window.scrollTo({top:0,behavior:'smooth'});});
+      }
+    });
+    // 3. Section wrappers with headings
+    document.querySelectorAll('section,.section-wrap,.hero,.paths-section,.curriculum-section,.testimonials-section,.hero-wrap').forEach(function(el){
+      var h=el.querySelector('h1,h2,.section-title');
+      if(h) add(el,h.textContent.trim(),'Section');
+    });
+    // 4. Fallback: all h1/h2 on page
+    if(items.length<2){
+      document.querySelectorAll('h1,h2').forEach(function(h){
+        add(h,h.textContent.trim(),'Section');
+      });
+    }
+    return items;
+  }
+  var overlay=document.getElementById('pxSearch');
+  var input=document.getElementById('pxsInput');
+  var resultsEl=document.getElementById('pxsResults');
+  var btn=document.getElementById('pxSearchBtn');
+  if(!overlay||!input) return;
+  var INDEX=[],activeIdx=-1;
+  function open(){
+    if(!INDEX.length) INDEX=buildIndex();
+    overlay.classList.add('open');
+    input.value='';activeIdx=-1;
+    render('');
+    setTimeout(function(){input.focus();},60);
+  }
+  function close(){overlay.classList.remove('open');}
+  function render(q){
+    var list=q?INDEX.filter(function(x){return x.label.toLowerCase().indexOf(q.toLowerCase())>=0;}):INDEX;
+    resultsEl.innerHTML='';activeIdx=-1;
+    list.forEach(function(item){
+      var d=document.createElement('div');
+      d.className='pxs-item';
+      d.innerHTML='<div class="pxs-item-icon">'+item.icon+'</div>'
+        +'<div><div class="pxs-item-label">'+item.label+'</div>'
+        +'<div class="pxs-item-sub">'+item.sub+'</div></div>'
+        +'<i class="fas fa-arrow-right pxs-item-arrow"></i>';
+      d.addEventListener('click',function(){go(item);});
+      resultsEl.appendChild(d);
+    });
+  }
+  function go(item){
+    close();
+    if(item.action){item.action();return;}
+    var top=item.el.getBoundingClientRect().top+window.scrollY-90;
+    window.scrollTo({top:top,behavior:'smooth'});
+    var orig=item.el.style.transition;
+    item.el.style.transition='outline .1s';
+    item.el.style.outline='2px solid rgba(57,255,20,.4)';
+    item.el.style.outlineOffset='6px';
+    setTimeout(function(){item.el.style.outline='';item.el.style.outlineOffset='';item.el.style.transition=orig;},1000);
+  }
+  function setActive(idx){
+    var its=resultsEl.querySelectorAll('.pxs-item');
+    its.forEach(function(el,i){el.classList.toggle('active',i===idx);});
+    if(its[idx]) its[idx].scrollIntoView({block:'nearest'});
+  }
+  input.addEventListener('input',function(){render(this.value);});
+  input.addEventListener('keydown',function(e){
+    var its=resultsEl.querySelectorAll('.pxs-item');
+    if(e.key==='ArrowDown'){e.preventDefault();activeIdx=Math.min(activeIdx+1,its.length-1);setActive(activeIdx);}
+    else if(e.key==='ArrowUp'){e.preventDefault();activeIdx=Math.max(activeIdx-1,0);setActive(activeIdx);}
+    else if(e.key==='Enter'){e.preventDefault();var a=resultsEl.querySelector('.pxs-item.active')||its[0];if(a)a.click();}
+    else if(e.key==='Escape'){close();}
+  });
+  overlay.addEventListener('click',function(e){if(e.target===overlay)close();});
+  if(btn) btn.addEventListener('click',open);
+  document.addEventListener('keydown',function(e){
+    if((e.metaKey||e.ctrlKey)&&e.key==='k'){e.preventDefault();open();}
+    if(e.key==='Escape'&&overlay.classList.contains('open'))close();
+  });
+})();
+
+</script>
 </body>
 </html>

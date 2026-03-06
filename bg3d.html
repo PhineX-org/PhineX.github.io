@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>bg3d.js — PhineX 3D Background Demo</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root{--neon:#39ff14;--void:#050508;--card:#13131e;--border:#ffffff10;--text:#f0f0ff;--muted:#7070a0;}
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{font-family:'DM Sans',sans-serif;background:var(--void);color:var(--text);min-height:100vh;overflow-x:hidden;}
+    h1,h2,h3{font-family:'Syne',sans-serif;}
+    .grid-bg{position:fixed;inset:0;pointer-events:none;z-index:1;background-image:linear-gradient(rgba(57,255,20,0.018) 1px,transparent 1px),linear-gradient(90deg,rgba(57,255,20,0.018) 1px,transparent 1px);background-size:60px 60px;}
+    .hero{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:40px 24px;position:relative;z-index:2;}
+    .badge{display:inline-flex;align-items:center;gap:8px;background:rgba(57,255,20,0.08);border:1px solid rgba(57,255,20,0.2);border-radius:100px;padding:6px 16px;font-size:12px;font-weight:700;color:var(--neon);letter-spacing:1px;margin-bottom:28px;}
+    .dot{width:6px;height:6px;border-radius:50%;background:var(--neon);animation:blink 2s infinite;}
+    @keyframes blink{0%,100%{opacity:1;}50%{opacity:.2;}}
+    h1{font-size:clamp(3rem,8vw,6.5rem);font-weight:800;line-height:1.0;letter-spacing:-2px;margin-bottom:20px;}
+    h1 span{color:var(--neon);}
+    p.sub{font-size:16px;color:var(--muted);line-height:1.8;max-width:560px;margin:0 auto 40px;}
+    .shapes-list{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:40px;}
+    .shape-tag{padding:6px 14px;background:rgba(57,255,20,0.06);border:1px solid rgba(57,255,20,0.15);border-radius:100px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--neon);}
+    .usage-card{background:var(--card);border:1px solid rgba(57,255,20,0.15);border-radius:20px;padding:28px 32px;max-width:560px;margin:0 auto;text-align:left;}
+    .usage-card h3{font-size:14px;font-weight:700;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:16px;display:flex;align-items:center;gap:8px;}
+    .usage-card h3 i{color:var(--neon);}
+    pre{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--neon);background:rgba(0,0,0,0.3);border-radius:10px;padding:16px 20px;overflow-x:auto;line-height:1.8;}
+    .pages-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:20px;}
+    .page-item{font-size:12px;color:var(--muted);background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:8px;padding:8px 12px;font-family:'JetBrains Mono',monospace;}
+    .page-item i{color:var(--neon);margin-right:5px;font-size:10px;}
+    @media(max-width:600px){.pages-grid{grid-template-columns:1fr 1fr;}}
+  </style>
+</head>
+<body>
+
+<!-- Grid overlay (z:1, sits on top of canvas) -->
+<div class="grid-bg"></div>
+
+<section class="hero" id="hero">
+  <div>
+    <div class="badge"><span class="dot"></span> bg3d.js — Live Preview</div>
+    <h1>3D Background<br><span>Animation</span></h1>
+    <p class="sub">Move your cursor around to see the parallax effect. 12 completely unique 3D wireframe shapes float in the scene — no two shapes are the same.</p>
+
+    <!-- Shape list -->
+    <div class="shapes-list">
+      <span class="shape-tag">🔷 Icosahedron</span>
+      <span class="shape-tag">⭕ Torus</span>
+      <span class="shape-tag">💎 Octahedron</span>
+      <span class="shape-tag">🌀 TorusKnot</span>
+      <span class="shape-tag">⬡ Dodecahedron</span>
+      <span class="shape-tag">△ Tetrahedron</span>
+      <span class="shape-tag">▲ Cone</span>
+      <span class="shape-tag">⬛ Box</span>
+      <span class="shape-tag">⬜ Cylinder</span>
+      <span class="shape-tag">🔵 Low-poly Sphere</span>
+      <span class="shape-tag">○ Ring</span>
+      <span class="shape-tag">🏺 Lathe</span>
+    </div>
+
+    <!-- Usage instructions -->
+    <div class="usage-card">
+      <h3><i class="fas fa-code"></i> Add to any PhineX page</h3>
+      <pre>&lt;!-- Add this ONE line before &lt;/body&gt; --&gt;
+&lt;script src="bg3d.js"&gt;&lt;/script&gt;</pre>
+
+      <div style="margin-top:16px;font-size:12px;color:var(--muted);line-height:1.7;">
+        <strong style="color:var(--text);">Add to these pages:</strong>
+      </div>
+      <div class="pages-grid" style="margin-top:10px;">
+        <div class="page-item"><i class="fas fa-check"></i> aboutus.html</div>
+        <div class="page-item"><i class="fas fa-check"></i> bugreport.html</div>
+        <div class="page-item"><i class="fas fa-check"></i> hiring.html</div>
+        <div class="page-item"><i class="fas fa-check"></i> login.html</div>
+        <div class="page-item"><i class="fas fa-check"></i> redeemcode.html</div>
+        <div class="page-item"><i class="fas fa-check"></i> x-academy-test.html</div>
+      </div>
+
+      <div style="margin-top:16px;padding:12px 14px;background:rgba(255,215,0,0.06);border:1px solid rgba(255,215,0,0.15);border-radius:10px;font-size:12px;color:#ffd700;line-height:1.7;">
+        <i class="fas fa-info-circle" style="margin-right:6px;"></i>
+        <strong>index.html</strong> already has its own Three.js scene — skip it. The script auto-detects existing Three.js so no conflicts occur.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ bg3d.js INLINED ══ -->
+<script>
+(function initBG3D() {
+  function boot(THREE) {
+    const canvas = document.createElement('canvas');
+    canvas.id = 'bg3dCanvas';
+    canvas.style.cssText = 'position:fixed;inset:0;z-index:0;pointer-events:none;width:100%;height:100%;';
+    document.body.insertBefore(canvas, document.body.firstChild);
+
+    const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setClearColor(0x000000, 0);
+
+    const scene  = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+    camera.position.z = 55;
+
+    const C_NEON = new THREE.Color(0x39ff14);
+    const C_CYAN = new THREE.Color(0x00ffcc);
+    const mouse = { x: 0, y: 0, tx: 0, ty: 0 };
+    window.addEventListener('mousemove', e => {
+      mouse.tx = (e.clientX / window.innerWidth  - 0.5) * 2;
+      mouse.ty = (e.clientY / window.innerHeight - 0.5) * 2;
+    });
+
+    /* ─ Particle network ─ */
+    const N = 160, SX = 95, SY = 70, SZ = 50;
+    const pos = new Float32Array(N * 3);
+    const vel = [];
+    for (let i = 0; i < N; i++) {
+      pos[i*3]   = (Math.random()-.5)*SX;
+      pos[i*3+1] = (Math.random()-.5)*SY;
+      pos[i*3+2] = (Math.random()-.5)*SZ;
+      vel.push({ x:(Math.random()-.5)*.020, y:(Math.random()-.5)*.015, z:(Math.random()-.5)*.009 });
+    }
+    const ptGeo = new THREE.BufferGeometry();
+    ptGeo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+    scene.add(new THREE.Points(ptGeo, new THREE.PointsMaterial({ color:0x39ff14, size:.45, transparent:true, opacity:.75, blending:THREE.AdditiveBlending, depthWrite:false })));
+
+    const MAX_SEG = N*8, lPos = new Float32Array(MAX_SEG*6), lCol = new Float32Array(MAX_SEG*6);
+    const lGeo = new THREE.BufferGeometry();
+    lGeo.setAttribute('position', new THREE.BufferAttribute(lPos,3));
+    lGeo.setAttribute('color',    new THREE.BufferAttribute(lCol,3));
+    const lMesh = new THREE.LineSegments(lGeo, new THREE.LineBasicMaterial({ vertexColors:true, transparent:true, opacity:.38, blending:THREE.AdditiveBlending, depthWrite:false }));
+    scene.add(lMesh);
+    const CONN = 14;
+
+    function updateNet() {
+      let idx = 0;
+      for (let i = 0; i < N; i++) {
+        if(Math.abs(pos[i*3])>SX/2) vel[i].x*=-1;
+        if(Math.abs(pos[i*3+1])>SY/2) vel[i].y*=-1;
+        if(Math.abs(pos[i*3+2])>SZ/2) vel[i].z*=-1;
+        pos[i*3]+=vel[i].x; pos[i*3+1]+=vel[i].y; pos[i*3+2]+=vel[i].z;
+        for (let j=i+1;j<N&&idx<MAX_SEG;j++) {
+          const dx=pos[i*3]-pos[j*3],dy=pos[i*3+1]-pos[j*3+1],dz=pos[i*3+2]-pos[j*3+2];
+          const d=Math.sqrt(dx*dx+dy*dy+dz*dz);
+          if(d<CONN){const a=1-d/CONN,c=d<CONN*.45?C_CYAN:C_NEON;lPos.set([pos[i*3],pos[i*3+1],pos[i*3+2],pos[j*3],pos[j*3+1],pos[j*3+2]],idx*6);lCol.set([c.r*a,c.g*a,c.b*a,c.r*a,c.g*a,c.b*a],idx*6);idx++;}
+        }
+      }
+      for(let k=idx;k<MAX_SEG;k++) lPos.fill(0,k*6,k*6+6);
+      lGeo.attributes.position.needsUpdate=true; lGeo.attributes.color.needsUpdate=true;
+      lGeo.setDrawRange(0,idx*2); ptGeo.attributes.position.needsUpdate=true;
+    }
+
+    /* ─ 12 Unique Wireframe Shapes ─ */
+    function wMat(color, opacity) {
+      return new THREE.MeshBasicMaterial({ color, wireframe:true, transparent:true, opacity, blending:THREE.AdditiveBlending, depthWrite:false });
+    }
+    const lathe_pts = [];
+    for(let i=0;i<=8;i++){const t=i/8;lathe_pts.push(new THREE.Vector2(Math.sin(t*Math.PI)*5+2,(t-.5)*14));}
+
+    const shapes = [
+      { mesh:new THREE.Mesh(new THREE.IcosahedronGeometry(12,1),    wMat(0x39ff14,0.062)), pos:[-32,13,-20],  spin:[.0006,.0010,.0004], bob:{amp:2.5,freq:.40,phase:0.0} },
+      { mesh:new THREE.Mesh(new THREE.TorusGeometry(10,.45,10,60),   wMat(0x00ffcc,0.050)), pos:[31,-10,-14],  spin:[.0009,.0000,.0008], bob:{amp:3.0,freq:.35,phase:1.2} },
+      { mesh:new THREE.Mesh(new THREE.OctahedronGeometry(9,1),       wMat(0x00aaff,0.042)), pos:[5,23,-30],    spin:[.0007,.0008,.0003], bob:{amp:2.0,freq:.50,phase:2.4} },
+      { mesh:new THREE.Mesh(new THREE.TorusKnotGeometry(5.5,1.1,100,14),wMat(0x39ff14,0.048)), pos:[-20,-20,-10], spin:[.0004,.0007,.0006], bob:{amp:3.5,freq:.28,phase:3.7} },
+      { mesh:new THREE.Mesh(new THREE.DodecahedronGeometry(9,0),     wMat(0xccff00,0.038)), pos:[18,20,-25],   spin:[.0005,.0004,.0007], bob:{amp:2.2,freq:.44,phase:0.9} },
+      { mesh:new THREE.Mesh(new THREE.TetrahedronGeometry(11,0),     wMat(0xff66cc,0.032)), pos:[-10,-8,-35],  spin:[.0008,.0003,.0009], bob:{amp:4.0,freq:.33,phase:5.1} },
+      { mesh:new THREE.Mesh(new THREE.ConeGeometry(7,14,8,1,true),   wMat(0x00eeff,0.040)), pos:[38,8,-18],    spin:[.0003,.0009,.0005], bob:{amp:2.8,freq:.38,phase:1.8} },
+      { mesh:new THREE.Mesh(new THREE.BoxGeometry(11,11,11,2,2,2),   wMat(0x39ff14,0.036)), pos:[-38,-5,-12],  spin:[.0006,.0006,.0006], bob:{amp:1.8,freq:.55,phase:4.3} },
+      { mesh:new THREE.Mesh(new THREE.CylinderGeometry(5,7,13,8,4,true),wMat(0x88ffaa,0.035)), pos:[10,-28,-22],  spin:[.0005,.0010,.0002], bob:{amp:3.2,freq:.42,phase:2.6} },
+      { mesh:new THREE.Mesh(new THREE.SphereGeometry(10,5,4),        wMat(0x00ccff,0.030)), pos:[-5,5,-40],    spin:[.0007,.0005,.0008], bob:{amp:2.6,freq:.47,phase:0.5} },
+      { mesh:new THREE.Mesh(new THREE.RingGeometry(6,9,24,3),        wMat(0x39ff14,0.045)), pos:[26,-22,-8],   spin:[.0010,.0002,.0007], bob:{amp:2.0,freq:.60,phase:3.1} },
+      { mesh:new THREE.Mesh(new THREE.LatheGeometry(lathe_pts,10),   wMat(0xffaa00,0.030)), pos:[-24,18,-15],  spin:[.0004,.0008,.0003], bob:{amp:3.0,freq:.36,phase:4.9} },
+    ];
+    shapes.forEach(({mesh,pos:p})=>{ mesh.position.set(...p); scene.add(mesh); });
+
+    /* ─ Pulsing rings ─ */
+    const rGroup = new THREE.Group(); rGroup.position.set(0,0,-38);
+    [[22,0x39ff14,.048],[34,0x00ffcc,.030],[48,0x00aaff,.018]].forEach(([r,c,o])=>{
+      const m=new THREE.Mesh(new THREE.RingGeometry(r,r+.14,100),new THREE.MeshBasicMaterial({color:c,transparent:true,opacity:o,side:THREE.DoubleSide,blending:THREE.AdditiveBlending,depthWrite:false}));
+      m.rotation.x=Math.PI/2; rGroup.add(m);
+    });
+    scene.add(rGroup);
+
+    /* ─ Central orb ─ */
+    const orbMat = new THREE.MeshBasicMaterial({color:0x39ff14,transparent:true,opacity:.04,blending:THREE.AdditiveBlending,depthWrite:false});
+    const orb = new THREE.Mesh(new THREE.SphereGeometry(3,32,32), orbMat);
+    orb.position.set(0,0,-5); scene.add(orb);
+
+    /* ─ Star field ─ */
+    const sPos = new Float32Array(700*3);
+    for(let i=0;i<700;i++){sPos[i*3]=(Math.random()-.5)*280;sPos[i*3+1]=(Math.random()-.5)*190;sPos[i*3+2]=-80+Math.random()*-120;}
+    const sGeo=new THREE.BufferGeometry(); sGeo.setAttribute('position',new THREE.BufferAttribute(sPos,3));
+    scene.add(new THREE.Points(sGeo,new THREE.PointsMaterial({color:0x39ff14,size:.16,transparent:true,opacity:.20,blending:THREE.AdditiveBlending,depthWrite:false})));
+
+    let t = 0;
+    function animate() {
+      requestAnimationFrame(animate); t+=.01;
+      mouse.x+=(mouse.tx-mouse.x)*.042; mouse.y+=(mouse.ty-mouse.y)*.042;
+      camera.position.x+=(mouse.x*7-camera.position.x)*.038;
+      camera.position.y+=(-mouse.y*5-camera.position.y)*.038;
+      camera.lookAt(0,0,0);
+      updateNet();
+      shapes.forEach(({mesh,spin,bob})=>{
+        mesh.rotation.x+=spin[0]; mesh.rotation.y+=spin[1]; mesh.rotation.z+=spin[2];
+        mesh.position.y+=Math.sin(t*bob.freq+bob.phase)*.012*bob.amp;
+      });
+      rGroup.rotation.z+=.0012;
+      rGroup.children.forEach((r,i)=>{ r.material.opacity=.022+Math.sin(t+i*1.4)*.015; });
+      const s=1+Math.sin(t*.65)*.18; orb.scale.set(s,s,s); orbMat.opacity=.028+Math.sin(t*.65)*.018;
+      renderer.render(scene,camera);
+    }
+    animate();
+    window.addEventListener('resize',()=>{ renderer.setSize(window.innerWidth,window.innerHeight); camera.aspect=window.innerWidth/window.innerHeight; camera.updateProjectionMatrix(); });
+  }
+
+  if(window.THREE){ boot(window.THREE); }
+  else {
+    const s=document.createElement('script');
+    s.src='https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js';
+    s.onload=()=>boot(window.THREE);
+    document.head.appendChild(s);
+  }
+})();
+</script>
+</body>
+</html>
