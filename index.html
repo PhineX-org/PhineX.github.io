@@ -532,7 +532,7 @@
       <div style="position:absolute;inset:0;background:linear-gradient(135deg,#1ab000,#005533);border-radius:12px;transform:rotateY(-90deg) translateZ(32px);opacity:0.6;"></div>
       <div style="position:absolute;inset:0;background:linear-gradient(135deg,#39ff14,#00ee88);border-radius:12px;transform:rotateX(90deg) translateZ(32px);opacity:0.85;"></div>
       <div style="position:absolute;inset:0;background:linear-gradient(135deg,#0d7700,#003322);border-radius:12px;transform:rotateX(-90deg) translateZ(32px);opacity:0.5;"></div>
-      <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;transform:translateZ(33px);font-size:28px;color:#050508;">🐉</div>
+      <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;transform:translateZ(33px);font-size:28px;color:#050508;"><i class="fas fa-dragon"></i></div>
     </div>
   </div>
   <div style="position:absolute;top:50%;left:50%;margin:-80px 0 0 -80px;width:160px;height:160px;border-radius:50%;border:1px solid rgba(57,255,20,0.15);animation:orbitRing 3s linear infinite;pointer-events:none;"><div style="position:absolute;top:-4px;left:50%;margin-left:-4px;width:8px;height:8px;border-radius:50%;background:var(--neon);box-shadow:0 0 12px rgba(57,255,20,0.8);"></div></div>
@@ -550,23 +550,23 @@
 <!-- NAVBAR -->
 <nav id="navbar">
   <div class="nav-inner">
-    <a href="index.html" class="nav-logo"><div class="logo-icon-wrap"><i class="fas fa-dragon"></i></div><span class="logo-text">Phine<span>X</span></span></a>
+    <a href="index.html" class="nav-logo"><div class="logo-icon-wrap"><i class="fas fa-dragon"></i></div><span class="logo-text"><span data-i18n="nav.brand">Phine</span><span><span data-i18n="nav.brand">X</span></span></span></a>
     <button class="pxs-trigger" aria-label="Open search"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg> Search</button>
     <div style="flex:1;"></div>
     <div style="position:relative;">
       <button id="pagesBtn"><i class="fas fa-th-large" style="font-size:12px;"></i> Pages <i class="fas fa-chevron-down" id="pagesBtnChevron" style="font-size:10px;transition:transform 0.2s;"></i></button>
       <div id="pagesPanel">
         <div class="pages-header">All Pages</div>
-        <a href="index.html" class="page-item"><i class="fas fa-home"></i><span>Home</span></a>
-        <a href="hiring.html" class="page-item"><i class="fas fa-laptop-code"></i><span>Join Us</span></a>
-        <a href="x-academy.html" class="page-item"><i class="fas fa-graduation-cap"></i><span>X-Academy</span></a>
-        <a href="bugreport.html" class="page-item"><i class="fas fa-bug"></i><span>Report Bug</span></a>
-        <a href="redeemcode.html" class="page-item"><i class="fas fa-gift"></i><span>Redeem Code</span></a>
-        <a href="aboutus.html" class="page-item"><i class="fas fa-info-circle"></i><span>About Us</span></a>
-        <a href="settings.html" class="page-item"><i class="fas fa-cog"></i><span>Settings</span></a>
+        <a href="index.html" class="page-item"><i class="fas fa-home"></i><span><span data-i18n="nav.home">Home</span></span></a>
+        <a href="hiring.html" class="page-item"><i class="fas fa-laptop-code"></i><span><span data-i18n="nav.joinus">Join Us</span></span></a>
+        <a href="x-academy.html" class="page-item"><i class="fas fa-graduation-cap"></i><span><span data-i18n="nav.academy">X-Academy</span></span></a>
+        <a href="bugreport.html" class="page-item"><i class="fas fa-bug"></i><span><span data-i18n="nav.bug">Report Bug</span></span></a>
+        <a href="redeemcode.html" class="page-item"><i class="fas fa-gift"></i><span><span data-i18n="nav.redeem">Redeem Code</span></span></a>
+        <a href="aboutus.html" class="page-item"><i class="fas fa-info-circle"></i><span><span data-i18n="nav.about">About Us</span></span></a>
+        <a href="settings.html" class="page-item"><i class="fas fa-cog"></i><span><span data-i18n="nav.settings">Settings</span></span></a>
       </div>
     </div>
-    <a href="login.html" class="nav-login"><i class="fas fa-sign-in-alt" style="font-size:13px;"></i> Sign In</a>
+    <a href="login.html" class="nav-login"><i class="fas fa-sign-in-alt" style="font-size:13px;"></i><span data-i18n="nav.signin">Sign In</span></a>
     <button id="mobileToggle"><i class="fas fa-bars"></i></button>
   </div>
   <div id="mobileMenu" style="display:none;background:var(--surface);border-top:1px solid var(--border);padding:16px 24px;">
@@ -588,7 +588,7 @@
     <div class="hero-actions">
       <a href="#features" class="btn-primary-hero"><i class="fas fa-rocket"></i>Explore Features</a>
       <a href="hiring.html" class="btn-outline-hero"><i class="fas fa-users"></i>Join Our Team</a>
-      <a href="https://phinex-org.github.io/ElJasus-The_ULTIMATE_Edition/"
+      <a href="https://phinex-org.github.io/ElJasus"
    target="_blank"
    class="eljasus-btn">
 
@@ -612,9 +612,9 @@
     </div>
     <div class="stats-row">
       <div class="stat-item"><div class="stat-num">50+</div><div class="stat-label">Needed Devs</div></div>
-      <div class="stat-item"><div class="stat-num">100+</div><div class="stat-label">Projects</div></div>
+      <div class="stat-item"><div class="stat-num">100+</div><div class="stat-label"><span data-i18n="home.stat.projects">Projects</span></div></div>
       <div class="stat-item"><div class="stat-num">7</div><div class="stat-label">Languages</div></div>
-      <div class="stat-item"><div class="stat-num">24/7</div><div class="stat-label">Support</div></div>
+      <div class="stat-item"><div class="stat-num">24/7</div><div class="stat-label"><span data-i18n="footer.support">Support</span></div></div>
     </div>
   </div>
 </section>
@@ -650,7 +650,7 @@
 <footer>
   <div class="footer-inner">
     <div class="footer-brand">
-      <a href="index.html" class="nav-logo" style="text-decoration:none;"><div class="logo-icon-wrap"><i class="fas fa-dragon"></i></div><span class="logo-text">Phine<span>X</span></span></a>
+      <a href="index.html" class="nav-logo" style="text-decoration:none;"><div class="logo-icon-wrap"><i class="fas fa-dragon"></i></div><span class="logo-text"><span data-i18n="nav.brand">Phine</span><span><span data-i18n="nav.brand">X</span></span></span></a>
       <p>A community of senior programmers building innovative solutions together since 2025.</p>
       <div class="social-row">
         <a href="https://discord.gg/xBQ3ewVVHk" class="social-btn" target="_blank"><i class="fab fa-discord"></i></a>
@@ -858,17 +858,17 @@
 <!-- PAGE SCRIPTS -->
 <script>
 const NEWS_DATA = [
-  { category:'Launch',   date:'Mar 2025', title:'EG Portfolio Goes Live in Production',            desc:'PhineX has deployed a professional digital showcase featuring advanced UI/UX designs, interactive elements, and personal project highlights.',                                                            img:'https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?w=800&q=80', href:'https://PhineX-org.github.io/Portfolio.github.io/'  },
-  { category:'Academy',  date:'Apr 2025', title:'X-Academy Randomized Testing System Live',        desc:'New randomized question pools and live countdown timers are now active for all X-Academy students, making assessments fairer and more rigorous.',                                                         img:'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&q=80', href:'x-academy.html'        },
+  { category:'Launch',   date:'Mar 2025', title:'PhineX official website update',                  desc:'PhineX has updated its official website with a professional digital showcase featuring new advanced UI/UX designs, interactive elements, and providing smart bug report system and search engine.',       img:'PhineX (2).png', href:'https://PhineX-org.github.io/Portfolio/'  },
   { category:'Community',date:'May 2025', title:'Join X-Developers — Collaborative Projects Open', desc:'We are actively recruiting senior developers to collaborate on global projects. Earn a share of profits while building remarkable software.',                                                             img:'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&q=80', href:'hiring.html'           },
-  { category:'Launch',   date:'Jul 2026', title:'The first project multiplayer game is live',      desc:'PhineX Launches First Multiplayer Game only for arab, this game is a revolutionary experience for PhineX projects development, where the game has a gorgeous gameplay and impressive UI Design.', img:'ElJasus2.png',    href:'https://phinex-org.github.io/ElJasus-The_ULTIMATE_Edition/'         },
+  { category:'Launch',   date:'Jul 2026', title:'The first project multiplayer game is live',      desc:'PhineX Launches First Multiplayer Game only for arab, this game is a revolutionary experience for PhineX projects development, where the game has a gorgeous gameplay and impressive UI Design.',         img:'ElJasus2.png',    href:'https://phinex-org.github.io/ElJasus'         },
   { category:'Feature',  date:'Mar 2026', title:'Advanced Bug Reporting System Launched',          desc:'Our new error reporting system lets developers submit issues with screenshots and video attachments directly to the PhineX dev team.',                                                                    img:'https://images.unsplash.com/photo-1504639725590-34d0984388bd?w=800&q=80', href:'bugreport.html'        },
+  { category:'Launch',   date:'Mar 2026', title:'ΣolveX very smart AI powered website',            desc:'AI powered website for solving different complex maths problems, all types of maths, accurate answers, analyze photos and videos, solve the problems fast and accurate with steps.',                                                                                                                                        img:'solveX.png', href:'https://phinex-org.github.io/SolveX'        },
 ];
 const PROJECTS_DATA = [
-  { title:'EG Portfolio',      desc:'A professional digital showcase featuring advanced UI/UX designs, interactive elements, and personal project highlights.',                                                            stack:['HTML5','CSS3','JavaScript','GitHub Pages'], icon:'🌐', status:'Live', href:'https://PhineX-org.github.io/Portfolio.github.io/', views:'2.4k', img:'https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?w=800&q=80' },
-  { title:'PhineX Platform',   desc:'The main PhineX community website — a hub for developers to collaborate, learn, and access resources. Features Firebase auth, theme engine, and multi-language support.',           stack:['HTML','CSS','JavaScript','Firebase'],       icon:'🐉', status:'Live', href:'index.html',    views:'5.1k', img:'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&q=80' },
-  { title:'El-Jasus',          desc:'Multiplayer online game for family and friends — test your acting skills and detective sense. Built with JavaScript and Firebase for real-time play.',                               stack:['JavaScript','Firebase','Tailwind'],         icon:'🕵️', status:'Live', href:'https://phinex-org.github.io/ElJasus-The_ULTIMATE_Edition/',                                                    views:'1.8k', img:'ElJasus2.png"' },
-  { title:'Bug Report System', desc:'A full-featured issue tracker allowing developers to submit bugs with media attachments. Reports are stored in Firebase and reviewed by the core team.',                              stack:['Firebase','Tailwind','JavaScript'],         icon:'🐛', status:'Live', href:'bugreport.html',                                                    views:'920',  img:'https://images.unsplash.com/photo-1504639725590-34d0984388bd?w=800&q=80' },
+  { title:'EG Portfolio',      desc:'A professional digital showcase featuring advanced UI/UX designs, interactive elements, and personal project highlights.',                                                           stack:['HTML5','CSS3','JavaScript','GitHub Pages'], icon:'🌐', status:'Live', href:'https://PhineX-org.github.io/Portfolio/', views:'2.4k', img:'https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?w=800&q=80' },
+  { title:'PhineX Platform',   desc:'The main PhineX community website — a hub for developers to collaborate, learn, and access resources. Features Firebase auth, theme engine, and multi-language support.',            stack:['HTML','CSS','JavaScript','Firebase'],       icon:'🐉', status:'Live', href:'index.html',    views:'5.1k', img:'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&q=80' },
+  { title:'El-Jasus',          desc:'Multiplayer online game for family and friends — test your acting skills and detective sense. Built with JavaScript and Firebase for real-time play.',                               stack:['JavaScript','Firebase','Tailwind'],         icon:'🕵️', status:'Live', href:'https://phinex-org.github.io/ElJasus/',                      views:'1.8k', img:'ElJasus2.png"' },
+  { title:'ΣolveX',            desc:'AI powered website for solving different complex maths problems, all types of maths, accurate answers, analyze photos and videos, solve the problems fast and accurate with steps.', stack:['Firebase','Tailwind CSS','JavaScript', 'GitHub Pages'],         icon:'📐', status:'Live', href:'https://phinex-org.github.io/SolveX/',   views:'920',  img:'solvex.png' },
 ];
 
 function buildNews() {
@@ -987,7 +987,7 @@ auth.onAuthStateChanged(user => {
     };
   } else {
     // User is NOT logged in - show Sign In button
-    loginBtn.innerHTML = '<i class="fas fa-sign-in-alt" style="font-size:13px;"></i> Sign In';
+    loginBtn.innerHTML = '<i class="fas fa-sign-in-alt" style="font-size:13px;"></i><span data-i18n="nav.signin">Sign In</span>';
     loginBtn.href = 'login.html';
     loginBtn.onclick = null;
     loginBtn.style.background = 'var(--neon)';
