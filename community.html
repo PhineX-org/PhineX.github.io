@@ -905,13 +905,15 @@
     }
 
     // Verify access code
-    // Verify access code
 verifyBtn.addEventListener('click', async () => {
   const rawCode = accessCodeInput.value.trim().toUpperCase();
   
   if (!rawCode) {
     showError('Please enter an access code');
     return;
+    console.log('Raw code:', rawCode);
+console.log('Normalized:', normalizedCode);
+console.log('Guild ID:', CONFIG.GUILD_ID);
   }
 
   // Remove all hyphens for database lookup (your stored codes likely have no hyphens)
@@ -932,6 +934,9 @@ verifyBtn.addEventListener('click', async () => {
       showSuccess('Admin access granted!');
       setTimeout(() => showApp(), 1000);
       return;
+      console.log('Raw code:', rawCode);
+console.log('Normalized:', normalizedCode);
+console.log('Guild ID:', CONFIG.GUILD_ID);
     }
 
     // Query database – try both the raw input and the normalized version
@@ -968,6 +973,20 @@ verifyBtn.addEventListener('click', async () => {
     showError('An error occurred. Please try again.');
     verifyBtn.disabled = false;
     verifyBtn.textContent = 'Verify Code';
+  }
+});
+
+// Close modal when clicking the overlay or the close button
+const modalOverlay = document.getElementById('postModal');
+const closeModalBtn = document.getElementById('closeModal');
+
+closeModalBtn.addEventListener('click', () => {
+  modalOverlay.classList.remove('active');
+});
+
+modalOverlay.addEventListener('click', (e) => {
+  if (e.target === modalOverlay) {
+    modalOverlay.classList.remove('active');
   }
 });
 
