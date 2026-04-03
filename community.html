@@ -905,67 +905,71 @@
     }
 
     // Verify access code
-    verifyBtn.addEventListener('click', async () => {
-      const code = accessCodeInput.value.trim().toUpperCase();
-      
-      if (!code) {
-        showError('Please enter an access code');
-        return;
-      }
+    // Verify access code
+verifyBtn.addEventListener('click', async () => {
+  const rawCode = accessCodeInput.value.trim().toUpperCase();
+  
+  if (!rawCode) {
+    showError('Please enter an access code');
+    return;
+  }
 
-      verifyBtn.disabled = true;
-      verifyBtn.textContent = 'Verifying...';
+  // Remove all hyphens for database lookup (your stored codes likely have no hyphens)
+  const normalizedCode = rawCode.replace(/-/g, '');
+  
+  verifyBtn.disabled = true;
+  verifyBtn.textContent = 'Verifying...';
 
-      try {
-        // Check if admin code
-        if (code === CONFIG.ADMIN_CODE) {
-          isAdmin = true;
-          currentUser = {
-            code: code,
-            user_id: 'ADMIN',
-            is_admin: true
-          };
-          showSuccess('Admin access granted!');
-          setTimeout(() => showApp(), 1000);
-          return;
-        }
+  try {
+    // Check if admin code (using normalized version)
+    if (normalizedCode === CONFIG.ADMIN_CODE) {
+      isAdmin = true;
+      currentUser = {
+        code: rawCode,
+        user_id: 'ADMIN',
+        is_admin: true
+      };
+      showSuccess('Admin access granted!');
+      setTimeout(() => showApp(), 1000);
+      return;
+    }
 
-        // Check in database
-        const { data, error } = await supabase
-          .from('community_tickets')
-          .select('*')
-          .eq('code', code)
-          .eq('guild_id', CONFIG.GUILD_ID)
-          .single();
+    // Query database – try both the raw input and the normalized version
+    const { data, error } = await supabase
+      .from('community_tickets')
+      .select('*')
+      .or(`code.eq.${rawCode},code.eq.${normalizedCode}`)
+      .eq('guild_id', CONFIG.GUILD_ID)
+      .single();
 
-        if (error || !data) {
-          showError('Invalid access code');
-          verifyBtn.disabled = false;
-          verifyBtn.textContent = 'Verify Code';
-          return;
-        }
+    if (error || !data) {
+      showError('Invalid access code');
+      verifyBtn.disabled = false;
+      verifyBtn.textContent = 'Verify Code';
+      return;
+    }
 
-        // Use the ticket
-        if (!data.used) {
-          await supabase
-            .from('community_tickets')
-            .update({ used: true, used_at: new Date().toISOString() })
-            .eq('code', code);
-        }
+    // Mark ticket as used if it hasn't been used yet
+    if (!data.used) {
+      await supabase
+        .from('community_tickets')
+        .update({ used: true, used_at: new Date().toISOString() })
+        .eq('code', data.code);
+    }
 
-        currentUser = data;
-        isAdmin = data.is_admin;
-        
-        showSuccess('Access granted!');
-        setTimeout(() => showApp(), 1000);
+    currentUser = data;
+    isAdmin = data.is_admin || false;
+    
+    showSuccess('Access granted!');
+    setTimeout(() => showApp(), 1000);
 
-      } catch (err) {
-        console.error('Error verifying code:', err);
-        showError('An error occurred. Please try again.');
-        verifyBtn.disabled = false;
-        verifyBtn.textContent = 'Verify Code';
-      }
-    });
+  } catch (err) {
+    console.error('Error verifying code:', err);
+    showError('An error occurred. Please try again.');
+    verifyBtn.disabled = false;
+    verifyBtn.textContent = 'Verify Code';
+  }
+});
 
     function showError(message) {
       errorMsg.textContent = message;
