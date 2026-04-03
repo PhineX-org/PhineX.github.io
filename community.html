@@ -1,0 +1,1457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PhineX Community — Exclusive Access</title>
+  <link rel="icon" type="image/x-icon" href="PhineX (2).png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --neon:#39ff14;--neon-dim:#39ff1440;--void:#050508;
+      --surface:#0d0d14;--card:#13131e;--border:#ffffff10;
+      --text:#f0f0ff;--muted:#7070a0;
+    }
+    *{margin:0;padding:0;box-sizing:border-box;}
+    html{scroll-behavior:smooth;}
+    body{font-family:'DM Sans',sans-serif;background:var(--void);color:var(--text);overflow-x:hidden;}
+    h1,h2,h3,h4{font-family:'Syne',sans-serif;}
+
+    /* Auth Screen */
+    #authScreen{
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:var(--void);
+      padding:20px;
+    }
+    .auth-box{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:24px;
+      padding:48px;
+      max-width:500px;
+      width:100%;
+      text-align:center;
+      box-shadow:0 20px 60px rgba(0,0,0,0.5);
+    }
+    .auth-logo{
+      width:80px;
+      height:80px;
+      margin:0 auto 24px;
+      background:linear-gradient(135deg,#39ff14,#00cc88);
+      border-radius:20px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:32px;
+      color:#050508;
+      box-shadow:0 0 30px rgba(57,255,20,0.4);
+    }
+    .auth-title{
+      font-size:28px;
+      font-weight:800;
+      margin-bottom:12px;
+      color:var(--text);
+    }
+    .auth-subtitle{
+      font-size:14px;
+      color:var(--muted);
+      margin-bottom:32px;
+    }
+    .input-group{
+      margin-bottom:20px;
+    }
+    .input-group label{
+      display:block;
+      text-align:left;
+      font-size:13px;
+      font-weight:600;
+      color:var(--text);
+      margin-bottom:8px;
+    }
+    .input-group input{
+      width:100%;
+      background:rgba(255,255,255,0.05);
+      border:1px solid var(--border);
+      border-radius:12px;
+      padding:14px 16px;
+      font-size:14px;
+      color:var(--text);
+      font-family:'DM Sans',sans-serif;
+      transition:all 0.2s;
+    }
+    .input-group input:focus{
+      outline:none;
+      border-color:var(--neon);
+      background:rgba(57,255,20,0.05);
+    }
+    .btn-auth{
+      width:100%;
+      background:var(--neon);
+      color:#050508;
+      font-family:'Syne',sans-serif;
+      font-weight:700;
+      font-size:14px;
+      padding:16px;
+      border:none;
+      border-radius:12px;
+      cursor:pointer;
+      transition:all 0.2s;
+      box-shadow:0 0 20px rgba(57,255,20,0.2);
+    }
+    .btn-auth:hover{
+      background:#50ff28;
+      box-shadow:0 0 30px rgba(57,255,20,0.4);
+      transform:translateY(-2px);
+    }
+    .btn-auth:disabled{
+      opacity:0.5;
+      cursor:not-allowed;
+    }
+    .error-msg{
+      background:rgba(255,68,68,0.1);
+      border:1px solid rgba(255,68,68,0.3);
+      color:#ff4444;
+      padding:12px;
+      border-radius:10px;
+      font-size:13px;
+      margin-top:16px;
+      display:none;
+    }
+    .success-msg{
+      background:rgba(57,255,20,0.1);
+      border:1px solid rgba(57,255,20,0.3);
+      color:var(--neon);
+      padding:12px;
+      border-radius:10px;
+      font-size:13px;
+      margin-top:16px;
+      display:none;
+    }
+
+    /* Main App */
+    #app{
+      display:none;
+    }
+    #navbar{
+      position:fixed;
+      top:0;
+      left:0;
+      right:0;
+      z-index:1000;
+      height:68px;
+      background:rgba(5,5,8,0.95);
+      backdrop-filter:blur(20px);
+      border-bottom:1px solid var(--border);
+    }
+    .nav-inner{
+      max-width:1400px;
+      margin:0 auto;
+      padding:0 24px;
+      height:100%;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+    }
+    .nav-logo{
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+    .logo-icon{
+      width:38px;
+      height:38px;
+      background:linear-gradient(135deg,#39ff14,#00cc88);
+      border-radius:10px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:18px;
+      color:#050508;
+    }
+    .logo-text{
+      font-size:22px;
+      font-weight:800;
+      color:var(--text);
+    }
+    .logo-text span{color:var(--neon);}
+    .nav-user{
+      display:flex;
+      align-items:center;
+      gap:12px;
+    }
+    .user-badge{
+      background:rgba(57,255,20,0.1);
+      border:1px solid rgba(57,255,20,0.2);
+      padding:8px 16px;
+      border-radius:10px;
+      font-size:13px;
+      font-weight:600;
+      color:var(--neon);
+    }
+    .btn-logout{
+      background:transparent;
+      border:1px solid var(--border);
+      color:var(--text);
+      padding:8px 16px;
+      border-radius:10px;
+      font-size:13px;
+      cursor:pointer;
+      transition:all 0.2s;
+    }
+    .btn-logout:hover{
+      border-color:#ff4444;
+      color:#ff4444;
+    }
+
+    /* Tabs */
+    .tabs{
+      position:fixed;
+      top:68px;
+      left:0;
+      right:0;
+      background:rgba(5,5,8,0.95);
+      backdrop-filter:blur(20px);
+      border-bottom:1px solid var(--border);
+      z-index:999;
+    }
+    .tabs-inner{
+      max-width:1400px;
+      margin:0 auto;
+      padding:0 24px;
+      display:flex;
+      gap:4px;
+    }
+    .tab-btn{
+      background:transparent;
+      border:none;
+      color:var(--muted);
+      padding:16px 24px;
+      font-size:14px;
+      font-weight:600;
+      font-family:'Syne',sans-serif;
+      cursor:pointer;
+      border-bottom:2px solid transparent;
+      transition:all 0.2s;
+    }
+    .tab-btn:hover{
+      color:var(--text);
+      background:rgba(255,255,255,0.03);
+    }
+    .tab-btn.active{
+      color:var(--neon);
+      border-bottom-color:var(--neon);
+    }
+
+    /* Content Area */
+    .content-area{
+      max-width:1200px;
+      margin:0 auto;
+      padding:148px 24px 60px;
+      min-height:100vh;
+    }
+    .tab-content{
+      display:none;
+    }
+    .tab-content.active{
+      display:block;
+      animation:fadeIn 0.3s ease;
+    }
+    @keyframes fadeIn{
+      from{opacity:0;transform:translateY(10px);}
+      to{opacity:1;transform:translateY(0);}
+    }
+
+    /* Posts */
+    .post-header{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:32px;
+    }
+    .post-header h2{
+      font-size:32px;
+      font-weight:800;
+      color:var(--text);
+    }
+    .btn-create-post{
+      background:var(--neon);
+      color:#050508;
+      border:none;
+      padding:12px 24px;
+      border-radius:10px;
+      font-family:'Syne',sans-serif;
+      font-weight:700;
+      font-size:14px;
+      cursor:pointer;
+      transition:all 0.2s;
+    }
+    .btn-create-post:hover{
+      background:#50ff28;
+      transform:translateY(-2px);
+    }
+    .posts-grid{
+      display:grid;
+      gap:24px;
+    }
+    .post-card{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:16px;
+      padding:24px;
+      transition:all 0.2s;
+    }
+    .post-card:hover{
+      border-color:rgba(57,255,20,0.3);
+      box-shadow:0 8px 30px rgba(0,0,0,0.3);
+    }
+    .post-author{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      margin-bottom:16px;
+    }
+    .post-avatar{
+      width:40px;
+      height:40px;
+      background:linear-gradient(135deg,#39ff14,#00cc88);
+      border-radius:50%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:700;
+      color:#050508;
+    }
+    .post-meta{
+      flex:1;
+    }
+    .post-author-name{
+      font-weight:600;
+      color:var(--text);
+      font-size:14px;
+    }
+    .post-date{
+      font-size:12px;
+      color:var(--muted);
+    }
+    .post-title{
+      font-size:20px;
+      font-weight:700;
+      color:var(--text);
+      margin-bottom:12px;
+    }
+    .post-content{
+      color:var(--muted);
+      line-height:1.6;
+      margin-bottom:16px;
+    }
+    .post-image{
+      width:100%;
+      border-radius:12px;
+      margin-bottom:16px;
+    }
+    .post-actions{
+      display:flex;
+      gap:16px;
+      padding-top:16px;
+      border-top:1px solid var(--border);
+    }
+    .post-action-btn{
+      background:transparent;
+      border:none;
+      color:var(--muted);
+      font-size:14px;
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      gap:6px;
+      transition:all 0.2s;
+      padding:6px 12px;
+      border-radius:8px;
+    }
+    .post-action-btn:hover{
+      background:rgba(255,255,255,0.05);
+      color:var(--text);
+    }
+    .post-action-btn.liked{
+      color:var(--neon);
+    }
+    .post-action-btn.liked:hover{
+      color:#50ff28;
+    }
+
+    /* Chat */
+    .chat-container{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:16px;
+      height:600px;
+      display:flex;
+      flex-direction:column;
+    }
+    .chat-header{
+      padding:20px 24px;
+      border-bottom:1px solid var(--border);
+      font-weight:700;
+      color:var(--text);
+    }
+    .chat-messages{
+      flex:1;
+      overflow-y:auto;
+      padding:20px;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+    }
+    .chat-message{
+      display:flex;
+      gap:12px;
+      animation:slideUp 0.3s ease;
+    }
+    @keyframes slideUp{
+      from{opacity:0;transform:translateY(10px);}
+      to{opacity:1;transform:translateY(0);}
+    }
+    .chat-avatar{
+      width:36px;
+      height:36px;
+      background:linear-gradient(135deg,#39ff14,#00cc88);
+      border-radius:50%;
+      flex-shrink:0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:700;
+      font-size:14px;
+      color:#050508;
+    }
+    .chat-bubble{
+      flex:1;
+    }
+    .chat-bubble-header{
+      display:flex;
+      gap:8px;
+      align-items:baseline;
+      margin-bottom:4px;
+    }
+    .chat-author{
+      font-weight:600;
+      font-size:14px;
+      color:var(--text);
+    }
+    .chat-time{
+      font-size:11px;
+      color:var(--muted);
+    }
+    .chat-text{
+      font-size:14px;
+      color:var(--muted);
+      line-height:1.5;
+      word-wrap:break-word;
+    }
+    .chat-input-area{
+      padding:16px 20px;
+      border-top:1px solid var(--border);
+      display:flex;
+      gap:12px;
+    }
+    .chat-input{
+      flex:1;
+      background:rgba(255,255,255,0.05);
+      border:1px solid var(--border);
+      border-radius:10px;
+      padding:12px 16px;
+      color:var(--text);
+      font-size:14px;
+      font-family:'DM Sans',sans-serif;
+    }
+    .chat-input:focus{
+      outline:none;
+      border-color:var(--neon);
+    }
+    .chat-input:disabled{
+      opacity:0.5;
+      cursor:not-allowed;
+    }
+    .btn-send{
+      background:var(--neon);
+      color:#050508;
+      border:none;
+      padding:12px 24px;
+      border-radius:10px;
+      font-weight:700;
+      cursor:pointer;
+      transition:all 0.2s;
+    }
+    .btn-send:hover{
+      background:#50ff28;
+    }
+    .btn-send:disabled{
+      opacity:0.5;
+      cursor:not-allowed;
+    }
+
+    /* Upload Form */
+    .upload-form{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:16px;
+      padding:32px;
+      max-width:700px;
+    }
+    .form-group{
+      margin-bottom:24px;
+    }
+    .form-group label{
+      display:block;
+      font-weight:600;
+      margin-bottom:8px;
+      color:var(--text);
+    }
+    .form-group input,
+    .form-group textarea{
+      width:100%;
+      background:rgba(255,255,255,0.05);
+      border:1px solid var(--border);
+      border-radius:10px;
+      padding:12px 16px;
+      color:var(--text);
+      font-size:14px;
+      font-family:'DM Sans',sans-serif;
+    }
+    .form-group textarea{
+      min-height:120px;
+      resize:vertical;
+    }
+    .form-group input:focus,
+    .form-group textarea:focus{
+      outline:none;
+      border-color:var(--neon);
+    }
+    .image-preview{
+      margin-top:16px;
+      border-radius:12px;
+      overflow:hidden;
+      display:none;
+    }
+    .image-preview img{
+      width:100%;
+      max-height:400px;
+      object-fit:contain;
+      background:rgba(255,255,255,0.03);
+    }
+    .btn-submit{
+      background:var(--neon);
+      color:#050508;
+      border:none;
+      padding:14px 32px;
+      border-radius:10px;
+      font-family:'Syne',sans-serif;
+      font-weight:700;
+      font-size:14px;
+      cursor:pointer;
+      transition:all 0.2s;
+    }
+    .btn-submit:hover{
+      background:#50ff28;
+      transform:translateY(-2px);
+    }
+
+    /* Modal */
+    .modal-overlay{
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,0.8);
+      backdrop-filter:blur(8px);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      z-index:2000;
+    }
+    .modal-overlay.active{
+      display:flex;
+    }
+    .modal{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:20px;
+      padding:32px;
+      max-width:600px;
+      width:90%;
+      max-height:90vh;
+      overflow-y:auto;
+    }
+    .modal-header{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:24px;
+    }
+    .modal-title{
+      font-size:24px;
+      font-weight:800;
+      color:var(--text);
+    }
+    .btn-close{
+      background:transparent;
+      border:none;
+      color:var(--muted);
+      font-size:24px;
+      cursor:pointer;
+      width:32px;
+      height:32px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      border-radius:8px;
+      transition:all 0.2s;
+    }
+    .btn-close:hover{
+      background:rgba(255,255,255,0.05);
+      color:var(--text);
+    }
+
+    /* Comments */
+    .comments-section{
+      margin-top:24px;
+      padding-top:24px;
+      border-top:1px solid var(--border);
+    }
+    .comments-header{
+      font-weight:700;
+      margin-bottom:16px;
+      color:var(--text);
+    }
+    .comment-form{
+      display:flex;
+      gap:12px;
+      margin-bottom:24px;
+    }
+    .comment-input{
+      flex:1;
+      background:rgba(255,255,255,0.05);
+      border:1px solid var(--border);
+      border-radius:10px;
+      padding:12px 16px;
+      color:var(--text);
+      font-size:14px;
+      font-family:'DM Sans',sans-serif;
+    }
+    .comment-input:focus{
+      outline:none;
+      border-color:var(--neon);
+    }
+    .btn-comment{
+      background:var(--neon);
+      color:#050508;
+      border:none;
+      padding:12px 20px;
+      border-radius:10px;
+      font-weight:700;
+      cursor:pointer;
+    }
+    .comments-list{
+      display:flex;
+      flex-direction:column;
+      gap:16px;
+    }
+    .comment{
+      display:flex;
+      gap:12px;
+    }
+    .comment-avatar{
+      width:32px;
+      height:32px;
+      background:linear-gradient(135deg,#39ff14,#00cc88);
+      border-radius:50%;
+      flex-shrink:0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:700;
+      font-size:12px;
+      color:#050508;
+    }
+    .comment-content{
+      flex:1;
+    }
+    .comment-author{
+      font-weight:600;
+      font-size:13px;
+      color:var(--text);
+      margin-bottom:4px;
+    }
+    .comment-text{
+      font-size:13px;
+      color:var(--muted);
+      line-height:1.5;
+    }
+
+    .hidden{display:none!important;}
+
+    @media(max-width:768px){
+      .tabs-inner{
+        overflow-x:auto;
+        scrollbar-width:none;
+      }
+      .tabs-inner::-webkit-scrollbar{
+        display:none;
+      }
+      .content-area{
+        padding:148px 16px 60px;
+      }
+      .auth-box{
+        padding:32px 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Auth Screen -->
+  <div id="authScreen">
+    <div class="auth-box">
+      <div class="auth-logo">
+        <i class="fas fa-dragon"></i>
+      </div>
+      <h1 class="auth-title">PhineX Community</h1>
+      <p class="auth-subtitle">Enter your access code to continue</p>
+      
+      <div class="input-group">
+        <label>Access Code</label>
+        <input type="text" id="accessCodeInput" placeholder="Enter your code" maxlength="12">
+      </div>
+      
+      <button class="btn-auth" id="verifyBtn">Verify Code</button>
+      
+      <div class="error-msg" id="errorMsg"></div>
+      <div class="success-msg" id="successMsg"></div>
+    </div>
+  </div>
+
+  <!-- Main App -->
+  <div id="app">
+    <!-- Navbar -->
+    <nav id="navbar">
+      <div class="nav-inner">
+        <div class="nav-logo">
+          <div class="logo-icon">
+            <i class="fas fa-dragon"></i>
+          </div>
+          <div class="logo-text">Phine<span>X</span></div>
+        </div>
+        <div class="nav-user">
+          <div class="user-badge" id="userRole">Member</div>
+          <button class="btn-logout" id="logoutBtn">
+            <i class="fas fa-sign-out-alt"></i>
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Tabs -->
+    <div class="tabs">
+      <div class="tabs-inner" id="tabsContainer">
+        <button class="tab-btn active" data-tab="posts">Posts</button>
+        <button class="tab-btn" data-tab="chat">Text Chat</button>
+        <button class="tab-btn" data-tab="public">Public Chat</button>
+      </div>
+    </div>
+
+    <!-- Content Area -->
+    <div class="content-area">
+      <!-- Posts Tab -->
+      <div class="tab-content active" id="postsTab">
+        <div class="post-header">
+          <h2>Community Posts</h2>
+          <button class="btn-create-post hidden" id="createPostBtn">
+            <i class="fas fa-plus"></i> New Post
+          </button>
+        </div>
+        <div class="posts-grid" id="postsContainer">
+          <!-- Posts will be loaded here -->
+        </div>
+      </div>
+
+      <!-- Admin Chat Tab -->
+      <div class="tab-content" id="chatTab">
+        <div class="chat-container">
+          <div class="chat-header">
+            <i class="fas fa-comments"></i> Admin Chat
+            <span style="font-size:12px;color:var(--muted);font-weight:400;margin-left:8px;">(Admins only can send messages)</span>
+          </div>
+          <div class="chat-messages" id="chatMessages">
+            <!-- Messages will be loaded here -->
+          </div>
+          <div class="chat-input-area">
+            <input type="text" class="chat-input" id="chatInput" placeholder="Type a message..." disabled>
+            <button class="btn-send" id="sendChatBtn" disabled>Send</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Public Chat Tab -->
+      <div class="tab-content" id="publicTab">
+        <div class="chat-container">
+          <div class="chat-header">
+            <i class="fas fa-users"></i> Public Chat
+            <span style="font-size:12px;color:var(--muted);font-weight:400;margin-left:8px;">(Everyone can send messages)</span>
+          </div>
+          <div class="chat-messages" id="publicMessages">
+            <!-- Messages will be loaded here -->
+          </div>
+          <div class="chat-input-area">
+            <input type="text" class="chat-input" id="publicInput" placeholder="Type a message...">
+            <button class="btn-send" id="sendPublicBtn">Send</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Upload Tab (Admin Only) -->
+      <div class="tab-content" id="uploadTab">
+        <div class="upload-form">
+          <h2 style="margin-bottom:24px;">Create New Post</h2>
+          <form id="uploadForm">
+            <div class="form-group">
+              <label>Post Title</label>
+              <input type="text" id="postTitle" required placeholder="Enter post title">
+            </div>
+            <div class="form-group">
+              <label>Content</label>
+              <textarea id="postContent" required placeholder="Write your post content..."></textarea>
+            </div>
+            <div class="form-group">
+              <label>Image (optional)</label>
+              <input type="file" id="postImage" accept="image/*">
+              <div class="image-preview" id="imagePreview">
+                <img id="previewImg" src="" alt="Preview">
+              </div>
+            </div>
+            <button type="submit" class="btn-submit">
+              <i class="fas fa-paper-plane"></i> Publish Post
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Post Detail Modal -->
+  <div class="modal-overlay" id="postModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 class="modal-title" id="modalTitle">Post Details</h3>
+        <button class="btn-close" id="closeModal">&times;</button>
+      </div>
+      <div id="modalContent">
+        <!-- Post content will be loaded here -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Supabase Client -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  
+  <script>
+    // Configuration - Replace with your values
+    const CONFIG = {
+      SUPABASE_URL: 'YOUR_SUPABASE_URL_HERE',
+      SUPABASE_KEY: 'YOUR_SUPABASE_ANON_KEY_HERE',
+      GUILD_ID: 'YOUR_DISCORD_GUILD_ID_HERE',
+      ADMIN_CODE: 'ADMIN26'
+    };
+
+    // Initialize Supabase
+    const supabase = window.supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_KEY);
+
+    // Global state
+    let currentUser = null;
+    let isAdmin = false;
+    let currentPost = null;
+
+    // DOM Elements
+    const authScreen = document.getElementById('authScreen');
+    const app = document.getElementById('app');
+    const accessCodeInput = document.getElementById('accessCodeInput');
+    const verifyBtn = document.getElementById('verifyBtn');
+    const errorMsg = document.getElementById('errorMsg');
+    const successMsg = document.getElementById('successMsg');
+    const tabsContainer = document.getElementById('tabsContainer');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const userRole = document.getElementById('userRole');
+
+    // Tab switching
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const tabName = btn.dataset.tab;
+        switchTab(tabName);
+      });
+    });
+
+    function switchTab(tabName) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+      
+      document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+      document.getElementById(`${tabName}Tab`).classList.add('active');
+      
+      // Load content based on tab
+      if (tabName === 'posts') loadPosts();
+      if (tabName === 'chat') loadChatMessages('admin');
+      if (tabName === 'public') loadChatMessages('public');
+    }
+
+    // Verify access code
+    verifyBtn.addEventListener('click', async () => {
+      const code = accessCodeInput.value.trim().toUpperCase();
+      
+      if (!code) {
+        showError('Please enter an access code');
+        return;
+      }
+
+      verifyBtn.disabled = true;
+      verifyBtn.textContent = 'Verifying...';
+
+      try {
+        // Check if admin code
+        if (code === CONFIG.ADMIN_CODE) {
+          isAdmin = true;
+          currentUser = {
+            code: code,
+            user_id: 'ADMIN',
+            is_admin: true
+          };
+          showSuccess('Admin access granted!');
+          setTimeout(() => showApp(), 1000);
+          return;
+        }
+
+        // Check in database
+        const { data, error } = await supabase
+          .from('community_tickets')
+          .select('*')
+          .eq('code', code)
+          .eq('guild_id', CONFIG.GUILD_ID)
+          .single();
+
+        if (error || !data) {
+          showError('Invalid access code');
+          verifyBtn.disabled = false;
+          verifyBtn.textContent = 'Verify Code';
+          return;
+        }
+
+        // Use the ticket
+        if (!data.used) {
+          await supabase
+            .from('community_tickets')
+            .update({ used: true, used_at: new Date().toISOString() })
+            .eq('code', code);
+        }
+
+        currentUser = data;
+        isAdmin = data.is_admin;
+        
+        showSuccess('Access granted!');
+        setTimeout(() => showApp(), 1000);
+
+      } catch (err) {
+        console.error('Error verifying code:', err);
+        showError('An error occurred. Please try again.');
+        verifyBtn.disabled = false;
+        verifyBtn.textContent = 'Verify Code';
+      }
+    });
+
+    function showError(message) {
+      errorMsg.textContent = message;
+      errorMsg.style.display = 'block';
+      successMsg.style.display = 'none';
+    }
+
+    function showSuccess(message) {
+      successMsg.textContent = message;
+      successMsg.style.display = 'block';
+      errorMsg.style.display = 'none';
+    }
+
+    function showApp() {
+      authScreen.style.display = 'none';
+      app.style.display = 'block';
+      
+      // Update UI for admin
+      if (isAdmin) {
+        userRole.textContent = 'Admin';
+        userRole.style.background = 'linear-gradient(135deg,#39ff14,#00cc88)';
+        userRole.style.color = '#050508';
+        
+        // Add upload tab
+        const uploadTab = document.createElement('button');
+        uploadTab.className = 'tab-btn';
+        uploadTab.setAttribute('data-tab', 'upload');
+        uploadTab.textContent = 'Upload';
+        tabsContainer.appendChild(uploadTab);
+        
+        uploadTab.addEventListener('click', () => switchTab('upload'));
+        
+        // Show create post button
+        document.getElementById('createPostBtn').classList.remove('hidden');
+        
+        // Enable admin chat
+        document.getElementById('chatInput').disabled = false;
+        document.getElementById('sendChatBtn').disabled = false;
+      }
+      
+      // Load initial content
+      loadPosts();
+      
+      // Start realtime subscriptions
+      subscribeToRealtime();
+    }
+
+    // Logout
+    logoutBtn.addEventListener('click', () => {
+      location.reload();
+    });
+
+    // Load Posts
+    async function loadPosts() {
+      try {
+        const { data, error } = await supabase
+          .from('community_posts')
+          .select('*')
+          .eq('guild_id', CONFIG.GUILD_ID)
+          .order('created_at', { ascending: false });
+
+        if (error) throw error;
+
+        const container = document.getElementById('postsContainer');
+        container.innerHTML = '';
+
+        if (!data || data.length === 0) {
+          container.innerHTML = '<p style="text-align:center;color:var(--muted);padding:60px 20px;">No posts yet. Check back soon!</p>';
+          return;
+        }
+
+        data.forEach(post => {
+          container.innerHTML += createPostHTML(post);
+        });
+
+        // Add event listeners to post action buttons
+        attachPostListeners();
+
+      } catch (err) {
+        console.error('Error loading posts:', err);
+      }
+    }
+
+    function createPostHTML(post) {
+      const date = new Date(post.created_at).toLocaleDateString();
+      const initials = post.author_name.slice(0, 2).toUpperCase();
+      
+      return `
+        <div class="post-card" data-post-id="${post.id}">
+          <div class="post-author">
+            <div class="post-avatar">${initials}</div>
+            <div class="post-meta">
+              <div class="post-author-name">${post.author_name}</div>
+              <div class="post-date">${date}</div>
+            </div>
+          </div>
+          ${post.title ? `<h3 class="post-title">${post.title}</h3>` : ''}
+          <div class="post-content">${post.content}</div>
+          ${post.image_url ? `<img src="${post.image_url}" class="post-image" alt="Post image">` : ''}
+          <div class="post-actions">
+            <button class="post-action-btn btn-like" data-post-id="${post.id}">
+              <i class="fas fa-heart"></i>
+              <span class="like-count">${post.likes || 0}</span>
+            </button>
+            <button class="post-action-btn btn-comment" data-post-id="${post.id}">
+              <i class="fas fa-comment"></i>
+              Comment
+            </button>
+            <button class="post-action-btn btn-share" data-post-id="${post.id}">
+              <i class="fas fa-share"></i>
+              Share
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    function attachPostListeners() {
+      // Like buttons
+      document.querySelectorAll('.btn-like').forEach(btn => {
+        btn.addEventListener('click', async (e) => {
+          e.stopPropagation();
+          const postId = btn.dataset.postId;
+          await toggleLike(postId, btn);
+        });
+      });
+
+      // Comment buttons
+      document.querySelectorAll('.btn-comment').forEach(btn => {
+        btn.addEventListener('click', async (e) => {
+          e.stopPropagation();
+          const postId = btn.dataset.postId;
+          await showPostModal(postId);
+        });
+      });
+
+      // Share buttons
+      document.querySelectorAll('.btn-share').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const postId = btn.dataset.postId;
+          sharePost(postId);
+        });
+      });
+    }
+
+    async function toggleLike(postId, btn) {
+      try {
+        const hasLiked = btn.classList.contains('liked');
+        
+        if (hasLiked) {
+          await supabase
+            .from('community_post_likes')
+            .delete()
+            .eq('post_id', postId)
+            .eq('user_id', currentUser.user_id);
+          
+          await supabase.rpc('decrement_post_likes', { post_id_param: postId });
+          btn.classList.remove('liked');
+        } else {
+          await supabase
+            .from('community_post_likes')
+            .insert({
+              post_id: postId,
+              user_id: currentUser.user_id
+            });
+          
+          await supabase.rpc('increment_post_likes', { post_id_param: postId });
+          btn.classList.add('liked');
+        }
+
+        // Refresh posts
+        await loadPosts();
+      } catch (err) {
+        console.error('Error toggling like:', err);
+      }
+    }
+
+    async function showPostModal(postId) {
+      try {
+        const { data: post, error } = await supabase
+          .from('community_posts')
+          .select('*')
+          .eq('id', postId)
+          .single();
+
+        if (error) throw error;
+
+        currentPost = post;
+
+        const { data: comments } = await supabase
+          .from('community_comments')
+          .select('*')
+          .eq('post_id', postId)
+          .is('parent_id', null)
+          .order('created_at', { ascending: true });
+
+        const initials = post.author_name.slice(0, 2).toUpperCase();
+        const date = new Date(post.created_at).toLocaleDateString();
+
+        const modalContent = document.getElementById('modalContent');
+        modalContent.innerHTML = `
+          <div class="post-author">
+            <div class="post-avatar">${initials}</div>
+            <div class="post-meta">
+              <div class="post-author-name">${post.author_name}</div>
+              <div class="post-date">${date}</div>
+            </div>
+          </div>
+          ${post.title ? `<h3 class="post-title">${post.title}</h3>` : ''}
+          <div class="post-content">${post.content}</div>
+          ${post.image_url ? `<img src="${post.image_url}" class="post-image" alt="Post image">` : ''}
+          
+          <div class="comments-section">
+            <div class="comments-header">
+              <i class="fas fa-comments"></i> Comments (${comments?.length || 0})
+            </div>
+            <div class="comment-form">
+              <input type="text" class="comment-input" id="newCommentInput" placeholder="Write a comment...">
+              <button class="btn-comment" id="submitCommentBtn">Post</button>
+            </div>
+            <div class="comments-list" id="commentsList">
+              ${comments?.map(c => createCommentHTML(c)).join('') || '<p style="color:var(--muted);font-size:13px;">No comments yet.</p>'}
+            </div>
+          </div>
+        `;
+
+        document.getElementById('postModal').classList.add('active');
+
+        // Submit comment handler
+        document.getElementById('submitCommentBtn').addEventListener('click', () => submitComment(postId));
+        document.getElementById('newCommentInput').addEventListener('keypress', (e) => {
+          if (e.key === 'Enter') submitComment(postId);
+        });
+
+      } catch (err) {
+        console.error('Error showing post modal:', err);
+      }
+    }
+
+    function createCommentHTML(comment) {
+      const initials = comment.author_name.slice(0, 2).toUpperCase();
+      const time = new Date(comment.created_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+      
+      return `
+        <div class="comment">
+          <div class="comment-avatar">${initials}</div>
+          <div class="comment-content">
+            <div class="comment-author">${comment.author_name} · ${time}</div>
+            <div class="comment-text">${comment.content}</div>
+          </div>
+        </div>
+      `;
+    }
+
+    async function submitComment(postId) {
+      const input = document.getElementById('newCommentInput');
+      const content = input.value.trim();
+      
+      if (!content) return;
+
+      try {
+        await supabase
+          .from('community_comments')
+          .insert({
+            post_id: postId,
+            author_id: currentUser.user_id,
+            author_name: isAdmin ? 'Admin' : 'Member',
+            content: content
+          });
+
+        input.value = '';
+        await showPostModal(postId); // Refresh modal
+      } catch (err) {
+        console.error('Error submitting comment:', err);
+      }
+    }
+
+    function sharePost(postId) {
+      const url = `${window.location.origin}${window.location.pathname}?post=${postId}`;
+      navigator.clipboard.writeText(url).then(() => {
+        alert('Post link copied to clipboard!');
+      });
+    }
+
+    // Close modal
+    document.getElementById('closeModal').addEventListener('click', () => {
+      document.getElementById('postModal').classList.remove('active');
+    });
+
+    // Load Chat Messages
+    async function loadChatMessages(channelType) {
+      try {
+        const { data, error } = await supabase
+          .from('community_chat_messages')
+          .select('*')
+          .eq('guild_id', CONFIG.GUILD_ID)
+          .eq('channel_type', channelType)
+          .order('created_at', { ascending: false })
+          .limit(100);
+
+        if (error) throw error;
+
+        const container = channelType === 'admin' 
+          ? document.getElementById('chatMessages')
+          : document.getElementById('publicMessages');
+        
+        container.innerHTML = '';
+
+        if (!data || data.length === 0) {
+          container.innerHTML = '<p style="text-align:center;color:var(--muted);padding:40px 20px;">No messages yet. Start the conversation!</p>';
+          return;
+        }
+
+        data.reverse().forEach(msg => {
+          container.innerHTML += createChatMessageHTML(msg);
+        });
+
+        container.scrollTop = container.scrollHeight;
+      } catch (err) {
+        console.error('Error loading chat messages:', err);
+      }
+    }
+
+    function createChatMessageHTML(msg) {
+      const initials = msg.author_name.slice(0, 2).toUpperCase();
+      const time = new Date(msg.created_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+      
+      return `
+        <div class="chat-message">
+          <div class="chat-avatar">${initials}</div>
+          <div class="chat-bubble">
+            <div class="chat-bubble-header">
+              <span class="chat-author">${msg.author_name}</span>
+              <span class="chat-time">${time}</span>
+            </div>
+            <div class="chat-text">${msg.content}</div>
+          </div>
+        </div>
+      `;
+    }
+
+    // Send Chat Message
+    async function sendChatMessage(channelType) {
+      const input = channelType === 'admin'
+        ? document.getElementById('chatInput')
+        : document.getElementById('publicInput');
+      
+      const content = input.value.trim();
+      
+      if (!content) return;
+
+      try {
+        await supabase
+          .from('community_chat_messages')
+          .insert({
+            guild_id: CONFIG.GUILD_ID,
+            channel_type: channelType,
+            author_id: currentUser.user_id,
+            author_name: isAdmin ? 'Admin' : 'Member',
+            content: content
+          });
+
+        input.value = '';
+      } catch (err) {
+        console.error('Error sending message:', err);
+      }
+    }
+
+    document.getElementById('sendChatBtn').addEventListener('click', () => sendChatMessage('admin'));
+    document.getElementById('chatInput').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') sendChatMessage('admin');
+    });
+
+    document.getElementById('sendPublicBtn').addEventListener('click', () => sendChatMessage('public'));
+    document.getElementById('publicInput').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') sendChatMessage('public');
+    });
+
+    // Upload Form (Admin Only)
+    document.getElementById('postImage')?.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          document.getElementById('previewImg').src = e.target.result;
+          document.getElementById('imagePreview').style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    document.getElementById('uploadForm')?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      if (!isAdmin) return;
+
+      const title = document.getElementById('postTitle').value;
+      const content = document.getElementById('postContent').value;
+      const imageFile = document.getElementById('postImage').files[0];
+      
+      let imageUrl = null;
+      
+      if (imageFile) {
+        // Convert image to base64 for simplicity (in production, use Supabase Storage)
+        const reader = new FileReader();
+        imageUrl = await new Promise((resolve) => {
+          reader.onload = (e) => resolve(e.target.result);
+          reader.readAsDataURL(imageFile);
+        });
+      }
+
+      try {
+        await supabase
+          .from('community_posts')
+          .insert({
+            guild_id: CONFIG.GUILD_ID,
+            author_id: currentUser.user_id,
+            author_name: 'Admin',
+            title: title,
+            content: content,
+            image_url: imageUrl
+          });
+
+        // Reset form
+        document.getElementById('uploadForm').reset();
+        document.getElementById('imagePreview').style.display = 'none';
+        
+        // Switch to posts tab
+        switchTab('posts');
+        
+        alert('Post published successfully!');
+      } catch (err) {
+        console.error('Error creating post:', err);
+        alert('Failed to publish post');
+      }
+    });
+
+    // Realtime subscriptions
+    function subscribeToRealtime() {
+      // Subscribe to new posts
+      supabase
+        .channel('community_posts')
+        .on('postgres_changes', {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'community_posts',
+          filter: `guild_id=eq.${CONFIG.GUILD_ID}`
+        }, () => {
+          loadPosts();
+        })
+        .subscribe();
+
+      // Subscribe to chat messages
+      supabase
+        .channel('community_chat')
+        .on('postgres_changes', {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'community_chat_messages',
+          filter: `guild_id=eq.${CONFIG.GUILD_ID}`
+        }, (payload) => {
+          const msg = payload.new;
+          const container = msg.channel_type === 'admin'
+            ? document.getElementById('chatMessages')
+            : document.getElementById('publicMessages');
+          
+          container.innerHTML += createChatMessageHTML(msg);
+          container.scrollTop = container.scrollHeight;
+        })
+        .subscribe();
+
+      // Subscribe to comments
+      supabase
+        .channel('community_comments')
+        .on('postgres_changes', {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'community_comments'
+        }, () => {
+          if (currentPost) {
+            showPostModal(currentPost.id);
+          }
+        })
+        .subscribe();
+    }
+  </script>
+</body>
+</html>
