@@ -3,22 +3,26 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PhineX Community — Exclusive Access</title>
+  <title>PhineX Community — Blog & Discussion</title>
   <link rel="icon" type="image/x-icon" href="PhineX (2).png">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Work+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   
   <style>
     :root {
-      --neon:#39ff14;
-      --neon-glow:rgba(57,255,20,0.15);
-      --void:#000000;
-      --surface:#0a0a0a;
-      --card:#121212;
-      --border:#2a2a2a;
-      --text:#ffffff;
-      --text-muted:#8e8e8e;
-      --hover:#1a1a1a;
+      --accent: #2D7D5F;
+      --accent-light: #3A9B77;
+      --accent-dim: rgba(45, 125, 95, 0.1);
+      --bg-primary: #FDFCFA;
+      --bg-secondary: #F8F6F2;
+      --surface: #FFFFFF;
+      --border: #E5E2DB;
+      --text-primary: #1A1A1A;
+      --text-secondary: #666666;
+      --text-muted: #999999;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.04);
+      --shadow-md: 0 4px 12px rgba(0,0,0,0.06);
+      --shadow-lg: 0 12px 32px rgba(0,0,0,0.08);
     }
 
     * {
@@ -32,111 +36,119 @@
     }
 
     body {
-      font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: var(--void);
-      color: var(--text);
+      font-family: 'Work Sans', sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
       overflow-x: hidden;
     }
 
-    /* ═══════════════════════════════════════════════════════
-       AUTH SCREEN (Login)
-    ═══════════════════════════════════════════════════════ */
+    h1, h2, h3, h4, h5, h6 {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 600;
+      line-height: 1.3;
+    }
+
+    /* ============ AUTH SCREEN ============ */
     #authScreen {
       min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: linear-gradient(135deg, #000000 0%, #0a0a0a 100%);
+      background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
       padding: 20px;
     }
 
     .auth-container {
-      background: var(--card);
+      background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 16px;
-      padding: 48px;
-      max-width: 400px;
+      padding: 56px 48px;
+      max-width: 480px;
       width: 100%;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .auth-brand {
       text-align: center;
-      box-shadow: 0 0 50px rgba(57, 255, 20, 0.1);
+      margin-bottom: 40px;
     }
 
     .auth-logo {
-      width: 80px;
-      height: 80px;
-      margin: 0 auto 24px;
-      background: linear-gradient(135deg, var(--neon), #00ff88);
-      border-radius: 50%;
+      width: 64px;
+      height: 64px;
+      margin: 0 auto 20px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-light));
+      border-radius: 16px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 36px;
-      color: #000;
-      box-shadow: 0 0 40px var(--neon-glow);
-      animation: pulse 2s infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { box-shadow: 0 0 40px var(--neon-glow); }
-      50% { box-shadow: 0 0 60px rgba(57, 255, 20, 0.3); }
+      font-size: 28px;
+      color: white;
+      box-shadow: 0 8px 24px rgba(45, 125, 95, 0.2);
     }
 
     .auth-title {
-      font-family: 'Syne', sans-serif;
-      font-size: 28px;
-      font-weight: 800;
+      font-size: 36px;
+      color: var(--text-primary);
       margin-bottom: 8px;
-      color: var(--text);
+      font-weight: 600;
     }
 
     .auth-subtitle {
+      font-size: 15px;
+      color: var(--text-secondary);
+    }
+
+    .form-group {
+      margin-bottom: 24px;
+    }
+
+    .form-label {
+      display: block;
       font-size: 14px;
-      color: var(--text-muted);
-      margin-bottom: 32px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 8px;
     }
 
-    .input-wrapper {
-      position: relative;
-      margin-bottom: 20px;
-    }
-
-    .input-wrapper input {
+    .form-input {
       width: 100%;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 16px;
-      font-size: 14px;
-      color: var(--text);
-      font-family: 'DM Sans', sans-serif;
-      transition: all 0.3s;
+      background: var(--bg-secondary);
+      border: 2px solid transparent;
+      border-radius: 10px;
+      padding: 14px 16px;
+      font-size: 15px;
+      color: var(--text-primary);
+      font-family: 'Work Sans', sans-serif;
+      transition: all 0.2s ease;
     }
 
-    .input-wrapper input:focus {
+    .form-input:focus {
       outline: none;
-      border-color: var(--neon);
-      box-shadow: 0 0 0 3px var(--neon-glow);
+      border-color: var(--accent);
+      background: var(--surface);
     }
 
     .btn-primary {
       width: 100%;
-      background: var(--neon);
-      color: #000;
-      font-family: 'Syne', sans-serif;
-      font-weight: 700;
+      background: var(--accent);
+      color: white;
+      font-family: 'Work Sans', sans-serif;
+      font-weight: 600;
       font-size: 15px;
       padding: 16px;
       border: none;
-      border-radius: 12px;
+      border-radius: 10px;
       cursor: pointer;
-      transition: all 0.3s;
-      box-shadow: 0 4px 20px var(--neon-glow);
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 16px rgba(45, 125, 95, 0.2);
     }
 
     .btn-primary:hover {
-      background: #50ff28;
+      background: var(--accent-light);
       transform: translateY(-2px);
-      box-shadow: 0 6px 30px rgba(57, 255, 20, 0.3);
+      box-shadow: 0 6px 20px rgba(45, 125, 95, 0.3);
     }
 
     .btn-primary:disabled {
@@ -145,533 +157,432 @@
       transform: none;
     }
 
-    .msg {
-      padding: 12px;
+    .message {
+      padding: 14px;
       border-radius: 8px;
-      font-size: 13px;
+      font-size: 14px;
       margin-top: 16px;
       display: none;
+      animation: slideDown 0.3s ease;
     }
 
-    .msg.error {
-      background: rgba(255, 68, 68, 0.1);
-      border: 1px solid rgba(255, 68, 68, 0.3);
-      color: #ff4444;
+    .message.error {
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.2);
+      color: #dc2626;
     }
 
-    .msg.success {
-      background: rgba(57, 255, 20, 0.1);
-      border: 1px solid var(--neon);
-      color: var(--neon);
+    .message.success {
+      background: var(--accent-dim);
+      border: 1px solid rgba(45, 125, 95, 0.2);
+      color: var(--accent);
     }
 
-    /* ═══════════════════════════════════════════════════════
-       MAIN APP LAYOUT
-    ═══════════════════════════════════════════════════════ */
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ============ MAIN APP ============ */
     #app {
       display: none;
-      min-height: 100vh;
     }
 
-    /* Top Navigation Bar */
-    .top-nav {
+    /* Header */
+    .app-header {
       position: fixed;
       top: 0;
       left: 0;
       right: 0;
-      height: 60px;
-      background: var(--surface);
-      border-bottom: 1px solid var(--border);
       z-index: 1000;
+      background: rgba(253, 252, 250, 0.98);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .header-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 20px 32px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 20px;
     }
 
-    .nav-logo {
+    .brand {
       display: flex;
       align-items: center;
       gap: 12px;
-      font-family: 'Syne', sans-serif;
-      font-size: 24px;
-      font-weight: 800;
-      color: var(--text);
     }
 
-    .nav-logo i {
-      color: var(--neon);
+    .brand-icon {
+      width: 44px;
+      height: 44px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-light));
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      color: white;
+    }
+
+    .brand-name {
       font-size: 28px;
+      font-weight: 600;
+      color: var(--text-primary);
     }
 
-    .nav-actions {
+    .brand-name span {
+      color: var(--accent);
+    }
+
+    .header-actions {
       display: flex;
       align-items: center;
       gap: 16px;
     }
 
-    .nav-badge {
-      background: linear-gradient(135deg, var(--neon), #00ff88);
-      color: #000;
-      font-size: 12px;
-      font-weight: 700;
-      padding: 6px 12px;
-      border-radius: 20px;
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 16px;
+      background: var(--accent-dim);
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--accent);
     }
 
     .btn-logout {
+      padding: 10px 20px;
       background: transparent;
-      border: 1px solid var(--border);
-      color: var(--text);
-      padding: 8px 16px;
-      border-radius: 8px;
-      font-size: 13px;
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      color: var(--text-secondary);
+      font-size: 14px;
+      font-weight: 500;
       cursor: pointer;
-      transition: all 0.2s;
+      transition: all 0.2s ease;
     }
 
     .btn-logout:hover {
-      border-color: #ff4444;
-      color: #ff4444;
+      border-color: #dc2626;
+      color: #dc2626;
     }
 
-    /* Bottom Navigation (Mobile) */
-    .bottom-nav {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: 60px;
-      background: var(--surface);
-      border-top: 1px solid var(--border);
-      display: none;
-      z-index: 1000;
-    }
-
-    .bottom-nav-inner {
+    /* Sidebar Navigation */
+    .app-layout {
       display: flex;
-      height: 100%;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding-top: 85px;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 85px;
+      width: 280px;
+      height: calc(100vh - 85px);
+      padding: 32px 24px;
+      border-right: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    .nav-section {
+      margin-bottom: 32px;
+    }
+
+    .nav-section-title {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+      padding-left: 12px;
     }
 
     .nav-item {
-      flex: 1;
       display: flex;
-      flex-direction: column;
       align-items: center;
-      justify-content: center;
-      gap: 4px;
-      cursor: pointer;
-      color: var(--text-muted);
-      transition: all 0.2s;
-      border: none;
-      background: transparent;
-      font-family: 'DM Sans', sans-serif;
-    }
-
-    .nav-item i {
-      font-size: 22px;
-    }
-
-    .nav-item span {
-      font-size: 11px;
+      gap: 12px;
+      padding: 12px;
+      margin-bottom: 4px;
+      border-radius: 10px;
+      color: var(--text-secondary);
+      font-size: 15px;
       font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: 2px solid transparent;
+    }
+
+    .nav-item:hover {
+      background: var(--bg-secondary);
+      color: var(--text-primary);
     }
 
     .nav-item.active {
-      color: var(--neon);
+      background: var(--accent-dim);
+      color: var(--accent);
+      border-color: rgba(45, 125, 95, 0.2);
     }
 
-    /* Main Content Container */
-    .main-container {
-      padding-top: 60px;
-      min-height: 100vh;
+    .nav-item i {
+      width: 20px;
+      font-size: 18px;
     }
 
-    /* ═══════════════════════════════════════════════════════
-       INSTAGRAM-STYLE FEED
-    ═══════════════════════════════════════════════════════ */
-    .feed-container {
-      max-width: 630px;
-      margin: 0 auto;
-      padding: 20px 0;
+    /* Main Content */
+    .main-content {
+      flex: 1;
+      padding: 32px;
+      min-height: calc(100vh - 85px);
     }
 
-    /* Post Card */
-    .post {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      margin-bottom: 20px;
-      overflow: hidden;
+    .content-section {
+      display: none;
+    }
+
+    .content-section.active {
+      display: block;
       animation: fadeIn 0.4s ease;
     }
 
     @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
-    /* Post Header */
+    /* ============ POSTS FEED ============ */
+    .feed-header {
+      margin-bottom: 40px;
+    }
+
+    .feed-title {
+      font-size: 48px;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+    }
+
+    .feed-description {
+      font-size: 18px;
+      color: var(--text-secondary);
+    }
+
+    .posts-feed {
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    .post-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      margin-bottom: 32px;
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.3s ease;
+    }
+
+    .post-card:hover {
+      box-shadow: var(--shadow-md);
+      transform: translateY(-4px);
+    }
+
     .post-header {
+      padding: 20px 24px;
       display: flex;
       align-items: center;
-      padding: 14px 16px;
       gap: 12px;
+      border-bottom: 1px solid var(--border);
     }
 
     .post-avatar {
-      width: 36px;
-      height: 36px;
+      width: 48px;
+      height: 48px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-light));
       border-radius: 50%;
-      background: linear-gradient(135deg, var(--neon), #00ff88);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-weight: 700;
-      font-size: 14px;
-      color: #000;
-      flex-shrink: 0;
+      color: white;
+      font-weight: 600;
+      font-size: 16px;
     }
 
-    .post-info {
+    .post-author-info {
       flex: 1;
     }
 
     .post-author {
       font-weight: 600;
-      font-size: 14px;
-      color: var(--text);
+      font-size: 15px;
+      color: var(--text-primary);
       margin-bottom: 2px;
     }
 
-    .post-time {
-      font-size: 12px;
+    .post-date {
+      font-size: 13px;
       color: var(--text-muted);
-    }
-
-    .post-options {
-      background: transparent;
-      border: none;
-      color: var(--text-muted);
-      font-size: 18px;
-      cursor: pointer;
-      padding: 8px;
-      transition: all 0.2s;
-    }
-
-    .post-options:hover {
-      color: var(--text);
-    }
-
-    /* Post Image */
-    .post-image-wrapper {
-      position: relative;
-      width: 100%;
-      background: var(--surface);
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
     }
 
     .post-image {
       width: 100%;
-      display: block;
-      max-height: 600px;
+      max-height: 500px;
       object-fit: cover;
+      display: block;
     }
 
-    /* Post Content */
     .post-content {
-      padding: 16px;
+      padding: 24px;
     }
 
     .post-title {
-      font-family: 'Syne', sans-serif;
-      font-size: 18px;
-      font-weight: 700;
-      color: var(--text);
-      margin-bottom: 8px;
+      font-size: 28px;
+      color: var(--text-primary);
+      margin-bottom: 12px;
+      line-height: 1.3;
     }
 
     .post-text {
-      font-size: 14px;
-      line-height: 1.6;
-      color: var(--text);
-      margin-bottom: 12px;
+      font-size: 16px;
+      color: var(--text-secondary);
+      line-height: 1.7;
     }
 
-    /* Post Actions */
     .post-actions {
+      padding: 16px 24px;
+      border-top: 1px solid var(--border);
       display: flex;
       align-items: center;
-      gap: 16px;
-      padding: 0 16px 16px;
+      gap: 24px;
     }
 
-    .action-btn {
-      background: transparent;
-      border: none;
-      color: var(--text);
-      font-size: 24px;
-      cursor: pointer;
+    .post-action-btn {
       display: flex;
       align-items: center;
       gap: 8px;
-      transition: all 0.2s;
-      padding: 0;
-    }
-
-    .action-btn:hover {
-      transform: scale(1.1);
-    }
-
-    .action-btn.liked {
-      color: #ff0050;
-      animation: likeAnim 0.3s ease;
-    }
-
-    @keyframes likeAnim {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.3); }
-    }
-
-    .action-btn span {
+      background: none;
+      border: none;
+      color: var(--text-secondary);
       font-size: 14px;
-      font-weight: 600;
-      font-family: 'DM Sans', sans-serif;
-    }
-
-    .action-btn.share {
-      margin-left: auto;
-    }
-
-    /* Like Count */
-    .likes-count {
-      padding: 0 16px 8px;
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--text);
-    }
-
-    /* Empty State */
-    .empty-state {
-      text-align: center;
-      padding: 80px 20px;
-      color: var(--text-muted);
-    }
-
-    .empty-state i {
-      font-size: 64px;
-      color: var(--border);
-      margin-bottom: 16px;
-    }
-
-    .empty-state h3 {
-      font-family: 'Syne', sans-serif;
-      font-size: 20px;
-      color: var(--text);
-      margin-bottom: 8px;
-    }
-
-    .empty-state p {
-      font-size: 14px;
-    }
-
-    /* Loading Skeleton */
-    .skeleton-post {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      margin-bottom: 20px;
-      padding: 16px;
-    }
-
-    .skeleton {
-      background: linear-gradient(90deg, var(--surface) 25%, var(--hover) 50%, var(--surface) 75%);
-      background-size: 200% 100%;
-      animation: loading 1.5s infinite;
-      border-radius: 8px;
-    }
-
-    @keyframes loading {
-      0% { background-position: 200% 0; }
-      100% { background-position: -200% 0; }
-    }
-
-    .skeleton-header {
-      display: flex;
-      gap: 12px;
-      margin-bottom: 16px;
-    }
-
-    .skeleton-avatar {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-    }
-
-    .skeleton-text {
-      flex: 1;
-    }
-
-    .skeleton-line {
-      height: 12px;
-      margin-bottom: 8px;
-    }
-
-    .skeleton-image {
-      width: 100%;
-      height: 400px;
-      margin-bottom: 16px;
-    }
-
-    /* ═══════════════════════════════════════════════════════
-       CHAT / MESSAGES
-    ═══════════════════════════════════════════════════════ */
-    .chat-container {
-      max-width: 935px;
-      margin: 0 auto;
-      display: flex;
-      height: calc(100vh - 60px);
-      background: var(--card);
-      border-left: 1px solid var(--border);
-      border-right: 1px solid var(--border);
-    }
-
-    .chat-list {
-      width: 350px;
-      border-right: 1px solid var(--border);
-      display: flex;
-      flex-direction: column;
-    }
-
-    .chat-list-header {
-      padding: 20px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .chat-list-header h2 {
-      font-family: 'Syne', sans-serif;
-      font-size: 20px;
-      font-weight: 800;
-      color: var(--text);
-    }
-
-    .chat-channels {
-      flex: 1;
-      overflow-y: auto;
-    }
-
-    .chat-channel {
-      padding: 16px 20px;
+      font-weight: 500;
       cursor: pointer;
-      border-bottom: 1px solid var(--border);
-      transition: all 0.2s;
-      display: flex;
-      align-items: center;
-      gap: 12px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      transition: all 0.2s ease;
     }
 
-    .chat-channel:hover {
-      background: var(--hover);
+    .post-action-btn:hover {
+      background: var(--bg-secondary);
+      color: var(--text-primary);
     }
 
-    .chat-channel.active {
-      background: var(--hover);
-      border-left: 3px solid var(--neon);
+    .post-action-btn.liked {
+      color: #dc2626;
     }
 
-    .chat-channel-icon {
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--neon), #00ff88);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 20px;
-      color: #000;
+    .post-action-btn i {
+      font-size: 18px;
     }
 
-    .chat-channel-info {
-      flex: 1;
-    }
-
-    .chat-channel-name {
-      font-weight: 600;
-      font-size: 14px;
-      color: var(--text);
-      margin-bottom: 4px;
-    }
-
-    .chat-channel-desc {
-      font-size: 12px;
-      color: var(--text-muted);
-    }
-
-    .chat-main {
-      flex: 1;
+    /* ============ ADMIN CHAT ============ */
+    .chat-container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      box-shadow: var(--shadow-md);
+      height: calc(100vh - 200px);
       display: flex;
       flex-direction: column;
     }
 
     .chat-header {
-      padding: 16px 20px;
+      padding: 24px;
       border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      gap: 12px;
+      background: var(--bg-secondary);
+      border-radius: 16px 16px 0 0;
     }
 
-    .chat-header h3 {
-      font-family: 'Syne', sans-serif;
-      font-size: 16px;
-      font-weight: 700;
-      color: var(--text);
+    .chat-title {
+      font-size: 24px;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+    }
+
+    .chat-subtitle {
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    .chat-tools {
+      padding: 16px 24px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      gap: 8px;
+    }
+
+    .tool-btn {
+      padding: 8px 16px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text-secondary);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .tool-btn:hover {
+      background: var(--accent-dim);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .tool-btn.active {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
     }
 
     .chat-messages {
       flex: 1;
+      padding: 24px;
       overflow-y: auto;
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
     }
 
-    .message {
+    .chat-message {
       display: flex;
       gap: 12px;
-      animation: slideUp 0.3s ease;
+      margin-bottom: 20px;
+      animation: slideIn 0.3s ease;
     }
 
-    @keyframes slideUp {
-      from {
-        opacity: 0;
-        transform: translateY(10px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateX(-10px); }
+      to { opacity: 1; transform: translateX(0); }
     }
 
     .message-avatar {
-      width: 32px;
-      height: 32px;
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-light));
       border-radius: 50%;
-      background: linear-gradient(135deg, var(--neon), #00ff88);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-weight: 700;
-      font-size: 12px;
-      color: #000;
+      color: white;
+      font-weight: 600;
+      font-size: 14px;
       flex-shrink: 0;
     }
 
@@ -681,306 +592,468 @@
 
     .message-header {
       display: flex;
-      align-items: baseline;
+      align-items: center;
       gap: 8px;
-      margin-bottom: 4px;
+      margin-bottom: 6px;
     }
 
     .message-author {
       font-weight: 600;
       font-size: 14px;
-      color: var(--text);
+      color: var(--text-primary);
     }
 
     .message-time {
-      font-size: 11px;
+      font-size: 12px;
       color: var(--text-muted);
     }
 
     .message-text {
-      font-size: 14px;
-      color: var(--text);
+      font-size: 15px;
+      color: var(--text-secondary);
       line-height: 1.5;
-      word-wrap: break-word;
+    }
+
+    /* Poll Card */
+    .poll-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      margin-top: 8px;
+      max-width: 500px;
+    }
+
+    .poll-question {
+      font-weight: 600;
+      font-size: 15px;
+      color: var(--text-primary);
+      margin-bottom: 12px;
+    }
+
+    .poll-option {
+      background: var(--surface);
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .poll-option:hover {
+      border-color: var(--accent);
+    }
+
+    .poll-option.voted {
+      border-color: var(--accent);
+    }
+
+    .poll-option-fill {
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100%;
+      background: var(--accent-dim);
+      transition: width 0.5s ease;
+      z-index: 0;
+    }
+
+    .poll-option-content {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .poll-option-text {
+      font-size: 14px;
+      color: var(--text-primary);
+      font-weight: 500;
+    }
+
+    .poll-option-percent {
+      font-size: 13px;
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    /* Quiz Card */
+    .quiz-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      margin-top: 8px;
+      max-width: 500px;
+    }
+
+    .quiz-question {
+      font-weight: 600;
+      font-size: 15px;
+      color: var(--text-primary);
+      margin-bottom: 12px;
+    }
+
+    .quiz-option {
+      background: var(--surface);
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-size: 14px;
+      color: var(--text-primary);
+    }
+
+    .quiz-option:hover {
+      border-color: var(--accent);
+    }
+
+    .quiz-option.correct {
+      border-color: #10b981;
+      background: rgba(16, 185, 129, 0.1);
+    }
+
+    .quiz-option.incorrect {
+      border-color: #dc2626;
+      background: rgba(220, 38, 38, 0.1);
+    }
+
+    .chat-input-area {
+      padding: 20px 24px;
+      border-top: 1px solid var(--border);
+      background: var(--bg-secondary);
+      border-radius: 0 0 16px 16px;
     }
 
     .chat-input-wrapper {
-      padding: 16px 20px;
-      border-top: 1px solid var(--border);
-      background: var(--surface);
-    }
-
-    .chat-input-container {
       display: flex;
       gap: 12px;
-      align-items: center;
     }
 
     .chat-input {
       flex: 1;
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 24px;
-      padding: 12px 20px;
-      color: var(--text);
-      font-size: 14px;
-      font-family: 'DM Sans', sans-serif;
-      transition: all 0.2s;
+      background: var(--surface);
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 16px;
+      font-size: 15px;
+      color: var(--text-primary);
+      font-family: 'Work Sans', sans-serif;
+      transition: all 0.2s ease;
     }
 
     .chat-input:focus {
       outline: none;
-      border-color: var(--neon);
-    }
-
-    .chat-input:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
+      border-color: var(--accent);
     }
 
     .btn-send {
-      background: var(--neon);
-      color: #000;
+      padding: 14px 24px;
+      background: var(--accent);
+      color: white;
       border: none;
-      padding: 12px 24px;
-      border-radius: 24px;
-      font-weight: 700;
+      border-radius: 10px;
+      font-weight: 600;
       font-size: 14px;
       cursor: pointer;
-      transition: all 0.2s;
-      font-family: 'Syne', sans-serif;
+      transition: all 0.2s ease;
     }
 
     .btn-send:hover {
-      background: #50ff28;
-      transform: scale(1.05);
+      background: var(--accent-light);
     }
 
-    .btn-send:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-
-    /* ═══════════════════════════════════════════════════════
-       CREATE POST MODAL
-    ═══════════════════════════════════════════════════════ */
-    .modal {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.85);
-      backdrop-filter: blur(8px);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 2000;
-      padding: 20px;
-    }
-
-    .modal.active {
-      display: flex;
-    }
-
-    .modal-content {
-      background: var(--card);
+    /* ============ UPLOAD FORM ============ */
+    .upload-container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 16px;
-      max-width: 600px;
-      width: 100%;
-      max-height: 90vh;
-      overflow-y: auto;
-      animation: modalIn 0.3s ease;
+      padding: 40px;
+      box-shadow: var(--shadow-md);
     }
 
-    @keyframes modalIn {
-      from {
-        opacity: 0;
-        transform: scale(0.9);
-      }
-      to {
-        opacity: 1;
-        transform: scale(1);
-      }
+    .upload-header {
+      margin-bottom: 32px;
     }
 
-    .modal-header {
-      padding: 20px;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .modal-title {
-      font-family: 'Syne', sans-serif;
-      font-size: 20px;
-      font-weight: 800;
-      color: var(--text);
-    }
-
-    .btn-close {
-      background: transparent;
-      border: none;
-      color: var(--text-muted);
-      font-size: 28px;
-      cursor: pointer;
-      width: 32px;
-      height: 32px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 50%;
-      transition: all 0.2s;
-    }
-
-    .btn-close:hover {
-      background: var(--hover);
-      color: var(--text);
-    }
-
-    .modal-body {
-      padding: 24px;
-    }
-
-    .form-group {
-      margin-bottom: 20px;
-    }
-
-    .form-group label {
-      display: block;
-      font-weight: 600;
-      font-size: 14px;
-      color: var(--text);
+    .upload-title {
+      font-size: 36px;
+      color: var(--text-primary);
       margin-bottom: 8px;
     }
 
-    .form-group input,
-    .form-group textarea {
-      width: 100%;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 12px 16px;
-      color: var(--text);
-      font-size: 14px;
-      font-family: 'DM Sans', sans-serif;
-      transition: all 0.2s;
+    .upload-description {
+      font-size: 16px;
+      color: var(--text-secondary);
     }
 
-    .form-group textarea {
-      min-height: 120px;
+    .upload-form {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .form-field {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .field-label {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .field-input {
+      background: var(--bg-secondary);
+      border: 2px solid transparent;
+      border-radius: 10px;
+      padding: 14px 16px;
+      font-size: 15px;
+      color: var(--text-primary);
+      font-family: 'Work Sans', sans-serif;
+      transition: all 0.2s ease;
+    }
+
+    .field-input:focus {
+      outline: none;
+      border-color: var(--accent);
+      background: var(--surface);
+    }
+
+    textarea.field-input {
+      min-height: 150px;
       resize: vertical;
     }
 
-    .form-group input:focus,
-    .form-group textarea:focus {
-      outline: none;
-      border-color: var(--neon);
-      box-shadow: 0 0 0 3px var(--neon-glow);
-    }
-
-    .image-upload-area {
+    .upload-area {
       border: 2px dashed var(--border);
-      border-radius: 8px;
+      border-radius: 12px;
       padding: 40px;
       text-align: center;
+      background: var(--bg-secondary);
+      transition: all 0.2s ease;
       cursor: pointer;
-      transition: all 0.2s;
     }
 
-    .image-upload-area:hover {
-      border-color: var(--neon);
-      background: var(--hover);
+    .upload-area:hover {
+      border-color: var(--accent);
+      background: var(--accent-dim);
     }
 
-    .image-upload-area i {
+    .upload-area.has-file {
+      border-color: var(--accent);
+      background: var(--accent-dim);
+    }
+
+    .upload-icon {
       font-size: 48px;
       color: var(--text-muted);
       margin-bottom: 12px;
     }
 
-    .image-upload-area p {
+    .upload-text {
+      font-size: 15px;
+      color: var(--text-secondary);
+      margin-bottom: 4px;
+    }
+
+    .upload-hint {
+      font-size: 13px;
       color: var(--text-muted);
-      font-size: 14px;
     }
 
     .image-preview {
-      margin-top: 16px;
-      border-radius: 8px;
-      overflow: hidden;
       display: none;
+      margin-top: 16px;
+      border-radius: 12px;
+      overflow: hidden;
+      max-height: 400px;
     }
 
     .image-preview img {
       width: 100%;
-      max-height: 400px;
-      object-fit: contain;
-      background: var(--surface);
+      height: auto;
+      display: block;
     }
 
     .btn-submit {
-      width: 100%;
-      background: var(--neon);
-      color: #000;
+      padding: 16px 32px;
+      background: var(--accent);
+      color: white;
       border: none;
-      padding: 14px;
-      border-radius: 8px;
-      font-family: 'Syne', sans-serif;
-      font-weight: 700;
+      border-radius: 10px;
+      font-weight: 600;
       font-size: 15px;
       cursor: pointer;
-      transition: all 0.2s;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 16px rgba(45, 125, 95, 0.2);
     }
 
     .btn-submit:hover {
-      background: #50ff28;
+      background: var(--accent-light);
       transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(45, 125, 95, 0.3);
     }
 
-    /* Comment Modal */
+    /* ============ POST MODAL ============ */
+    .modal {
+      position: fixed;
+      inset: 0;
+      z-index: 2000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(4px);
+      padding: 20px;
+    }
+
+    .modal.active {
+      display: flex;
+      animation: fadeInModal 0.3s ease;
+    }
+
+    @keyframes fadeInModal {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .modal-content {
+      background: var(--surface);
+      border-radius: 16px;
+      max-width: 900px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: var(--shadow-lg);
+      animation: slideUp 0.3s ease;
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(30px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .modal-header {
+      padding: 24px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      background: var(--surface);
+      z-index: 1;
+    }
+
+    .modal-title {
+      font-size: 24px;
+      color: var(--text-primary);
+    }
+
+    .btn-close {
+      width: 36px;
+      height: 36px;
+      background: var(--bg-secondary);
+      border: none;
+      border-radius: 50%;
+      color: var(--text-secondary);
+      font-size: 18px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-close:hover {
+      background: var(--border);
+      color: var(--text-primary);
+    }
+
+    .modal-post {
+      padding: 24px;
+    }
+
+    .modal-post-image {
+      width: 100%;
+      max-height: 500px;
+      object-fit: cover;
+      border-radius: 12px;
+      margin-bottom: 20px;
+    }
+
+    .modal-post-title {
+      font-size: 32px;
+      color: var(--text-primary);
+      margin-bottom: 16px;
+    }
+
+    .modal-post-text {
+      font-size: 17px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      margin-bottom: 24px;
+    }
+
+    /* Comments Section */
     .comments-section {
-      margin-top: 20px;
-      padding-top: 20px;
+      padding: 24px;
       border-top: 1px solid var(--border);
+      background: var(--bg-secondary);
     }
 
     .comments-header {
-      font-weight: 700;
-      font-size: 16px;
-      color: var(--text);
-      margin-bottom: 16px;
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 20px;
     }
 
     .comment-form {
       display: flex;
       gap: 12px;
-      margin-bottom: 20px;
+      margin-bottom: 24px;
     }
 
     .comment-input {
       flex: 1;
       background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 10px 16px;
-      color: var(--text);
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 16px;
       font-size: 14px;
-      font-family: 'DM Sans', sans-serif;
+      color: var(--text-primary);
+      font-family: 'Work Sans', sans-serif;
+      transition: all 0.2s ease;
     }
 
     .comment-input:focus {
       outline: none;
-      border-color: var(--neon);
+      border-color: var(--accent);
     }
 
     .btn-comment {
-      background: var(--neon);
-      color: #000;
+      padding: 12px 20px;
+      background: var(--accent);
+      color: white;
       border: none;
-      padding: 10px 20px;
-      border-radius: 8px;
-      font-weight: 700;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 14px;
       cursor: pointer;
-      font-family: 'Syne', sans-serif;
+      transition: all 0.2s ease;
+    }
+
+    .btn-comment:hover {
+      background: var(--accent-light);
     }
 
     .comments-list {
@@ -992,905 +1065,970 @@
     .comment {
       display: flex;
       gap: 12px;
+      padding: 16px;
+      background: var(--surface);
+      border-radius: 12px;
+      border: 1px solid var(--border);
     }
 
     .comment-avatar {
-      width: 32px;
-      height: 32px;
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-light));
       border-radius: 50%;
-      background: linear-gradient(135deg, var(--neon), #00ff88);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-weight: 700;
-      font-size: 12px;
-      color: #000;
+      color: white;
+      font-weight: 600;
+      font-size: 13px;
       flex-shrink: 0;
     }
 
-    .comment-content {
+    .comment-body {
       flex: 1;
+    }
+
+    .comment-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
     }
 
     .comment-author {
       font-weight: 600;
-      font-size: 13px;
-      color: var(--text);
-      margin-bottom: 4px;
+      font-size: 14px;
+      color: var(--text-primary);
+    }
+
+    .comment-time {
+      font-size: 12px;
+      color: var(--text-muted);
     }
 
     .comment-text {
       font-size: 14px;
-      color: var(--text);
-      line-height: 1.5;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: 8px;
     }
 
-    /* Floating Action Button (Create Post) */
-    .fab {
-      position: fixed;
-      bottom: 80px;
-      right: 24px;
-      width: 56px;
-      height: 56px;
-      background: var(--neon);
+    .comment-actions {
+      display: flex;
+      gap: 16px;
+    }
+
+    .comment-action {
+      background: none;
       border: none;
-      border-radius: 50%;
-      color: #000;
-      font-size: 24px;
+      color: var(--text-muted);
+      font-size: 13px;
+      font-weight: 500;
       cursor: pointer;
-      box-shadow: 0 4px 20px var(--neon-glow);
-      transition: all 0.3s;
-      z-index: 999;
-      display: none;
+      transition: all 0.2s ease;
     }
 
-    .fab:hover {
-      transform: scale(1.1);
-      box-shadow: 0 6px 30px rgba(57, 255, 20, 0.4);
+    .comment-action:hover {
+      color: var(--accent);
     }
 
-    .fab.show {
+    /* Nested Replies */
+    .replies {
+      margin-top: 12px;
+      padding-left: 48px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .reply {
+      display: flex;
+      gap: 10px;
+      padding: 12px;
+      background: var(--bg-secondary);
+      border-radius: 10px;
+      border: 1px solid var(--border);
+    }
+
+    .reply-avatar {
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-light));
+      border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
+      color: white;
+      font-weight: 600;
+      font-size: 12px;
+      flex-shrink: 0;
     }
 
-    /* View Selector */
-    .view {
+    .reply-body {
+      flex: 1;
+    }
+
+    .reply-header {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 4px;
+    }
+
+    .reply-author {
+      font-weight: 600;
+      font-size: 13px;
+      color: var(--text-primary);
+    }
+
+    .reply-time {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .reply-text {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    .reply-form {
       display: none;
+      margin-top: 8px;
+      gap: 8px;
     }
 
-    .view.active {
-      display: block;
+    .reply-form.active {
+      display: flex;
     }
 
-    /* Hide elements */
-    .hidden {
-      display: none !important;
+    .reply-input {
+      flex: 1;
+      background: var(--surface);
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-size: 13px;
+      color: var(--text-primary);
+      font-family: 'Work Sans', sans-serif;
     }
 
-    /* ═══════════════════════════════════════════════════════
-       RESPONSIVE
-    ═══════════════════════════════════════════════════════ */
-    @media (max-width: 768px) {
-      .bottom-nav {
-        display: block;
-      }
+    .reply-input:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
 
-      .main-container {
-        padding-bottom: 60px;
-      }
+    .btn-reply {
+      padding: 10px 16px;
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+    }
 
-      .feed-container {
-        padding: 16px 0;
-      }
+    /* Empty States */
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-muted);
+    }
 
-      .post {
-        border-radius: 0;
-        border-left: none;
-        border-right: none;
-      }
+    .empty-icon {
+      font-size: 64px;
+      margin-bottom: 16px;
+      opacity: 0.3;
+    }
 
-      .chat-list {
-        width: 100%;
+    .empty-text {
+      font-size: 16px;
+    }
+
+    /* Loading State */
+    .loading {
+      text-align: center;
+      padding: 40px;
+      color: var(--text-muted);
+    }
+
+    .loading-spinner {
+      width: 40px;
+      height: 40px;
+      margin: 0 auto 16px;
+      border: 3px solid var(--border);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Admin Badge */
+    .admin-badge {
+      display: inline-block;
+      padding: 4px 8px;
+      background: var(--accent);
+      color: white;
+      font-size: 11px;
+      font-weight: 600;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .sidebar {
         display: none;
       }
 
-      .chat-list.mobile-show {
-        display: flex;
+      .app-layout {
+        padding-top: 85px;
+      }
+
+      .main-content {
+        padding: 20px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .header-inner {
+        padding: 16px 20px;
+      }
+
+      .brand-name {
+        font-size: 24px;
+      }
+
+      .feed-title {
+        font-size: 36px;
+      }
+
+      .post-title {
+        font-size: 24px;
       }
 
       .chat-container {
-        border: none;
+        height: calc(100vh - 150px);
       }
 
-      .fab {
-        bottom: 80px;
+      .upload-container {
+        padding: 24px;
       }
 
-      .nav-actions .btn-logout {
-        padding: 6px 12px;
-        font-size: 12px;
+      .replies {
+        padding-left: 24px;
       }
-
-      .nav-badge {
-        font-size: 11px;
-        padding: 4px 10px;
-      }
-    }
-
-    /* Scrollbar Styling */
-    ::-webkit-scrollbar {
-      width: 8px;
-    }
-
-    ::-webkit-scrollbar-track {
-      background: var(--surface);
-    }
-
-    ::-webkit-scrollbar-thumb {
-      background: var(--border);
-      border-radius: 4px;
-    }
-
-    ::-webkit-scrollbar-thumb:hover {
-      background: var(--text-muted);
     }
   </style>
 </head>
 <body>
-  <!-- Auth Screen -->
+  <!-- ============ AUTH SCREEN ============ -->
   <div id="authScreen">
     <div class="auth-container">
-      <div class="auth-logo">
-        <i class="fas fa-dragon"></i>
+      <div class="auth-brand">
+        <div class="auth-logo">
+          <i class="fas fa-bolt"></i>
+        </div>
+        <h1 class="auth-title">PhineX Community</h1>
+        <p class="auth-subtitle">Enter your access code to join</p>
       </div>
-      <h1 class="auth-title">PhineX Community</h1>
-      <p class="auth-subtitle">Enter your access code to continue</p>
-      
-      <div class="input-wrapper">
-        <input type="text" id="accessCodeInput" placeholder="Access Code" maxlength="100" autocomplete="off">
-      </div>
-      
-      <button class="btn-primary" id="verifyBtn">
-        <span>Verify & Access</span>
-      </button>
-      
-      <div class="msg" id="errorMsg"></div>
-      <div class="msg success" id="successMsg"></div>
+
+      <form id="authForm">
+        <div class="form-group">
+          <label class="form-label">Access Code</label>
+          <input 
+            type="text" 
+            id="codeInput" 
+            class="form-input" 
+            placeholder="Enter your code"
+            required
+          >
+        </div>
+
+        <button type="submit" class="btn-primary" id="submitBtn">
+          Access Community
+        </button>
+
+        <div id="errorMsg" class="message error"></div>
+        <div id="successMsg" class="message success"></div>
+      </form>
     </div>
   </div>
 
-  <!-- Main App -->
+  <!-- ============ MAIN APP ============ -->
   <div id="app">
-    <!-- Top Navigation -->
-    <div class="top-nav">
-      <div class="nav-logo">
-        <i class="fas fa-dragon"></i>
-        <span>PhineX</span>
-      </div>
-      <div class="nav-actions">
-        <div class="nav-badge" id="userRole">Member</div>
-        <button class="btn-logout" id="logoutBtn">
-          <i class="fas fa-sign-out-alt"></i>
-        </button>
-      </div>
-    </div>
-
-    <!-- Bottom Navigation (Mobile) -->
-    <div class="bottom-nav">
-      <div class="bottom-nav-inner">
-        <button class="nav-item active" data-view="feed">
-          <i class="fas fa-home"></i>
-          <span>Home</span>
-        </button>
-        <button class="nav-item" data-view="messages">
-          <i class="fas fa-comment-dots"></i>
-          <span>Messages</span>
-        </button>
-        <button class="nav-item hidden" id="navCreateBtn">
-          <i class="fas fa-plus-square"></i>
-          <span>Create</span>
-        </button>
-      </div>
-    </div>
-
-    <!-- Main Container -->
-    <div class="main-container">
-      <!-- Feed View -->
-      <div class="view active" id="feedView">
-        <div class="feed-container">
-          <!-- Loading Skeletons -->
-          <div id="loadingSkeletons">
-            <div class="skeleton-post">
-              <div class="skeleton-header">
-                <div class="skeleton skeleton-avatar"></div>
-                <div class="skeleton-text">
-                  <div class="skeleton skeleton-line" style="width: 30%; margin-bottom: 4px;"></div>
-                  <div class="skeleton skeleton-line" style="width: 20%; height: 10px;"></div>
-                </div>
-              </div>
-              <div class="skeleton skeleton-image"></div>
-              <div class="skeleton skeleton-line" style="width: 70%;"></div>
-            </div>
+    <!-- Header -->
+    <header class="app-header">
+      <div class="header-inner">
+        <div class="brand">
+          <div class="brand-icon">
+            <i class="fas fa-bolt"></i>
           </div>
+          <div class="brand-name">Phine<span>X</span></div>
+        </div>
 
-          <!-- Posts Container -->
-          <div id="postsContainer"></div>
-
-          <!-- Empty State -->
-          <div class="empty-state hidden" id="emptyState">
-            <i class="fas fa-images"></i>
-            <h3>No posts yet</h3>
-            <p>Be the first to share something amazing!</p>
+        <div class="header-actions">
+          <div class="user-info">
+            <i class="fas fa-user-circle"></i>
+            <span id="userDisplay"></span>
           </div>
+          <button class="btn-logout" id="logoutBtn">
+            <i class="fas fa-sign-out-alt"></i> Logout
+          </button>
         </div>
       </div>
+    </header>
 
-      <!-- Messages View -->
-      <div class="view" id="messagesView">
-        <div class="chat-container">
-          <div class="chat-list">
-            <div class="chat-list-header">
-              <h2>Messages</h2>
-            </div>
-            <div class="chat-channels">
-              <div class="chat-channel active" data-channel="admin">
-                <div class="chat-channel-icon">
-                  <i class="fas fa-shield-alt"></i>
-                </div>
-                <div class="chat-channel-info">
-                  <div class="chat-channel-name">Admin Chat</div>
-                  <div class="chat-channel-desc">Admins only</div>
-                </div>
-              </div>
-              <div class="chat-channel" data-channel="public">
-                <div class="chat-channel-icon">
-                  <i class="fas fa-users"></i>
-                </div>
-                <div class="chat-channel-info">
-                  <div class="chat-channel-name">Public Chat</div>
-                  <div class="chat-channel-desc">Community discussion</div>
-                </div>
-              </div>
-            </div>
+    <!-- App Layout -->
+    <div class="app-layout">
+      <!-- Sidebar Navigation -->
+      <aside class="sidebar">
+        <div class="nav-section">
+          <div class="nav-section-title">Browse</div>
+          <div class="nav-item active" data-section="feed">
+            <i class="fas fa-home"></i>
+            <span>Feed</span>
+          </div>
+          <div class="nav-item" data-section="public-chat">
+            <i class="fas fa-comments"></i>
+            <span>Community Chat</span>
+          </div>
+        </div>
+
+        <div class="nav-section" id="adminNav" style="display: none;">
+          <div class="nav-section-title">Admin</div>
+          <div class="nav-item" data-section="admin-chat">
+            <i class="fas fa-shield-alt"></i>
+            <span>Admin Chat</span>
+          </div>
+          <div class="nav-item" data-section="upload">
+            <i class="fas fa-plus-circle"></i>
+            <span>Create Post</span>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="main-content">
+        <!-- Posts Feed -->
+        <section id="feed" class="content-section active">
+          <div class="feed-header">
+            <h1 class="feed-title">Community Feed</h1>
+            <p class="feed-description">Latest posts and updates from our community</p>
           </div>
 
-          <div class="chat-main">
+          <div class="posts-feed" id="postsFeed">
+            <div class="loading">
+              <div class="loading-spinner"></div>
+              <p>Loading posts...</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Public Chat -->
+        <section id="public-chat" class="content-section">
+          <div class="chat-container">
             <div class="chat-header">
-              <div class="chat-channel-icon" style="width: 32px; height: 32px; font-size: 16px;">
-                <i class="fas fa-shield-alt" id="currentChannelIcon"></i>
+              <div>
+                <h2 class="chat-title">Community Chat</h2>
+                <p class="chat-subtitle">Connect with other members</p>
               </div>
-              <h3 id="currentChannelName">Admin Chat</h3>
             </div>
 
-            <div class="chat-messages" id="chatMessages">
-              <!-- Messages will load here -->
+            <div class="chat-messages" id="publicMessages">
+              <div class="loading">
+                <div class="loading-spinner"></div>
+                <p>Loading messages...</p>
+              </div>
             </div>
 
-            <div class="chat-input-wrapper">
-              <div class="chat-input-container">
-                <input type="text" class="chat-input" id="messageInput" placeholder="Type a message..." disabled>
-                <button class="btn-send" id="sendMessageBtn" disabled>Send</button>
+            <div class="chat-input-area">
+              <div class="chat-input-wrapper">
+                <input 
+                  type="text" 
+                  class="chat-input" 
+                  id="publicInput" 
+                  placeholder="Type a message..."
+                >
+                <button class="btn-send" id="sendPublicBtn">
+                  <i class="fas fa-paper-plane"></i> Send
+                </button>
               </div>
             </div>
           </div>
-        </div>
-      </div>
-    </div>
+        </section>
 
-    <!-- Floating Action Button (Admin Only) -->
-    <button class="fab" id="fabCreatePost">
-      <i class="fas fa-plus"></i>
-    </button>
-
-    <!-- Create Post Modal -->
-    <div class="modal" id="createPostModal">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h3 class="modal-title">Create Post</h3>
-          <button class="btn-close" id="closeCreateModal">&times;</button>
-        </div>
-        <div class="modal-body">
-          <form id="createPostForm">
-            <div class="form-group">
-              <label>Title</label>
-              <input type="text" id="postTitle" placeholder="Give your post a title" required>
-            </div>
-            <div class="form-group">
-              <label>What's on your mind?</label>
-              <textarea id="postContent" placeholder="Share your thoughts..." required></textarea>
-            </div>
-            <div class="form-group">
-              <label>Add Image (Optional)</label>
-              <input type="file" id="postImage" accept="image/*" style="display: none;">
-              <div class="image-upload-area" id="imageUploadArea">
-                <i class="fas fa-image"></i>
-                <p>Click to upload an image</p>
-              </div>
-              <div class="image-preview" id="imagePreview">
-                <img id="previewImg" src="" alt="Preview">
+        <!-- Admin Chat -->
+        <section id="admin-chat" class="content-section">
+          <div class="chat-container">
+            <div class="chat-header">
+              <div>
+                <h2 class="chat-title">Admin Chat <span class="admin-badge">Admin Only</span></h2>
+                <p class="chat-subtitle">Tools: Polls, Quizzes, and more</p>
               </div>
             </div>
-            <button type="submit" class="btn-submit">
-              <i class="fas fa-paper-plane"></i> Publish Post
-            </button>
-          </form>
-        </div>
-      </div>
-    </div>
 
-    <!-- Post Detail Modal -->
-    <div class="modal" id="postDetailModal">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h3 class="modal-title">Post</h3>
-          <button class="btn-close" id="closeDetailModal">&times;</button>
-        </div>
-        <div class="modal-body" id="postDetailContent">
-          <!-- Post details and comments will load here -->
-        </div>
-      </div>
+            <div class="chat-tools" id="chatTools">
+              <button class="tool-btn" id="createPollBtn">
+                <i class="fas fa-poll"></i> Create Poll
+              </button>
+              <button class="tool-btn" id="createQuizBtn">
+                <i class="fas fa-question-circle"></i> Create Quiz
+              </button>
+            </div>
+
+            <div class="chat-messages" id="adminMessages">
+              <div class="loading">
+                <div class="loading-spinner"></div>
+                <p>Loading messages...</p>
+              </div>
+            </div>
+
+            <div class="chat-input-area">
+              <div class="chat-input-wrapper">
+                <input 
+                  type="text" 
+                  class="chat-input" 
+                  id="adminInput" 
+                  placeholder="Type a message..."
+                >
+                <button class="btn-send" id="sendAdminBtn">
+                  <i class="fas fa-paper-plane"></i> Send
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Upload Post -->
+        <section id="upload" class="content-section">
+          <div class="upload-container">
+            <div class="upload-header">
+              <h2 class="upload-title">Create New Post</h2>
+              <p class="upload-description">Share updates with the community</p>
+            </div>
+
+            <form id="uploadForm" class="upload-form">
+              <div class="form-field">
+                <label class="field-label">Post Title</label>
+                <input 
+                  type="text" 
+                  id="postTitle" 
+                  class="field-input" 
+                  placeholder="Enter a compelling title..."
+                  required
+                >
+              </div>
+
+              <div class="form-field">
+                <label class="field-label">Content</label>
+                <textarea 
+                  id="postContent" 
+                  class="field-input" 
+                  placeholder="Write your post content here..."
+                  required
+                ></textarea>
+              </div>
+
+              <div class="form-field">
+                <label class="field-label">Featured Image (Optional)</label>
+                <div class="upload-area" id="uploadArea">
+                  <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                  <p class="upload-text">Click to upload an image</p>
+                  <p class="upload-hint">PNG, JPG up to 10MB</p>
+                  <input 
+                    type="file" 
+                    id="postImage" 
+                    accept="image/*" 
+                    style="display: none;"
+                  >
+                </div>
+                <div class="image-preview" id="imagePreview">
+                  <img id="previewImg" src="" alt="Preview">
+                </div>
+              </div>
+
+              <button type="submit" class="btn-submit">
+                <i class="fas fa-check"></i> Publish Post
+              </button>
+            </form>
+          </div>
+        </section>
+      </main>
     </div>
   </div>
 
-  <!-- Supabase Client -->
+  <!-- ============ POST MODAL ============ -->
+  <div id="postModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">Post Details</h3>
+        <button class="btn-close" id="closeModal">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+
+      <div id="modalBody"></div>
+    </div>
+  </div>
+
+  <!-- ============ SCRIPTS ============ -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  
   <script>
-    (function() {
+    (() => {
       // Configuration
       const CONFIG = {
         SUPABASE_URL: 'https://nwgsqaztrggyfthkkpan.supabase.co',
-        SUPABASE_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im53Z3NxYXp0cmdneWZ0aGtrcGFuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzgxOTEyNTgsImV4cCI6MjA1Mzc2NzI1OH0.MCz2o6MGHP3yqCcr2pXuSWe4ZOUQhZoEOdN75SLz1gY',
-        GUILD_ID: '1438576191610032160',
-        ADMIN_CODE: 'ADMIN26'
+        SUPABASE_KEY: 'sb_publishable_3W9Yscrc35Hmb9EeFAlfTA_myvjfxUo',
+        GUILD_ID: '1438576191610032160'
       };
 
-      const supabase = window.supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_KEY);
-
+      // Initialize Supabase
+      const supabaseClient = supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_KEY);
+      
       let currentUser = null;
       let isAdmin = false;
-      let currentChannel = 'admin';
       let currentPost = null;
 
-      // DOM Elements
-      const authScreen = document.getElementById('authScreen');
-      const app = document.getElementById('app');
-      const accessCodeInput = document.getElementById('accessCodeInput');
-      const verifyBtn = document.getElementById('verifyBtn');
-      const errorMsg = document.getElementById('errorMsg');
-      const successMsg = document.getElementById('successMsg');
-      const logoutBtn = document.getElementById('logoutBtn');
-      const userRole = document.getElementById('userRole');
-      const fabCreatePost = document.getElementById('fabCreatePost');
-      const createPostModal = document.getElementById('createPostModal');
-      const postDetailModal = document.getElementById('postDetailModal');
-
-      // Initialize
-      init();
-
-      function init() {
-        setupEventListeners();
-      }
-
-      function setupEventListeners() {
-        // Auth
-        verifyBtn.addEventListener('click', handleVerifyCode);
-        accessCodeInput.addEventListener('keypress', (e) => {
-          if (e.key === 'Enter') handleVerifyCode();
-        });
-        logoutBtn.addEventListener('click', () => location.reload());
-
-        // Navigation
-        document.querySelectorAll('.nav-item').forEach(btn => {
-          btn.addEventListener('click', () => {
-            const view = btn.dataset.view;
-            if (view) switchView(view);
-          });
-        });
-
-        // Create Post
-        fabCreatePost.addEventListener('click', openCreatePostModal);
-        document.getElementById('navCreateBtn').addEventListener('click', openCreatePostModal);
-        document.getElementById('closeCreateModal').addEventListener('click', closeCreatePostModal);
-        document.getElementById('imageUploadArea').addEventListener('click', () => {
-          document.getElementById('postImage').click();
-        });
-        document.getElementById('postImage').addEventListener('change', handleImageSelect);
-        document.getElementById('createPostForm').addEventListener('submit', handleCreatePost);
-
-        // Post Detail
-        document.getElementById('closeDetailModal').addEventListener('click', closePostDetailModal);
-
-        // Chat
-        document.querySelectorAll('.chat-channel').forEach(channel => {
-          channel.addEventListener('click', () => {
-            const channelType = channel.dataset.channel;
-            switchChannel(channelType);
-          });
-        });
-        document.getElementById('sendMessageBtn').addEventListener('click', sendMessage);
-        document.getElementById('messageInput').addEventListener('keypress', (e) => {
-          if (e.key === 'Enter') sendMessage();
-        });
-
-        // Close modals on overlay click
-        [createPostModal, postDetailModal].forEach(modal => {
-          modal.addEventListener('click', (e) => {
-            if (e.target === modal) {
-              modal.classList.remove('active');
-            }
-          });
-        });
-      }
-
-      async function handleVerifyCode() {
-        const rawCode = accessCodeInput.value.trim().toUpperCase();
+      // ============ AUTH ============
+      document.getElementById('authForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
         
-        if (!rawCode) {
-          showError('Please enter an access code');
-          return;
-        }
+        const code = document.getElementById('codeInput').value.trim();
+        const submitBtn = document.getElementById('submitBtn');
+        const errorMsg = document.getElementById('errorMsg');
+        const successMsg = document.getElementById('successMsg');
 
-        const normalizedCode = rawCode.replace(/-/g, '');
-        
-        verifyBtn.disabled = true;
-        verifyBtn.innerHTML = '<span>Verifying...</span>';
+        errorMsg.style.display = 'none';
+        successMsg.style.display = 'none';
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Verifying...';
 
         try {
-          // Check admin code
-          if (normalizedCode === CONFIG.ADMIN_CODE) {
-            isAdmin = true;
-            currentUser = { code: rawCode, user_id: 'ADMIN', is_admin: true };
-            showSuccess('Admin access granted!');
-            setTimeout(showApp, 1000);
-            return;
-          }
-
-          // Check database
-          const { data, error } = await supabase
+          const { data, error } = await supabaseClient
             .from('community_tickets')
             .select('*')
-            .or(`code.eq.${rawCode},code.eq.${normalizedCode}`)
+            .eq('code', code)
             .eq('guild_id', CONFIG.GUILD_ID)
-            .maybeSingle();
+            .eq('used', false)
+            .single();
 
           if (error || !data) {
-            showError('Invalid access code');
-            verifyBtn.disabled = false;
-            verifyBtn.innerHTML = '<span>Verify & Access</span>';
-            return;
+            throw new Error('Invalid or expired code');
           }
 
-          // Mark as used
-          if (!data.used) {
-            await supabase
-              .from('community_tickets')
-              .update({ used: true, used_at: new Date().toISOString() })
-              .eq('code', data.code);
-          }
+          // Mark ticket as used
+          await supabaseClient
+            .from('community_tickets')
+            .update({ used: true, used_at: new Date().toISOString() })
+            .eq('id', data.id);
 
           currentUser = data;
-          isAdmin = data.is_admin || false;
-          showSuccess('Access granted!');
-          setTimeout(showApp, 1000);
+          isAdmin = data.is_admin;
+
+          successMsg.textContent = 'Access granted! Loading community...';
+          successMsg.style.display = 'block';
+
+          setTimeout(() => {
+            document.getElementById('authScreen').style.display = 'none';
+            document.getElementById('app').style.display = 'block';
+            initializeApp();
+          }, 1000);
 
         } catch (err) {
-          console.error('Verification error:', err);
-          showError('An error occurred. Please try again.');
-          verifyBtn.disabled = false;
-          verifyBtn.innerHTML = '<span>Verify & Access</span>';
+          errorMsg.textContent = err.message || 'Authentication failed';
+          errorMsg.style.display = 'block';
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Access Community';
         }
-      }
+      });
 
-      function showError(message) {
-        errorMsg.textContent = message;
-        errorMsg.style.display = 'block';
-        errorMsg.classList.add('error');
-        successMsg.style.display = 'none';
-      }
-
-      function showSuccess(message) {
-        successMsg.textContent = message;
-        successMsg.style.display = 'block';
-        errorMsg.style.display = 'none';
-      }
-
-      function showApp() {
-        authScreen.style.display = 'none';
-        app.style.display = 'block';
-
-        // Setup admin features
-        if (isAdmin) {
-          userRole.textContent = 'Admin';
-          fabCreatePost.classList.add('show');
-          document.getElementById('navCreateBtn').classList.remove('hidden');
-          document.getElementById('messageInput').disabled = false;
-          document.getElementById('sendMessageBtn').disabled = false;
-        } else {
-          // Public chat is always enabled
-          switchChannel('public');
-        }
-
-        loadPosts();
-        loadMessages(currentChannel);
-        subscribeToRealtime();
-      }
-
-      function switchView(viewName) {
-        document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+      // ============ APP INITIALIZATION ============
+      function initializeApp() {
+        document.getElementById('userDisplay').textContent = isAdmin ? 'Admin' : 'Member';
         
-        document.getElementById(`${viewName}View`).classList.add('active');
-        document.querySelector(`[data-view="${viewName}"]`).classList.add('active');
+        if (isAdmin) {
+          document.getElementById('adminNav').style.display = 'block';
+        }
 
-        if (viewName === 'messages') {
-          loadMessages(currentChannel);
+        // Navigation
+        document.querySelectorAll('.nav-item').forEach(item => {
+          item.addEventListener('click', () => {
+            const section = item.dataset.section;
+            switchSection(section);
+          });
+        });
+
+        // Upload area
+        document.getElementById('uploadArea').addEventListener('click', () => {
+          document.getElementById('postImage').click();
+        });
+
+        // Load initial content
+        loadPosts();
+        loadChatMessages('public');
+        if (isAdmin) {
+          loadChatMessages('admin');
+        }
+
+        // Realtime subscriptions
+        subscribeToRealtime();
+
+        // Logout
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+          location.reload();
+        });
+      }
+
+      function switchSection(section) {
+        // Update nav
+        document.querySelectorAll('.nav-item').forEach(item => {
+          item.classList.remove('active');
+        });
+        document.querySelector(`[data-section="${section}"]`).classList.add('active');
+
+        // Update content
+        document.querySelectorAll('.content-section').forEach(content => {
+          content.classList.remove('active');
+        });
+        document.getElementById(section).classList.add('active');
+
+        // Load data if needed
+        if (section === 'admin-chat' && isAdmin) {
+          loadChatMessages('admin');
+        } else if (section === 'public-chat') {
+          loadChatMessages('public');
         }
       }
 
-      function switchChannel(channelType) {
-        currentChannel = channelType;
-
-        document.querySelectorAll('.chat-channel').forEach(c => c.classList.remove('active'));
-        document.querySelector(`[data-channel="${channelType}"]`).classList.add('active');
-
-        const icons = { admin: 'fa-shield-alt', public: 'fa-users' };
-        const names = { admin: 'Admin Chat', public: 'Public Chat' };
-
-        document.getElementById('currentChannelIcon').className = `fas ${icons[channelType]}`;
-        document.getElementById('currentChannelName').textContent = names[channelType];
-
-        // Enable/disable input based on channel and role
-        const messageInput = document.getElementById('messageInput');
-        const sendBtn = document.getElementById('sendMessageBtn');
-
-        if (channelType === 'admin' && !isAdmin) {
-          messageInput.disabled = true;
-          sendBtn.disabled = true;
-          messageInput.placeholder = 'Only admins can send messages here';
-        } else {
-          messageInput.disabled = false;
-          sendBtn.disabled = false;
-          messageInput.placeholder = 'Type a message...';
-        }
-
-        loadMessages(channelType);
-      }
-
+      // ============ POSTS ============
       async function loadPosts() {
-        const container = document.getElementById('postsContainer');
-        const skeleton = document.getElementById('loadingSkeletons');
-        const emptyState = document.getElementById('emptyState');
-
-        skeleton.style.display = 'block';
-        container.innerHTML = '';
-        emptyState.classList.add('hidden');
-
         try {
-          const { data, error } = await supabase
+          const { data, error } = await supabaseClient
             .from('community_posts')
             .select('*')
             .eq('guild_id', CONFIG.GUILD_ID)
             .order('created_at', { ascending: false });
 
-          skeleton.style.display = 'none';
-
           if (error) throw error;
 
+          const container = document.getElementById('postsFeed');
+          container.innerHTML = '';
+
           if (!data || data.length === 0) {
-            emptyState.classList.remove('hidden');
+            container.innerHTML = `
+              <div class="empty-state">
+                <i class="fas fa-file-alt empty-icon"></i>
+                <p class="empty-text">No posts yet. Check back soon!</p>
+              </div>
+            `;
             return;
           }
 
           data.forEach(post => {
-            container.appendChild(createPostElement(post));
+            container.innerHTML += createPostCard(post);
           });
 
         } catch (err) {
           console.error('Error loading posts:', err);
-          skeleton.style.display = 'none';
-          emptyState.classList.remove('hidden');
         }
       }
 
-      function createPostElement(post) {
-        const postEl = document.createElement('div');
-        postEl.className = 'post';
-        postEl.dataset.postId = post.id;
-
+      function createPostCard(post) {
         const initials = post.author_name.slice(0, 2).toUpperCase();
-        const date = new Date(post.created_at);
-        const timeAgo = getTimeAgo(date);
+        const date = new Date(post.created_at).toLocaleDateString('en-US', { 
+          month: 'long', 
+          day: 'numeric', 
+          year: 'numeric' 
+        });
 
-        postEl.innerHTML = `
-          <div class="post-header">
-            <div class="post-avatar">${initials}</div>
-            <div class="post-info">
-              <div class="post-author">${post.author_name}</div>
-              <div class="post-time">${timeAgo}</div>
+        return `
+          <article class="post-card">
+            <div class="post-header">
+              <div class="post-avatar">${initials}</div>
+              <div class="post-author-info">
+                <div class="post-author">${post.author_name}</div>
+                <div class="post-date">${date}</div>
+              </div>
             </div>
-            <button class="post-options">
-              <i class="fas fa-ellipsis-h"></i>
-            </button>
-          </div>
 
-          ${post.image_url ? `
-            <div class="post-image-wrapper">
-              <img src="${post.image_url}" class="post-image" alt="Post image">
+            ${post.image_url ? `<img src="${post.image_url}" alt="${post.title}" class="post-image">` : ''}
+
+            <div class="post-content">
+              <h2 class="post-title">${post.title}</h2>
+              <p class="post-text">${post.content}</p>
             </div>
-          ` : ''}
 
-          <div class="post-actions">
-            <button class="action-btn btn-like" data-post-id="${post.id}">
-              <i class="far fa-heart"></i>
-            </button>
-            <button class="action-btn btn-comment" data-post-id="${post.id}">
-              <i class="far fa-comment"></i>
-            </button>
-            <button class="action-btn share">
-              <i class="far fa-paper-plane"></i>
-            </button>
-          </div>
-
-          ${post.likes > 0 ? `<div class="likes-count">${post.likes} ${post.likes === 1 ? 'like' : 'likes'}</div>` : ''}
-
-          <div class="post-content">
-            ${post.title ? `<div class="post-title">${post.title}</div>` : ''}
-            <div class="post-text">${post.content}</div>
-          </div>
+            <div class="post-actions">
+              <button class="post-action-btn" onclick="toggleLike(${post.id})">
+                <i class="far fa-heart"></i>
+                <span>${post.likes || 0}</span>
+              </button>
+              <button class="post-action-btn" onclick="openPostModal(${post.id})">
+                <i class="far fa-comment"></i>
+                <span>Comment</span>
+              </button>
+              <button class="post-action-btn" onclick="sharePost(${post.id})">
+                <i class="far fa-share-square"></i>
+                <span>Share</span>
+              </button>
+            </div>
+          </article>
         `;
-
-        // Add event listeners
-        postEl.querySelector('.btn-like').addEventListener('click', () => toggleLike(post.id));
-        postEl.querySelector('.btn-comment').addEventListener('click', () => openPostDetail(post.id));
-        postEl.querySelector('.share').addEventListener('click', () => sharePost(post.id));
-
-        return postEl;
       }
 
-      function getTimeAgo(date) {
-        const seconds = Math.floor((new Date() - date) / 1000);
-        const intervals = {
-          year: 31536000,
-          month: 2592000,
-          week: 604800,
-          day: 86400,
-          hour: 3600,
-          minute: 60
-        };
-
-        for (const [unit, secondsInUnit] of Object.entries(intervals)) {
-          const interval = Math.floor(seconds / secondsInUnit);
-          if (interval >= 1) {
-            return `${interval} ${unit}${interval !== 1 ? 's' : ''} ago`;
-          }
-        }
-        return 'just now';
-      }
-
-      async function toggleLike(postId) {
+      window.toggleLike = async function(postId) {
         try {
-          const btn = document.querySelector(`[data-post-id="${postId}"].btn-like`);
-          const icon = btn.querySelector('i');
-          const isLiked = icon.classList.contains('fas');
+          // Check if already liked
+          const { data: existingLike } = await supabaseClient
+            .from('community_post_likes')
+            .select('*')
+            .eq('post_id', postId)
+            .eq('user_id', currentUser.user_id)
+            .single();
 
-          if (isLiked) {
-            await supabase
+          if (existingLike) {
+            // Unlike
+            await supabaseClient
               .from('community_post_likes')
               .delete()
-              .eq('post_id', postId)
-              .eq('user_id', currentUser.user_id);
+              .eq('id', existingLike.id);
 
-            await supabase.rpc('decrement_post_likes', { post_id_param: postId });
-            icon.classList.remove('fas');
-            icon.classList.add('far');
-            btn.classList.remove('liked');
+            await supabaseClient
+              .from('community_posts')
+              .update({ likes: (existingLike.likes || 1) - 1 })
+              .eq('id', postId);
           } else {
-            await supabase
+            // Like
+            await supabaseClient
               .from('community_post_likes')
-              .insert({ post_id: postId, user_id: currentUser.user_id });
+              .insert({
+                post_id: postId,
+                user_id: currentUser.user_id
+              });
 
-            await supabase.rpc('increment_post_likes', { post_id_param: postId });
-            icon.classList.remove('far');
-            icon.classList.add('fas');
-            btn.classList.add('liked');
+            const { data: post } = await supabaseClient
+              .from('community_posts')
+              .select('likes')
+              .eq('id', postId)
+              .single();
+
+            await supabaseClient
+              .from('community_posts')
+              .update({ likes: (post.likes || 0) + 1 })
+              .eq('id', postId);
           }
 
-          loadPosts(); // Refresh to show updated like count
+          loadPosts();
         } catch (err) {
           console.error('Error toggling like:', err);
         }
-      }
+      };
 
-      async function openPostDetail(postId) {
+      window.sharePost = function(postId) {
+        const url = `${window.location.origin}${window.location.pathname}?post=${postId}`;
+        navigator.clipboard.writeText(url).then(() => {
+          alert('Post link copied to clipboard!');
+        });
+      };
+
+      // ============ POST MODAL & COMMENTS ============
+      window.openPostModal = async function(postId) {
         try {
-          const { data: post, error } = await supabase
+          const { data: post } = await supabaseClient
             .from('community_posts')
             .select('*')
             .eq('id', postId)
             .single();
 
-          if (error) throw error;
-
-          currentPost = post;
-
-          const { data: comments } = await supabase
+          const { data: comments } = await supabaseClient
             .from('community_comments')
             .select('*')
             .eq('post_id', postId)
             .is('parent_id', null)
             .order('created_at', { ascending: true });
 
-          const initials = post.author_name.slice(0, 2).toUpperCase();
-          const date = new Date(post.created_at);
-          const timeAgo = getTimeAgo(date);
+          currentPost = post;
 
-          document.getElementById('postDetailContent').innerHTML = `
-            <div class="post-header">
-              <div class="post-avatar">${initials}</div>
-              <div class="post-info">
-                <div class="post-author">${post.author_name}</div>
-                <div class="post-time">${timeAgo}</div>
-              </div>
-            </div>
-
-            ${post.image_url ? `
-              <div class="post-image-wrapper">
-                <img src="${post.image_url}" class="post-image" alt="Post image">
-              </div>
-            ` : ''}
-
-            <div class="post-content">
-              ${post.title ? `<div class="post-title">${post.title}</div>` : ''}
-              <div class="post-text">${post.content}</div>
+          const modalBody = document.getElementById('modalBody');
+          modalBody.innerHTML = `
+            <div class="modal-post">
+              ${post.image_url ? `<img src="${post.image_url}" alt="${post.title}" class="modal-post-image">` : ''}
+              <h2 class="modal-post-title">${post.title}</h2>
+              <p class="modal-post-text">${post.content}</p>
             </div>
 
             <div class="comments-section">
-              <div class="comments-header">
-                <i class="fas fa-comments"></i> Comments (${comments?.length || 0})
-              </div>
+              <h3 class="comments-header">Comments</h3>
+              
               <div class="comment-form">
                 <input type="text" class="comment-input" id="newCommentInput" placeholder="Write a comment...">
-                <button class="btn-comment" id="submitCommentBtn">Post</button>
+                <button class="btn-comment" onclick="submitComment(${postId})">Post</button>
               </div>
+
               <div class="comments-list" id="commentsList">
-                ${comments?.map(c => createCommentHTML(c)).join('') || '<p style="color:var(--text-muted);font-size:14px;padding:20px 0;">No comments yet.</p>'}
+                ${comments && comments.length > 0 ? await renderComments(comments, postId) : '<div class="empty-state"><i class="far fa-comments empty-icon"></i><p class="empty-text">No comments yet. Be the first!</p></div>'}
               </div>
             </div>
           `;
 
-          postDetailModal.classList.add('active');
+          document.getElementById('postModal').classList.add('active');
 
-          document.getElementById('submitCommentBtn').addEventListener('click', submitComment);
+          // Enter key support
           document.getElementById('newCommentInput').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') submitComment();
+            if (e.key === 'Enter') submitComment(postId);
           });
 
         } catch (err) {
-          console.error('Error opening post detail:', err);
+          console.error('Error opening post modal:', err);
         }
+      };
+
+      async function renderComments(comments, postId) {
+        let html = '';
+        
+        for (const comment of comments) {
+          const { data: replies } = await supabaseClient
+            .from('community_comments')
+            .select('*')
+            .eq('parent_id', comment.id)
+            .order('created_at', { ascending: true });
+
+          html += createCommentHTML(comment, replies, postId);
+        }
+
+        return html;
       }
 
-      function createCommentHTML(comment) {
+      function createCommentHTML(comment, replies, postId) {
         const initials = comment.author_name.slice(0, 2).toUpperCase();
-        const time = new Date(comment.created_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-        
-        return `
+        const time = new Date(comment.created_at).toLocaleTimeString([], {
+          hour: '2-digit',
+          minute: '2-digit'
+        });
+
+        let html = `
           <div class="comment">
             <div class="comment-avatar">${initials}</div>
-            <div class="comment-content">
-              <div class="comment-author">${comment.author_name} · ${time}</div>
-              <div class="comment-text">${comment.content}</div>
+            <div class="comment-body">
+              <div class="comment-header">
+                <span class="comment-author">${comment.author_name}</span>
+                <span class="comment-time">${time}</span>
+              </div>
+              <p class="comment-text">${comment.content}</p>
+              <div class="comment-actions">
+                <button class="comment-action" onclick="toggleReplyForm(${comment.id})">
+                  <i class="fas fa-reply"></i> Reply
+                </button>
+              </div>
+
+              <div class="reply-form" id="replyForm${comment.id}">
+                <input type="text" class="reply-input" id="replyInput${comment.id}" placeholder="Write a reply...">
+                <button class="btn-reply" onclick="submitReply(${postId}, ${comment.id})">Reply</button>
+              </div>
+
+              ${replies && replies.length > 0 ? `
+                <div class="replies">
+                  ${replies.map(reply => createReplyHTML(reply)).join('')}
+                </div>
+              ` : ''}
+            </div>
+          </div>
+        `;
+
+        return html;
+      }
+
+      function createReplyHTML(reply) {
+        const initials = reply.author_name.slice(0, 2).toUpperCase();
+        const time = new Date(reply.created_at).toLocaleTimeString([], {
+          hour: '2-digit',
+          minute: '2-digit'
+        });
+
+        return `
+          <div class="reply">
+            <div class="reply-avatar">${initials}</div>
+            <div class="reply-body">
+              <div class="reply-header">
+                <span class="reply-author">${reply.author_name}</span>
+                <span class="reply-time">${time}</span>
+              </div>
+              <p class="reply-text">${reply.content}</p>
             </div>
           </div>
         `;
       }
 
-      async function submitComment() {
+      window.toggleReplyForm = function(commentId) {
+        const form = document.getElementById(`replyForm${commentId}`);
+        form.classList.toggle('active');
+        if (form.classList.contains('active')) {
+          document.getElementById(`replyInput${commentId}`).focus();
+        }
+      };
+
+      window.submitComment = async function(postId) {
         const input = document.getElementById('newCommentInput');
         const content = input.value.trim();
-        
+
         if (!content) return;
 
         try {
-          await supabase
+          await supabaseClient
             .from('community_comments')
             .insert({
-              post_id: currentPost.id,
+              post_id: postId,
               author_id: currentUser.user_id,
               author_name: isAdmin ? 'Admin' : 'Member',
               content: content
             });
 
           input.value = '';
-          openPostDetail(currentPost.id); // Refresh
+          openPostModal(postId); // Refresh
         } catch (err) {
           console.error('Error submitting comment:', err);
         }
-      }
+      };
 
-      function sharePost(postId) {
-        const url = `${window.location.origin}${window.location.pathname}?post=${postId}`;
-        navigator.clipboard.writeText(url).then(() => {
-          alert('Post link copied to clipboard!');
-        });
-      }
+      window.submitReply = async function(postId, parentId) {
+        const input = document.getElementById(`replyInput${parentId}`);
+        const content = input.value.trim();
 
-      function closePostDetailModal() {
-        postDetailModal.classList.remove('active');
-      }
-
-      // Create Post
-      function openCreatePostModal() {
-        createPostModal.classList.add('active');
-      }
-
-      function closeCreatePostModal() {
-        createPostModal.classList.remove('active');
-        document.getElementById('createPostForm').reset();
-        document.getElementById('imagePreview').style.display = 'none';
-      }
-
-      function handleImageSelect(e) {
-        const file = e.target.files[0];
-        if (file) {
-          const reader = new FileReader();
-          reader.onload = (e) => {
-            document.getElementById('previewImg').src = e.target.result;
-            document.getElementById('imagePreview').style.display = 'block';
-          };
-          reader.readAsDataURL(file);
-        }
-      }
-
-      async function handleCreatePost(e) {
-        e.preventDefault();
-
-        if (!isAdmin) return;
-
-        const title = document.getElementById('postTitle').value;
-        const content = document.getElementById('postContent').value;
-        const imageFile = document.getElementById('postImage').files[0];
-
-        let imageUrl = null;
-        if (imageFile) {
-          const reader = new FileReader();
-          imageUrl = await new Promise((resolve) => {
-            reader.onload = (e) => resolve(e.target.result);
-            reader.readAsDataURL(imageFile);
-          });
-        }
+        if (!content) return;
 
         try {
-          await supabase
-            .from('community_posts')
+          await supabaseClient
+            .from('community_comments')
             .insert({
-              guild_id: CONFIG.GUILD_ID,
+              post_id: postId,
+              parent_id: parentId,
               author_id: currentUser.user_id,
-              author_name: 'Admin',
-              title: title,
-              content: content,
-              image_url: imageUrl
+              author_name: isAdmin ? 'Admin' : 'Member',
+              content: content
             });
 
-          closeCreatePostModal();
-          switchView('feed');
-          loadPosts();
+          input.value = '';
+          openPostModal(postId); // Refresh
         } catch (err) {
-          console.error('Error creating post:', err);
-          alert('Failed to create post');
+          console.error('Error submitting reply:', err);
         }
-      }
+      };
 
-      // Messages
-      async function loadMessages(channelType) {
-        const container = document.getElementById('chatMessages');
-        container.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-muted);">Loading messages...</div>';
+      document.getElementById('closeModal').addEventListener('click', () => {
+        document.getElementById('postModal').classList.remove('active');
+      });
 
+      // ============ CHAT ============
+      async function loadChatMessages(channelType) {
         try {
-          const { data, error } = await supabase
+          const { data, error } = await supabaseClient
             .from('community_chat_messages')
             .select('*')
             .eq('guild_id', CONFIG.GUILD_ID)
@@ -1900,59 +2038,121 @@
 
           if (error) throw error;
 
+          const container = channelType === 'admin' 
+            ? document.getElementById('adminMessages')
+            : document.getElementById('publicMessages');
+
           container.innerHTML = '';
 
           if (!data || data.length === 0) {
-            container.innerHTML = '<div style="text-align:center;padding:60px;color:var(--text-muted);">No messages yet. Start the conversation!</div>';
+            container.innerHTML = `
+              <div class="empty-state">
+                <i class="far fa-comments empty-icon"></i>
+                <p class="empty-text">No messages yet. Start the conversation!</p>
+              </div>
+            `;
             return;
           }
 
           data.reverse().forEach(msg => {
-            container.appendChild(createMessageElement(msg));
+            container.innerHTML += createChatMessageHTML(msg);
           });
 
           container.scrollTop = container.scrollHeight;
         } catch (err) {
-          console.error('Error loading messages:', err);
+          console.error('Error loading chat messages:', err);
         }
       }
 
-      function createMessageElement(msg) {
-        const msgEl = document.createElement('div');
-        msgEl.className = 'message';
-
+      function createChatMessageHTML(msg) {
         const initials = msg.author_name.slice(0, 2).toUpperCase();
-        const time = new Date(msg.created_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+        const time = new Date(msg.created_at).toLocaleTimeString([], {
+          hour: '2-digit',
+          minute: '2-digit'
+        });
 
-        msgEl.innerHTML = `
-          <div class="message-avatar">${initials}</div>
-          <div class="message-content">
-            <div class="message-header">
-              <span class="message-author">${msg.author_name}</span>
-              <span class="message-time">${time}</span>
+        // Check if message contains poll data
+        let messageContent = msg.content;
+        if (msg.content.startsWith('POLL:')) {
+          const pollData = JSON.parse(msg.content.replace('POLL:', ''));
+          messageContent = createPollHTML(pollData, msg.id);
+        } else if (msg.content.startsWith('QUIZ:')) {
+          const quizData = JSON.parse(msg.content.replace('QUIZ:', ''));
+          messageContent = createQuizHTML(quizData, msg.id);
+        }
+
+        return `
+          <div class="chat-message">
+            <div class="message-avatar">${initials}</div>
+            <div class="message-content">
+              <div class="message-header">
+                <span class="message-author">${msg.author_name}</span>
+                <span class="message-time">${time}</span>
+              </div>
+              <div class="message-text">${messageContent}</div>
             </div>
-            <div class="message-text">${msg.content}</div>
           </div>
         `;
-
-        return msgEl;
       }
 
-      async function sendMessage() {
-        const input = document.getElementById('messageInput');
+      function createPollHTML(poll, msgId) {
+        return `
+          <div class="poll-card">
+            <div class="poll-question">${poll.question}</div>
+            ${poll.options.map((option, idx) => `
+              <div class="poll-option" onclick="votePoll(${msgId}, ${idx})">
+                <div class="poll-option-fill" style="width: ${option.votes || 0}%"></div>
+                <div class="poll-option-content">
+                  <span class="poll-option-text">${option.text}</span>
+                  <span class="poll-option-percent">${option.votes || 0}%</span>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        `;
+      }
+
+      function createQuizHTML(quiz, msgId) {
+        return `
+          <div class="quiz-card">
+            <div class="quiz-question">${quiz.question}</div>
+            ${quiz.options.map((option, idx) => `
+              <div class="quiz-option" onclick="answerQuiz(${msgId}, ${idx}, ${quiz.correct})">
+                ${option}
+              </div>
+            `).join('')}
+          </div>
+        `;
+      }
+
+      window.votePoll = function(msgId, optionIdx) {
+        // Implement poll voting logic
+        console.log(`Voted for option ${optionIdx} in poll ${msgId}`);
+      };
+
+      window.answerQuiz = function(msgId, answerIdx, correctIdx) {
+        const options = document.querySelectorAll(`[onclick*="answerQuiz(${msgId}"]`);
+        options[answerIdx].classList.add(answerIdx === correctIdx ? 'correct' : 'incorrect');
+        if (answerIdx !== correctIdx) {
+          options[correctIdx].classList.add('correct');
+        }
+      };
+
+      async function sendChatMessage(channelType) {
+        const input = channelType === 'admin'
+          ? document.getElementById('adminInput')
+          : document.getElementById('publicInput');
+
         const content = input.value.trim();
 
         if (!content) return;
 
-        // Check permissions
-        if (currentChannel === 'admin' && !isAdmin) return;
-
         try {
-          await supabase
+          await supabaseClient
             .from('community_chat_messages')
             .insert({
               guild_id: CONFIG.GUILD_ID,
-              channel_type: currentChannel,
+              channel_type: channelType,
               author_id: currentUser.user_id,
               author_name: isAdmin ? 'Admin' : 'Member',
               content: content
@@ -1964,22 +2164,159 @@
         }
       }
 
-      // Realtime subscriptions
+      document.getElementById('sendPublicBtn').addEventListener('click', () => sendChatMessage('public'));
+      document.getElementById('publicInput').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') sendChatMessage('public');
+      });
+
+      if (document.getElementById('sendAdminBtn')) {
+        document.getElementById('sendAdminBtn').addEventListener('click', () => sendChatMessage('admin'));
+        document.getElementById('adminInput').addEventListener('keypress', (e) => {
+          if (e.key === 'Enter') sendChatMessage('admin');
+        });
+      }
+
+      // ============ ADMIN TOOLS ============
+      document.getElementById('createPollBtn')?.addEventListener('click', () => {
+        const question = prompt('Enter poll question:');
+        if (!question) return;
+
+        const options = [];
+        for (let i = 1; i <= 4; i++) {
+          const option = prompt(`Option ${i} (leave empty to finish):`);
+          if (!option) break;
+          options.push({ text: option, votes: 0 });
+        }
+
+        if (options.length < 2) {
+          alert('You need at least 2 options');
+          return;
+        }
+
+        const pollData = { question, options };
+        
+        sendAdminTool('POLL:' + JSON.stringify(pollData));
+      });
+
+      document.getElementById('createQuizBtn')?.addEventListener('click', () => {
+        const question = prompt('Enter quiz question:');
+        if (!question) return;
+
+        const options = [];
+        for (let i = 1; i <= 4; i++) {
+          const option = prompt(`Option ${i} (leave empty to finish):`);
+          if (!option) break;
+          options.push(option);
+        }
+
+        if (options.length < 2) {
+          alert('You need at least 2 options');
+          return;
+        }
+
+        const correct = parseInt(prompt(`Which option is correct? (1-${options.length}):`)) - 1;
+        if (correct < 0 || correct >= options.length) {
+          alert('Invalid correct answer');
+          return;
+        }
+
+        const quizData = { question, options, correct };
+        
+        sendAdminTool('QUIZ:' + JSON.stringify(quizData));
+      });
+
+      async function sendAdminTool(content) {
+        try {
+          await supabaseClient
+            .from('community_chat_messages')
+            .insert({
+              guild_id: CONFIG.GUILD_ID,
+              channel_type: 'admin',
+              author_id: currentUser.user_id,
+              author_name: 'Admin',
+              content: content
+            });
+        } catch (err) {
+          console.error('Error sending admin tool:', err);
+        }
+      }
+
+      // ============ UPLOAD POST ============
+      document.getElementById('postImage').addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            document.getElementById('previewImg').src = e.target.result;
+            document.getElementById('imagePreview').style.display = 'block';
+            document.getElementById('uploadArea').classList.add('has-file');
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+
+      document.getElementById('uploadForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        if (!isAdmin) return;
+
+        const title = document.getElementById('postTitle').value;
+        const content = document.getElementById('postContent').value;
+        const imageFile = document.getElementById('postImage').files[0];
+
+        let imageUrl = null;
+
+        if (imageFile) {
+          const reader = new FileReader();
+          imageUrl = await new Promise((resolve) => {
+            reader.onload = (e) => resolve(e.target.result);
+            reader.readAsDataURL(imageFile);
+          });
+        }
+
+        try {
+          await supabaseClient
+            .from('community_posts')
+            .insert({
+              guild_id: CONFIG.GUILD_ID,
+              author_id: currentUser.user_id,
+              author_name: 'Admin',
+              title: title,
+              content: content,
+              image_url: imageUrl
+            });
+
+          // Reset form
+          document.getElementById('uploadForm').reset();
+          document.getElementById('imagePreview').style.display = 'none';
+          document.getElementById('uploadArea').classList.remove('has-file');
+
+          // Switch to feed
+          switchSection('feed');
+
+          alert('Post published successfully!');
+        } catch (err) {
+          console.error('Error creating post:', err);
+          alert('Failed to publish post');
+        }
+      });
+
+      // ============ REALTIME ============
       function subscribeToRealtime() {
-        // Posts
-        supabase
-          .channel('posts_channel')
+        supabaseClient
+          .channel('community_posts')
           .on('postgres_changes', {
             event: 'INSERT',
             schema: 'public',
             table: 'community_posts',
             filter: `guild_id=eq.${CONFIG.GUILD_ID}`
-          }, () => loadPosts())
+          }, () => {
+            loadPosts();
+          })
           .subscribe();
 
-        // Messages
-        supabase
-          .channel('messages_channel')
+        supabaseClient
+          .channel('community_chat')
           .on('postgres_changes', {
             event: 'INSERT',
             schema: 'public',
@@ -1987,24 +2324,24 @@
             filter: `guild_id=eq.${CONFIG.GUILD_ID}`
           }, (payload) => {
             const msg = payload.new;
-            if (msg.channel_type === currentChannel) {
-              const container = document.getElementById('chatMessages');
-              container.appendChild(createMessageElement(msg));
-              container.scrollTop = container.scrollHeight;
-            }
+            const container = msg.channel_type === 'admin'
+              ? document.getElementById('adminMessages')
+              : document.getElementById('publicMessages');
+
+            container.innerHTML += createChatMessageHTML(msg);
+            container.scrollTop = container.scrollHeight;
           })
           .subscribe();
 
-        // Comments
-        supabase
-          .channel('comments_channel')
+        supabaseClient
+          .channel('community_comments')
           .on('postgres_changes', {
             event: 'INSERT',
             schema: 'public',
             table: 'community_comments'
           }, () => {
-            if (currentPost && postDetailModal.classList.contains('active')) {
-              openPostDetail(currentPost.id);
+            if (currentPost) {
+              openPostModal(currentPost.id);
             }
           })
           .subscribe();
