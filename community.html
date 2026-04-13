@@ -1,2056 +1,2462 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PhineX Community — Channels & Roles</title>
-  <meta name="description" content="Join the PhineX Community - Discord-style channels with roles and permissions">
-  <link rel="icon" type="image/x-icon" href="PhineX (2).png">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  
-  <style>
-    :root {
-      /* Discord-inspired color palette */
-      --bg-primary: #36393f;
-      --bg-secondary: #2f3136;
-      --bg-tertiary: #202225;
-      --bg-hover: #3a3d44;
-      --bg-modifier: rgba(79, 84, 92, 0.16);
-      --text-normal: #dcddde;
-      --text-muted: #72767d;
-      --text-link: #00b0f4;
-      --interactive-normal: #b9bbbe;
-      --interactive-hover: #dcddde;
-      --interactive-active: #fff;
-      --interactive-muted: #4f545c;
-      --header-primary: #fff;
-      --header-secondary: #b9bbbe;
-      
-      /* Role colors */
-      --role-admin: #f04747;
-      --role-xuser: #7289da;
-      --role-member: #43b581;
-      
-      /* Accent */
-      --accent-primary: #5865f2;
-      --accent-hover: #4752c4;
-      
-      /* Borders */
-      --border-color: rgba(0, 0, 0, 0.2);
-      --border-subtle: rgba(0, 0, 0, 0.1);
-    }
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: var(--bg-primary);
-      color: var(--text-normal);
-      overflow: hidden;
-    }
-
-    /* ============ AUTH SCREEN ============ */
-    #authScreen {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: linear-gradient(#51ff00, #00000000);
-      padding: 20px;
-    }
-
-    .auth-container {
-      background: var(--bg-primary);
-      border-radius: 8px;
-      padding: 48px 40px;
-      max-width: 480px;
-      width: 100%;
-      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.24);
-    }
-
-    .auth-logo {
-      width: 80px;
-      height: 80px;
-      margin: 0 auto 24px;
-      background: #00000000;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 36px;
-      color: white;
-    }
-
-    .auth-title {
-      font-size: 28px;
-      color: var(--header-primary);
-      margin-bottom: 8px;
-      text-align: center;
-      font-weight: 700;
-    }
-
-    .auth-subtitle {
-      font-size: 16px;
-      color: var(--text-muted);
-      text-align: center;
-      margin-bottom: 32px;
-    }
-
-    .form-group {
-      margin-bottom: 20px;
-    }
-
-    .form-label {
-      display: block;
-      font-size: 12px;
-      font-weight: 700;
-      color: var(--header-secondary);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 8px;
-    }
-
-    .form-input {
-      width: 100%;
-      background: var(--bg-tertiary);
-      border: 1px solid var(--bg-tertiary);
-      border-radius: 4px;
-      padding: 12px;
-      font-size: 16px;
-      color: var(--text-normal);
-      font-family: 'Inter', sans-serif;
-      transition: all 0.15s ease;
-    }
-
-    .form-input:focus {
-      outline: none;
-      border-color: var(--accent-primary);
-    }
-
-    .btn-primary {
-      width: 100%;
-      background: var(--accent-primary);
-      color: white;
-      font-family: 'Inter', sans-serif;
-      font-weight: 600;
-      font-size: 16px;
-      padding: 14px;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      margin-top: 8px;
-    }
-
-    .btn-primary:hover {
-      background: var(--accent-hover);
-    }
-
-    .btn-primary:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-
-    .message {
-      padding: 12px;
-      border-radius: 4px;
-      font-size: 14px;
-      margin-top: 16px;
-      display: none;
-    }
-
-    .message.error {
-      background: rgba(240, 71, 71, 0.1);
-      border: 1px solid rgba(240, 71, 71, 0.3);
-      color: #f04747;
-    }
-
-    .message.success {
-      background: rgba(67, 181, 129, 0.1);
-      border: 1px solid rgba(67, 181, 129, 0.3);
-      color: #43b581;
-    }
-
-    .code-hint {
-      margin-top: 24px;
-      padding: 12px;
-      background: var(--bg-modifier);
-      border-radius: 4px;
-      font-size: 12px;
-      color: rgb(255, 255, 255);
-      text-align: center;
-      line-height: 1.6;
-    }
-
-    /* ============ MAIN APP ============ */
-    #app {
-      display: none;
-      height: 100vh;
-      overflow: hidden;
-    }
-
-    .app-container {
-      display: flex;
-      height: 100vh;
-    }
-
-    /* ============ SIDEBAR ============ */
-    .sidebar {
-      width: 240px;
-      background: var(--bg-secondary);
-      display: flex;
-      flex-direction: column;
-      border-right: 1px solid var(--border-color);
-    }
-
-    .server-header {
-      padding: 16px;
-      border-bottom: 1px solid var(--border-color);
-      background: var(--bg-secondary);
-      cursor: pointer;
-      transition: background 0.15s ease;
-      font-weight: 600;
-      font-size: 16px;
-      color: var(--header-primary);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      box-shadow: 0 1px 0 rgba(0, 0, 0, 0.2), 0 1.5px 0 rgba(0, 0, 0, 0.05), 0 2px 0 rgba(0, 0, 0, 0.05);
-    }
-
-    .server-header:hover {
-      background: var(--bg-hover);
-    }
-
-    .server-name {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .server-icon {
-      width: 24px;
-      height: 24px;
-      background: linear-gradient(135deg, #667eea, #764ba2);
-      border-radius: 6px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 12px;
-      color: white;
-      font-weight: 700;
-    }
-
-    .channels-container {
-      flex: 1;
-      overflow-y: auto;
-      padding: 16px 8px;
-    }
-
-    .channel-category {
-      margin-bottom: 4px;
-    }
-
-    .category-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 8px 8px 4px 8px;
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      color: var(--text-muted);
-      cursor: pointer;
-      transition: color 0.15s ease;
-    }
-
-    .category-header:hover {
-      color: var(--interactive-hover);
-    }
-
-    .category-icon {
-      font-size: 10px;
-      transition: transform 0.2s ease;
-    }
-
-    .category-header.collapsed .category-icon {
-      transform: rotate(-90deg);
-    }
-
-    .category-channels {
-      margin-bottom: 16px;
-    }
-
-    .category-channels.hidden {
-      display: none;
-    }
-
-    .channel-item {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 6px 8px;
-      margin: 2px 0;
-      border-radius: 4px;
-      cursor: pointer;
-      color: var(--interactive-normal);
-      font-size: 15px;
-      font-weight: 500;
-      transition: all 0.15s ease;
-      position: relative;
-    }
-
-    .channel-item:hover {
-      background: var(--bg-modifier);
-      color: var(--interactive-hover);
-    }
-
-    .channel-item.active {
-      background: var(--bg-modifier);
-      color: var(--interactive-active);
-    }
-
-    .channel-item.active::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 3px;
-      height: 20px;
-      background: var(--header-primary);
-      border-radius: 0 2px 2px 0;
-    }
-
-    .channel-icon {
-      font-size: 18px;
-      opacity: 0.6;
-    }
-
-    .channel-item.active .channel-icon {
-      opacity: 1;
-    }
-
-    .channel-name {
-      flex: 1;
-    }
-
-    .channel-actions {
-      display: none;
-      gap: 4px;
-    }
-
-    .channel-item:hover .channel-actions {
-      display: flex;
-    }
-
-    .channel-action-btn {
-      width: 20px;
-      height: 20px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 3px;
-      font-size: 12px;
-      color: var(--interactive-normal);
-      transition: all 0.15s ease;
-    }
-
-    .channel-action-btn:hover {
-      background: var(--bg-tertiary);
-      color: var(--interactive-active);
-    }
-
-    .add-channel-btn {
-      width: 20px;
-      height: 20px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 3px;
-      font-size: 12px;
-      color: var(--interactive-normal);
-      transition: all 0.15s ease;
-      cursor: pointer;
-    }
-
-    .add-channel-btn:hover {
-      background: var(--bg-tertiary);
-      color: var(--interactive-active);
-    }
-
-    .user-panel {
-      background: var(--bg-tertiary);
-      padding: 12px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      border-top: 1px solid var(--border-color);
-    }
-
-    .user-avatar {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      background: var(--accent-primary);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 14px;
-      font-weight: 700;
-      color: white;
-      position: relative;
-    }
-
-    .user-status {
-      position: absolute;
-      bottom: -2px;
-      right: -2px;
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      background: #43b581;
-      border: 2px solid var(--bg-tertiary);
-    }
-
-    .user-info {
-      flex: 1;
-      min-width: 0;
-    }
-
-    .user-name {
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--header-primary);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .user-role-badge {
-      font-size: 11px;
-      font-weight: 600;
-      padding: 2px 6px;
-      border-radius: 3px;
-      display: inline-block;
-      margin-top: 2px;
-    }
-
-    .user-role-badge.admin {
-      background: rgba(240, 71, 71, 0.15);
-      color: var(--role-admin);
-    }
-
-    .user-role-badge.xuser {
-      background: rgba(114, 137, 218, 0.15);
-      color: var(--role-xuser);
-    }
-
-    .user-actions {
-      display: flex;
-      gap: 8px;
-    }
-
-    .user-action-btn {
-      width: 28px;
-      height: 28px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 4px;
-      color: var(--interactive-normal);
-      cursor: pointer;
-      transition: all 0.15s ease;
-      font-size: 16px;
-    }
-
-    .user-action-btn:hover {
-      background: var(--bg-modifier);
-      color: var(--interactive-hover);
-    }
-
-    /* ============ MAIN CONTENT ============ */
-    .main-content {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      background: var(--bg-primary);
-    }
-
-    .chat-header {
-      padding: 12px 16px;
-      border-bottom: 1px solid var(--border-color);
-      background: var(--bg-primary);
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      box-shadow: 0 1px 0 rgba(0, 0, 0, 0.2), 0 1.5px 0 rgba(0, 0, 0, 0.05), 0 2px 0 rgba(0, 0, 0, 0.05);
-    }
-
-    .chat-header-info {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .chat-header-icon {
-      font-size: 20px;
-      color: var(--text-muted);
-    }
-
-    .chat-header-name {
-      font-size: 16px;
-      font-weight: 700;
-      color: var(--header-primary);
-    }
-
-    .chat-header-divider {
-      width: 1px;
-      height: 24px;
-      background: var(--border-color);
-      margin: 0 4px;
-    }
-
-    .chat-header-topic {
-      font-size: 14px;
-      color: var(--text-muted);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .chat-header-actions {
-      display: flex;
-      gap: 16px;
-    }
-
-    .header-icon-btn {
-      color: var(--interactive-normal);
-      font-size: 20px;
-      cursor: pointer;
-      transition: color 0.15s ease;
-    }
-
-    .header-icon-btn:hover {
-      color: var(--interactive-hover);
-    }
-
-    .messages-container {
-      flex: 1;
-      overflow-y: auto;
-      padding: 16px 16px 0 16px;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .messages-container::-webkit-scrollbar {
-      width: 14px;
-    }
-
-    .messages-container::-webkit-scrollbar-track {
-      background: transparent;
-    }
-
-    .messages-container::-webkit-scrollbar-thumb {
-      background: var(--bg-tertiary);
-      border: 3px solid var(--bg-primary);
-      border-radius: 8px;
-    }
-
-    .messages-container::-webkit-scrollbar-thumb:hover {
-      background: var(--interactive-muted);
-    }
-
-    .chat-welcome {
-      padding: 16px 0;
-    }
-
-    .welcome-icon {
-      width: 68px;
-      height: 68px;
-      background: var(--bg-modifier);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 32px;
-      color: var(--header-primary);
-      margin-bottom: 16px;
-    }
-
-    .welcome-title {
-      font-size: 32px;
-      font-weight: 700;
-      color: var(--header-primary);
-      margin-bottom: 8px;
-    }
-
-    .welcome-text {
-      font-size: 16px;
-      color: var(--text-muted);
-      line-height: 1.5;
-    }
-
-    .message-group {
-      padding: 4px 0;
-      margin-bottom: 16px;
-      position: relative;
-    }
-
-    .message-group:hover {
-      background: var(--bg-modifier);
-      margin: 0 -16px 16px -72px;
-      padding: 4px 16px 4px 72px;
-    }
-
-    .message-timestamp {
-      position: absolute;
-      left: 0;
-      top: 4px;
-      font-size: 11px;
-      color: var(--text-muted);
-      opacity: 0;
-      transition: opacity 0.15s ease;
-      width: 56px;
-      text-align: right;
-    }
-
-    .message-group:hover .message-timestamp {
-      opacity: 1;
-    }
-
-    .message-header {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 4px;
-    }
-
-    .message-avatar {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: var(--accent-primary);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 16px;
-      font-weight: 700;
-      color: white;
-      flex-shrink: 0;
-    }
-
-    .message-author {
-      font-size: 16px;
-      font-weight: 600;
-      color: var(--header-primary);
-      cursor: pointer;
-      transition: text-decoration 0.15s ease;
-    }
-
-    .message-author:hover {
-      text-decoration: underline;
-    }
-
-    .message-author.admin {
-      color: var(--role-admin);
-    }
-
-    .message-author.xuser {
-      color: var(--role-xuser);
-    }
-
-    .role-badge {
-      font-size: 11px;
-      font-weight: 700;
-      padding: 2px 6px;
-      border-radius: 3px;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      text-transform: uppercase;
-      letter-spacing: 0.3px;
-    }
-
-    .role-badge.admin {
-      background: rgba(240, 71, 71, 0.15);
-      color: var(--role-admin);
-      animation: adminPulse 2s ease-in-out infinite;
-    }
-
-    .role-badge.xuser {
-      background: rgba(114, 137, 218, 0.15);
-      color: var(--role-xuser);
-      animation: xuserGlow 3s ease-in-out infinite;
-    }
-
-    @keyframes adminPulse {
-      0%, 100% { box-shadow: 0 0 0 rgba(240, 71, 71, 0); }
-      50% { box-shadow: 0 0 8px rgba(240, 71, 71, 0.4); }
-    }
-
-    @keyframes xuserGlow {
-      0%, 100% { box-shadow: 0 0 0 rgba(114, 137, 218, 0); }
-      50% { box-shadow: 0 0 8px rgba(114, 137, 218, 0.3); }
-    }
-
-    .message-time {
-      font-size: 12px;
-      color: var(--text-muted);
-    }
-
-    .message-content {
-      margin-left: 48px;
-      color: var(--text-normal);
-      font-size: 15px;
-      line-height: 1.5;
-      word-wrap: break-word;
-    }
-
-    .message-input-container {
-      padding: 16px;
-      background: var(--bg-primary);
-    }
-
-    .message-input-wrapper {
-      background: var(--bg-modifier);
-      border-radius: 8px;
-      padding: 12px 16px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .message-input-wrapper.disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-
-    .message-input-wrapper.disabled .message-input {
-      cursor: not-allowed;
-    }
-
-    .message-input {
-      flex: 1;
-      background: transparent;
-      border: none;
-      color: var(--text-normal);
-      font-size: 15px;
-      font-family: 'Inter', sans-serif;
-      outline: none;
-    }
-
-    .message-input::placeholder {
-      color: var(--text-muted);
-    }
-
-    .message-input:disabled {
-      cursor: not-allowed;
-    }
-
-    .message-send-btn {
-      background: var(--accent-primary);
-      color: white;
-      border: none;
-      border-radius: 4px;
-      padding: 8px 16px;
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.15s ease;
-      font-family: 'Inter', sans-serif;
-    }
-
-    .message-send-btn:hover:not(:disabled) {
-      background: var(--accent-hover);
-    }
-
-    .message-send-btn:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-
-    .no-permission-banner {
-      background: rgba(240, 71, 71, 0.1);
-      border: 1px solid rgba(240, 71, 71, 0.3);
-      border-radius: 4px;
-      padding: 12px;
-      margin: 16px;
-      color: #f04747;
-      font-size: 14px;
-      text-align: center;
-    }
-
-    /* ============ MEMBERS SIDEBAR ============ */
-    .members-sidebar {
-      width: 240px;
-      background: var(--bg-secondary);
-      border-left: 1px solid var(--border-color);
-      overflow-y: auto;
-      padding: 16px 8px;
-    }
-
-    .members-sidebar::-webkit-scrollbar {
-      width: 8px;
-    }
-
-    .members-sidebar::-webkit-scrollbar-track {
-      background: transparent;
-    }
-
-    .members-sidebar::-webkit-scrollbar-thumb {
-      background: var(--bg-tertiary);
-      border-radius: 4px;
-    }
-
-    .members-title {
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      color: var(--text-muted);
-      padding: 8px 8px 4px 8px;
-      margin-bottom: 4px;
-    }
-
-    .role-group {
-      margin-bottom: 16px;
-    }
-
-    .role-group-header {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      padding: 8px 8px 4px 8px;
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      cursor: pointer;
-      transition: color 0.15s ease;
-    }
-
-    .role-group-header.admin {
-      color: var(--role-admin);
-    }
-
-    .role-group-header.xuser {
-      color: var(--role-xuser);
-    }
-
-    .role-group-header.member {
-      color: var(--role-member);
-    }
-
-    .role-count {
-      font-size: 10px;
-      opacity: 0.6;
-    }
-
-    .role-members {
-      margin-bottom: 8px;
-    }
-
-    .member-item {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 6px 8px;
-      margin: 2px 0;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: background 0.15s ease;
-    }
-
-    .member-item:hover {
-      background: var(--bg-modifier);
-    }
-
-    .member-avatar {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      background: var(--accent-primary);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 14px;
-      font-weight: 700;
-      color: white;
-      position: relative;
-      flex-shrink: 0;
-    }
-
-    .member-status {
-      position: absolute;
-      bottom: -2px;
-      right: -2px;
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: #43b581;
-      border: 2px solid var(--bg-secondary);
-    }
-
-    .member-name {
-      flex: 1;
-      font-size: 14px;
-      font-weight: 500;
-      color: var(--interactive-normal);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .member-item:hover .member-name {
-      color: var(--interactive-hover);
-    }
-
-    /* ============ MODALS ============ */
-    .modal-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0, 0, 0, 0.85);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 10000;
-      animation: fadeIn 0.15s ease;
-    }
-
-    .modal-overlay.active {
-      display: flex;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-
-    .modal {
-      background: var(--bg-primary);
-      border-radius: 8px;
-      width: 90%;
-      max-width: 480px;
-      max-height: 90vh;
-      overflow: hidden;
-      animation: slideUp 0.2s ease;
-    }
-
-    @keyframes slideUp {
-      from { transform: scale(0.95) translateY(20px); opacity: 0; }
-      to { transform: scale(1) translateY(0); opacity: 1; }
-    }
-
-    .modal-header {
-      padding: 20px 24px;
-      border-bottom: 1px solid var(--border-color);
-    }
-
-    .modal-title {
-      font-size: 20px;
-      font-weight: 700;
-      color: var(--header-primary);
-      margin-bottom: 8px;
-    }
-
-    .modal-subtitle {
-      font-size: 14px;
-      color: var(--text-muted);
-    }
-
-    .modal-body {
-      padding: 24px;
-      max-height: 60vh;
-      overflow-y: auto;
-    }
-
-    .modal-footer {
-      padding: 16px 24px;
-      background: var(--bg-secondary);
-      display: flex;
-      gap: 12px;
-      justify-content: flex-end;
-    }
-
-    .btn-secondary {
-      background: transparent;
-      color: var(--text-normal);
-      border: none;
-      padding: 10px 16px;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 14px;
-      font-weight: 600;
-      font-family: 'Inter', sans-serif;
-      transition: all 0.15s ease;
-    }
-
-    .btn-secondary:hover {
-      background: var(--bg-modifier);
-    }
-
-    .permission-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 12px 0;
-      border-bottom: 1px solid var(--border-subtle);
-    }
-
-    .permission-item:last-child {
-      border-bottom: none;
-    }
-
-    .permission-info {
-      flex: 1;
-    }
-
-    .permission-name {
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--header-primary);
-      margin-bottom: 4px;
-    }
-
-    .permission-desc {
-      font-size: 12px;
-      color: var(--text-muted);
-    }
-
-    .toggle-switch {
-      position: relative;
-      width: 44px;
-      height: 24px;
-      background: var(--interactive-muted);
-      border-radius: 12px;
-      cursor: pointer;
-      transition: background 0.2s ease;
-    }
-
-    .toggle-switch.active {
-      background: var(--accent-primary);
-    }
-
-    .toggle-switch::after {
-      content: '';
-      position: absolute;
-      top: 3px;
-      left: 3px;
-      width: 18px;
-      height: 18px;
-      background: white;
-      border-radius: 50%;
-      transition: transform 0.2s ease;
-    }
-
-    .toggle-switch.active::after {
-      transform: translateX(20px);
-    }
-
-    .role-picker {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      margin-top: 12px;
-    }
-
-    .role-option {
-      padding: 16px;
-      background: var(--bg-secondary);
-      border: 2px solid transparent;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-
-    .role-option:hover {
-      background: var(--bg-hover);
-      border-color: var(--bg-modifier);
-    }
-
-    .role-option.selected {
-      border-color: var(--accent-primary);
-      background: rgba(88, 101, 242, 0.1);
-    }
-
-    .role-option-name {
-      font-size: 16px;
-      font-weight: 700;
-      margin-bottom: 4px;
-    }
-
-    .role-option-name.admin {
-      color: var(--role-admin);
-    }
-
-    .role-option-name.xuser {
-      color: var(--role-xuser);
-    }
-
-    .role-option-desc {
-      font-size: 13px;
-      color: var(--text-muted);
-    }
-
-    /* ============ RESPONSIVE ============ */
-    @media (max-width: 768px) {
-      .members-sidebar {
-        display: none;
-      }
-
-      .sidebar {
-        width: 72px;
-      }
-
-      .channel-name,
-      .server-name span,
-      .user-info,
-      .category-header span {
-        display: none;
-      }
-
-      .server-header {
-        justify-content: center;
-      }
-
-      .user-panel {
-        justify-content: center;
-      }
-    }
-
-    /* ============ UTILITY ============ */
-    .hidden {
-      display: none !important;
-    }
-
-    .fade-in {
-      animation: fadeIn 0.3s ease;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PhineX Community</title>
+<link rel="icon" href="PhineX (2).png">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
+<style>
+:root{
+  --void:#050508; --bg1:#0a0a12; --bg2:#0d0d18; --bg3:#111118;
+  --border:#ffffff0d; --border2:#ffffff18;
+  --neon:#39ff14; --neon2:rgba(57,255,20,0.12);
+  --text:#e8e8f0; --muted:#5a5a78; --muted2:#8080a0;
+  --danger:#ff4444; --warn:#ffb700;
+  --scrollbar:#1a1a28;
+}
+*{margin:0;padding:0;box-sizing:border-box;min-width:0;}
+body{font-family:'DM Sans',sans-serif;background:var(--void);color:var(--text);overflow:hidden;height:100vh;}
+h1,h2,h3,.syne{font-family:'Syne',sans-serif;}
+::-webkit-scrollbar{width:6px;height:6px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--scrollbar);border-radius:3px;}
+::-webkit-scrollbar-thumb:hover{background:#252538;}
+
+@keyframes neonPulse{0%,100%{box-shadow:0 0 6px var(--neon),0 0 12px rgba(57,255,20,0.3);}50%{box-shadow:0 0 12px var(--neon),0 0 24px rgba(57,255,20,0.5);}}
+@keyframes rolePulse{0%,100%{opacity:1;}50%{opacity:0.7;}}
+@keyframes roleGlow{0%,100%{text-shadow:0 0 4px currentColor;}50%{text-shadow:0 0 10px currentColor,0 0 20px currentColor;}}
+@keyframes rainbow{0%{color:#ff4444;}16%{color:#ff8800;}33%{color:#ffcc00;}50%{color:#39ff14;}66%{color:#00ccff;}83%{color:#8844ff;}100%{color:#ff4444;}}
+@keyframes slideIn{from{transform:translateX(-8px);opacity:0;}to{transform:translateX(0);opacity:1;}}
+@keyframes fadeIn{from{opacity:0;transform:scale(0.97);}to{opacity:1;transform:scale(1);}}
+@keyframes spin{to{transform:rotate(360deg);}}
+@keyframes msgIn{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);}}
+
+/* ═══ LAYOUT ═══ */
+#app{display:none;height:100vh;flex-direction:row;}
+#app.visible{display:flex;}
+.app-wrap{display:flex;height:100vh;width:100%;}
+
+/* ═══ SIDEBAR ═══ */
+.sidebar{width:240px;min-width:240px;background:var(--bg1);display:flex;flex-direction:column;border-right:1px solid var(--border);}
+
+.server-header{padding:0 16px;height:48px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;border-bottom:1px solid var(--border);transition:background 0.15s;user-select:none;position:relative;}
+.server-header:hover{background:rgba(255,255,255,0.03);}
+.server-name-wrap{display:flex;align-items:center;gap:10px;font-family:'Syne',sans-serif;font-weight:700;font-size:15px;color:var(--text);}
+.server-icon-img{width:28px;height:28px;border-radius:7px;object-fit:cover;}
+.server-icon-fallback{width:28px;height:28px;border-radius:7px;background:linear-gradient(135deg,#39ff14,#00cc88);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#050508;}
+.server-chevron{color:var(--muted2);font-size:12px;transition:transform 0.2s;}
+
+/* Server dropdown */
+.server-dropdown{position:absolute;top:calc(100% + 4px);left:8px;right:8px;background:#16162a;border:1px solid var(--border2);border-radius:8px;z-index:200;box-shadow:0 8px 32px rgba(0,0,0,0.6);overflow:hidden;animation:fadeIn 0.15s ease;}
+.server-dropdown.hidden{display:none;}
+.sdrop-item{display:flex;align-items:center;gap:10px;padding:10px 14px;font-size:13px;cursor:pointer;transition:background 0.1s;color:var(--text);}
+.sdrop-item:hover{background:rgba(255,255,255,0.05);}
+.sdrop-item.danger{color:var(--danger);}
+.sdrop-item i{width:16px;text-align:center;color:var(--muted2);}
+.sdrop-item.danger i{color:var(--danger);}
+.sdrop-sep{height:1px;background:var(--border);margin:4px 0;}
+
+/* Search */
+.sidebar-search{padding:8px 8px;border-bottom:1px solid var(--border);}
+.search-input-wrap{position:relative;}
+.search-input{width:100%;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:8px;padding:7px 12px 7px 32px;font-size:13px;color:var(--text);font-family:'DM Sans',sans-serif;outline:none;transition:all 0.2s;}
+.search-input:focus{border-color:rgba(57,255,20,0.3);background:rgba(57,255,20,0.04);}
+.search-input::placeholder{color:var(--muted);}
+.search-icon{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:12px;}
+
+/* Channels list */
+.channels-list{flex:1;overflow-y:auto;padding:8px 4px;}
+.ch-category{margin-bottom:2px;}
+.ch-cat-header{display:flex;align-items:center;gap:6px;padding:6px 8px 4px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--muted);cursor:pointer;border-radius:4px;transition:color 0.15s;user-select:none;}
+.ch-cat-header:hover{color:var(--muted2);}
+.ch-cat-header:hover .cat-add-btn{opacity:1;}
+.cat-chevron{font-size:9px;transition:transform 0.2s;}
+.ch-cat-header.collapsed .cat-chevron{transform:rotate(-90deg);}
+.cat-name{flex:1;}
+.cat-add-btn{opacity:0;transition:opacity 0.15s;font-size:12px;padding:2px 4px;border-radius:3px;}
+.cat-add-btn:hover{background:rgba(255,255,255,0.08);color:var(--text);}
+.ch-cat-channels{padding-bottom:4px;}
+.ch-cat-channels.collapsed{display:none;}
+
+.ch-item{display:flex;align-items:center;gap:7px;padding:5px 8px 5px 10px;margin:1px 0;border-radius:6px;cursor:pointer;color:var(--muted2);font-size:14px;font-weight:500;transition:all 0.15s;position:relative;user-select:none;}
+.ch-item:hover{background:rgba(255,255,255,0.05);color:var(--text);}
+.ch-item.active{background:rgba(57,255,20,0.08);color:var(--neon);}
+.ch-item.active::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);width:2px;height:16px;background:var(--neon);border-radius:0 2px 2px 0;}
+.ch-item-icon{font-size:16px;flex-shrink:0;color:var(--muted);transition:color 0.15s;}
+.ch-item.active .ch-item-icon{color:var(--neon);}
+.ch-item-name{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.ch-item-actions{display:none;gap:2px;align-items:center;}
+.ch-item:hover .ch-item-actions{display:flex;}
+.ch-act-btn{padding:3px 5px;border-radius:4px;font-size:11px;color:var(--muted2);transition:all 0.15s;}
+.ch-act-btn:hover{background:rgba(255,255,255,0.1);color:var(--text);}
+.ch-slowmode-badge{font-size:9px;color:var(--warn);background:rgba(255,183,0,0.12);padding:1px 5px;border-radius:4px;}
+
+.ch-divider{margin:6px 8px;padding:5px 0;border-top:1px solid var(--border2);display:flex;align-items:center;gap:6px;}
+.ch-divider span{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;white-space:nowrap;}
+.ch-divider::after{content:'';flex:1;height:1px;background:var(--border2);}
+
+/* User panel */
+.user-panel{height:52px;background:var(--void);border-top:1px solid var(--border);display:flex;align-items:center;padding:0 8px;gap:8px;}
+.up-avatar{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;flex-shrink:0;position:relative;cursor:pointer;}
+.up-status{position:absolute;bottom:-1px;right:-1px;width:10px;height:10px;border-radius:50%;background:#39ff14;border:2px solid var(--void);}
+.up-info{flex:1;overflow:hidden;}
+.up-name{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.up-tag{font-size:10px;color:var(--muted);}
+.up-actions{display:flex;gap:2px;}
+.up-btn{width:28px;height:28px;display:flex;align-items:center;justify-content:center;border-radius:6px;color:var(--muted2);cursor:pointer;transition:all 0.15s;font-size:14px;}
+.up-btn:hover{background:rgba(255,255,255,0.08);color:var(--text);}
+.up-btn.muted{color:var(--danger);}
+.up-btn.deafened{color:var(--danger);}
+
+/* ═══ MAIN CONTENT ═══ */
+.main-content{flex:1;display:flex;flex-direction:column;background:var(--bg2);min-width:0;}
+
+.chat-header{height:48px;background:var(--bg2);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 16px;gap:12px;flex-shrink:0;}
+.chat-header-icon{font-size:18px;color:var(--muted2);}
+.chat-header-name{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:var(--text);}
+.chat-header-divider{width:1px;height:20px;background:var(--border2);margin:0 4px;}
+.chat-header-topic{font-size:13px;color:var(--muted2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;}
+.chat-header-actions{display:flex;gap:4px;margin-left:auto;flex-shrink:0;}
+.ch-header-btn{width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:6px;color:var(--muted2);cursor:pointer;font-size:16px;transition:all 0.15s;}
+.ch-header-btn:hover{background:rgba(255,255,255,0.06);color:var(--text);}
+.slowmode-indicator{font-size:11px;color:var(--warn);background:rgba(255,183,0,0.1);padding:3px 8px;border-radius:4px;display:flex;align-items:center;gap:4px;}
+
+/* Messages */
+.messages-area{flex:1;overflow-y:auto;padding:16px 16px 0;display:flex;flex-direction:column;}
+.ch-welcome{padding:24px 0 16px;}
+.ch-welcome-icon{width:72px;height:72px;border-radius:50%;background:var(--neon2);border:2px solid rgba(57,255,20,0.2);display:flex;align-items:center;justify-content:center;font-size:32px;margin-bottom:16px;}
+.ch-welcome-title{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;margin-bottom:8px;}
+.ch-welcome-title span{color:var(--neon);}
+.ch-welcome-sub{font-size:15px;color:var(--muted2);line-height:1.6;}
+
+.msg-group{display:flex;gap:14px;padding:4px 0;margin-bottom:2px;border-radius:6px;transition:background 0.1s;position:relative;}
+.msg-group:hover{background:rgba(255,255,255,0.02);}
+.msg-group.announcement{background:rgba(57,255,20,0.04);border-left:3px solid var(--neon);padding-left:12px;border-radius:0 6px 6px 0;margin:8px 0;}
+.msg-avatar{width:40px;height:40px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:15px;font-weight:700;margin-top:2px;cursor:pointer;transition:transform 0.2s;}
+.msg-avatar:hover{transform:scale(1.08);}
+.msg-body{flex:1;min-width:0;}
+.msg-header{display:flex;align-items:baseline;gap:8px;margin-bottom:4px;flex-wrap:wrap;}
+.msg-author{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;cursor:pointer;}
+.msg-author:hover{text-decoration:underline;}
+.msg-time{font-size:11px;color:var(--muted);}
+.msg-role-badge{font-size:10px;font-weight:700;padding:1px 7px;border-radius:4px;text-transform:uppercase;letter-spacing:0.3px;display:inline-flex;align-items:center;gap:3px;}
+.msg-content{font-size:14px;line-height:1.6;color:var(--text);word-break:break-word;}
+.msg-content strong{font-weight:700;}
+.msg-content em{font-style:italic;}
+.msg-content u{text-decoration:underline;}
+.msg-content s{text-decoration:line-through;}
+.msg-content code{background:#0a0a18;border:1px solid var(--border2);border-radius:4px;padding:1px 6px;font-family:'Courier New',monospace;font-size:13px;color:#a0d8ff;}
+.msg-content pre{background:#0a0a18;border:1px solid var(--border2);border-radius:6px;padding:12px 14px;font-family:'Courier New',monospace;font-size:13px;overflow-x:auto;margin:6px 0;line-height:1.5;color:#c8e6ff;}
+.msg-content blockquote{border-left:3px solid var(--neon);padding:2px 10px;color:var(--muted2);font-style:italic;margin:4px 0;}
+.msg-content .spoiler{background:rgba(255,255,255,0.12);border-radius:3px;padding:0 4px;cursor:pointer;color:transparent;transition:color 0.2s;}
+.msg-content .spoiler.revealed{color:var(--text);}
+.msg-content .mention{color:var(--neon);background:rgba(57,255,20,0.1);border-radius:3px;padding:0 4px;font-weight:600;cursor:pointer;}
+.msg-content .mention:hover{background:rgba(57,255,20,0.2);}
+.msg-content a{color:var(--neon);text-decoration:none;}
+.msg-content a:hover{text-decoration:underline;}
+.msg-content h1{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;margin:4px 0;}
+.msg-content h2{font-family:'Syne',sans-serif;font-size:17px;font-weight:700;margin:4px 0;}
+.msg-content h3{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;margin:4px 0;}
+.msg-content ul{padding-left:20px;margin:4px 0;}
+.msg-content ol{padding-left:20px;margin:4px 0;}
+.msg-content li{margin:2px 0;}
+.msg-edited{font-size:10px;color:var(--muted);margin-left:4px;}
+.msg-embed{background:#0d0d1a;border:1px solid var(--border2);border-radius:6px;padding:12px 14px;margin:6px 0;max-width:520px;}
+.msg-embed-site{font-size:11px;color:var(--muted2);margin-bottom:4px;}
+.msg-embed-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--neon);margin-bottom:4px;}
+.msg-embed-desc{font-size:13px;color:var(--muted2);line-height:1.5;}
+.msg-attachment{display:inline-flex;align-items:center;gap:8px;background:#0d0d1a;border:1px solid var(--border2);border-radius:6px;padding:8px 12px;margin:4px 0;font-size:13px;cursor:pointer;transition:background 0.15s;}
+.msg-attachment:hover{background:#121224;}
+.msg-attachment i{color:var(--neon);}
+.msg-reactions{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px;}
+.reaction{display:inline-flex;align-items:center;gap:4px;background:rgba(255,255,255,0.06);border:1px solid var(--border);border-radius:6px;padding:2px 8px;font-size:14px;cursor:pointer;transition:all 0.15s;user-select:none;}
+.reaction:hover,.reaction.reacted{background:rgba(57,255,20,0.08);border-color:rgba(57,255,20,0.25);}
+.reaction-count{font-size:12px;color:var(--muted2);}
+.msg-actions{position:absolute;top:-16px;right:0;background:#16162a;border:1px solid var(--border2);border-radius:6px;display:none;gap:2px;padding:3px;z-index:10;}
+.msg-group:hover .msg-actions{display:flex;}
+.msg-act-btn{width:28px;height:28px;display:flex;align-items:center;justify-content:center;border-radius:4px;font-size:13px;color:var(--muted2);cursor:pointer;transition:all 0.15s;}
+.msg-act-btn:hover{background:rgba(255,255,255,0.08);color:var(--text);}
+.msg-act-btn.danger:hover{background:rgba(255,68,68,0.15);color:var(--danger);}
+
+/* Poll */
+.poll-card{background:#0d0d1a;border:1px solid var(--border2);border-radius:8px;padding:14px;margin:6px 0;max-width:420px;}
+.poll-question{font-family:'Syne',sans-serif;font-weight:700;font-size:14px;margin-bottom:12px;}
+.poll-option{display:flex;align-items:center;gap:8px;padding:8px 12px;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:6px;margin-bottom:6px;cursor:pointer;transition:all 0.15s;position:relative;overflow:hidden;}
+.poll-option:hover{border-color:rgba(57,255,20,0.3);}
+.poll-option.voted{border-color:var(--neon);}
+.poll-bar{position:absolute;left:0;top:0;bottom:0;background:rgba(57,255,20,0.08);transition:width 0.4s ease;z-index:0;}
+.poll-opt-text{position:relative;z-index:1;flex:1;font-size:13px;}
+.poll-opt-pct{position:relative;z-index:1;font-size:12px;color:var(--muted2);font-family:'Syne',sans-serif;font-weight:700;}
+.poll-footer{font-size:11px;color:var(--muted);margin-top:8px;}
+
+/* Message input */
+.input-area{padding:0 16px 16px;flex-shrink:0;}
+.input-wrap-outer{background:rgba(255,255,255,0.04);border:1px solid var(--border2);border-radius:10px;overflow:hidden;transition:border-color 0.2s;}
+.input-wrap-outer:focus-within{border-color:rgba(57,255,20,0.25);}
+.format-toolbar{display:flex;align-items:center;gap:1px;padding:6px 8px;border-bottom:1px solid var(--border);flex-wrap:wrap;}
+.fmt-btn{min-width:26px;height:26px;display:flex;align-items:center;justify-content:center;border-radius:4px;font-size:12px;color:var(--muted2);cursor:pointer;transition:all 0.15s;padding:0 4px;font-family:'DM Sans',sans-serif;}
+.fmt-btn:hover{background:rgba(255,255,255,0.08);color:var(--text);}
+.fmt-btn.active{background:rgba(57,255,20,0.1);color:var(--neon);}
+.fmt-sep{width:1px;height:16px;background:var(--border);margin:0 3px;}
+.input-row{display:flex;align-items:flex-end;gap:0;padding:4px 4px 4px 12px;}
+.msg-input{flex:1;background:transparent;border:none;outline:none;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--text);resize:none;max-height:180px;min-height:36px;padding:8px 0;line-height:1.5;}
+.msg-input::placeholder{color:var(--muted);}
+.input-actions{display:flex;align-items:flex-end;gap:2px;padding-bottom:4px;}
+.input-act-btn{width:34px;height:34px;display:flex;align-items:center;justify-content:center;border-radius:6px;font-size:15px;color:var(--muted2);cursor:pointer;transition:all 0.15s;}
+.input-act-btn:hover{color:var(--text);}
+.send-btn{background:var(--neon);color:#050508;border:none;font-size:14px;}
+.send-btn:hover{background:#50ff28;box-shadow:0 0 16px rgba(57,255,20,0.3);}
+.send-btn:disabled{opacity:0.4;cursor:not-allowed;}
+.slowmode-countdown{padding:4px 12px;font-size:11px;color:var(--warn);text-align:right;}
+
+/* ═══ MEMBERS SIDEBAR ═══ */
+.members-sidebar{width:240px;min-width:240px;background:var(--bg1);border-left:1px solid var(--border);display:flex;flex-direction:column;overflow-y:auto;padding:16px 8px;}
+.members-header{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--muted);padding:0 8px 8px;font-family:'Syne',sans-serif;}
+.role-group-header{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.6px;padding:12px 8px 4px;color:var(--muted);}
+.member-item{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:6px;cursor:pointer;transition:background 0.15s;}
+.member-item:hover{background:rgba(255,255,255,0.05);}
+.member-avatar{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;flex-shrink:0;position:relative;}
+.member-status{position:absolute;bottom:-1px;right:-1px;width:10px;height:10px;border-radius:50%;border:2px solid var(--bg1);}
+.status-online{background:#39ff14;}
+.status-idle{background:#ffb700;}
+.status-dnd{background:#ff4444;}
+.status-offline{background:#4a4a60;}
+.member-info{flex:1;overflow:hidden;}
+.member-name{font-size:13px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.member-tag{font-size:10px;color:var(--muted);}
+.member-muted-icon{font-size:10px;color:var(--danger);}
+
+/* ═══ MODALS ═══ */
+.modal-backdrop{position:fixed;inset:0;z-index:300;background:rgba(5,5,8,0.7);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;padding:20px;}
+.modal-backdrop.open{display:flex;}
+
+/* Server Settings */
+#serverSettingsModal{background:var(--bg3);border:1px solid var(--border2);border-radius:12px;width:92%;max-width:900px;max-height:92vh;display:flex;overflow:hidden;box-shadow:0 40px 80px rgba(0,0,0,0.8);}
+.ss-nav{width:220px;background:var(--bg1);padding:16px 8px;border-right:1px solid var(--border);display:flex;flex-direction:column;overflow-y:auto;flex-shrink:0;}
+.ss-nav-section{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--muted);padding:10px 8px 4px;font-family:'Syne',sans-serif;}
+.ss-nav-item{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:6px;cursor:pointer;font-size:13px;color:var(--muted2);transition:all 0.15s;margin-bottom:1px;}
+.ss-nav-item:hover{background:rgba(255,255,255,0.05);color:var(--text);}
+.ss-nav-item.active{background:rgba(57,255,20,0.1);color:var(--neon);}
+.ss-nav-item i{width:16px;text-align:center;}
+.ss-nav-sep{height:1px;background:var(--border);margin:8px 0;}
+.ss-content{flex:1;padding:24px 28px;overflow-y:auto;}
+.ss-tab{display:none;}
+.ss-tab.active{display:block;animation:fadeIn 0.15s ease;}
+.ss-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;margin-bottom:6px;}
+.ss-sub{font-size:13px;color:var(--muted2);margin-bottom:24px;}
+.ss-close{position:absolute;top:16px;right:16px;width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:6px;cursor:pointer;color:var(--muted2);transition:all 0.15s;font-size:18px;}
+.ss-close:hover{background:rgba(255,255,255,0.06);color:var(--text);}
+#serverSettingsModal{position:relative;}
+
+/* Form elements for settings */
+.ss-field{margin-bottom:20px;}
+.ss-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--muted2);margin-bottom:8px;display:block;}
+.ss-input{width:100%;background:rgba(255,255,255,0.04);border:1px solid var(--border2);border-radius:8px;padding:10px 14px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--text);outline:none;transition:all 0.2s;}
+.ss-input:focus{border-color:rgba(57,255,20,0.35);background:rgba(57,255,20,0.03);}
+.ss-input::placeholder{color:var(--muted);}
+.ss-textarea{min-height:80px;resize:vertical;}
+.ss-select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 6'%3E%3Cpath fill='%235a5a78' d='M0 0l5 6 5-6z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;background-size:10px;padding-right:32px;}
+.ss-server-icon-area{display:flex;align-items:center;gap:16px;margin-bottom:24px;}
+.ss-server-icon{width:80px;height:80px;border-radius:16px;object-fit:cover;border:2px solid var(--border2);}
+.ss-server-icon-fallback{width:80px;height:80px;border-radius:16px;background:linear-gradient(135deg,#39ff14,#00cc88);display:flex;align-items:center;justify-content:center;font-size:32px;font-weight:800;color:#050508;font-family:'Syne',sans-serif;border:2px solid rgba(57,255,20,0.3);}
+.ss-btn{padding:9px 18px;border-radius:8px;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all 0.2s;border:none;}
+.ss-btn-primary{background:var(--neon);color:#050508;}
+.ss-btn-primary:hover{background:#50ff28;box-shadow:0 0 16px rgba(57,255,20,0.25);}
+.ss-btn-ghost{background:transparent;border:1px solid var(--border2);color:var(--muted2);}
+.ss-btn-ghost:hover{border-color:rgba(255,255,255,0.2);color:var(--text);}
+.ss-btn-danger{background:rgba(255,68,68,0.12);border:1px solid rgba(255,68,68,0.3);color:var(--danger);}
+.ss-btn-danger:hover{background:rgba(255,68,68,0.2);}
+.ss-row{display:flex;gap:10px;align-items:center;}
+.ss-divider{height:1px;background:var(--border);margin:20px 0;}
+
+/* Roles */
+.role-list{display:flex;flex-direction:column;gap:4px;margin-bottom:16px;}
+.role-item{display:flex;align-items:center;gap:12px;padding:10px 14px;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:8px;cursor:pointer;transition:all 0.15s;}
+.role-item:hover{background:rgba(255,255,255,0.06);border-color:var(--border2);}
+.role-item.selected{border-color:rgba(57,255,20,0.3);background:rgba(57,255,20,0.05);}
+.role-color-dot{width:14px;height:14px;border-radius:50%;flex-shrink:0;}
+.role-item-name{flex:1;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;}
+.role-badge-preview{font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;text-transform:uppercase;letter-spacing:0.3px;}
+
+/* Role editor */
+.role-editor{background:var(--bg1);border:1px solid var(--border2);border-radius:10px;padding:20px;margin-top:16px;}
+.role-editor-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
+.role-editor-title{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;}
+.color-picker-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px;}
+.color-swatch{width:24px;height:24px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:all 0.15s;}
+.color-swatch.selected{border-color:#fff;transform:scale(1.15);}
+.color-swatch-custom{width:24px;height:24px;border-radius:50%;border:2px dashed var(--border2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--muted2);}
+.anim-picker{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;}
+.anim-opt{padding:5px 12px;border-radius:6px;border:1px solid var(--border2);font-size:12px;cursor:pointer;transition:all 0.15s;color:var(--muted2);}
+.anim-opt:hover{border-color:rgba(57,255,20,0.3);color:var(--text);}
+.anim-opt.selected{background:rgba(57,255,20,0.1);border-color:rgba(57,255,20,0.4);color:var(--neon);}
+.anim-preview{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;padding:6px 12px;border-radius:4px;display:inline-block;margin-bottom:12px;}
+
+/* Permissions (3-state) */
+.perm-group{margin-bottom:20px;}
+.perm-group-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--muted2);margin-bottom:8px;font-family:'Syne',sans-serif;}
+.perm-item{display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid var(--border);}
+.perm-item:last-child{border-bottom:none;}
+.perm-info{flex:1;}
+.perm-name{font-size:13px;font-weight:600;}
+.perm-desc{font-size:11px;color:var(--muted2);margin-top:2px;}
+.perm-3state{display:flex;border-radius:6px;overflow:hidden;border:1px solid var(--border2);}
+.p3-btn{width:28px;height:26px;display:flex;align-items:center;justify-content:center;font-size:12px;cursor:pointer;transition:all 0.15s;background:transparent;color:var(--muted);}
+.p3-btn:hover{background:rgba(255,255,255,0.06);}
+.p3-btn.deny.active{background:rgba(255,68,68,0.2);color:var(--danger);}
+.p3-btn.neutral.active{background:rgba(255,255,255,0.08);color:var(--muted2);}
+.p3-btn.allow.active{background:rgba(57,255,20,0.15);color:var(--neon);}
+
+/* Members management */
+.manage-member-item{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);}
+.manage-member-item:last-child{border-bottom:none;}
+.mgm-info{flex:1;}
+.mgm-name{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;}
+.mgm-details{font-size:11px;color:var(--muted2);margin-top:2px;}
+.mgm-roles{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px;}
+.mgm-role-tag{font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;text-transform:uppercase;}
+.mgm-actions{display:flex;gap:4px;}
+
+/* Category & Channel management */
+.ch-manage-item{display:flex;align-items:center;gap:10px;padding:8px 12px;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:8px;margin-bottom:4px;}
+.ch-manage-item:hover{background:rgba(255,255,255,0.05);}
+.ch-manage-icon{font-size:14px;color:var(--muted2);width:16px;text-align:center;}
+.ch-manage-name{flex:1;font-size:13px;font-weight:600;}
+.ch-manage-tag{font-size:10px;color:var(--muted);background:rgba(255,255,255,0.04);padding:2px 6px;border-radius:4px;}
+.drag-handle{color:var(--muted);font-size:12px;cursor:grab;padding:4px;}
+.drag-handle:active{cursor:grabbing;}
+
+/* Small modal */
+.small-modal{background:var(--bg3);border:1px solid var(--border2);border-radius:10px;padding:28px 28px;width:440px;max-width:95vw;box-shadow:0 20px 60px rgba(0,0,0,0.7);animation:fadeIn 0.15s ease;}
+.small-modal-title{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;margin-bottom:6px;}
+.small-modal-sub{font-size:13px;color:var(--muted2);margin-bottom:20px;}
+.modal-actions{display:flex;gap:8px;margin-top:20px;justify-content:flex-end;}
+
+/* Context menu */
+.ctx-menu{position:fixed;background:#16162a;border:1px solid var(--border2);border-radius:8px;padding:4px;z-index:500;box-shadow:0 8px 24px rgba(0,0,0,0.7);min-width:180px;animation:fadeIn 0.1s ease;}
+.ctx-menu.hidden{display:none;}
+.ctx-item{display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:5px;cursor:pointer;font-size:13px;color:var(--text);transition:background 0.1s;}
+.ctx-item:hover{background:rgba(255,255,255,0.06);}
+.ctx-item.danger{color:var(--danger);}
+.ctx-item.danger:hover{background:rgba(255,68,68,0.1);}
+.ctx-item i{width:14px;text-align:center;color:var(--muted2);font-size:12px;}
+.ctx-item.danger i{color:var(--danger);}
+.ctx-sep{height:1px;background:var(--border);margin:3px 0;}
+
+/* Toast */
+.toast-container{position:fixed;bottom:20px;right:20px;z-index:9999;display:flex;flex-direction:column;gap:8px;}
+.toast{background:#16162a;border:1px solid var(--border2);border-radius:8px;padding:12px 16px;font-size:13px;box-shadow:0 4px 20px rgba(0,0,0,0.5);display:flex;align-items:center;gap:8px;animation:slideIn 0.2s ease;max-width:300px;}
+.toast.success{border-color:rgba(57,255,20,0.3);color:var(--neon);}
+.toast.error{border-color:rgba(255,68,68,0.3);color:var(--danger);}
+.toast.info{border-color:rgba(100,160,255,0.3);color:#60a0ff;}
+.toast-icon{font-size:14px;}
+.toast-text{flex:1;}
+
+/* Auth screen */
+#authWall{position:fixed;inset:0;z-index:999;background:var(--void);display:flex;align-items:center;justify-content:center;}
+.auth-wall-inner{text-align:center;}
+.auth-wall-logo{width:80px;height:80px;border-radius:20px;margin:0 auto 20px;border:2px solid rgba(57,255,20,0.3);animation:neonPulse 2s ease infinite;}
+.auth-wall-title{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;margin-bottom:8px;}
+.auth-wall-sub{font-size:14px;color:var(--muted2);margin-bottom:24px;}
+.auth-wall-btns{display:flex;gap:12px;justify-content:center;}
+.auth-wall-btn{padding:11px 24px;border-radius:10px;font-family:'Syne',sans-serif;font-size:14px;font-weight:700;cursor:pointer;text-decoration:none;transition:all 0.2s;}
+.auth-wall-btn.primary{background:var(--neon);color:#050508;border:none;}
+.auth-wall-btn.primary:hover{background:#50ff28;box-shadow:0 0 20px rgba(57,255,20,0.3);}
+.auth-wall-btn.ghost{background:transparent;color:var(--text);border:1px solid var(--border2);}
+.auth-wall-btn.ghost:hover{border-color:rgba(255,255,255,0.2);}
+.auth-spinner{width:40px;height:40px;border:3px solid var(--border2);border-top-color:var(--neon);border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 20px;}
+
+/* Channel type picker */
+.ch-type-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;}
+.ch-type-opt{padding:12px;border:1px solid var(--border2);border-radius:8px;cursor:pointer;transition:all 0.15s;text-align:left;}
+.ch-type-opt:hover{border-color:rgba(57,255,20,0.3);}
+.ch-type-opt.selected{background:rgba(57,255,20,0.06);border-color:rgba(57,255,20,0.4);}
+.ch-type-icon{font-size:18px;margin-bottom:6px;color:var(--muted2);}
+.ch-type-opt.selected .ch-type-icon{color:var(--neon);}
+.ch-type-name{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;}
+.ch-type-desc{font-size:11px;color:var(--muted2);margin-top:2px;}
+
+/* Invite area */
+.invite-box{background:rgba(57,255,20,0.04);border:1px solid rgba(57,255,20,0.15);border-radius:8px;padding:12px 14px;display:flex;align-items:center;gap:10px;margin-bottom:16px;}
+.invite-link{flex:1;font-family:'Courier New',monospace;font-size:13px;color:var(--neon);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.invite-copy{padding:6px 12px;background:var(--neon);color:#050508;border:none;border-radius:6px;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:all 0.15s;white-space:nowrap;}
+.invite-copy:hover{background:#50ff28;}
+</style>
 </head>
 <body>
-  <!-- ============ AUTH SCREEN ============ -->
-  <div id="authScreen">
-    <div class="auth-container">
-      <div class="auth-logo">
-        <img src="PhineX (2).png" style="width: 100px; height: 100px;">
-      </div>
-      <h1 class="auth-title">Welcome to PhineX</h1>
-      <p class="auth-subtitle">Enter your access code to continue</p>
 
-      <form id="authForm">
-        <div class="form-group">
-          <label class="form-label">Access Code</label>
-          <input type="text" id="accessCode" class="form-input" placeholder="Enter your code..." required>
-        </div>
+<!-- AUTH WALL -->
+<div id="authWall">
+  <div class="auth-wall-inner">
+    <div style="display:flex;align-items:center;justify-content:center;margin-bottom:20px;">
+      <div class="auth-spinner"></div>
+    </div>
+    <div class="auth-wall-title" style="font-family:'Syne',sans-serif;font-size:20px;font-weight:700;">Loading PhineX Community...</div>
+  </div>
+</div>
 
-        <button type="submit" class="btn-primary" id="submitBtn">
-          Enter Community
-        </button>
+<!-- MAIN APP -->
+<div id="app">
+<div class="app-wrap">
 
-        <div id="authMessage" class="message"></div>
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <!-- Server Header -->
+  <div class="server-header" id="serverHeaderBtn" onclick="toggleServerDropdown()">
+    <div class="server-name-wrap">
+      <img src="PhineX (2).png" class="server-icon-img" id="serverIconImg" onerror="this.style.display='none';document.getElementById('serverIconFallback').style.display='flex'">
+      <div class="server-icon-fallback" id="serverIconFallback" style="display:none;">PX</div>
+      <span id="serverNameDisplay">PhineX Community</span>
+    </div>
+    <i class="fas fa-chevron-down server-chevron" id="serverChevron"></i>
+  </div>
+  <div class="server-dropdown hidden" id="serverDropdown">
+    <div class="sdrop-item" onclick="openServerSettings('overview')"><i class="fas fa-sliders"></i> Server Settings</div>
+    <div class="sdrop-item" onclick="openServerSettings('roles')"><i class="fas fa-shield-halved"></i> Manage Roles</div>
+    <div class="sdrop-item" onclick="openServerSettings('channels')"><i class="fas fa-layer-group"></i> Manage Channels</div>
+    <div class="sdrop-item" onclick="openServerSettings('members')"><i class="fas fa-users"></i> Manage Members</div>
+    <div class="sdrop-sep"></div>
+    <div class="sdrop-item" onclick="showInviteModal()"><i class="fas fa-user-plus"></i> Invite People</div>
+    <div class="sdrop-sep"></div>
+    <div class="sdrop-item danger" onclick="doLogout()"><i class="fas fa-sign-out-alt"></i> Sign Out</div>
+  </div>
 
-        <div class="code-hint">
-          <strong>How to get an access code:</strong>
-            <p>1. Join our <a href="https://discord.gg/wk4xtQVRzm" target="_blank" style="color: #00b0f4; text-decoration: none;" class="Discord">Discord server</a>.</p>
-            <p>2. Navigate to the #verify channel.</p>
-            <p>3. Verify your account.</p>
-            <p>4. Navigate to the #codes channel.</p>
-            <p>5. Copy the community code.</p>
-        </div>
-      </form>
+  <!-- Search -->
+  <div class="sidebar-search">
+    <div class="search-input-wrap">
+      <i class="fas fa-search search-icon"></i>
+      <input type="text" class="search-input" id="channelSearch" placeholder="Search channels..." oninput="filterChannels(this.value)">
     </div>
   </div>
 
-  <!-- ============ MAIN APP ============ -->
-  <div id="app">
-    <div class="app-container">
-      <!-- Left Sidebar -->
-      <div class="sidebar">
-        <div class="server-header" onclick="showServerMenu()">
-          <div class="server-name">
-            <div class="server-icon">P</div>
-            <span>PhineX Community</span>
-          </div>
-          <i class="fas fa-chevron-down" style="font-size: 12px;"></i>
-        </div>
+  <!-- Channels -->
+  <div class="channels-list" id="channelsList"></div>
 
-        <div class="channels-container" id="channelsContainer">
-          <!-- Channels will be rendered here -->
-        </div>
+  <!-- User Panel -->
+  <div class="user-panel">
+    <div class="up-avatar" id="upAvatar" onclick="showMyProfile()">
+      <div class="up-status" id="upStatus"></div>
+    </div>
+    <div class="up-info">
+      <div class="up-name" id="upName">Loading...</div>
+      <div class="up-tag" id="upTag"></div>
+    </div>
+    <div class="up-actions">
+      <div class="up-btn" id="muteBtn" title="Mute/Unmute" onclick="toggleSelfMute()"><i class="fas fa-microphone"></i></div>
+      <div class="up-btn" id="deafenBtn" title="Deafen/Undeafen" onclick="toggleSelfDeafen()"><i class="fas fa-headphones"></i></div>
+      <div class="up-btn" title="User Settings" onclick="openServerSettings('account')"><i class="fas fa-gear"></i></div>
+    </div>
+  </div>
+</div>
 
-        <div class="user-panel">
-          <div class="user-avatar">
-            <span id="userInitials">U</span>
-            <div class="user-status"></div>
-          </div>
-          <div class="user-info">
-            <div class="user-name" id="userName">User</div>
-            <div class="user-role-badge" id="userRoleBadge">Member</div>
-          </div>
-          <div class="user-actions">
-            <div class="user-action-btn" onclick="toggleMute()" title="Mute">
-              <i class="fas fa-microphone"></i>
-            </div>
-            <div class="user-action-btn" onclick="showSettings()" title="Settings">
-              <i class="fas fa-cog"></i>
-            </div>
-            <div class="user-action-btn" onclick="logout()" title="Logout">
-              <i class="fas fa-sign-out-alt"></i>
-            </div>
-          </div>
-        </div>
+<!-- MAIN CHAT -->
+<div class="main-content">
+  <div class="chat-header" id="chatHeader">
+    <i class="fas fa-hashtag chat-header-icon" id="chatHeaderIcon"></i>
+    <span class="chat-header-name" id="chatHeaderName">Select a channel</span>
+    <div class="chat-header-divider" id="chatHeaderDivider" style="display:none;"></div>
+    <span class="chat-header-topic" id="chatHeaderTopic"></span>
+    <div class="chat-header-actions">
+      <div class="slowmode-indicator" id="slowmodeIndicator" style="display:none;"><i class="fas fa-clock"></i><span id="slowmodeText"></span></div>
+      <div class="ch-header-btn" title="Search Messages" onclick="focusSearch()"><i class="fas fa-magnifying-glass"></i></div>
+      <div class="ch-header-btn" title="Members List" onclick="toggleMembersSidebar()"><i class="fas fa-users"></i></div>
+      <div class="ch-header-btn" title="Channel Settings" id="channelSettingsBtn" onclick="openCurrentChannelSettings()" style="display:none;"><i class="fas fa-gear"></i></div>
+    </div>
+  </div>
+  <div class="messages-area" id="messagesArea">
+    <div class="ch-welcome" id="channelWelcome">
+      <div class="ch-welcome-icon"><i class="fas fa-dragon" style="color:var(--neon);"></i></div>
+      <div class="ch-welcome-title">Welcome to <span>PhineX</span></div>
+      <div class="ch-welcome-sub">Select a channel from the sidebar to start chatting.</div>
+    </div>
+  </div>
+  <div class="input-area" id="inputArea">
+    <div class="input-wrap-outer">
+      <div class="format-toolbar" id="formatToolbar">
+        <div class="fmt-btn" title="Announce (##)" onclick="insertFmt('## ','')"><i class="fas fa-bullhorn" style="font-size:11px;"></i></div>
+        <div class="fmt-btn" title="Heading 1 (# )" onclick="insertFmt('# ','')"><b style="font-size:12px;">H1</b></div>
+        <div class="fmt-btn" title="Heading 2 (## )" onclick="insertFmt('## ','')"><b style="font-size:11px;">H2</b></div>
+        <div class="fmt-btn" title="Heading 3 (### )" onclick="insertFmt('### ','')"><b style="font-size:10px;">H3</b></div>
+        <div class="fmt-sep"></div>
+        <div class="fmt-btn" title="Bold (Ctrl+B)" onclick="insertFmt('**','**')"><b>B</b></div>
+        <div class="fmt-btn" title="Italic (Ctrl+I)" onclick="insertFmt('*','*')"><i>I</i></div>
+        <div class="fmt-btn" title="Underline (Ctrl+U)" onclick="insertFmt('__','__')"><u>U</u></div>
+        <div class="fmt-btn" title="Strikethrough" onclick="insertFmt('~~','~~')"><s>S</s></div>
+        <div class="fmt-sep"></div>
+        <div class="fmt-btn" title="Inline Code" onclick="insertFmt('`','`')"><i class="fas fa-code" style="font-size:11px;"></i></div>
+        <div class="fmt-btn" title="Code Block" onclick="insertFmt('```\n','\n```')"><i class="fas fa-terminal" style="font-size:11px;"></i></div>
+        <div class="fmt-btn" title="Quote" onclick="insertFmt('> ','')"><i class="fas fa-quote-right" style="font-size:11px;"></i></div>
+        <div class="fmt-sep"></div>
+        <div class="fmt-btn" title="Unordered List" onclick="insertFmt('- ','')"><i class="fas fa-list-ul" style="font-size:11px;"></i></div>
+        <div class="fmt-btn" title="Ordered List" onclick="insertFmt('1. ','')"><i class="fas fa-list-ol" style="font-size:11px;"></i></div>
+        <div class="fmt-sep"></div>
+        <div class="fmt-btn" title="Spoiler" onclick="insertFmt('||','||')"><i class="fas fa-eye-slash" style="font-size:11px;"></i></div>
+        <div class="fmt-btn" title="Mention @" onclick="insertFmt('@','')"><i class="fas fa-at" style="font-size:11px;"></i></div>
+        <div class="fmt-sep"></div>
+        <div class="fmt-btn" title="Create Poll" onclick="openPollModal()"><i class="fas fa-chart-bar" style="font-size:11px;"></i></div>
       </div>
-
-      <!-- Main Content -->
-      <div class="main-content">
-        <div class="chat-header">
-          <div class="chat-header-info">
-            <i class="chat-header-icon fas fa-hashtag" id="channelIcon"></i>
-            <span class="chat-header-name" id="channelName">Select a channel</span>
-            <div class="chat-header-divider"></div>
-            <span class="chat-header-topic" id="channelTopic"></span>
-          </div>
-          <div class="chat-header-actions">
-            <i class="header-icon-btn fas fa-bell" title="Notifications"></i>
-            <i class="header-icon-btn fas fa-search" title="Search"></i>
-            <i class="header-icon-btn fas fa-users" title="Members" onclick="toggleMembersSidebar()"></i>
-          </div>
-        </div>
-
-        <div class="messages-container" id="messagesContainer">
-          <div class="chat-welcome">
-            <div class="welcome-icon">
-              <i class="fas fa-hashtag"></i>
-            </div>
-            <h2 class="welcome-title">Welcome to PhineX!</h2>
-            <p class="welcome-text">
-              This is the beginning of your journey. Select a channel to start chatting with the community.
-            </p>
-          </div>
-        </div>
-
-        <div class="message-input-container">
-          <div class="message-input-wrapper" id="messageInputWrapper">
-            <input 
-              type="text" 
-              class="message-input" 
-              id="messageInput" 
-              placeholder="Message #general"
-              disabled
-            >
-            <button class="message-send-btn" id="sendMessageBtn" disabled>Send</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Members Sidebar -->
-      <div class="members-sidebar" id="membersSidebar">
-        <div class="members-title">Members</div>
-        <div id="membersContainer">
-          <!-- Members will be rendered here -->
+      <div class="input-row">
+        <textarea class="msg-input" id="msgInput" placeholder="Message #general..." rows="1" onkeydown="handleInputKey(event)" oninput="autoResize(this)"></textarea>
+        <div class="input-actions">
+          <div class="input-act-btn" title="Attach File" onclick="document.getElementById('fileInput').click()"><i class="fas fa-paperclip"></i></div>
+          <input type="file" id="fileInput" style="display:none" onchange="handleFileAttach(event)" multiple>
+          <div class="input-act-btn send-btn" id="sendBtn" onclick="sendMessage()"><i class="fas fa-paper-plane"></i></div>
         </div>
       </div>
     </div>
+    <div class="slowmode-countdown" id="slowmodeCountdown" style="display:none;"></div>
   </div>
+</div>
 
-  <!-- ============ MODALS ============ -->
-  <!-- Create Channel Modal -->
-  <div class="modal-overlay" id="createChannelModal">
-    <div class="modal">
-      <div class="modal-header">
-        <div class="modal-title">Create Channel</div>
-        <div class="modal-subtitle">Create a new text channel</div>
+<!-- MEMBERS SIDEBAR -->
+<div class="members-sidebar" id="membersSidebar">
+  <div class="members-header">Members</div>
+  <div id="membersContainer"></div>
+</div>
+
+</div><!-- /.app-wrap -->
+</div><!-- /#app -->
+
+<!-- ═══ SERVER SETTINGS MODAL ═══ -->
+<div class="modal-backdrop" id="serverSettingsBackdrop" onclick="if(event.target===this)closeServerSettings()">
+<div id="serverSettingsModal">
+  <div class="ss-nav">
+    <div class="ss-nav-section">Server Settings</div>
+    <div class="ss-nav-item active" data-tab="overview" onclick="switchSSTab('overview')"><i class="fas fa-sliders"></i> Overview</div>
+    <div class="ss-nav-item" data-tab="roles" onclick="switchSSTab('roles')"><i class="fas fa-shield-halved"></i> Roles</div>
+    <div class="ss-nav-item" data-tab="channels" onclick="switchSSTab('channels')"><i class="fas fa-layer-group"></i> Channels & Categories</div>
+    <div class="ss-nav-item" data-tab="permissions" onclick="switchSSTab('permissions')"><i class="fas fa-lock"></i> Permissions</div>
+    <div class="ss-nav-sep"></div>
+    <div class="ss-nav-section">Community</div>
+    <div class="ss-nav-item" data-tab="members" onclick="switchSSTab('members')"><i class="fas fa-users"></i> Members</div>
+    <div class="ss-nav-item" data-tab="invites" onclick="switchSSTab('invites')"><i class="fas fa-link"></i> Invites</div>
+    <div class="ss-nav-sep"></div>
+    <div class="ss-nav-item" onclick="closeServerSettings();doLogout()" style="color:var(--danger);"><i class="fas fa-sign-out-alt" style="color:var(--danger);"></i> Sign Out</div>
+  </div>
+  <div class="ss-content">
+    <span class="ss-close" onclick="closeServerSettings()"><i class="fas fa-xmark"></i></span>
+
+    <!-- OVERVIEW -->
+    <div class="ss-tab active" id="ss-overview">
+      <div class="ss-title">Server Overview</div>
+      <div class="ss-sub">Customize how your server appears to members.</div>
+      <div class="ss-server-icon-area">
+        <img src="PhineX (2).png" class="ss-server-icon" id="ssServerIcon" onerror="this.style.display='none';document.getElementById('ssServerIconFb').style.display='flex'">
+        <div class="ss-server-icon-fallback" id="ssServerIconFb" style="display:none;">PX</div>
+        <div>
+          <div style="font-family:'Syne',sans-serif;font-size:14px;font-weight:700;margin-bottom:8px;">Server Icon</div>
+          <div style="display:flex;gap:8px;">
+            <button class="ss-btn ss-btn-ghost" onclick="document.getElementById('iconUpload').click()"><i class="fas fa-upload"></i> Upload Image</button>
+            <input type="file" id="iconUpload" style="display:none" accept="image/*" onchange="handleServerIconUpload(event)">
+            <button class="ss-btn ss-btn-ghost" onclick="resetServerIcon()">Reset</button>
+          </div>
+          <div style="font-size:11px;color:var(--muted2);margin-top:6px;">Recommended: PNG, JPG · Minimum 128x128</div>
+        </div>
       </div>
-      <div class="modal-body">
-        <div class="form-group">
-          <label class="form-label">Channel Name</label>
-          <input type="text" id="newChannelName" class="form-input" placeholder="new-channel">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Channel Topic (Optional)</label>
-          <input type="text" id="newChannelTopic" class="form-input" placeholder="What's this channel about?">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Category</label>
-          <select id="newChannelCategory" class="form-input" style="cursor: pointer;">
-            <option value="TEXT CHANNELS">TEXT CHANNELS</option>
-            <option value="VOICE CHANNELS">VOICE CHANNELS</option>
-          </select>
-        </div>
+      <div class="ss-field">
+        <label class="ss-label">Server Name</label>
+        <input type="text" class="ss-input" id="ssServerName" placeholder="PhineX Community">
       </div>
-      <div class="modal-footer">
-        <button class="btn-secondary" onclick="closeModal('createChannelModal')">Cancel</button>
-        <button class="btn-primary" onclick="createChannel()" style="width: auto; padding: 10px 24px;">Create</button>
+      <div class="ss-field">
+        <label class="ss-label">Server Description</label>
+        <textarea class="ss-input ss-textarea" id="ssServerDesc" placeholder="What is this server about?"></textarea>
+      </div>
+      <div class="ss-field">
+        <label class="ss-label">Default Slowmode (seconds, 0 = off)</label>
+        <input type="number" class="ss-input" id="ssDefaultSlowmode" min="0" max="21600" placeholder="0">
+      </div>
+      <div class="ss-row">
+        <button class="ss-btn ss-btn-primary" onclick="saveServerOverview()"><i class="fas fa-check"></i> Save Changes</button>
       </div>
     </div>
-  </div>
 
-  <!-- Channel Settings Modal -->
-  <div class="modal-overlay" id="channelSettingsModal">
-    <div class="modal">
-      <div class="modal-header">
-        <div class="modal-title">Channel Permissions</div>
-        <div class="modal-subtitle" id="settingsChannelName"></div>
+    <!-- ROLES -->
+    <div class="ss-tab" id="ss-roles">
+      <div class="ss-title">Roles</div>
+      <div class="ss-sub">Manage roles, their colors, animations, and permissions.</div>
+      <button class="ss-btn ss-btn-primary" style="margin-bottom:16px;" onclick="createNewRole()"><i class="fas fa-plus"></i> Create Role</button>
+      <div class="role-list" id="roleList"></div>
+      <div id="roleEditorContainer"></div>
+    </div>
+
+    <!-- CHANNELS -->
+    <div class="ss-tab" id="ss-channels">
+      <div class="ss-title">Channels & Categories</div>
+      <div class="ss-sub">Create and organize your channels and categories.</div>
+      <div class="ss-row" style="margin-bottom:16px;gap:8px;">
+        <button class="ss-btn ss-btn-primary" onclick="openCreateCategory()"><i class="fas fa-folder-plus"></i> New Category</button>
+        <button class="ss-btn ss-btn-ghost" onclick="openCreateChannel()"><i class="fas fa-plus"></i> New Channel</button>
+        <button class="ss-btn ss-btn-ghost" onclick="addDivider()"><i class="fas fa-minus"></i> Add Divider</button>
       </div>
-      <div class="modal-body">
-        <div class="form-group">
-          <label class="form-label">Select Role</label>
-          <div class="role-picker" id="rolePickerSettings">
-            <!-- Will be populated dynamically -->
-          </div>
-        </div>
-        <div class="form-group" style="margin-top: 24px;">
-          <label class="form-label">Permissions</label>
-          <div id="permissionsContainer">
-            <!-- Permissions will be rendered here -->
-          </div>
-        </div>
+      <div id="channelManageList"></div>
+    </div>
+
+    <!-- PERMISSIONS (global) -->
+    <div class="ss-tab" id="ss-permissions">
+      <div class="ss-title">Global Permissions</div>
+      <div class="ss-sub">Set default permissions for all channels. Per-channel overrides can be set in channel settings.</div>
+      <div style="margin-bottom:12px;">
+        <label class="ss-label">Configure for Role</label>
+        <select class="ss-input ss-select" id="globalPermRolePicker" onchange="renderGlobalPerms()"></select>
       </div>
-      <div class="modal-footer">
-        <button class="btn-secondary" onclick="closeModal('channelSettingsModal')">Close</button>
-        <button class="btn-primary" onclick="savePermissions()" style="width: auto; padding: 10px 24px;">Save</button>
+      <div id="globalPermsContainer"></div>
+      <button class="ss-btn ss-btn-primary" onclick="saveGlobalPerms()"><i class="fas fa-check"></i> Save Permissions</button>
+    </div>
+
+    <!-- MEMBERS -->
+    <div class="ss-tab" id="ss-members">
+      <div class="ss-title">Members</div>
+      <div class="ss-sub">Manage roles, mute, and deafen members.</div>
+      <div style="position:relative;margin-bottom:16px;">
+        <i class="fas fa-search" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:12px;"></i>
+        <input type="text" class="ss-input" id="memberSearch" placeholder="Search members..." style="padding-left:36px;" oninput="filterMembersManage(this.value)">
       </div>
+      <div id="membersManageList"></div>
+    </div>
+
+    <!-- INVITES -->
+    <div class="ss-tab" id="ss-invites">
+      <div class="ss-title">Invites</div>
+      <div class="ss-sub">Share the link below to invite people to PhineX Community.</div>
+      <div class="invite-box">
+        <span class="invite-link" id="inviteLink">Loading...</span>
+        <button class="invite-copy" onclick="copyInviteLink()"><i class="fas fa-copy"></i> Copy</button>
+      </div>
+      <div style="font-size:12px;color:var(--muted2);">Members who join via this link will be assigned the default Member role.</div>
     </div>
   </div>
+</div>
+</div>
 
-  <!-- Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+<!-- CHANNEL SETTINGS MODAL -->
+<div class="modal-backdrop" id="channelSettingsBackdrop" onclick="if(event.target===this)closeChannelSettings()">
+<div class="small-modal" style="width:600px;max-height:90vh;overflow-y:auto;">
+  <div class="small-modal-title" id="chSettingsTitle">Channel Settings</div>
+  <div class="small-modal-sub" id="chSettingsSub"></div>
 
-  <script>
-    // ============ FIREBASE CONFIG ============
-    const CONFIG = {
-      FIREBASE_CONFIG: {
-        apiKey: "AIzaSyAWVx7WUlMcMPyTJxF1hDQc0-VCfP87xRE",
-        authDomain: "phinex-b73e1.firebaseapp.com",
-        databaseURL: "https://phinex-b73e1-default-rtdb.firebaseio.com",
-        projectId: "phinex-b73e1",
-        storageBucket: "phinex-b73e1.firebasestorage.app",
-        messagingSenderId: "1078507208782",
-        appId: "1:1078507208782:web:2ac21f4a58d4b41be40bce"
-      },
-      GUILD_ID: 'phinex_community_v2',
-      ACCESS_CODES: {
-        'ADMIN26': { role: 'admin', name: 'Admin' },
-        'PHNX@098764583729': { role: 'xuser', name: 'X-User' }
-      }
+  <div class="ss-field">
+    <label class="ss-label">Channel Name</label>
+    <input type="text" class="ss-input" id="chSettingsName" placeholder="channel-name">
+  </div>
+  <div class="ss-field">
+    <label class="ss-label">Topic</label>
+    <input type="text" class="ss-input" id="chSettingsTopic" placeholder="What's this channel about?">
+  </div>
+  <div class="ss-field">
+    <label class="ss-label">Slowmode (seconds, 0 = off)</label>
+    <input type="number" class="ss-input" id="chSettingsSlowmode" min="0" max="21600" placeholder="0">
+  </div>
+  <div class="ss-divider"></div>
+  <div style="font-family:'Syne',sans-serif;font-size:14px;font-weight:700;margin-bottom:12px;">Permission Overrides</div>
+  <div style="margin-bottom:12px;">
+    <label class="ss-label">Role</label>
+    <select class="ss-input ss-select" id="chPermRolePicker" onchange="renderChannelPerms()"></select>
+  </div>
+  <div id="chPermsContainer"></div>
+  <div class="modal-actions">
+    <button class="ss-btn ss-btn-ghost" onclick="closeChannelSettings()">Cancel</button>
+    <button class="ss-btn ss-btn-danger" onclick="deleteCurrentChannel()"><i class="fas fa-trash"></i> Delete</button>
+    <button class="ss-btn ss-btn-primary" onclick="saveChannelSettings()"><i class="fas fa-check"></i> Save</button>
+  </div>
+</div>
+</div>
+
+<!-- CREATE CHANNEL MODAL -->
+<div class="modal-backdrop" id="createChannelBackdrop" onclick="if(event.target===this)closeModal('createChannelBackdrop')">
+<div class="small-modal">
+  <div class="small-modal-title">Create Channel</div>
+  <div class="small-modal-sub">Add a new channel to your server.</div>
+  <div class="ch-type-grid">
+    <div class="ch-type-opt selected" id="chType-text" onclick="selectChType('text')">
+      <div class="ch-type-icon"><i class="fas fa-hashtag"></i></div>
+      <div class="ch-type-name">Text Channel</div>
+      <div class="ch-type-desc">Send messages</div>
+    </div>
+    <div class="ch-type-opt" id="chType-announcement" onclick="selectChType('announcement')">
+      <div class="ch-type-icon"><i class="fas fa-bullhorn"></i></div>
+      <div class="ch-type-name">Announcement</div>
+      <div class="ch-type-desc">Official updates</div>
+    </div>
+    <div class="ch-type-opt" id="chType-rules" onclick="selectChType('rules')">
+      <div class="ch-type-icon"><i class="fas fa-scroll"></i></div>
+      <div class="ch-type-name">Rules Channel</div>
+      <div class="ch-type-desc">Read-only rules</div>
+    </div>
+    <div class="ch-type-opt" id="chType-voice" onclick="selectChType('voice')">
+      <div class="ch-type-icon"><i class="fas fa-microphone"></i></div>
+      <div class="ch-type-name">Voice Channel</div>
+      <div class="ch-type-desc">Coming soon</div>
+    </div>
+  </div>
+  <div class="ss-field">
+    <label class="ss-label">Category</label>
+    <select class="ss-input ss-select" id="newChCategory"></select>
+  </div>
+  <div class="ss-field">
+    <label class="ss-label">Channel Name</label>
+    <input type="text" class="ss-input" id="newChName" placeholder="new-channel" oninput="this.value=this.value.toLowerCase().replace(/\s+/g,'-').replace(/[^a-z0-9-]/g,'')">
+  </div>
+  <div class="ss-field">
+    <label class="ss-label">Topic (optional)</label>
+    <input type="text" class="ss-input" id="newChTopic" placeholder="What's this channel about?">
+  </div>
+  <div class="ss-field">
+    <label class="ss-label">Slowmode (seconds, 0 = off)</label>
+    <input type="number" class="ss-input" id="newChSlowmode" min="0" max="21600" value="0">
+  </div>
+  <div class="modal-actions">
+    <button class="ss-btn ss-btn-ghost" onclick="closeModal('createChannelBackdrop')">Cancel</button>
+    <button class="ss-btn ss-btn-primary" onclick="createChannel()"><i class="fas fa-plus"></i> Create Channel</button>
+  </div>
+</div>
+</div>
+
+<!-- CREATE CATEGORY MODAL -->
+<div class="modal-backdrop" id="createCategoryBackdrop" onclick="if(event.target===this)closeModal('createCategoryBackdrop')">
+<div class="small-modal">
+  <div class="small-modal-title">Create Category</div>
+  <div class="small-modal-sub">Group your channels into a category.</div>
+  <div class="ss-field">
+    <label class="ss-label">Category Name</label>
+    <input type="text" class="ss-input" id="newCatName" placeholder="CATEGORY NAME">
+  </div>
+  <div class="ss-field" style="display:flex;align-items:center;gap:10px;">
+    <input type="checkbox" id="catPrivate" style="width:16px;height:16px;accent-color:var(--neon);">
+    <label for="catPrivate" style="font-size:13px;cursor:pointer;">Private Category (admin only by default)</label>
+  </div>
+  <div class="modal-actions">
+    <button class="ss-btn ss-btn-ghost" onclick="closeModal('createCategoryBackdrop')">Cancel</button>
+    <button class="ss-btn ss-btn-primary" onclick="createCategory()"><i class="fas fa-folder-plus"></i> Create Category</button>
+  </div>
+</div>
+</div>
+
+<!-- POLL MODAL -->
+<div class="modal-backdrop" id="pollBackdrop" onclick="if(event.target===this)closeModal('pollBackdrop')">
+<div class="small-modal">
+  <div class="small-modal-title">Create Poll</div>
+  <div class="small-modal-sub">Ask your community a question.</div>
+  <div class="ss-field">
+    <label class="ss-label">Question</label>
+    <input type="text" class="ss-input" id="pollQuestion" placeholder="What do you think about...?">
+  </div>
+  <div class="ss-field">
+    <label class="ss-label">Options (one per line, min 2)</label>
+    <textarea class="ss-input ss-textarea" id="pollOptions" placeholder="Option 1&#10;Option 2&#10;Option 3"></textarea>
+  </div>
+  <div class="modal-actions">
+    <button class="ss-btn ss-btn-ghost" onclick="closeModal('pollBackdrop')">Cancel</button>
+    <button class="ss-btn ss-btn-primary" onclick="sendPoll()"><i class="fas fa-chart-bar"></i> Create Poll</button>
+  </div>
+</div>
+</div>
+
+<!-- MEMBER CONTEXT MENU -->
+<div class="ctx-menu hidden" id="memberCtxMenu">
+  <div class="ctx-item" id="ctxViewProfile"><i class="fas fa-user"></i> View Profile</div>
+  <div class="ctx-item" id="ctxMentionUser"><i class="fas fa-at"></i> Mention</div>
+  <div class="ctx-sep"></div>
+  <div class="ctx-item" id="ctxChangeRole"><i class="fas fa-shield-halved"></i> Change Role</div>
+  <div class="ctx-item" id="ctxToggleMute"><i class="fas fa-microphone-slash"></i> Mute Member</div>
+  <div class="ctx-item" id="ctxToggleDeafen"><i class="fas fa-headphones-slash"></i> Deafen Member</div>
+  <div class="ctx-sep"></div>
+  <div class="ctx-item danger" id="ctxKickMember"><i class="fas fa-user-slash"></i> Kick from Server</div>
+  <div class="ctx-item danger" id="ctxBanMember"><i class="fas fa-ban"></i> Ban Member</div>
+</div>
+
+<!-- CHANNEL CONTEXT MENU -->
+<div class="ctx-menu hidden" id="channelCtxMenu">
+  <div class="ctx-item" id="ctxOpenChannel"><i class="fas fa-hashtag"></i> Open Channel</div>
+  <div class="ctx-item" id="ctxChannelSettings"><i class="fas fa-gear"></i> Channel Settings</div>
+  <div class="ctx-sep"></div>
+  <div class="ctx-item" id="ctxCopyChId"><i class="fas fa-copy"></i> Copy Channel ID</div>
+  <div class="ctx-sep"></div>
+  <div class="ctx-item danger" id="ctxDeleteChannel"><i class="fas fa-trash"></i> Delete Channel</div>
+</div>
+
+<!-- TOAST CONTAINER -->
+<div class="toast-container" id="toastContainer"></div>
+
+<script>
+// ═══════════════════════════════════════
+//  FIREBASE INIT
+// ═══════════════════════════════════════
+if (typeof firebase === 'undefined') {
+  document.getElementById('authWall').innerHTML = `
+    <div class="auth-wall-inner" style="max-width:420px;padding:24px;">
+      <div style="font-size:48px;margin-bottom:16px;">⚠️</div>
+      <div class="auth-wall-title" style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;margin-bottom:8px;color:#ff4444;">Firebase SDK failed to load</div>
+      <div style="font-size:13px;color:#8080a0;line-height:1.7;margin-bottom:20px;">The Firebase scripts couldn't be fetched from the CDN. Check your internet connection or ad-blocker, then refresh the page.</div>
+      <button onclick="location.reload()" style="background:#39ff14;color:#050508;border:none;padding:11px 24px;border-radius:8px;font-family:'Syne',sans-serif;font-weight:700;cursor:pointer;">Reload Page</button>
+    </div>`;
+  throw new Error('Firebase SDK not loaded');
+}
+
+const firebaseConfig = {
+  apiKey:"AIzaSyBrRYcCZXuVz6sX-nKnWs7SaPXirNymlF8",
+  authDomain:"phinex-b5823.firebaseapp.com",
+  databaseURL:"https://phinex-b5823-default-rtdb.firebaseio.com",
+  projectId:"phinex-b5823",
+  storageBucket:"phinex-b5823.firebasestorage.app",
+  messagingSenderId:"481103836570",
+  appId:"1:481103836570:web:2b9f7e8041e0c885d3b623"
+};
+if(!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db   = firebase.database();
+
+// ─── Firebase Rules helper ───
+// If you get permission_denied errors, go to:
+// Firebase Console → Realtime Database → Rules → paste:
+/*
+{
+  "rules": {
+    "users":            { "$uid": { ".read":"auth!=null", ".write":"auth!=null && auth.uid===$uid" }},
+    "usernames":        { ".read":"auth!=null", ".write":"auth!=null" },
+    "presence":         { "$uid": { ".read":"auth!=null", ".write":"auth!=null && auth.uid===$uid" }},
+    "community_members":{ ".read":"auth!=null", ".write":"auth!=null" },
+    "phinex_v3":        { ".read":"auth!=null", ".write":"auth!=null" }
+  }
+}
+*/
+
+const SERVER_ID = 'phinex_v3';
+
+// ═══════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════
+let STATE = {
+  user: null,       // { uid, displayName, username, roles:[], isMuted, isDeafened }
+  settings: {},     // server settings
+  categories: {},   // { id: {name,position,...} }
+  channels: {},     // { id: {name,type,categoryId,position,slowmode,...} }
+  roles: {},        // { id: {name,color,position,animation,permissions:{}} }
+  members: {},      // { uid: {displayName,username,roles,muted,deafened,...} }
+  globalPerms: {},  // { roleId: {perm: 0/-1/1} }
+  channelPerms: {}, // { channelId: { roleId: {perm: 0/-1/1} } }
+  messages: {},     // { channelId: {msgId: msg} }
+  currentChannelId: null,
+  selfMuted: false,
+  selfDeafened: false,
+  msgListeners: {},
+  selectedChType: 'text',
+  editingRoleId: null,
+  editingChannelId: null,
+  slowmodeTimers: {},   // { channelId: lastSentAt }
+};
+
+// ═══════════════════════════════════════
+//  AUTH STATE
+// ═══════════════════════════════════════
+
+// Timeout fallback — if auth doesn't resolve in 8s, show login wall
+const authTimeout = setTimeout(() => {
+  const wall = document.getElementById('authWall');
+  if (wall && wall.style.display !== 'none') {
+    wall.innerHTML = `
+      <div class="auth-wall-inner">
+        <img src="PhineX (2).png" style="width:80px;height:80px;border-radius:20px;border:2px solid rgba(57,255,20,0.3);margin-bottom:20px;" onerror="this.src=''">
+        <div class="auth-wall-title" style="font-family:'Syne',sans-serif;font-size:28px;font-weight:800;margin-bottom:8px;">PhineX Community</div>
+        <div class="auth-wall-sub">Sign in to join the conversation</div>
+        <div class="auth-wall-btns">
+          <a href="login.html" class="auth-wall-btn primary">Sign In</a>
+          <a href="login.html#signup" class="auth-wall-btn ghost">Create Account</a>
+        </div>
+      </div>`;
+  }
+}, 8000);
+
+auth.onAuthStateChanged(async user => {
+  clearTimeout(authTimeout);
+
+  if (!user) {
+    document.getElementById('authWall').innerHTML = `
+      <div class="auth-wall-inner">
+        <img src="PhineX (2).png" style="width:80px;height:80px;border-radius:20px;border:2px solid rgba(57,255,20,0.3);margin-bottom:20px;" onerror="this.src=''">
+        <div class="auth-wall-title" style="font-family:'Syne',sans-serif;font-size:28px;font-weight:800;margin-bottom:8px;">PhineX Community</div>
+        <div class="auth-wall-sub">Sign in to join the conversation</div>
+        <div class="auth-wall-btns">
+          <a href="login.html" class="auth-wall-btn primary">Sign In</a>
+          <a href="login.html#signup" class="auth-wall-btn ghost">Create Account</a>
+        </div>
+      </div>`;
+    return;
+  }
+
+  try {
+    // Get profile from DB
+    let profile = {};
+    try {
+      const snap = await db.ref(`users/${user.uid}`).once('value');
+      profile = snap.val() || {};
+    } catch(e) {
+      console.warn('Could not read user profile:', e.message);
+    }
+
+    STATE.user = {
+      uid: user.uid,
+      displayName: profile.displayName || user.displayName || user.email.split('@')[0],
+      username: profile.username || null,
+      email: user.email,
+      roles: [],
+      isMuted: false,
+      isDeafened: false
     };
 
-    // Initialize Firebase
-    const app = firebase.initializeApp(CONFIG.FIREBASE_CONFIG);
-    const db = firebase.database();
-    const { ref, set, push, onValue, get, update, remove } = firebase.database;
+    // Set presence (fire & forget — ignore permission errors)
+    setPresence(user.uid, 'online');
 
-    // ============ STATE ============
-    let currentUser = null;
-    let isAdmin = false;
-    let currentChannel = null;
-    let channels = [];
-    let permissions = {};
-    let selectedRoleForSettings = 'member';
+    // Load everything
+    await initServer();
 
-    // Default channels structure
-    const defaultChannels = [
-      {
-        id: 'general',
-        name: 'general',
-        category: 'TEXT CHANNELS',
-        topic: 'General discussion for all members',
-        icon: 'hashtag'
-      },
-      {
-        id: 'announcements',
-        name: 'announcements',
-        category: 'TEXT CHANNELS',
-        topic: 'Official announcements from the PhineX team',
-        icon: 'bullhorn'
-      },
-      {
-        id: 'development',
-        name: 'development',
-        category: 'TEXT CHANNELS',
-        topic: 'Discuss development, coding, and technical topics',
-        icon: 'code'
-      },
-      {
-        id: 'random',
-        name: 'random',
-        category: 'TEXT CHANNELS',
-        topic: 'Off-topic conversations and fun',
-        icon: 'dice'
-      }
-    ];
+    // Hide auth wall, show app
+    document.getElementById('authWall').style.display = 'none';
+    document.getElementById('app').classList.add('visible');
 
-    // Default permissions structure
-    const defaultPermissions = {
-      general: {
-        admin: { send_messages: true, react: true, manage: true },
-        xuser: { send_messages: true, react: true, manage: false },
-        member: { send_messages: true, react: true, manage: false }
-      },
-      announcements: {
-        admin: { send_messages: true, react: true, manage: true },
-        xuser: { send_messages: false, react: true, manage: false },
-        member: { send_messages: false, react: true, manage: false }
-      },
-      development: {
-        admin: { send_messages: true, react: true, manage: true },
-        xuser: { send_messages: true, react: true, manage: false },
-        member: { send_messages: true, react: true, manage: false }
-      },
-      random: {
-        admin: { send_messages: true, react: true, manage: true },
-        xuser: { send_messages: true, react: true, manage: true },
-        member: { send_messages: true, react: true, manage: false }
-      }
-    };
+    // Setup user panel
+    renderUserPanel();
 
-    // ============ AUTH ============
-    document.getElementById('authForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      
-      const code = document.getElementById('accessCode').value.trim();
-      const messageEl = document.getElementById('authMessage');
-      const submitBtn = document.getElementById('submitBtn');
+    // Listen to realtime data
+    listenToAllData();
 
-      if (!CONFIG.ACCESS_CODES[code]) {
-        messageEl.textContent = 'Invalid access code';
-        messageEl.className = 'message error';
-        messageEl.style.display = 'block';
-        return;
-      }
+  } catch(err) {
+    console.error('Community init error:', err);
+    const isPermDenied = err.message && (err.message.includes('permission_denied') || err.message.includes('Permission denied'));
+    document.getElementById('authWall').innerHTML = `
+      <div class="auth-wall-inner" style="max-width:480px;padding:24px;text-align:center;">
+        <div style="font-size:48px;margin-bottom:16px;">${isPermDenied ? '🔒' : '💥'}</div>
+        <div style="font-family:'Syne',sans-serif;font-size:20px;font-weight:800;margin-bottom:10px;color:#ff4444;">
+          ${isPermDenied ? 'Firebase Rules Need Updating' : 'Failed to Load Community'}
+        </div>
+        ${isPermDenied ? `
+        <div style="font-size:13px;color:#8080a0;line-height:1.8;margin-bottom:16px;text-align:left;background:rgba(255,255,255,0.03);border:1px solid rgba(255,68,68,0.2);border-radius:8px;padding:14px;">
+          <strong style="color:#e8e8f0;">Go to Firebase Console → Realtime Database → Rules</strong> and set:<br><br>
+          <code style="background:#050508;color:#39ff14;padding:8px 10px;border-radius:6px;font-size:11px;display:block;white-space:pre-wrap;">{
+  "rules": {
+    "users": { "$uid": { ".read":"auth!=null", ".write":"auth!=null && auth.uid===$uid" }},
+    "usernames": { ".read":"auth!=null", ".write":"auth!=null" },
+    "presence": { "$uid": { ".read":"auth!=null", ".write":"auth!=null && auth.uid===$uid" }},
+    "community_members": { ".read":"auth!=null", ".write":"auth!=null" },
+    "phinex_v3": { ".read":"auth!=null", ".write":"auth!=null" }
+  }
+}</code>
+        </div>` : `<div style="font-size:13px;color:#8080a0;margin-bottom:16px;">${err.message}</div>`}
+        <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+          <button onclick="location.reload()" style="background:#39ff14;color:#050508;border:none;padding:10px 20px;border-radius:8px;font-family:'Syne',sans-serif;font-weight:700;cursor:pointer;">Retry</button>
+          <a href="login.html" style="background:transparent;color:#e8e8f0;border:1px solid rgba(255,255,255,0.15);padding:10px 20px;border-radius:8px;font-family:'Syne',sans-serif;font-weight:700;cursor:pointer;text-decoration:none;">Back to Login</a>
+        </div>
+      </div>`;
+  }
+});
 
-      submitBtn.disabled = true;
-      submitBtn.textContent = 'Entering...';
+// ═══════════════════════════════════════
+//  PRESENCE
+// ═══════════════════════════════════════
+function setPresence(uid, status) {
+  // Fire-and-forget — don't block app load on permission errors
+  db.ref(`presence/${uid}`).set(status).catch(() => {});
+  try { db.ref(`presence/${uid}`).onDisconnect().set('offline'); } catch(e) {}
+}
 
-      const userRole = CONFIG.ACCESS_CODES[code];
-      currentUser = {
-        user_id: Date.now().toString(),
-        role: userRole.role,
-        name: userRole.name,
-        joined_at: Date.now()
-      };
-
-      isAdmin = userRole.role === 'admin';
-
-      // Initialize default data if needed
-      await initializeDefaultData();
-
-      // Load channels and permissions
-      await loadChannels();
-      await loadPermissions();
-
-      // Show app
-      document.getElementById('authScreen').style.display = 'none';
-      document.getElementById('app').style.display = 'block';
-
-      // Initialize UI
-      initializeUI();
-      renderChannels();
-      renderMembers();
-
-      // Select first channel
-      if (channels.length > 0) {
-        selectChannel(channels[0].id);
-      }
+// ═══════════════════════════════════════
+//  SERVER INIT (default data)
+// ═══════════════════════════════════════
+async function initServer() {
+  // Load settings — this will throw permission_denied if rules aren't set
+  let settingsSnap;
+  try {
+    settingsSnap = await db.ref(`${SERVER_ID}/settings`).once('value');
+  } catch(e) {
+    throw new Error(`permission_denied at /${SERVER_ID}/settings: Update your Firebase Realtime Database rules.`);
+  }
+  if (!settingsSnap.exists()) {
+    // Create default server
+    await db.ref(`${SERVER_ID}/settings`).set({
+      name: 'PhineX Community',
+      description: 'The PhineX developer community',
+      ownerId: STATE.user.uid,
+      createdAt: Date.now(),
+      slowmodeDefault: 0
     });
+  }
+  STATE.settings = (await db.ref(`${SERVER_ID}/settings`).once('value')).val() || {};
 
-    async function initializeDefaultData() {
-      try {
-        // Check if channels exist
-        const channelsSnapshot = await get(ref(db, `channels/${CONFIG.GUILD_ID}`));
-        if (!channelsSnapshot.exists()) {
-          // Create default channels
-          const channelsData = {};
-          defaultChannels.forEach(channel => {
-            channelsData[channel.id] = channel;
-          });
-          await set(ref(db, `channels/${CONFIG.GUILD_ID}`), channelsData);
-        }
+  // Default roles
+  const rolesSnap = await db.ref(`${SERVER_ID}/roles`).once('value');
+  if (!rolesSnap.exists()) {
+    const defaultRoles = {
+      'role_admin': { name:'Admin', color:'#ff4444', position:0, animation:'pulse', isDefault:false, permissions:{ administrator:true } },
+      'role_mod':   { name:'Moderator', color:'#ffb700', position:1, animation:'glow', isDefault:false, permissions:{ manage_messages:true, mute_members:true } },
+      'role_dev':   { name:'Developer', color:'#39ff14', position:2, animation:'none', isDefault:false, permissions:{ attach_files:true, embed_links:true } },
+      'role_member':{ name:'Member', color:'#5a5a78', position:3, animation:'none', isDefault:true, permissions:{ send_messages:true, read_message_history:true, add_reactions:true } },
+    };
+    await db.ref(`${SERVER_ID}/roles`).set(defaultRoles);
+  }
 
-        // Check if permissions exist
-        const permissionsSnapshot = await get(ref(db, `permissions/${CONFIG.GUILD_ID}`));
-        if (!permissionsSnapshot.exists()) {
-          await set(ref(db, `permissions/${CONFIG.GUILD_ID}`), defaultPermissions);
-        }
-      } catch (error) {
-        console.error('Error initializing default data:', error);
-      }
+  // Default categories
+  const catsSnap = await db.ref(`${SERVER_ID}/categories`).once('value');
+  if (!catsSnap.exists()) {
+    const cats = {
+      'cat_info':    { name:'INFORMATION', position:0, createdAt:Date.now() },
+      'cat_general': { name:'GENERAL', position:1, createdAt:Date.now() },
+      'cat_dev':     { name:'DEVELOPMENT', position:2, createdAt:Date.now() },
+    };
+    await db.ref(`${SERVER_ID}/categories`).set(cats);
+  }
+
+  // Default channels
+  const chSnap = await db.ref(`${SERVER_ID}/channels`).once('value');
+  if (!chSnap.exists()) {
+    const now = Date.now();
+    const channels = {
+      'ch_rules':    { name:'rules', type:'rules', categoryId:'cat_info', position:0, topic:'Server rules - please read!', slowmode:0, createdAt:now },
+      'ch_announce': { name:'announcements', type:'announcement', categoryId:'cat_info', position:1, topic:'Official PhineX announcements', slowmode:0, createdAt:now },
+      'ch_general':  { name:'general', type:'text', categoryId:'cat_general', position:0, topic:'General chat for everyone', slowmode:0, createdAt:now },
+      'ch_intro':    { name:'introductions', type:'text', categoryId:'cat_general', position:1, topic:'Introduce yourself!', slowmode:30, createdAt:now },
+      'ch_offtopic': { name:'off-topic', type:'text', categoryId:'cat_general', position:2, topic:'Random chatter', slowmode:0, createdAt:now },
+      'ch_projects': { name:'projects', type:'text', categoryId:'cat_dev', position:0, topic:'Share your projects', slowmode:0, createdAt:now },
+      'ch_divider1': { name:'• Specialized •', type:'divider', categoryId:'cat_dev', position:1, createdAt:now },
+      'ch_help':     { name:'help', type:'text', categoryId:'cat_dev', position:2, topic:'Ask for help here', slowmode:5, createdAt:now },
+      'ch_showcase': { name:'showcase', type:'text', categoryId:'cat_dev', position:3, topic:'Show off your work', slowmode:60, createdAt:now },
+    };
+    await db.ref(`${SERVER_ID}/channels`).set(channels);
+    // Post welcome message
+    await db.ref(`${SERVER_ID}/messages/ch_general`).push({
+      authorId: 'system',
+      authorName: 'PhineX Bot',
+      content: '## 🎉 Welcome to PhineX Community!\nThis is the beginning of **#general**. Feel free to introduce yourself!',
+      type: 'text',
+      timestamp: Date.now(),
+      role: 'system'
+    });
+  }
+
+  // Register member
+  const memberSnap = await db.ref(`${SERVER_ID}/members/${STATE.user.uid}`).once('value');
+  if (!memberSnap.exists()) {
+    await db.ref(`${SERVER_ID}/members/${STATE.user.uid}`).set({
+      uid: STATE.user.uid,
+      displayName: STATE.user.displayName,
+      username: STATE.user.username,
+      roles: ['role_member'],
+      muted: false, deafened: false,
+      joinedAt: Date.now()
+    });
+  } else {
+    await db.ref(`${SERVER_ID}/members/${STATE.user.uid}`).update({
+      displayName: STATE.user.displayName,
+      username: STATE.user.username
+    });
+  }
+}
+
+// ═══════════════════════════════════════
+//  REALTIME LISTENERS
+// ═══════════════════════════════════════
+function listenToAllData() {
+  const onErr = (ctx) => (e) => console.warn(`Listener error [${ctx}]:`, e.message);
+
+  // Settings
+  db.ref(`${SERVER_ID}/settings`).on('value', snap => {
+    STATE.settings = snap.val() || {};
+    applyServerSettings();
+  }, onErr('settings'));
+
+  // Categories
+  db.ref(`${SERVER_ID}/categories`).on('value', snap => {
+    STATE.categories = snap.val() || {};
+    renderChannelsSidebar();
+    renderChannelManageList();
+  }, onErr('categories'));
+
+  // Channels
+  db.ref(`${SERVER_ID}/channels`).on('value', snap => {
+    STATE.channels = snap.val() || {};
+    renderChannelsSidebar();
+    renderChannelManageList();
+  }, onErr('channels'));
+
+  // Roles
+  db.ref(`${SERVER_ID}/roles`).on('value', snap => {
+    STATE.roles = snap.val() || {};
+    renderRoleList();
+    populateRolePickers();
+  }, onErr('roles'));
+
+  // Members
+  db.ref(`${SERVER_ID}/members`).on('value', snap => {
+    STATE.members = snap.val() || {};
+    if (STATE.user && STATE.members[STATE.user.uid]) {
+      STATE.user.roles = STATE.members[STATE.user.uid].roles || ['role_member'];
     }
+    renderMembersSidebar();
+    renderMembersManageList();
+    renderUserPanel(); // re-render user panel to show correct role color
+  }, onErr('members'));
 
-    async function loadChannels() {
-      try {
-        const snapshot = await get(ref(db, `channels/${CONFIG.GUILD_ID}`));
-        if (snapshot.exists()) {
-          const data = snapshot.val();
-          channels = Object.entries(data).map(([id, channel]) => ({
-            id,
-            ...channel
-          }));
-        } else {
-          channels = defaultChannels;
-        }
-      } catch (error) {
-        console.error('Error loading channels:', error);
-        channels = defaultChannels;
-      }
-    }
+  // Channel perms
+  db.ref(`${SERVER_ID}/channelPerms`).on('value', snap => {
+    STATE.channelPerms = snap.val() || {};
+  }, onErr('channelPerms'));
 
-    async function loadPermissions() {
-      try {
-        const snapshot = await get(ref(db, `permissions/${CONFIG.GUILD_ID}`));
-        if (snapshot.exists()) {
-          permissions = snapshot.val();
-        } else {
-          permissions = defaultPermissions;
-        }
-      } catch (error) {
-        console.error('Error loading permissions:', error);
-        permissions = defaultPermissions;
-      }
-    }
+  // Global perms
+  db.ref(`${SERVER_ID}/globalPerms`).on('value', snap => {
+    STATE.globalPerms = snap.val() || {};
+  }, onErr('globalPerms'));
+}
 
-    function initializeUI() {
-      document.getElementById('userName').textContent = currentUser.name;
-      document.getElementById('userInitials').textContent = currentUser.name.charAt(0).toUpperCase();
-      
-      const roleBadge = document.getElementById('userRoleBadge');
-      roleBadge.textContent = currentUser.role === 'admin' ? 'ADMIN' : currentUser.role === 'xuser' ? 'X-USER' : 'MEMBER';
-      roleBadge.className = `user-role-badge ${currentUser.role}`;
-    }
+function applyServerSettings() {
+  const s = STATE.settings;
+  document.getElementById('serverNameDisplay').textContent = s.name || 'PhineX Community';
+  document.getElementById('ssServerName').value = s.name || '';
+  document.getElementById('ssServerDesc').value = s.description || '';
+  document.getElementById('ssDefaultSlowmode').value = s.slowmodeDefault || 0;
+  document.title = `${s.name || 'PhineX'} Community`;
+}
 
-    // ============ RENDER CHANNELS ============
-    function renderChannels() {
-      const container = document.getElementById('channelsContainer');
-      const categories = {};
-
-      // Group channels by category
-      channels.forEach(channel => {
-        if (!categories[channel.category]) {
-          categories[channel.category] = [];
-        }
-        categories[channel.category].push(channel);
-      });
-
-      let html = '';
-
-      Object.entries(categories).forEach(([category, categoryChannels]) => {
-        html += `
-          <div class="channel-category">
-            <div class="category-header" onclick="toggleCategory(this)">
-              <span>${category}</span>
-              <div style="display: flex; align-items: center; gap: 8px;">
-                ${isAdmin ? `<div class="add-channel-btn" onclick="event.stopPropagation(); openCreateChannelModal()"><i class="fas fa-plus"></i></div>` : ''}
-                <i class="category-icon fas fa-chevron-down"></i>
-              </div>
-            </div>
-            <div class="category-channels">
-              ${categoryChannels.map(channel => `
-                <div class="channel-item ${currentChannel?.id === channel.id ? 'active' : ''}" onclick="selectChannel('${channel.id}')">
-                  <i class="channel-icon fas fa-${channel.icon || 'hashtag'}"></i>
-                  <span class="channel-name">${channel.name}</span>
-                  ${isAdmin ? `
-                    <div class="channel-actions">
-                      <div class="channel-action-btn" onclick="event.stopPropagation(); openChannelSettings('${channel.id}')" title="Settings">
-                        <i class="fas fa-cog"></i>
-                      </div>
-                      <div class="channel-action-btn" onclick="event.stopPropagation(); deleteChannel('${channel.id}')" title="Delete">
-                        <i class="fas fa-trash"></i>
-                      </div>
-                    </div>
-                  ` : ''}
-                </div>
-              `).join('')}
-            </div>
-          </div>
-        `;
-      });
-
-      container.innerHTML = html;
-    }
-
-    function toggleCategory(element) {
-      element.classList.toggle('collapsed');
-      const channels = element.nextElementSibling;
-      channels.classList.toggle('hidden');
-    }
-
-    // ============ CHANNEL SELECTION ============
-    async function selectChannel(channelId) {
-      const channel = channels.find(c => c.id === channelId);
-      if (!channel) return;
-
-      currentChannel = channel;
-
-      // Update UI
-      document.getElementById('channelName').textContent = channel.name;
-      document.getElementById('channelTopic').textContent = channel.topic || 'No topic set';
-      document.getElementById('channelIcon').className = `chat-header-icon fas fa-${channel.icon || 'hashtag'}`;
-      document.getElementById('messageInput').placeholder = `Message #${channel.name}`;
-
-      // Check permissions
-      const userRole = currentUser.role;
-      const channelPerms = permissions[channelId]?.[userRole] || { send_messages: false, react: false };
-
-      const inputWrapper = document.getElementById('messageInputWrapper');
-      const messageInput = document.getElementById('messageInput');
-      const sendBtn = document.getElementById('sendMessageBtn');
-
-      if (channelPerms.send_messages) {
-        inputWrapper.classList.remove('disabled');
-        messageInput.disabled = false;
-        sendBtn.disabled = false;
+// ═══════════════════════════════════════
+//  RENDER CHANNELS SIDEBAR
+// ═══════════════════════════════════════
+function renderChannelsSidebar(filter='') {
+  const cats = Object.entries(STATE.categories).sort((a,b) => (a[1].position||0)-(b[1].position||0));
+  const chs  = Object.entries(STATE.channels).sort((a,b) => (a[1].position||0)-(b[1].position||0));
+  const filt = filter.toLowerCase();
+  let html = '';
+  // Uncategorized channels first
+  const uncatChs = chs.filter(([,c]) => !c.categoryId && c.type !== 'divider' && (!filt || c.name.includes(filt)));
+  if (uncatChs.length) {
+    html += `<div class="ch-category"><div class="ch-cat-channels">`;
+    uncatChs.forEach(([id,ch]) => { html += renderChannelItem(id,ch); });
+    html += `</div></div>`;
+  }
+  // Categories
+  cats.forEach(([catId, cat]) => {
+    const catChs = chs.filter(([,c]) => c.categoryId === catId && (!filt || c.name.includes(filt) || c.type==='divider'));
+    if (filt && catChs.length === 0) return;
+    html += `<div class="ch-category">
+      <div class="ch-cat-header" id="cathdr_${catId}" onclick="toggleCategory('${catId}')">
+        <i class="fas fa-chevron-down cat-chevron"></i>
+        <span class="cat-name">${escHtml(cat.name)}</span>
+        <span class="cat-add-btn" onclick="event.stopPropagation();openCreateChannelInCat('${catId}')"><i class="fas fa-plus"></i></span>
+      </div>
+      <div class="ch-cat-channels" id="catchans_${catId}">`;
+    catChs.forEach(([id,ch]) => {
+      if (ch.type === 'divider') {
+        html += `<div class="ch-divider"><span>${escHtml(ch.name)}</span></div>`;
       } else {
-        inputWrapper.classList.add('disabled');
-        messageInput.disabled = true;
-        sendBtn.disabled = true;
-      }
-
-      // Update active channel in sidebar
-      renderChannels();
-
-      // Load messages
-      await loadMessages(channelId);
-    }
-
-    async function loadMessages(channelId) {
-      const container = document.getElementById('messagesContainer');
-      
-      try {
-        const snapshot = await get(ref(db, `messages/${CONFIG.GUILD_ID}/${channelId}`));
-        
-        if (snapshot.exists()) {
-          const messagesData = snapshot.val();
-          const messagesList = Object.entries(messagesData).map(([id, msg]) => ({
-            id,
-            ...msg
-          })).sort((a, b) => a.timestamp - b.timestamp);
-
-          let html = '';
-          messagesList.forEach(msg => {
-            html += renderMessage(msg);
-          });
-
-          container.innerHTML = html;
-          container.scrollTop = container.scrollHeight;
-        } else {
-          container.innerHTML = `
-            <div class="chat-welcome">
-              <div class="welcome-icon">
-                <i class="fas fa-${currentChannel.icon || 'hashtag'}"></i>
-              </div>
-              <h2 class="welcome-title">Welcome to #${currentChannel.name}!</h2>
-              <p class="welcome-text">
-                ${currentChannel.topic || 'This is the beginning of the #' + currentChannel.name + ' channel.'}
-              </p>
-            </div>
-          `;
-        }
-
-        // Subscribe to realtime updates
-        subscribeToMessages(channelId);
-      } catch (error) {
-        console.error('Error loading messages:', error);
-      }
-    }
-
-    function renderMessage(msg) {
-      const time = new Date(msg.timestamp).toLocaleTimeString('en-US', {
-        hour: '2-digit',
-        minute: '2-digit'
-      });
-
-      const initials = msg.author.charAt(0).toUpperCase();
-      const roleClass = msg.role || 'member';
-      const roleBadge = msg.role === 'admin' 
-        ? '<span class="role-badge admin"><i class="fas fa-shield-alt"></i> ADMIN</span>'
-        : msg.role === 'xuser'
-        ? '<span class="role-badge xuser"><i class="fas fa-star"></i> X-USER</span>'
-        : '';
-
-      return `
-        <div class="message-group">
-          <div class="message-timestamp">${time}</div>
-          <div style="display: flex; gap: 16px;">
-            <div class="message-avatar">${initials}</div>
-            <div style="flex: 1;">
-              <div class="message-header">
-                <span class="message-author ${roleClass}">${msg.author}</span>
-                ${roleBadge}
-                <span class="message-time">${time}</span>
-              </div>
-              <div class="message-content">${msg.content}</div>
-            </div>
-          </div>
-        </div>
-      `;
-    }
-
-    function subscribeToMessages(channelId) {
-      const messagesRef = ref(db, `messages/${CONFIG.GUILD_ID}/${channelId}`);
-      
-      onValue(messagesRef, (snapshot) => {
-        if (currentChannel?.id === channelId) {
-          loadMessages(channelId);
-        }
-      });
-    }
-
-    // ============ SEND MESSAGE ============
-    document.getElementById('sendMessageBtn').addEventListener('click', sendMessage);
-    document.getElementById('messageInput').addEventListener('keypress', (e) => {
-      if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault();
-        sendMessage();
+        html += renderChannelItem(id, ch);
       }
     });
+    html += `</div></div>`;
+  });
+  document.getElementById('channelsList').innerHTML = html || '<div style="padding:16px 12px;font-size:12px;color:var(--muted);">No channels found.</div>';
+}
 
-    async function sendMessage() {
-      const input = document.getElementById('messageInput');
-      const content = input.value.trim();
+function renderChannelItem(id, ch) {
+  const icons = { text:'hashtag', announcement:'bullhorn', rules:'scroll', voice:'microphone', forum:'comments' };
+  const icon = icons[ch.type] || 'hashtag';
+  const isActive = id === STATE.currentChannelId;
+  const slowBadge = ch.slowmode > 0 ? `<span class="ch-slowmode-badge"><i class="fas fa-clock"></i></span>` : '';
+  return `<div class="ch-item${isActive?' active':''}" id="chi_${id}" onclick="selectChannel('${id}')" oncontextmenu="showChannelCtx(event,'${id}')">
+    <i class="fas fa-${icon} ch-item-icon"></i>
+    <span class="ch-item-name">${escHtml(ch.name)}</span>
+    ${slowBadge}
+    <div class="ch-item-actions">
+      <span class="ch-act-btn" title="Settings" onclick="event.stopPropagation();openChannelSettings('${id}')"><i class="fas fa-gear"></i></span>
+    </div>
+  </div>`;
+}
 
-      if (!content || !currentChannel) return;
+function toggleCategory(catId) {
+  const hdr = document.getElementById(`cathdr_${catId}`);
+  const chans = document.getElementById(`catchans_${catId}`);
+  if (hdr && chans) {
+    hdr.classList.toggle('collapsed');
+    chans.classList.toggle('collapsed');
+  }
+}
 
-      // Check permissions
-      const userRole = currentUser.role;
-      const channelPerms = permissions[currentChannel.id]?.[userRole] || { send_messages: false };
+function filterChannels(val) { renderChannelsSidebar(val); }
 
-      if (!channelPerms.send_messages) {
-        alert('You do not have permission to send messages in this channel.');
-        return;
+// ═══════════════════════════════════════
+//  SELECT CHANNEL
+// ═══════════════════════════════════════
+function selectChannel(id) {
+  const ch = STATE.channels[id];
+  if (!ch) return;
+  if (!canViewChannel(id)) { toast('You do not have permission to view this channel.', 'error'); return; }
+  STATE.currentChannelId = id;
+  // Update active state
+  document.querySelectorAll('.ch-item').forEach(el => el.classList.remove('active'));
+  const el = document.getElementById(`chi_${id}`);
+  if (el) el.classList.add('active');
+  // Update header
+  const icons = { text:'hashtag', announcement:'bullhorn', rules:'scroll', voice:'microphone' };
+  document.getElementById('chatHeaderIcon').className = `fas fa-${icons[ch.type]||'hashtag'} chat-header-icon`;
+  document.getElementById('chatHeaderName').textContent = ch.name;
+  if (ch.topic) {
+    document.getElementById('chatHeaderDivider').style.display = '';
+    document.getElementById('chatHeaderTopic').textContent = ch.topic;
+  } else {
+    document.getElementById('chatHeaderDivider').style.display = 'none';
+    document.getElementById('chatHeaderTopic').textContent = '';
+  }
+  // Slowmode indicator
+  if (ch.slowmode > 0) {
+    document.getElementById('slowmodeIndicator').style.display = 'flex';
+    document.getElementById('slowmodeText').textContent = `${ch.slowmode}s slowmode`;
+  } else {
+    document.getElementById('slowmodeIndicator').style.display = 'none';
+  }
+  // Settings button (admin only)
+  document.getElementById('channelSettingsBtn').style.display = isAdmin() ? '' : 'none';
+  // Update input placeholder
+  const canSend = canSendMessage(id);
+  document.getElementById('msgInput').placeholder = canSend ? `Message #${ch.name}` : `You cannot send messages in #${ch.name}`;
+  document.getElementById('msgInput').disabled = !canSend || ch.type === 'rules';
+  // Load messages
+  loadMessages(id);
+}
+
+// ═══════════════════════════════════════
+//  MESSAGES
+// ═══════════════════════════════════════
+function loadMessages(channelId) {
+  // Remove old listener
+  if (STATE.msgListeners[channelId]) {
+    db.ref(`${SERVER_ID}/messages/${channelId}`).off('value', STATE.msgListeners[channelId]);
+  }
+  const area = document.getElementById('messagesArea');
+  area.innerHTML = `<div style="flex:1;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:13px;"><i class="fas fa-spinner fa-spin" style="margin-right:8px;"></i> Loading...</div>`;
+  
+  const listener = db.ref(`${SERVER_ID}/messages/${channelId}`).limitToLast(100).on('value', snap => {
+    const msgs = snap.val() || {};
+    STATE.messages[channelId] = msgs;
+    renderMessages(channelId);
+  });
+  STATE.msgListeners[channelId] = listener;
+}
+
+function renderMessages(channelId) {
+  const ch = STATE.channels[channelId];
+  const msgs = STATE.messages[channelId] || {};
+  const sorted = Object.entries(msgs).sort((a,b) => (a[1].timestamp||0)-(b[1].timestamp||0));
+  const area = document.getElementById('messagesArea');
+  if (!area) return;
+  
+  let html = '';
+  // Welcome section
+  html += `<div class="ch-welcome">
+    <div class="ch-welcome-icon"><i class="fas fa-${ch?.type==='announcement'?'bullhorn':'hashtag'}" style="color:var(--neon);"></i></div>
+    <div class="ch-welcome-title">Welcome to <span>#${escHtml(ch?.name||'channel')}</span></div>
+    <div class="ch-welcome-sub">${escHtml(ch?.topic||'Start the conversation!')}</div>
+  </div>`;
+  
+  let lastAuthor = null, lastTime = 0;
+  sorted.forEach(([msgId, msg]) => {
+    const sameAuthor = msg.authorId === lastAuthor && (msg.timestamp - lastTime) < 300000;
+    lastAuthor = msg.authorId;
+    lastTime = msg.timestamp || 0;
+    html += renderMessageGroup(msgId, msg, ch, sameAuthor);
+  });
+  
+  area.innerHTML = html;
+  area.scrollTop = area.scrollHeight;
+  
+  // Add reaction click handlers
+  area.querySelectorAll('.reaction').forEach(r => {
+    r.onclick = () => toggleReaction(channelId, r.dataset.msgid, r.dataset.emoji);
+  });
+  // Spoiler reveal
+  area.querySelectorAll('.spoiler').forEach(s => {
+    s.onclick = () => s.classList.toggle('revealed');
+  });
+}
+
+function renderMessageGroup(msgId, msg, ch, compact) {
+  const member = STATE.members[msg.authorId] || {};
+  const roles = member.roles || [];
+  const primaryRole = getPrimaryRole(roles);
+  const roleColor = primaryRole ? (STATE.roles[primaryRole]?.color || '#5a5a78') : '#5a5a78';
+  const roleName = primaryRole ? STATE.roles[primaryRole]?.name : null;
+  const roleAnim = primaryRole ? (STATE.roles[primaryRole]?.animation || 'none') : 'none';
+  const avatarStyle = `background:${hexToRgba(roleColor,0.2)};color:${roleColor};`;
+  const initials = (msg.authorName||'?').charAt(0).toUpperCase();
+  const time = msg.timestamp ? new Date(msg.timestamp).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}) : '';
+  const isMyMsg = msg.authorId === STATE.user?.uid;
+  const isAnnounce = msg.type === 'announcement' || ch?.type === 'announcement';
+  const isSystem = msg.authorId === 'system';
+  
+  let roleAnimStyle = '';
+  if(roleAnim==='pulse') roleAnimStyle='animation:rolePulse 2s ease infinite;';
+  else if(roleAnim==='glow') roleAnimStyle='animation:roleGlow 2s ease infinite;';
+  else if(roleAnim==='rainbow') roleAnimStyle='animation:rainbow 3s linear infinite;';
+
+  let content = renderMarkdown(msg.content || '');
+  
+  let badgeHtml = '';
+  if (roleName && !isSystem) {
+    badgeHtml = `<span class="msg-role-badge" style="background:${hexToRgba(roleColor,0.12)};color:${roleColor};${roleAnimStyle}">${escHtml(roleName)}</span>`;
+  }
+  if (isSystem) badgeHtml = `<span class="msg-role-badge" style="background:rgba(57,255,20,0.1);color:var(--neon);">BOT</span>`;
+  
+  let pollHtml = '';
+  if (msg.type === 'poll' && msg.poll) {
+    pollHtml = renderPollCard(msgId, msg.poll, STATE.currentChannelId);
+  }
+  
+  let attachHtml = '';
+  if (msg.attachments && msg.attachments.length) {
+    msg.attachments.forEach(a => {
+      if (a.isImage) {
+        attachHtml += `<div style="margin-top:6px;"><img src="${a.url}" style="max-width:400px;max-height:300px;border-radius:8px;border:1px solid var(--border2);" loading="lazy"></div>`;
+      } else {
+        attachHtml += `<div class="msg-attachment"><i class="fas fa-file"></i><span>${escHtml(a.name)}</span><span style="color:var(--muted);font-size:11px;">${a.size}</span></div>`;
       }
-
-      try {
-        const messageRef = push(ref(db, `messages/${CONFIG.GUILD_ID}/${currentChannel.id}`));
-        await set(messageRef, {
-          author: currentUser.name,
-          author_id: currentUser.user_id,
-          role: currentUser.role,
-          content: content,
-          timestamp: Date.now()
-        });
-
-        input.value = '';
-      } catch (error) {
-        console.error('Error sending message:', error);
-        alert('Failed to send message. Please try again.');
-      }
-    }
-
-    // ============ CHANNEL MANAGEMENT ============
-    function openCreateChannelModal() {
-      document.getElementById('createChannelModal').classList.add('active');
-    }
-
-    async function createChannel() {
-      const name = document.getElementById('newChannelName').value.trim().toLowerCase().replace(/\s+/g, '-');
-      const topic = document.getElementById('newChannelTopic').value.trim();
-      const category = document.getElementById('newChannelCategory').value;
-
-      if (!name) {
-        alert('Please enter a channel name');
-        return;
-      }
-
-      const channelId = name.replace(/[^a-z0-9-]/g, '');
-
-      const newChannel = {
-        id: channelId,
-        name: name,
-        category: category,
-        topic: topic,
-        icon: 'hashtag',
-        created_at: Date.now()
-      };
-
-      try {
-        // Add channel
-        await set(ref(db, `channels/${CONFIG.GUILD_ID}/${channelId}`), newChannel);
-
-        // Set default permissions
-        await set(ref(db, `permissions/${CONFIG.GUILD_ID}/${channelId}`), {
-          admin: { send_messages: true, react: true, manage: true },
-          xuser: { send_messages: true, react: true, manage: false },
-          member: { send_messages: true, react: true, manage: false }
-        });
-
-        // Reload
-        await loadChannels();
-        await loadPermissions();
-        renderChannels();
-
-        closeModal('createChannelModal');
-        
-        // Clear form
-        document.getElementById('newChannelName').value = '';
-        document.getElementById('newChannelTopic').value = '';
-      } catch (error) {
-        console.error('Error creating channel:', error);
-        alert('Failed to create channel');
-      }
-    }
-
-    async function deleteChannel(channelId) {
-      if (!confirm('Are you sure you want to delete this channel?')) return;
-
-      try {
-        await remove(ref(db, `channels/${CONFIG.GUILD_ID}/${channelId}`));
-        await remove(ref(db, `messages/${CONFIG.GUILD_ID}/${channelId}`));
-        await remove(ref(db, `permissions/${CONFIG.GUILD_ID}/${channelId}`));
-
-        await loadChannels();
-        await loadPermissions();
-        renderChannels();
-
-        if (currentChannel?.id === channelId) {
-          currentChannel = null;
-          if (channels.length > 0) {
-            selectChannel(channels[0].id);
-          }
-        }
-      } catch (error) {
-        console.error('Error deleting channel:', error);
-        alert('Failed to delete channel');
-      }
-    }
-
-    // ============ PERMISSIONS ============
-    function openChannelSettings(channelId) {
-      const channel = channels.find(c => c.id === channelId);
-      if (!channel) return;
-
-      currentChannel = channel;
-      document.getElementById('settingsChannelName').textContent = `#${channel.name}`;
-
-      // Render role picker
-      const rolePicker = document.getElementById('rolePickerSettings');
-      rolePicker.innerHTML = `
-        <div class="role-option ${selectedRoleForSettings === 'admin' ? 'selected' : ''}" onclick="selectRoleForSettings('admin')">
-          <div class="role-option-name admin">Admin</div>
-          <div class="role-option-desc">Full access and management permissions</div>
-        </div>
-        <div class="role-option ${selectedRoleForSettings === 'xuser' ? 'selected' : ''}" onclick="selectRoleForSettings('xuser')">
-          <div class="role-option-name xuser">X-User</div>
-          <div class="role-option-desc">Enhanced user with special privileges</div>
-        </div>
-        <div class="role-option ${selectedRoleForSettings === 'member' ? 'selected' : ''}" onclick="selectRoleForSettings('member')">
-          <div class="role-option-name">Member</div>
-          <div class="role-option-desc">Standard community member</div>
-        </div>
-      `;
-
-      renderPermissions(channelId, selectedRoleForSettings);
-
-      document.getElementById('channelSettingsModal').classList.add('active');
-    }
-
-    window.selectRoleForSettings = function(role) {
-      selectedRoleForSettings = role;
-      openChannelSettings(currentChannel.id);
-    };
-
-    function renderPermissions(channelId, role) {
-      const perms = permissions[channelId]?.[role] || { send_messages: false, react: false, manage: false };
-
-      const permissionsContainer = document.getElementById('permissionsContainer');
-      permissionsContainer.innerHTML = `
-        <div class="permission-item">
-          <div class="permission-info">
-            <div class="permission-name">Send Messages</div>
-            <div class="permission-desc">Allows members to send messages in this channel</div>
-          </div>
-          <div class="toggle-switch ${perms.send_messages ? 'active' : ''}" 
-               onclick="togglePermission('${channelId}', '${role}', 'send_messages')">
-          </div>
-        </div>
-        <div class="permission-item">
-          <div class="permission-info">
-            <div class="permission-name">Add Reactions</div>
-            <div class="permission-desc">Allows members to add reactions to messages</div>
-          </div>
-          <div class="toggle-switch ${perms.react ? 'active' : ''}" 
-               onclick="togglePermission('${channelId}', '${role}', 'react')">
-          </div>
-        </div>
-        ${role === 'admin' ? `
-          <div class="permission-item">
-            <div class="permission-info">
-              <div class="permission-name">Manage Channel</div>
-              <div class="permission-desc">Allows admins to manage channel settings</div>
-            </div>
-            <div class="toggle-switch ${perms.manage ? 'active' : ''}" 
-                 onclick="togglePermission('${channelId}', '${role}', 'manage')">
-            </div>
-          </div>
-        ` : ''}
-      `;
-    }
-
-    window.togglePermission = function(channelId, role, permission) {
-      if (!permissions[channelId]) {
-        permissions[channelId] = {};
-      }
-      if (!permissions[channelId][role]) {
-        permissions[channelId][role] = { send_messages: false, react: false, manage: false };
-      }
-
-      permissions[channelId][role][permission] = !permissions[channelId][role][permission];
-      renderPermissions(channelId, role);
-    };
-
-    async function savePermissions() {
-      try {
-        await set(ref(db, `permissions/${CONFIG.GUILD_ID}`), permissions);
-        await loadPermissions();
-        closeModal('channelSettingsModal');
-        
-        // Refresh current channel if needed
-        if (currentChannel) {
-          selectChannel(currentChannel.id);
-        }
-      } catch (error) {
-        console.error('Error saving permissions:', error);
-        alert('Failed to save permissions');
-      }
-    }
-
-    // ============ MEMBERS ============
-    function renderMembers() {
-      const container = document.getElementById('membersContainer');
-      
-      // Mock members for demonstration
-      const members = [
-        { name: 'Admin', role: 'admin', status: 'online' },
-        { name: 'X-User', role: 'xuser', status: 'online' }
-      ];
-
-      // Add current user if not already in list
-      if (!members.find(m => m.name === currentUser.name)) {
-        members.push({
-          name: currentUser.name,
-          role: currentUser.role,
-          status: 'online'
-        });
-      }
-
-      // Group by role
-      const roleGroups = {
-        admin: members.filter(m => m.role === 'admin'),
-        xuser: members.filter(m => m.role === 'xuser'),
-        member: members.filter(m => m.role === 'member')
-      };
-
-      let html = '';
-
-      if (roleGroups.admin.length > 0) {
-        html += `
-          <div class="role-group">
-            <div class="role-group-header admin">
-              <i class="fas fa-shield-alt"></i>
-              <span>ADMIN</span>
-              <span class="role-count">— ${roleGroups.admin.length}</span>
-            </div>
-            <div class="role-members">
-              ${roleGroups.admin.map(member => renderMemberItem(member)).join('')}
-            </div>
-          </div>
-        `;
-      }
-
-      if (roleGroups.xuser.length > 0) {
-        html += `
-          <div class="role-group">
-            <div class="role-group-header xuser">
-              <i class="fas fa-star"></i>
-              <span>X-USER</span>
-              <span class="role-count">— ${roleGroups.xuser.length}</span>
-            </div>
-            <div class="role-members">
-              ${roleGroups.xuser.map(member => renderMemberItem(member)).join('')}
-            </div>
-          </div>
-        `;
-      }
-
-      if (roleGroups.member.length > 0) {
-        html += `
-          <div class="role-group">
-            <div class="role-group-header member">
-              <i class="fas fa-user"></i>
-              <span>MEMBERS</span>
-              <span class="role-count">— ${roleGroups.member.length}</span>
-            </div>
-            <div class="role-members">
-              ${roleGroups.member.map(member => renderMemberItem(member)).join('')}
-            </div>
-          </div>
-        `;
-      }
-
-      container.innerHTML = html;
-    }
-
-    function renderMemberItem(member) {
-      const initials = member.name.charAt(0).toUpperCase();
-      return `
-        <div class="member-item">
-          <div class="member-avatar">
-            ${initials}
-            <div class="member-status"></div>
-          </div>
-          <div class="member-name">${member.name}</div>
-        </div>
-      `;
-    }
-
-    // ============ UTILITY ============
-    function closeModal(modalId) {
-      document.getElementById(modalId).classList.remove('active');
-    }
-
-    function toggleMembersSidebar() {
-      const sidebar = document.getElementById('membersSidebar');
-      sidebar.classList.toggle('hidden');
-    }
-
-    function showServerMenu() {
-      alert('Server menu coming soon!');
-    }
-
-    function toggleMute() {
-      alert('Voice features coming soon!');
-    }
-
-    function showSettings() {
-      alert('Settings coming soon!');
-    }
-
-    function logout() {
-      if (confirm('Are you sure you want to logout?')) {
-        location.reload();
-      }
-    }
-
-    // Close modals when clicking outside
-    document.querySelectorAll('.modal-overlay').forEach(overlay => {
-      overlay.addEventListener('click', (e) => {
-        if (e.target === overlay) {
-          overlay.classList.remove('active');
-        }
-      });
     });
-  </script>
+  }
+
+  let embedHtml = '';
+  if (msg.embed) {
+    embedHtml = `<div class="msg-embed" style="border-left:3px solid ${msg.embed.color||'var(--neon)'} ">
+      <div class="msg-embed-site">${escHtml(msg.embed.site||'')}</div>
+      <div class="msg-embed-title">${escHtml(msg.embed.title||'')}</div>
+      <div class="msg-embed-desc">${escHtml(msg.embed.description||'')}</div>
+    </div>`;
+  }
+  
+  let reactionsHtml = '';
+  if (msg.reactions && Object.keys(msg.reactions).length) {
+    reactionsHtml = '<div class="msg-reactions">';
+    Object.entries(msg.reactions).forEach(([emoji, users]) => {
+      const count = Object.keys(users).length;
+      const reacted = users[STATE.user?.uid] ? ' reacted' : '';
+      reactionsHtml += `<div class="reaction${reacted}" data-msgid="${msgId}" data-emoji="${emoji}">${emoji}<span class="reaction-count">${count}</span></div>`;
+    });
+    reactionsHtml += '</div>';
+  }
+  
+  const canDel = isMyMsg || isAdmin() || hasPerm('manage_messages');
+  const actHtml = `<div class="msg-actions">
+    <div class="msg-act-btn" title="Add Reaction" onclick="addReactionMenu(event,'${msgId}')">😀</div>
+    ${hasPerm('create_polls')?`<div class="msg-act-btn" title="Reply" onclick="replyTo('${msgId}','${escHtml(msg.authorName||'')}')"><i class="fas fa-reply"></i></div>`:''}
+    ${canDel?`<div class="msg-act-btn danger" title="Delete" onclick="deleteMessage('${STATE.currentChannelId}','${msgId}')"><i class="fas fa-trash"></i></div>`:''}
+  </div>`;
+  
+  const headHtml = compact ? '' : `<div class="msg-header">
+    <span class="msg-author" style="color:${isSystem?'var(--neon)':roleColor};${roleAnimStyle}" onclick="showMemberCtx(event,'${msg.authorId}')">${escHtml(msg.authorName||'Unknown')}</span>
+    ${badgeHtml}
+    <span class="msg-time" title="${new Date(msg.timestamp||0).toLocaleString()}">${time}</span>
+  </div>`;
+  
+  return `<div class="msg-group${isAnnounce?' announcement':''}" id="msg_${msgId}">
+    ${compact?`<div style="width:40px;flex-shrink:0;padding-top:4px;"><span class="msg-time" style="font-size:10px;color:var(--muted);opacity:0;transition:opacity 0.15s;">${time}</span></div>`:
+    `<div class="msg-avatar" style="${isSystem?'background:rgba(57,255,20,0.15);color:var(--neon);':avatarStyle}" onclick="showMemberCtx(event,'${msg.authorId}')">${isSystem?'🤖':initials}</div>`}
+    <div class="msg-body">
+      ${headHtml}
+      <div class="msg-content">${content}${msg.isEdited?'<span class="msg-edited">(edited)</span>':''}</div>
+      ${pollHtml}${attachHtml}${embedHtml}
+      ${reactionsHtml}
+    </div>
+    ${actHtml}
+  </div>`;
+}
+
+function renderPollCard(msgId, poll, channelId) {
+  const totalVotes = poll.options.reduce((s,o) => s + (o.votes?Object.keys(o.votes).length:0), 0);
+  const hasVoted = poll.options.some(o => o.votes && o.votes[STATE.user?.uid]);
+  let optsHtml = poll.options.map((opt, i) => {
+    const votes = opt.votes ? Object.keys(opt.votes).length : 0;
+    const pct = totalVotes > 0 ? Math.round(votes/totalVotes*100) : 0;
+    const myVote = opt.votes && opt.votes[STATE.user?.uid];
+    return `<div class="poll-option${myVote?' voted':''}" onclick="votePoll('${channelId}','${msgId}',${i})">
+      <div class="poll-bar" style="width:${pct}%"></div>
+      <span class="poll-opt-text">${escHtml(opt.text)}</span>
+      ${hasVoted?`<span class="poll-opt-pct">${pct}%</span>`:''}
+    </div>`;
+  }).join('');
+  return `<div class="poll-card">
+    <div class="poll-question">📊 ${escHtml(poll.question)}</div>
+    ${optsHtml}
+    <div class="poll-footer">${totalVotes} vote${totalVotes!==1?'s':''}</div>
+  </div>`;
+}
+
+// Markdown renderer
+function renderMarkdown(text) {
+  if (!text) return '';
+  let t = escHtml(text);
+  // Headers (must be at start of line)
+  t = t.replace(/^### (.+)$/gm, '<h3>$1</h3>');
+  t = t.replace(/^## (.+)$/gm, '<h2>$1</h2>');
+  t = t.replace(/^# (.+)$/gm, '<h1>$1</h1>');
+  // Code blocks
+  t = t.replace(/```([\s\S]*?)```/g, '<pre><code>$1</code></pre>');
+  // Inline code
+  t = t.replace(/`([^`]+)`/g, '<code>$1</code>');
+  // Bold
+  t = t.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+  // Italic
+  t = t.replace(/\*(.+?)\*/g, '<em>$1</em>');
+  // Underline
+  t = t.replace(/__(.+?)__/g, '<u>$1</u>');
+  // Strikethrough
+  t = t.replace(/~~(.+?)~~/g, '<s>$1</s>');
+  // Spoiler
+  t = t.replace(/\|\|(.+?)\|\|/g, '<span class="spoiler">$1</span>');
+  // Blockquote
+  t = t.replace(/^&gt; (.+)$/gm, '<blockquote>$1</blockquote>');
+  // Unordered list
+  t = t.replace(/^- (.+)$/gm, '• $1');
+  // Ordered list (simplified)
+  t = t.replace(/^\d+\. (.+)$/gm, (m,p1,off,str) => {
+    const num = parseInt(m);
+    return `${isNaN(num)?'•':num}. ${p1}`;
+  });
+  // @Mentions
+  t = t.replace(/@(\w+)/g, '<span class="mention">@$1</span>');
+  // Links
+  t = t.replace(/https?:\/\/[^\s<>"]+/g, url => `<a href="${url}" target="_blank" rel="noopener">${url}</a>`);
+  // New lines
+  t = t.replace(/\n/g, '<br>');
+  return t;
+}
+
+// ═══════════════════════════════════════
+//  SEND MESSAGE
+// ═══════════════════════════════════════
+async function sendMessage() {
+  const id = STATE.currentChannelId;
+  if (!id) return;
+  const ch = STATE.channels[id];
+  if (!ch) return;
+  if (!canSendMessage(id)) { toast('You don\'t have permission to send messages here.', 'error'); return; }
+  
+  // Slowmode check
+  if (ch.slowmode > 0 && !hasPerm('bypass_slowmode') && !isAdmin()) {
+    const lastSent = STATE.slowmodeTimers[id] || 0;
+    const wait = (ch.slowmode * 1000) - (Date.now() - lastSent);
+    if (wait > 0) { toast(`Slowmode: wait ${Math.ceil(wait/1000)}s`, 'error'); return; }
+  }
+  
+  const input = document.getElementById('msgInput');
+  const content = input.value.trim();
+  if (!content) return;
+  input.value = '';
+  autoResize(input);
+  
+  const member = STATE.members[STATE.user.uid] || {};
+  const roles = member.roles || ['role_member'];
+  
+  const msgData = {
+    authorId: STATE.user.uid,
+    authorName: STATE.user.displayName,
+    content,
+    type: ch.type === 'announcement' ? 'announcement' : 'text',
+    timestamp: Date.now(),
+    roles
+  };
+  
+  // Check for embeds (with permission)
+  if (hasPerm('embed_links') || isAdmin()) {
+    const urlMatch = content.match(/https?:\/\/[^\s]+/);
+    if (urlMatch) {
+      msgData.embed = { site: new URL(urlMatch[0]).hostname, title: urlMatch[0], description: 'Link preview', color: '#39ff14' };
+    }
+  }
+  
+  STATE.slowmodeTimers[id] = Date.now();
+  try {
+    await db.ref(`${SERVER_ID}/messages/${id}`).push(msgData);
+  } catch(e) { toast('Failed to send message.', 'error'); }
+}
+
+async function deleteMessage(channelId, msgId) {
+  try {
+    await db.ref(`${SERVER_ID}/messages/${channelId}/${msgId}`).remove();
+  } catch(e) { toast('Failed to delete message.', 'error'); }
+}
+
+async function toggleReaction(channelId, msgId, emoji) {
+  const uid = STATE.user?.uid;
+  if (!uid) return;
+  if (!hasPerm('add_reactions') && !isAdmin()) { toast('No permission to add reactions.','error'); return; }
+  const ref = db.ref(`${SERVER_ID}/messages/${channelId}/${msgId}/reactions/${emoji}/${uid}`);
+  const snap = await ref.once('value');
+  if (snap.exists()) { await ref.remove(); } else { await ref.set(true); }
+}
+
+function addReactionMenu(e, msgId) {
+  e.stopPropagation();
+  const emojis = ['👍','❤️','😂','😮','😢','🔥','✅','🚀','💯','🎉','👀','💡'];
+  const existing = document.getElementById('emojiPicker');
+  if (existing) existing.remove();
+  const picker = document.createElement('div');
+  picker.id = 'emojiPicker';
+  picker.style.cssText = `position:fixed;left:${e.clientX}px;top:${e.clientY-50}px;background:#16162a;border:1px solid var(--border2);border-radius:8px;padding:8px;display:flex;flex-wrap:wrap;gap:4px;z-index:999;width:168px;box-shadow:0 8px 24px rgba(0,0,0,0.7);`;
+  emojis.forEach(em => {
+    const b = document.createElement('span');
+    b.textContent = em;
+    b.style.cssText = 'font-size:20px;cursor:pointer;padding:4px;border-radius:4px;transition:background 0.1s;';
+    b.onmouseenter = () => b.style.background = 'rgba(255,255,255,0.1)';
+    b.onmouseleave = () => b.style.background = 'transparent';
+    b.onclick = () => { toggleReaction(STATE.currentChannelId, msgId, em); picker.remove(); };
+    picker.appendChild(b);
+  });
+  document.body.appendChild(picker);
+  setTimeout(() => document.addEventListener('click', () => picker.remove(), {once:true}), 10);
+}
+
+async function votePoll(channelId, msgId, optIdx) {
+  const uid = STATE.user?.uid;
+  if (!uid) return;
+  const msg = STATE.messages[channelId]?.[msgId];
+  if (!msg || !msg.poll) return;
+  // Remove existing vote
+  for (let i = 0; i < msg.poll.options.length; i++) {
+    if (msg.poll.options[i].votes?.[uid]) {
+      await db.ref(`${SERVER_ID}/messages/${channelId}/${msgId}/poll/options/${i}/votes/${uid}`).remove();
+    }
+  }
+  // Add new vote if different option
+  const hasVoted = msg.poll.options[optIdx]?.votes?.[uid];
+  if (!hasVoted) {
+    await db.ref(`${SERVER_ID}/messages/${channelId}/${msgId}/poll/options/${optIdx}/votes/${uid}`).set(true);
+  }
+}
+
+function replyTo(msgId, authorName) {
+  const input = document.getElementById('msgInput');
+  input.value = `> @${authorName}\n${input.value}`;
+  input.focus();
+  autoResize(input);
+}
+
+// ═══════════════════════════════════════
+//  FILE ATTACHMENTS
+// ═══════════════════════════════════════
+async function handleFileAttach(event) {
+  if (!canSendMessage(STATE.currentChannelId)) { toast('No permission to send messages here.','error'); return; }
+  if (!hasPerm('attach_files') && !isAdmin()) { toast('No permission to attach files.','error'); return; }
+  const files = event.target.files;
+  if (!files.length) return;
+  for (const file of files) {
+    if (file.size > 5 * 1024 * 1024) { toast(`${file.name} is too large (max 5MB).`, 'error'); continue; }
+    const reader = new FileReader();
+    reader.onload = async e => {
+      const isImage = file.type.startsWith('image/');
+      const member = STATE.members[STATE.user.uid] || {};
+      await db.ref(`${SERVER_ID}/messages/${STATE.currentChannelId}`).push({
+        authorId: STATE.user.uid,
+        authorName: STATE.user.displayName,
+        content: '',
+        type: 'text',
+        timestamp: Date.now(),
+        roles: member.roles || ['role_member'],
+        attachments: [{ name: file.name, url: e.target.result, size: formatBytes(file.size), isImage }]
+      });
+    };
+    reader.readAsDataURL(file);
+  }
+  event.target.value = '';
+}
+
+function formatBytes(bytes) {
+  if (bytes < 1024) return bytes + 'B';
+  if (bytes < 1024*1024) return (bytes/1024).toFixed(1) + 'KB';
+  return (bytes/1024/1024).toFixed(1) + 'MB';
+}
+
+// ═══════════════════════════════════════
+//  POLLS
+// ═══════════════════════════════════════
+function openPollModal() {
+  if (!hasPerm('create_polls') && !isAdmin()) { toast('No permission to create polls.','error'); return; }
+  openModal('pollBackdrop');
+}
+
+async function sendPoll() {
+  const q = document.getElementById('pollQuestion').value.trim();
+  const opts = document.getElementById('pollOptions').value.trim().split('\n').map(s=>s.trim()).filter(Boolean);
+  if (!q) { toast('Enter a question.','error'); return; }
+  if (opts.length < 2) { toast('Add at least 2 options.','error'); return; }
+  const member = STATE.members[STATE.user.uid] || {};
+  await db.ref(`${SERVER_ID}/messages/${STATE.currentChannelId}`).push({
+    authorId: STATE.user.uid,
+    authorName: STATE.user.displayName,
+    content: '',
+    type: 'poll',
+    timestamp: Date.now(),
+    roles: member.roles || ['role_member'],
+    poll: { question:q, options: opts.map(t=>({text:t,votes:{}})) }
+  });
+  document.getElementById('pollQuestion').value = '';
+  document.getElementById('pollOptions').value = '';
+  closeModal('pollBackdrop');
+}
+
+// ═══════════════════════════════════════
+//  PERMISSIONS
+// ═══════════════════════════════════════
+const ALL_PERMISSIONS = [
+  { group:'General', items:[
+    { key:'view_channel', name:'View Channel', desc:'See channel and read messages' },
+    { key:'manage_channel', name:'Manage Channel', desc:'Edit channel settings' },
+    { key:'manage_permissions', name:'Manage Permissions', desc:'Edit permission overrides' },
+  ]},
+  { group:'Membership', items:[
+    { key:'create_invite', name:'Create Invite', desc:'Create invite links' },
+    { key:'change_nickname', name:'Change Nickname', desc:'Change own nickname' },
+    { key:'manage_nicknames', name:'Manage Nicknames', desc:'Change others\' nicknames' },
+    { key:'kick_members', name:'Kick Members', desc:'Remove members from server' },
+    { key:'ban_members', name:'Ban Members', desc:'Ban members permanently' },
+    { key:'timeout_members', name:'Timeout Members', desc:'Temporarily restrict members' },
+  ]},
+  { group:'Text Channels', items:[
+    { key:'send_messages', name:'Send Messages', desc:'Send messages in text channels' },
+    { key:'embed_links', name:'Embed Links', desc:'Links show link preview cards' },
+    { key:'attach_files', name:'Attach Files', desc:'Upload files and images' },
+    { key:'add_reactions', name:'Add Reactions', desc:'Add emoji reactions to messages' },
+    { key:'mention_everyone', name:'Mention @everyone', desc:'Mention everyone in channel' },
+    { key:'mention_roles', name:'Mention Roles', desc:'Mention any role' },
+    { key:'manage_messages', name:'Manage Messages', desc:'Delete others\' messages' },
+    { key:'read_message_history', name:'Read Message History', desc:'Read previous messages' },
+    { key:'create_polls', name:'Create Polls', desc:'Create polls in channels' },
+    { key:'bypass_slowmode', name:'Bypass Slowmode', desc:'Send messages ignoring slowmode' },
+    { key:'use_external_emojis', name:'Use External Emojis', desc:'Use emojis from other servers' },
+  ]},
+  { group:'Voice', items:[
+    { key:'connect', name:'Connect', desc:'Join voice channels' },
+    { key:'speak', name:'Speak', desc:'Talk in voice channels' },
+    { key:'mute_members', name:'Mute Members', desc:'Mute others in voice' },
+    { key:'deafen_members', name:'Deafen Members', desc:'Deafen others in voice' },
+    { key:'move_members', name:'Move Members', desc:'Move members between channels' },
+  ]},
+  { group:'Advanced', items:[
+    { key:'administrator', name:'Administrator', desc:'Bypasses all permissions (dangerous)' },
+    { key:'view_audit_log', name:'View Audit Log', desc:'View all server changes' },
+    { key:'manage_server', name:'Manage Server', desc:'Edit server settings' },
+    { key:'manage_roles', name:'Manage Roles', desc:'Create, edit, and delete roles below yours' },
+    { key:'manage_channels', name:'Manage Channels', desc:'Create, edit, and delete channels' },
+  ]},
+];
+
+function hasPerm(perm) {
+  if (!STATE.user) return false;
+  const member = STATE.members[STATE.user.uid];
+  if (!member) return false;
+  const roles = member.roles || ['role_member'];
+  // Admin role
+  for (const roleId of roles) {
+    if (STATE.roles[roleId]?.permissions?.administrator) return true;
+    if (STATE.roles[roleId]?.permissions?.[perm]) return true;
+  }
+  // Check global perms
+  for (const roleId of roles) {
+    const gp = STATE.globalPerms[roleId];
+    if (gp?.[perm] === 1) return true;
+    if (gp?.[perm] === -1) return false;
+  }
+  return false;
+}
+
+function isAdmin() {
+  const member = STATE.members[STATE.user?.uid];
+  if (!member) return false;
+  const roles = member.roles || [];
+  return roles.some(r => STATE.roles[r]?.permissions?.administrator || STATE.roles[r]?.name === 'Admin');
+}
+
+function canViewChannel(id) {
+  return true; // simplified - can add channel-level permission check
+}
+
+function canSendMessage(id) {
+  if (!id) return false;
+  const ch = STATE.channels[id];
+  if (!ch) return false;
+  if (ch.type === 'rules') return false;
+  if (ch.type === 'announcement' && !isAdmin()) return false;
+  return hasPerm('send_messages') || isAdmin();
+}
+
+function getPrimaryRole(roles) {
+  if (!roles || !roles.length) return null;
+  let top = null, topPos = 999;
+  for (const r of roles) {
+    const role = STATE.roles[r];
+    if (role && (role.position || 0) < topPos) { top = r; topPos = role.position || 0; }
+  }
+  return top;
+}
+
+// ═══════════════════════════════════════
+//  RENDER GLOBAL PERMISSIONS
+// ═══════════════════════════════════════
+function renderGlobalPerms() {
+  const roleId = document.getElementById('globalPermRolePicker').value;
+  const perms = STATE.globalPerms[roleId] || {};
+  document.getElementById('globalPermsContainer').innerHTML = renderPermGroups(roleId, perms, 'global');
+}
+
+function renderChannelPerms() {
+  const roleId = document.getElementById('chPermRolePicker').value;
+  const channelId = STATE.editingChannelId;
+  const perms = STATE.channelPerms[channelId]?.[roleId] || {};
+  document.getElementById('chPermsContainer').innerHTML = renderPermGroups(roleId, perms, 'channel');
+}
+
+function renderPermGroups(roleId, perms, scope) {
+  let html = '';
+  ALL_PERMISSIONS.forEach(grp => {
+    html += `<div class="perm-group"><div class="perm-group-title">${grp.group}</div>`;
+    grp.items.forEach(perm => {
+      const val = perms[perm.key] !== undefined ? perms[perm.key] : 0;
+      html += `<div class="perm-item">
+        <div class="perm-info">
+          <div class="perm-name">${perm.name}</div>
+          <div class="perm-desc">${perm.desc}</div>
+        </div>
+        <div class="perm-3state" id="p3_${scope}_${roleId}_${perm.key}">
+          <div class="p3-btn deny${val===-1?' active':''}" onclick="setPermValue('${scope}','${roleId}','${perm.key}',-1,this)" title="Deny"><i class="fas fa-xmark"></i></div>
+          <div class="p3-btn neutral${val===0?' active':''}" onclick="setPermValue('${scope}','${roleId}','${perm.key}',0,this)" title="Neutral"><i class="fas fa-minus"></i></div>
+          <div class="p3-btn allow${val===1?' active':''}" onclick="setPermValue('${scope}','${roleId}','${perm.key}',1,this)" title="Allow"><i class="fas fa-check"></i></div>
+        </div>
+      </div>`;
+    });
+    html += `</div>`;
+  });
+  return html;
+}
+
+function setPermValue(scope, roleId, permKey, val, btn) {
+  const container = btn.closest('.perm-3state');
+  container.querySelectorAll('.p3-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  // Store in temp state
+  if (scope === 'global') {
+    if (!STATE.globalPerms[roleId]) STATE.globalPerms[roleId] = {};
+    STATE.globalPerms[roleId][permKey] = val;
+  } else {
+    const channelId = STATE.editingChannelId;
+    if (!STATE.channelPerms[channelId]) STATE.channelPerms[channelId] = {};
+    if (!STATE.channelPerms[channelId][roleId]) STATE.channelPerms[channelId][roleId] = {};
+    STATE.channelPerms[channelId][roleId][permKey] = val;
+  }
+}
+
+async function saveGlobalPerms() {
+  await db.ref(`${SERVER_ID}/globalPerms`).set(STATE.globalPerms);
+  toast('Global permissions saved!', 'success');
+}
+
+// ═══════════════════════════════════════
+//  ROLE MANAGEMENT
+// ═══════════════════════════════════════
+function renderRoleList() {
+  const roles = Object.entries(STATE.roles).sort((a,b) => (a[1].position||0)-(b[1].position||0));
+  const rl = document.getElementById('roleList');
+  if (!rl) return;
+  rl.innerHTML = roles.map(([id, role]) => `
+    <div class="role-item${STATE.editingRoleId===id?' selected':''}" onclick="selectRoleForEdit('${id}')">
+      <div class="role-color-dot" style="background:${role.color||'#5a5a78'}"></div>
+      <span class="role-item-name">${escHtml(role.name)}</span>
+      ${role.isDefault?'<span style="font-size:10px;color:var(--muted);background:rgba(255,255,255,0.04);padding:2px 6px;border-radius:4px;">Default</span>':''}
+      <i class="fas fa-chevron-right" style="color:var(--muted);font-size:11px;"></i>
+    </div>`).join('');
+}
+
+const ROLE_COLORS = ['#ff4444','#ff8800','#ffcc00','#39ff14','#00ccff','#4444ff','#cc44ff','#ff44cc','#ffffff','#5a5a78'];
+const ROLE_ANIMS  = ['none','pulse','glow','rainbow'];
+
+function selectRoleForEdit(roleId) {
+  STATE.editingRoleId = roleId;
+  renderRoleList();
+  const role = STATE.roles[roleId];
+  if (!role) return;
+  const container = document.getElementById('roleEditorContainer');
+  let animStyle = '';
+  if (role.animation==='pulse') animStyle='animation:rolePulse 2s ease infinite;';
+  else if (role.animation==='glow') animStyle='animation:roleGlow 2s ease infinite;';
+  else if (role.animation==='rainbow') animStyle='animation:rainbow 3s linear infinite;';
+  
+  container.innerHTML = `
+    <div class="role-editor">
+      <div class="role-editor-head">
+        <span class="role-editor-title">Edit: <span style="color:${role.color}">${escHtml(role.name)}</span></span>
+        <span class="anim-preview" style="color:${role.color};background:${hexToRgba(role.color,0.12)};${animStyle}">${escHtml(role.name)}</span>
+      </div>
+      <div class="ss-field">
+        <label class="ss-label">Role Name</label>
+        <input type="text" class="ss-input" id="editRoleName" value="${escHtml(role.name)}" oninput="liveUpdateRolePreview()">
+      </div>
+      <div class="ss-field">
+        <label class="ss-label">Color</label>
+        <div class="color-picker-row">
+          ${ROLE_COLORS.map(c => `<div class="color-swatch${role.color===c?' selected':''}" style="background:${c}" onclick="selectRoleColor('${c}')"></div>`).join('')}
+          <input type="color" id="customRoleColor" value="${role.color||'#5a5a78'}" style="width:24px;height:24px;border-radius:50%;border:2px dashed var(--border2);cursor:pointer;background:none;padding:0;" oninput="selectRoleColor(this.value)">
+        </div>
+      </div>
+      <div class="ss-field">
+        <label class="ss-label">Badge Animation</label>
+        <div class="anim-picker">
+          ${ROLE_ANIMS.map(a => `<div class="anim-opt${(role.animation||'none')===a?' selected':''}" onclick="selectRoleAnim('${a}')">${a}</div>`).join('')}
+        </div>
+      </div>
+      <div class="ss-field">
+        <label class="ss-label">Position (lower = higher priority)</label>
+        <input type="number" class="ss-input" id="editRolePosition" value="${role.position||0}" min="0" max="99">
+      </div>
+      <div class="ss-row" style="gap:8px;flex-wrap:wrap;">
+        <button class="ss-btn ss-btn-primary" onclick="saveRole('${roleId}')"><i class="fas fa-check"></i> Save Role</button>
+        ${!role.isDefault?`<button class="ss-btn ss-btn-danger" onclick="deleteRole('${roleId}')"><i class="fas fa-trash"></i> Delete</button>`:''}
+      </div>
+    </div>`;
+}
+
+function selectRoleColor(c) {
+  document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('selected'));
+  // Deferred preview
+  document.getElementById('customRoleColor').value = c;
+  liveUpdateRolePreview();
+}
+
+function selectRoleAnim(a) {
+  document.querySelectorAll('.anim-opt').forEach(el => el.classList.remove('selected'));
+  event.target.classList.add('selected');
+  liveUpdateRolePreview();
+}
+
+function liveUpdateRolePreview() {
+  const name = document.getElementById('editRoleName')?.value || '';
+  const color = document.getElementById('customRoleColor')?.value || '#39ff14';
+  const animEl = document.querySelector('.anim-opt.selected');
+  const anim = animEl ? animEl.textContent : 'none';
+  let animStyle = '';
+  if (anim==='pulse') animStyle='animation:rolePulse 2s ease infinite;';
+  else if (anim==='glow') animStyle='animation:roleGlow 2s ease infinite;';
+  else if (anim==='rainbow') animStyle='animation:rainbow 3s linear infinite;';
+  const preview = document.querySelector('.anim-preview');
+  if (preview) { preview.textContent=name; preview.style.cssText=`color:${color};background:${hexToRgba(color,0.12)};${animStyle};font-family:'Syne',sans-serif;font-size:13px;font-weight:700;padding:6px 12px;border-radius:4px;display:inline-block;`; }
+}
+
+async function saveRole(roleId) {
+  const name = document.getElementById('editRoleName')?.value?.trim();
+  const color = document.getElementById('customRoleColor')?.value;
+  const animEl = document.querySelector('.anim-opt.selected');
+  const animation = animEl ? animEl.textContent : 'none';
+  const position = parseInt(document.getElementById('editRolePosition')?.value) || 0;
+  if (!name) { toast('Role name required.','error'); return; }
+  await db.ref(`${SERVER_ID}/roles/${roleId}`).update({ name, color, animation, position });
+  toast(`Role "${name}" saved!`, 'success');
+}
+
+async function createNewRole() {
+  const id = 'role_' + Date.now();
+  await db.ref(`${SERVER_ID}/roles/${id}`).set({
+    name: 'New Role', color: '#5a5a78', position: 99, animation: 'none', isDefault: false, permissions: {}
+  });
+  selectRoleForEdit(id);
+  toast('New role created!', 'success');
+}
+
+async function deleteRole(roleId) {
+  if (!confirm('Delete this role?')) return;
+  await db.ref(`${SERVER_ID}/roles/${roleId}`).remove();
+  STATE.editingRoleId = null;
+  document.getElementById('roleEditorContainer').innerHTML = '';
+  toast('Role deleted.', 'info');
+}
+
+// ═══════════════════════════════════════
+//  CHANNEL / CATEGORY MANAGEMENT
+// ═══════════════════════════════════════
+function renderChannelManageList() {
+  const container = document.getElementById('channelManageList');
+  if (!container) return;
+  const cats = Object.entries(STATE.categories).sort((a,b) => (a[1].position||0)-(b[1].position||0));
+  const chs  = Object.entries(STATE.channels).sort((a,b) => (a[1].position||0)-(b[1].position||0));
+  let html = '';
+  // Uncategorized
+  const uncat = chs.filter(([,c]) => !c.categoryId);
+  if (uncat.length) {
+    html += `<div style="margin-bottom:4px;"><div style="font-size:10px;font-weight:700;text-transform:uppercase;color:var(--muted);padding:4px 8px;">UNCATEGORIZED</div>`;
+    uncat.forEach(([id,ch]) => { html += renderChManageItem(id,ch); });
+    html += `</div>`;
+  }
+  cats.forEach(([catId, cat]) => {
+    const icons = { text:'hashtag', announcement:'bullhorn', rules:'scroll', voice:'microphone', divider:'minus' };
+    html += `<div style="margin-bottom:8px;">
+      <div class="ch-manage-item" style="background:rgba(57,255,20,0.04);border-color:rgba(57,255,20,0.1);">
+        <i class="drag-handle fas fa-grip-vertical"></i>
+        <i class="ch-manage-icon fas fa-folder" style="color:var(--neon);"></i>
+        <span class="ch-manage-name" style="color:var(--neon);">${escHtml(cat.name)}</span>
+        <div style="display:flex;gap:4px;">
+          <button class="ss-btn ss-btn-ghost" style="padding:4px 8px;font-size:11px;" onclick="renameCat('${catId}','${escHtml(cat.name)}')"><i class="fas fa-pencil"></i></button>
+          <button class="ss-btn ss-btn-ghost" style="padding:4px 8px;font-size:11px;" onclick="moveCat('${catId}',-1)"><i class="fas fa-arrow-up"></i></button>
+          <button class="ss-btn ss-btn-ghost" style="padding:4px 8px;font-size:11px;" onclick="moveCat('${catId}',1)"><i class="fas fa-arrow-down"></i></button>
+          <button class="ss-btn ss-btn-danger" style="padding:4px 8px;font-size:11px;" onclick="deleteCat('${catId}')"><i class="fas fa-trash"></i></button>
+        </div>
+      </div>`;
+    chs.filter(([,c]) => c.categoryId === catId).forEach(([id,ch]) => { html += renderChManageItem(id,ch,catId); });
+    html += `</div>`;
+  });
+  container.innerHTML = html || '<div style="color:var(--muted);font-size:13px;padding:8px;">No channels yet.</div>';
+}
+
+function renderChManageItem(id, ch, catId) {
+  const icons = { text:'hashtag', announcement:'bullhorn', rules:'scroll', voice:'microphone', divider:'minus' };
+  const tags = { text:'text', announcement:'announce', rules:'rules', voice:'voice', divider:'divider' };
+  return `<div class="ch-manage-item" style="margin-left:${catId?'16px':'0'};">
+    <i class="drag-handle fas fa-grip-vertical"></i>
+    <i class="ch-manage-icon fas fa-${icons[ch.type]||'hashtag'}"></i>
+    <span class="ch-manage-name">${escHtml(ch.name)}</span>
+    <span class="ch-manage-tag">${tags[ch.type]||ch.type}</span>
+    ${ch.slowmode>0?`<span class="ch-manage-tag" style="color:var(--warn);"><i class="fas fa-clock"></i> ${ch.slowmode}s</span>`:''}
+    <div style="display:flex;gap:4px;">
+      <button class="ss-btn ss-btn-ghost" style="padding:4px 8px;font-size:11px;" onclick="openChannelSettings('${id}');closeServerSettings()"><i class="fas fa-gear"></i></button>
+      <button class="ss-btn ss-btn-ghost" style="padding:4px 8px;font-size:11px;" onclick="moveCh('${id}',-1)"><i class="fas fa-arrow-up"></i></button>
+      <button class="ss-btn ss-btn-ghost" style="padding:4px 8px;font-size:11px;" onclick="moveCh('${id}',1)"><i class="fas fa-arrow-down"></i></button>
+      <button class="ss-btn ss-btn-danger" style="padding:4px 8px;font-size:11px;" onclick="deleteChannel('${id}')"><i class="fas fa-trash"></i></button>
+    </div>
+  </div>`;
+}
+
+async function moveCat(catId, dir) {
+  const cats = Object.entries(STATE.categories).sort((a,b) => (a[1].position||0)-(b[1].position||0));
+  const idx = cats.findIndex(([id]) => id === catId);
+  const newIdx = idx + dir;
+  if (newIdx < 0 || newIdx >= cats.length) return;
+  // Swap positions
+  const [a, b] = [cats[idx], cats[newIdx]];
+  await db.ref(`${SERVER_ID}/categories/${a[0]}/position`).set(newIdx);
+  await db.ref(`${SERVER_ID}/categories/${b[0]}/position`).set(idx);
+}
+
+async function moveCh(chId, dir) {
+  const ch = STATE.channels[chId];
+  const chs = Object.entries(STATE.channels).filter(([,c]) => c.categoryId === ch.categoryId).sort((a,b) => (a[1].position||0)-(b[1].position||0));
+  const idx = chs.findIndex(([id]) => id === chId);
+  const newIdx = idx + dir;
+  if (newIdx < 0 || newIdx >= chs.length) return;
+  const [a, b] = [chs[idx], chs[newIdx]];
+  await db.ref(`${SERVER_ID}/channels/${a[0]}/position`).set(newIdx);
+  await db.ref(`${SERVER_ID}/channels/${b[0]}/position`).set(idx);
+}
+
+async function renameCat(catId, current) {
+  const name = prompt('Category name:', current);
+  if (!name || name === current) return;
+  await db.ref(`${SERVER_ID}/categories/${catId}/name`).set(name.toUpperCase());
+  toast('Category renamed.', 'success');
+}
+
+async function deleteCat(catId) {
+  if (!confirm('Delete this category? Channels inside will become uncategorized.')) return;
+  // Remove category from channels
+  const updates = {};
+  Object.entries(STATE.channels).forEach(([id, ch]) => {
+    if (ch.categoryId === catId) updates[`${SERVER_ID}/channels/${id}/categoryId`] = null;
+  });
+  updates[`${SERVER_ID}/categories/${catId}`] = null;
+  await db.ref().update(updates);
+  toast('Category deleted.', 'info');
+}
+
+async function deleteChannel(chId) {
+  if (!confirm('Delete this channel and all its messages?')) return;
+  const updates = {};
+  updates[`${SERVER_ID}/channels/${chId}`] = null;
+  updates[`${SERVER_ID}/messages/${chId}`] = null;
+  updates[`${SERVER_ID}/channelPerms/${chId}`] = null;
+  await db.ref().update(updates);
+  if (STATE.currentChannelId === chId) { STATE.currentChannelId = null; document.getElementById('messagesArea').innerHTML = ''; }
+  toast('Channel deleted.', 'info');
+}
+
+function selectChType(type) {
+  document.querySelectorAll('.ch-type-opt').forEach(el => el.classList.remove('selected'));
+  document.getElementById(`chType-${type}`).classList.add('selected');
+  STATE.selectedChType = type;
+}
+
+function openCreateChannel() { openModal('createChannelBackdrop'); populateCatSelect(); }
+function openCreateChannelInCat(catId) {
+  openModal('createChannelBackdrop');
+  populateCatSelect(catId);
+}
+
+function populateCatSelect(defaultCat) {
+  const sel = document.getElementById('newChCategory');
+  const cats = Object.entries(STATE.categories).sort((a,b) => (a[1].position||0)-(b[1].position||0));
+  sel.innerHTML = `<option value="">-- Uncategorized --</option>` + cats.map(([id,c]) => `<option value="${id}"${id===defaultCat?' selected':''}>${escHtml(c.name)}</option>`).join('');
+}
+
+async function createChannel() {
+  if (!isAdmin()) { toast('Only admins can create channels.','error'); return; }
+  const name = document.getElementById('newChName').value.trim();
+  const topic = document.getElementById('newChTopic').value.trim();
+  const catId = document.getElementById('newChCategory').value;
+  const slowmode = parseInt(document.getElementById('newChSlowmode').value) || 0;
+  const type = STATE.selectedChType;
+  if (!name) { toast('Channel name required.','error'); return; }
+  const pos = Object.values(STATE.channels).filter(c => c.categoryId === (catId||null)).length;
+  const id = 'ch_' + Date.now();
+  await db.ref(`${SERVER_ID}/channels/${id}`).set({ name, type, categoryId:catId||null, topic, position:pos, slowmode, createdAt:Date.now() });
+  closeModal('createChannelBackdrop');
+  document.getElementById('newChName').value = '';
+  document.getElementById('newChTopic').value = '';
+  toast(`#${name} created!`, 'success');
+}
+
+function openCreateCategory() { openModal('createCategoryBackdrop'); }
+
+async function createCategory() {
+  if (!isAdmin()) { toast('Only admins can create categories.','error'); return; }
+  const name = document.getElementById('newCatName').value.trim().toUpperCase();
+  if (!name) { toast('Category name required.','error'); return; }
+  const pos = Object.keys(STATE.categories).length;
+  const id = 'cat_' + Date.now();
+  await db.ref(`${SERVER_ID}/categories/${id}`).set({ name, position:pos, createdAt:Date.now() });
+  closeModal('createCategoryBackdrop');
+  document.getElementById('newCatName').value = '';
+  toast(`Category "${name}" created!`, 'success');
+}
+
+async function addDivider() {
+  if (!isAdmin()) { toast('Only admins can add dividers.','error'); return; }
+  const name = prompt('Divider label:', '• • •');
+  if (!name) return;
+  const id = 'ch_divider_' + Date.now();
+  await db.ref(`${SERVER_ID}/channels/${id}`).set({ name, type:'divider', position:99, createdAt:Date.now() });
+  toast('Divider added.', 'success');
+}
+
+// ═══════════════════════════════════════
+//  CHANNEL SETTINGS MODAL
+// ═══════════════════════════════════════
+function openChannelSettings(chId) {
+  const ch = STATE.channels[chId];
+  if (!ch) return;
+  if (!isAdmin()) { toast('No permission to edit channel settings.','error'); return; }
+  STATE.editingChannelId = chId;
+  document.getElementById('chSettingsTitle').textContent = `Settings: #${ch.name}`;
+  document.getElementById('chSettingsSub').textContent = `Channel ID: ${chId}`;
+  document.getElementById('chSettingsName').value = ch.name;
+  document.getElementById('chSettingsTopic').value = ch.topic || '';
+  document.getElementById('chSettingsSlowmode').value = ch.slowmode || 0;
+  populateRolePickerForEl('chPermRolePicker');
+  renderChannelPerms();
+  openModal('channelSettingsBackdrop');
+}
+
+function openCurrentChannelSettings() {
+  if (STATE.currentChannelId) openChannelSettings(STATE.currentChannelId);
+}
+
+async function saveChannelSettings() {
+  const chId = STATE.editingChannelId;
+  if (!chId) return;
+  const name = document.getElementById('chSettingsName').value.trim();
+  const topic = document.getElementById('chSettingsTopic').value.trim();
+  const slowmode = parseInt(document.getElementById('chSettingsSlowmode').value) || 0;
+  if (!name) { toast('Channel name required.','error'); return; }
+  await db.ref(`${SERVER_ID}/channels/${chId}`).update({ name, topic, slowmode });
+  // Save channel perms
+  if (STATE.channelPerms[chId]) {
+    await db.ref(`${SERVER_ID}/channelPerms/${chId}`).set(STATE.channelPerms[chId]);
+  }
+  closeChannelSettings();
+  toast('Channel settings saved!', 'success');
+}
+
+async function deleteCurrentChannel() {
+  if (confirm('Delete this channel?')) {
+    await deleteChannel(STATE.editingChannelId);
+    closeChannelSettings();
+  }
+}
+
+function closeChannelSettings() { closeModal('channelSettingsBackdrop'); }
+
+// ═══════════════════════════════════════
+//  MEMBERS MANAGEMENT
+// ═══════════════════════════════════════
+function renderMembersSidebar() {
+  const container = document.getElementById('membersContainer');
+  if (!container) return;
+  const roles = Object.entries(STATE.roles).sort((a,b) => (a[1].position||0)-(b[1].position||0));
+  let html = '';
+  roles.forEach(([roleId, role]) => {
+    const roleMembers = Object.entries(STATE.members).filter(([,m]) => m.roles && m.roles.includes(roleId));
+    if (!roleMembers.length) return;
+    html += `<div class="role-group-header" style="color:${role.color}">${escHtml(role.name)} — ${roleMembers.length}</div>`;
+    roleMembers.forEach(([uid, member]) => {
+      const initials = (member.displayName||'?').charAt(0).toUpperCase();
+      const isMe = uid === STATE.user?.uid;
+      const muted = member.muted ? '<i class="member-muted-icon fas fa-microphone-slash" title="Muted"></i>' : '';
+      html += `<div class="member-item" oncontextmenu="showMemberCtx(event,'${uid}')" onclick="showMemberCtx(event,'${uid}')">
+        <div class="member-avatar" style="background:${hexToRgba(role.color,0.2)};color:${role.color};">
+          ${initials}
+          <div class="member-status status-online"></div>
+        </div>
+        <div class="member-info">
+          <div class="member-name" style="color:${role.color}${isMe?' ':''}">${escHtml(member.displayName||uid)}${isMe?' (you)':''}</div>
+          ${member.username?`<div class="member-tag">@${escHtml(member.username)}</div>`:''}
+        </div>
+        ${muted}
+      </div>`;
+    });
+  });
+  container.innerHTML = html || '<div style="color:var(--muted);font-size:12px;padding:8px;">No members online.</div>';
+}
+
+function renderMembersManageList(filter='') {
+  const container = document.getElementById('membersManageList');
+  if (!container) return;
+  const filt = filter.toLowerCase();
+  const members = Object.entries(STATE.members).filter(([,m]) => !filt || (m.displayName||'').toLowerCase().includes(filt) || (m.username||'').toLowerCase().includes(filt));
+  let html = '';
+  members.forEach(([uid, member]) => {
+    const roles = member.roles || [];
+    const rolesHtml = roles.map(r => {
+      const role = STATE.roles[r];
+      if (!role) return '';
+      return `<span class="mgm-role-tag" style="background:${hexToRgba(role.color,0.12)};color:${role.color};">${escHtml(role.name)}</span>`;
+    }).join('');
+    const isMe = uid === STATE.user?.uid;
+    html += `<div class="manage-member-item">
+      <div style="width:36px;height:36px;border-radius:50%;background:rgba(57,255,20,0.1);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--neon);">${(member.displayName||'?').charAt(0).toUpperCase()}</div>
+      <div class="mgm-info">
+        <div class="mgm-name">${escHtml(member.displayName||uid)}${isMe?' (you)':''}</div>
+        <div class="mgm-details">${member.username?'@'+escHtml(member.username):''} ${member.muted?'• 🔇 Muted':''} ${member.deafened?'• 🎧 Deafened':''}</div>
+        <div class="mgm-roles">${rolesHtml}</div>
+      </div>
+      ${!isMe?`<div class="mgm-actions">
+        <button class="ss-btn ss-btn-ghost" style="padding:5px 9px;font-size:11px;" onclick="openRoleAssign('${uid}')"><i class="fas fa-shield-halved"></i></button>
+        <button class="ss-btn ss-btn-ghost" style="padding:5px 9px;font-size:11px;" title="${member.muted?'Unmute':'Mute'}" onclick="toggleMemberMute('${uid}')"><i class="fas fa-microphone${member.muted?'':'-slash'}"></i></button>
+        <button class="ss-btn ss-btn-ghost" style="padding:5px 9px;font-size:11px;" title="${member.deafened?'Undeafen':'Deafen'}" onclick="toggleMemberDeafen('${uid}')"><i class="fas fa-headphones${member.deafened?'':'-slash'}"></i></button>
+        <button class="ss-btn ss-btn-danger" style="padding:5px 9px;font-size:11px;" onclick="kickMember('${uid}')"><i class="fas fa-user-slash"></i></button>
+      </div>`:''}
+    </div>`;
+  });
+  container.innerHTML = html || '<div style="color:var(--muted);font-size:13px;">No members found.</div>';
+}
+
+function filterMembersManage(val) { renderMembersManageList(val); }
+
+async function toggleMemberMute(uid) {
+  if (!hasPerm('mute_members') && !isAdmin()) { toast('No permission to mute members.','error'); return; }
+  const current = STATE.members[uid]?.muted || false;
+  await db.ref(`${SERVER_ID}/members/${uid}/muted`).set(!current);
+  toast(current ? 'Member unmuted.' : 'Member muted.', 'info');
+}
+
+async function toggleMemberDeafen(uid) {
+  if (!hasPerm('deafen_members') && !isAdmin()) { toast('No permission to deafen members.','error'); return; }
+  const current = STATE.members[uid]?.deafened || false;
+  await db.ref(`${SERVER_ID}/members/${uid}/deafened`).set(!current);
+  toast(current ? 'Member undeafened.' : 'Member deafened.', 'info');
+}
+
+async function kickMember(uid) {
+  if (!hasPerm('kick_members') && !isAdmin()) { toast('No permission to kick members.','error'); return; }
+  if (!confirm('Kick this member from the server?')) return;
+  await db.ref(`${SERVER_ID}/members/${uid}`).remove();
+  toast('Member kicked.', 'info');
+}
+
+async function openRoleAssign(uid) {
+  const roles = Object.entries(STATE.roles).sort((a,b) => (a[1].position||0)-(b[1].position||0));
+  const member = STATE.members[uid] || {};
+  const current = member.roles || [];
+  const roleSel = roles.map(([id,r]) => `<option value="${id}"${current.includes(id)?' selected':''}>${escHtml(r.name)}</option>`).join('');
+  const d = document.createElement('div');
+  d.className = 'modal-backdrop open';
+  d.innerHTML = `<div class="small-modal">
+    <div class="small-modal-title">Assign Roles</div>
+    <div class="small-modal-sub">Select roles for ${escHtml(member.displayName||uid)}</div>
+    <select class="ss-input" id="roleAssignSel" multiple size="6" style="height:auto;">${roleSel}</select>
+    <div class="modal-actions">
+      <button class="ss-btn ss-btn-ghost" onclick="this.closest('.modal-backdrop').remove()">Cancel</button>
+      <button class="ss-btn ss-btn-primary" onclick="saveRoleAssign('${uid}',this)">Save</button>
+    </div>
+  </div>`;
+  document.body.appendChild(d);
+  d.addEventListener('click', e => { if (e.target === d) d.remove(); });
+}
+
+async function saveRoleAssign(uid, btn) {
+  const sel = btn.closest('.small-modal').querySelector('#roleAssignSel');
+  const roles = Array.from(sel.selectedOptions).map(o => o.value);
+  await db.ref(`${SERVER_ID}/members/${uid}/roles`).set(roles);
+  btn.closest('.modal-backdrop').remove();
+  toast('Roles updated!', 'success');
+}
+
+// ═══════════════════════════════════════
+//  SERVER SETTINGS
+// ═══════════════════════════════════════
+function openServerSettings(tab) {
+  closeServerDropdown();
+  document.getElementById('serverSettingsBackdrop').classList.add('open');
+  switchSSTab(tab || 'overview');
+  // Populate invite link
+  document.getElementById('inviteLink').textContent = window.location.href.replace('community.html','') + 'community.html';
+}
+
+function closeServerSettings() { document.getElementById('serverSettingsBackdrop').classList.remove('open'); }
+
+function switchSSTab(tab) {
+  document.querySelectorAll('.ss-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.ss-nav-item[data-tab]').forEach(i => i.classList.remove('active'));
+  const tabEl = document.getElementById(`ss-${tab}`);
+  const navEl = document.querySelector(`.ss-nav-item[data-tab="${tab}"]`);
+  if (tabEl) tabEl.classList.add('active');
+  if (navEl) navEl.classList.add('active');
+}
+
+async function saveServerOverview() {
+  const name = document.getElementById('ssServerName').value.trim();
+  const desc = document.getElementById('ssServerDesc').value.trim();
+  const slowmode = parseInt(document.getElementById('ssDefaultSlowmode').value) || 0;
+  if (!name) { toast('Server name required.','error'); return; }
+  await db.ref(`${SERVER_ID}/settings`).update({ name, description:desc, slowmodeDefault:slowmode });
+  toast('Server settings saved!', 'success');
+}
+
+function handleServerIconUpload(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  if (!file.type.startsWith('image/')) { toast('Please upload an image file.','error'); return; }
+  const reader = new FileReader();
+  reader.onload = async e => {
+    await db.ref(`${SERVER_ID}/settings/iconBase64`).set(e.target.result);
+    document.getElementById('ssServerIcon').src = e.target.result;
+    document.getElementById('serverIconImg').src = e.target.result;
+    toast('Server icon updated!', 'success');
+  };
+  reader.readAsDataURL(file);
+}
+
+async function resetServerIcon() {
+  await db.ref(`${SERVER_ID}/settings/iconBase64`).remove();
+  document.getElementById('ssServerIcon').src = 'PhineX (2).png';
+  document.getElementById('serverIconImg').src = 'PhineX (2).png';
+  toast('Server icon reset.', 'info');
+}
+
+// ═══════════════════════════════════════
+//  USER PANEL
+// ═══════════════════════════════════════
+function renderUserPanel() {
+  if (!STATE.user) return;
+  const member = STATE.members[STATE.user.uid] || {};
+  const roles = member.roles || ['role_member'];
+  const primaryRole = getPrimaryRole(roles);
+  const color = primaryRole ? (STATE.roles[primaryRole]?.color || '#39ff14') : '#39ff14';
+  const initials = STATE.user.displayName.charAt(0).toUpperCase();
+  const avatar = document.getElementById('upAvatar');
+  avatar.style.cssText = `background:${hexToRgba(color,0.2)};color:${color};width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;flex-shrink:0;position:relative;cursor:pointer;`;
+  avatar.querySelector('.up-status').style.background = '#39ff14';
+  // Re-create avatar content
+  let inner = document.createElement('span');
+  inner.textContent = initials;
+  const status = avatar.querySelector('.up-status');
+  avatar.innerHTML = '';
+  avatar.appendChild(inner);
+  avatar.appendChild(status);
+  document.getElementById('upName').textContent = STATE.user.displayName;
+  document.getElementById('upTag').textContent = STATE.user.username ? `@${STATE.user.username}` : '#' + STATE.user.uid.slice(-4);
+}
+
+function toggleSelfMute() {
+  STATE.selfMuted = !STATE.selfMuted;
+  const btn = document.getElementById('muteBtn');
+  btn.classList.toggle('muted', STATE.selfMuted);
+  btn.title = STATE.selfMuted ? 'Unmute' : 'Mute';
+  btn.innerHTML = `<i class="fas fa-microphone${STATE.selfMuted?'-slash':''}"></i>`;
+  toast(STATE.selfMuted ? 'Microphone muted.' : 'Microphone unmuted.', 'info');
+}
+
+function toggleSelfDeafen() {
+  STATE.selfDeafened = !STATE.selfDeafened;
+  const btn = document.getElementById('deafenBtn');
+  btn.classList.toggle('deafened', STATE.selfDeafened);
+  btn.title = STATE.selfDeafened ? 'Undeafen' : 'Deafen';
+  btn.innerHTML = `<i class="fas fa-headphones${STATE.selfDeafened?'-slash':''}"></i>`;
+  toast(STATE.selfDeafened ? 'Headphones deafened.' : 'Headphones undeafened.', 'info');
+}
+
+// ═══════════════════════════════════════
+//  CONTEXT MENUS
+// ═══════════════════════════════════════
+let ctxTarget = null;
+function showMemberCtx(e, uid) {
+  e.preventDefault();
+  e.stopPropagation();
+  ctxTarget = uid;
+  const member = STATE.members[uid] || {};
+  const menu = document.getElementById('memberCtxMenu');
+  menu.classList.remove('hidden');
+  menu.style.left = Math.min(e.clientX, window.innerWidth-200) + 'px';
+  menu.style.top  = Math.min(e.clientY, window.innerHeight-280) + 'px';
+  const isMe = uid === STATE.user?.uid;
+  document.getElementById('ctxToggleMute').style.display = (isAdmin() && !isMe) ? '' : 'none';
+  document.getElementById('ctxToggleDeafen').style.display = (isAdmin() && !isMe) ? '' : 'none';
+  document.getElementById('ctxKickMember').style.display = (isAdmin() && !isMe) ? '' : 'none';
+  document.getElementById('ctxBanMember').style.display = (isAdmin() && !isMe) ? '' : 'none';
+  document.getElementById('ctxChangeRole').style.display = (isAdmin() && !isMe) ? '' : 'none';
+  document.getElementById('ctxMentionUser').onclick = () => {
+    const name = member.username || member.displayName;
+    document.getElementById('msgInput').value += `@${name} `;
+    document.getElementById('msgInput').focus();
+    menu.classList.add('hidden');
+  };
+  document.getElementById('ctxToggleMute').onclick = () => { toggleMemberMute(uid); menu.classList.add('hidden'); };
+  document.getElementById('ctxToggleDeafen').onclick = () => { toggleMemberDeafen(uid); menu.classList.add('hidden'); };
+  document.getElementById('ctxKickMember').onclick = () => { kickMember(uid); menu.classList.add('hidden'); };
+  document.getElementById('ctxChangeRole').onclick = () => { openRoleAssign(uid); menu.classList.add('hidden'); };
+  document.getElementById('ctxViewProfile').onclick = () => {
+    const m = STATE.members[uid] || {};
+    toast(`👤 ${m.displayName||uid}${m.username?' (@'+m.username+')':''}`, 'info');
+    menu.classList.add('hidden');
+  };
+}
+
+let ctxChannelTarget = null;
+function showChannelCtx(e, chId) {
+  e.preventDefault();
+  ctxChannelTarget = chId;
+  const menu = document.getElementById('channelCtxMenu');
+  menu.classList.remove('hidden');
+  menu.style.left = Math.min(e.clientX, window.innerWidth-200) + 'px';
+  menu.style.top  = Math.min(e.clientY, window.innerHeight-160) + 'px';
+  document.getElementById('ctxOpenChannel').onclick = () => { selectChannel(chId); menu.classList.add('hidden'); };
+  document.getElementById('ctxChannelSettings').onclick = () => { openChannelSettings(chId); menu.classList.add('hidden'); };
+  document.getElementById('ctxCopyChId').onclick = () => { navigator.clipboard?.writeText(chId); toast('Channel ID copied!','success'); menu.classList.add('hidden'); };
+  document.getElementById('ctxDeleteChannel').onclick = () => { deleteChannel(chId); menu.classList.add('hidden'); };
+  document.getElementById('ctxChannelSettings').style.display = isAdmin() ? '' : 'none';
+  document.getElementById('ctxDeleteChannel').style.display = isAdmin() ? '' : 'none';
+}
+
+document.addEventListener('click', () => {
+  document.getElementById('memberCtxMenu').classList.add('hidden');
+  document.getElementById('channelCtxMenu').classList.add('hidden');
+});
+
+// ═══════════════════════════════════════
+//  INPUT HELPERS
+// ═══════════════════════════════════════
+function handleInputKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+  if (e.key === 'b' && e.ctrlKey) { e.preventDefault(); insertFmt('**','**'); }
+  if (e.key === 'i' && e.ctrlKey) { e.preventDefault(); insertFmt('*','*'); }
+  if (e.key === 'u' && e.ctrlKey) { e.preventDefault(); insertFmt('__','__'); }
+}
+
+function insertFmt(before, after) {
+  const ta = document.getElementById('msgInput');
+  const start = ta.selectionStart, end = ta.selectionEnd;
+  const sel = ta.value.substring(start, end);
+  ta.value = ta.value.substring(0,start) + before + sel + after + ta.value.substring(end);
+  ta.selectionStart = start + before.length;
+  ta.selectionEnd = start + before.length + sel.length;
+  ta.focus();
+  autoResize(ta);
+}
+
+function autoResize(ta) {
+  ta.style.height = 'auto';
+  ta.style.height = Math.min(ta.scrollHeight, 180) + 'px';
+}
+
+// ═══════════════════════════════════════
+//  MODAL HELPERS
+// ═══════════════════════════════════════
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+function toggleServerDropdown() {
+  const dd = document.getElementById('serverDropdown');
+  dd.classList.toggle('hidden');
+  document.getElementById('serverChevron').style.transform = dd.classList.contains('hidden') ? '' : 'rotate(180deg)';
+}
+function closeServerDropdown() {
+  document.getElementById('serverDropdown').classList.add('hidden');
+  document.getElementById('serverChevron').style.transform = '';
+}
+document.addEventListener('click', e => {
+  if (!e.target.closest('#serverHeaderBtn') && !e.target.closest('#serverDropdown')) closeServerDropdown();
+});
+
+function toggleMembersSidebar() {
+  const sb = document.getElementById('membersSidebar');
+  sb.style.display = sb.style.display === 'none' ? '' : 'none';
+}
+
+function focusSearch() { document.getElementById('channelSearch').focus(); }
+function showMyProfile() { toast(`👤 You are ${STATE.user?.displayName || 'Unknown'}`, 'info'); }
+function showInviteModal() { closeServerDropdown(); openServerSettings('invites'); }
+function copyInviteLink() {
+  const link = document.getElementById('inviteLink').textContent;
+  navigator.clipboard?.writeText(link).then(() => toast('Invite link copied!','success'));
+}
+
+function doLogout() {
+  auth.signOut().then(() => window.location.href = 'login.html').catch(() => window.location.href = 'login.html');
+}
+
+// ═══════════════════════════════════════
+//  POPULATE ROLE PICKERS
+// ═══════════════════════════════════════
+function populateRolePickers() {
+  populateRolePickerForEl('globalPermRolePicker');
+  populateRolePickerForEl('chPermRolePicker');
+}
+
+function populateRolePickerForEl(elId) {
+  const sel = document.getElementById(elId);
+  if (!sel) return;
+  const roles = Object.entries(STATE.roles).sort((a,b) => (a[1].position||0)-(b[1].position||0));
+  const cur = sel.value;
+  sel.innerHTML = roles.map(([id,r]) => `<option value="${id}"${id===cur?' selected':''}>${escHtml(r.name)}</option>`).join('');
+}
+
+// ═══════════════════════════════════════
+//  TOAST
+// ═══════════════════════════════════════
+function toast(msg, type='info') {
+  const icons = { success:'check-circle', error:'xmark-circle', info:'circle-info' };
+  const t = document.createElement('div');
+  t.className = `toast ${type}`;
+  t.innerHTML = `<i class="toast-icon fas fa-${icons[type]||'circle-info'}"></i><span class="toast-text">${escHtml(msg)}</span>`;
+  document.getElementById('toastContainer').appendChild(t);
+  setTimeout(() => { t.style.opacity='0'; t.style.transform='translateX(20px)'; t.style.transition='all 0.3s'; setTimeout(()=>t.remove(),300); }, 3000);
+}
+
+// ═══════════════════════════════════════
+//  UTILS
+// ═══════════════════════════════════════
+function escHtml(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
+function hexToRgba(hex, alpha) {
+  try {
+    hex = hex.replace('#','');
+    if (hex.length === 3) hex = hex.split('').map(c=>c+c).join('');
+    const r = parseInt(hex.substring(0,2),16);
+    const g = parseInt(hex.substring(2,4),16);
+    const b = parseInt(hex.substring(4,6),16);
+    return `rgba(${r},${g},${b},${alpha})`;
+  } catch { return `rgba(90,90,120,${alpha})`; }
+}
+</script>
 </body>
 </html>
