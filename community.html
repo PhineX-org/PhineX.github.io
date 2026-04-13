@@ -3,26 +3,42 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PhineX Community — Blog & Discussion</title>
+  <title>PhineX Community — Channels & Roles</title>
+  <meta name="description" content="Join the PhineX Community - Discord-style channels with roles and permissions">
   <link rel="icon" type="image/x-icon" href="PhineX (2).png">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Work+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   
   <style>
     :root {
-      --accent: #2D7D5F;
-      --accent-light: #3A9B77;
-      --accent-dim: rgba(45, 125, 95, 0.1);
-      --bg-primary: #FDFCFA;
-      --bg-secondary: #F8F6F2;
-      --surface: #FFFFFF;
-      --border: #E5E2DB;
-      --text-primary: #1A1A1A;
-      --text-secondary: #666666;
-      --text-muted: #999999;
-      --shadow-sm: 0 1px 3px rgba(0,0,0,0.04);
-      --shadow-md: 0 4px 12px rgba(0,0,0,0.06);
-      --shadow-lg: 0 12px 32px rgba(0,0,0,0.08);
+      /* Discord-inspired color palette */
+      --bg-primary: #36393f;
+      --bg-secondary: #2f3136;
+      --bg-tertiary: #202225;
+      --bg-hover: #3a3d44;
+      --bg-modifier: rgba(79, 84, 92, 0.16);
+      --text-normal: #dcddde;
+      --text-muted: #72767d;
+      --text-link: #00b0f4;
+      --interactive-normal: #b9bbbe;
+      --interactive-hover: #dcddde;
+      --interactive-active: #fff;
+      --interactive-muted: #4f545c;
+      --header-primary: #fff;
+      --header-secondary: #b9bbbe;
+      
+      /* Role colors */
+      --role-admin: #f04747;
+      --role-xuser: #7289da;
+      --role-member: #43b581;
+      
+      /* Accent */
+      --accent-primary: #5865f2;
+      --accent-hover: #4752c4;
+      
+      /* Borders */
+      --border-color: rgba(0, 0, 0, 0.2);
+      --border-subtle: rgba(0, 0, 0, 0.1);
     }
 
     * {
@@ -31,22 +47,11 @@
       box-sizing: border-box;
     }
 
-    html {
-      scroll-behavior: smooth;
-    }
-
     body {
-      font-family: 'Work Sans', sans-serif;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       background: var(--bg-primary);
-      color: var(--text-primary);
-      line-height: 1.6;
-      overflow-x: hidden;
-    }
-
-    h1, h2, h3, h4, h5, h6 {
-      font-family: 'Cormorant Garamond', serif;
-      font-weight: 600;
-      line-height: 1.3;
+      color: var(--text-normal);
+      overflow: hidden;
     }
 
     /* ============ AUTH SCREEN ============ */
@@ -55,552 +60,645 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       padding: 20px;
     }
 
     .auth-container {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 56px 48px;
+      background: var(--bg-primary);
+      border-radius: 8px;
+      padding: 48px 40px;
       max-width: 480px;
       width: 100%;
-      box-shadow: var(--shadow-lg);
-    }
-
-    .auth-brand {
-      text-align: center;
-      margin-bottom: 40px;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.24);
     }
 
     .auth-logo {
-      width: 64px;
-      height: 64px;
-      margin: 0 auto 20px;
-      background: linear-gradient(135deg, var(--accent), var(--accent-light));
-      border-radius: 16px;
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 24px;
+      background: #00000000;
+      border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 28px;
+      font-size: 36px;
       color: white;
-      box-shadow: 0 8px 24px rgba(45, 125, 95, 0.2);
     }
 
     .auth-title {
-      font-size: 36px;
-      color: var(--text-primary);
+      font-size: 28px;
+      color: var(--header-primary);
       margin-bottom: 8px;
-      font-weight: 600;
+      text-align: center;
+      font-weight: 700;
     }
 
     .auth-subtitle {
-      font-size: 15px;
-      color: var(--text-secondary);
+      font-size: 16px;
+      color: var(--text-muted);
+      text-align: center;
+      margin-bottom: 32px;
     }
 
     .form-group {
-      margin-bottom: 24px;
+      margin-bottom: 20px;
     }
 
     .form-label {
       display: block;
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--text-primary);
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--header-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
       margin-bottom: 8px;
     }
 
     .form-input {
       width: 100%;
-      background: var(--bg-secondary);
-      border: 2px solid transparent;
-      border-radius: 10px;
-      padding: 14px 16px;
-      font-size: 15px;
-      color: var(--text-primary);
-      font-family: 'Work Sans', sans-serif;
-      transition: all 0.2s ease;
+      background: var(--bg-tertiary);
+      border: 1px solid var(--bg-tertiary);
+      border-radius: 4px;
+      padding: 12px;
+      font-size: 16px;
+      color: var(--text-normal);
+      font-family: 'Inter', sans-serif;
+      transition: all 0.15s ease;
     }
 
     .form-input:focus {
       outline: none;
-      border-color: var(--accent);
-      background: var(--surface);
+      border-color: var(--accent-primary);
     }
 
     .btn-primary {
       width: 100%;
-      background: var(--accent);
+      background: var(--accent-primary);
       color: white;
-      font-family: 'Work Sans', sans-serif;
+      font-family: 'Inter', sans-serif;
       font-weight: 600;
-      font-size: 15px;
-      padding: 16px;
+      font-size: 16px;
+      padding: 14px;
       border: none;
-      border-radius: 10px;
+      border-radius: 4px;
       cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 16px rgba(45, 125, 95, 0.2);
+      transition: all 0.2s ease;
+      margin-top: 8px;
     }
 
     .btn-primary:hover {
-      background: var(--accent-light);
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(45, 125, 95, 0.3);
+      background: var(--accent-hover);
     }
 
     .btn-primary:disabled {
       opacity: 0.5;
       cursor: not-allowed;
-      transform: none;
     }
 
     .message {
-      padding: 14px;
-      border-radius: 8px;
+      padding: 12px;
+      border-radius: 4px;
       font-size: 14px;
       margin-top: 16px;
       display: none;
-      animation: slideDown 0.3s ease;
     }
 
     .message.error {
-      background: rgba(239, 68, 68, 0.1);
-      border: 1px solid rgba(239, 68, 68, 0.2);
-      color: #dc2626;
+      background: rgba(240, 71, 71, 0.1);
+      border: 1px solid rgba(240, 71, 71, 0.3);
+      color: #f04747;
     }
 
     .message.success {
-      background: var(--accent-dim);
-      border: 1px solid rgba(45, 125, 95, 0.2);
-      color: var(--accent);
+      background: rgba(67, 181, 129, 0.1);
+      border: 1px solid rgba(67, 181, 129, 0.3);
+      color: #43b581;
     }
 
-    @keyframes slideDown {
-      from { opacity: 0; transform: translateY(-10px); }
-      to { opacity: 1; transform: translateY(0); }
+    .code-hint {
+      margin-top: 24px;
+      padding: 12px;
+      background: var(--bg-modifier);
+      border-radius: 4px;
+      font-size: 12px;
+      color: rgb(255, 255, 255);
+      text-align: center;
+      line-height: 1.6;
     }
 
     /* ============ MAIN APP ============ */
     #app {
       display: none;
+      height: 100vh;
+      overflow: hidden;
     }
 
-    /* Header */
-    .app-header {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 1000;
-      background: rgba(253, 252, 250, 0.98);
-      backdrop-filter: blur(20px);
-      border-bottom: 1px solid var(--border);
+    .app-container {
+      display: flex;
+      height: 100vh;
     }
 
-    .header-inner {
-      max-width: 1400px;
-      margin: 0 auto;
-      padding: 20px 32px;
+    /* ============ SIDEBAR ============ */
+    .sidebar {
+      width: 240px;
+      background: var(--bg-secondary);
+      display: flex;
+      flex-direction: column;
+      border-right: 1px solid var(--border-color);
+    }
+
+    .server-header {
+      padding: 16px;
+      border-bottom: 1px solid var(--border-color);
+      background: var(--bg-secondary);
+      cursor: pointer;
+      transition: background 0.15s ease;
+      font-weight: 600;
+      font-size: 16px;
+      color: var(--header-primary);
       display: flex;
       align-items: center;
       justify-content: space-between;
+      box-shadow: 0 1px 0 rgba(0, 0, 0, 0.2), 0 1.5px 0 rgba(0, 0, 0, 0.05), 0 2px 0 rgba(0, 0, 0, 0.05);
     }
 
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
+    .server-header:hover {
+      background: var(--bg-hover);
     }
 
-    .brand-icon {
-      width: 44px;
-      height: 44px;
-      background: linear-gradient(135deg, var(--accent), var(--accent-light));
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 20px;
-      color: white;
-    }
-
-    .brand-name {
-      font-size: 28px;
-      font-weight: 600;
-      color: var(--text-primary);
-    }
-
-    .brand-name span {
-      color: var(--accent);
-    }
-
-    .header-actions {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-    }
-
-    .user-info {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 10px 16px;
-      background: var(--accent-dim);
-      border-radius: 10px;
-      font-size: 14px;
-      font-weight: 500;
-      color: var(--accent);
-    }
-
-    .btn-logout {
-      padding: 10px 20px;
-      background: transparent;
-      border: 2px solid var(--border);
-      border-radius: 10px;
-      color: var(--text-secondary);
-      font-size: 14px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-
-    .btn-logout:hover {
-      border-color: #dc2626;
-      color: #dc2626;
-    }
-
-    /* Sidebar Navigation */
-    .app-layout {
-      display: flex;
-      max-width: 1400px;
-      margin: 0 auto;
-      padding-top: 85px;
-    }
-
-    .sidebar {
-      position: sticky;
-      top: 85px;
-      width: 280px;
-      height: calc(100vh - 85px);
-      padding: 32px 24px;
-      border-right: 1px solid var(--border);
-      flex-shrink: 0;
-    }
-
-    .nav-section {
-      margin-bottom: 32px;
-    }
-
-    .nav-section-title {
-      font-size: 12px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      color: var(--text-muted);
-      margin-bottom: 12px;
-      padding-left: 12px;
-    }
-
-    .nav-item {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 12px;
-      margin-bottom: 4px;
-      border-radius: 10px;
-      color: var(--text-secondary);
-      font-size: 15px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      border: 2px solid transparent;
-    }
-
-    .nav-item:hover {
-      background: var(--bg-secondary);
-      color: var(--text-primary);
-    }
-
-    .nav-item.active {
-      background: var(--accent-dim);
-      color: var(--accent);
-      border-color: rgba(45, 125, 95, 0.2);
-    }
-
-    .nav-item i {
-      width: 20px;
-      font-size: 18px;
-    }
-
-    /* Main Content */
-    .main-content {
-      flex: 1;
-      padding: 32px;
-      min-height: calc(100vh - 85px);
-    }
-
-    .content-section {
-      display: none;
-    }
-
-    .content-section.active {
-      display: block;
-      animation: fadeIn 0.4s ease;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* ============ POSTS FEED ============ */
-    .feed-header {
-      margin-bottom: 40px;
-    }
-
-    .feed-title {
-      font-size: 48px;
-      color: var(--text-primary);
-      margin-bottom: 8px;
-    }
-
-    .feed-description {
-      font-size: 18px;
-      color: var(--text-secondary);
-    }
-
-    .posts-feed {
-      max-width: 720px;
-      margin: 0 auto;
-    }
-
-    .post-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      margin-bottom: 32px;
-      overflow: hidden;
-      box-shadow: var(--shadow-sm);
-      transition: all 0.3s ease;
-    }
-
-    .post-card:hover {
-      box-shadow: var(--shadow-md);
-      transform: translateY(-4px);
-    }
-
-    .post-header {
-      padding: 20px 24px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .post-avatar {
-      width: 48px;
-      height: 48px;
-      background: linear-gradient(135deg, var(--accent), var(--accent-light));
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-weight: 600;
-      font-size: 16px;
-    }
-
-    .post-author-info {
-      flex: 1;
-    }
-
-    .post-author {
-      font-weight: 600;
-      font-size: 15px;
-      color: var(--text-primary);
-      margin-bottom: 2px;
-    }
-
-    .post-date {
-      font-size: 13px;
-      color: var(--text-muted);
-    }
-
-    .post-image {
-      width: 100%;
-      max-height: 500px;
-      object-fit: cover;
-      display: block;
-    }
-
-    .post-content {
-      padding: 24px;
-    }
-
-    .post-title {
-      font-size: 28px;
-      color: var(--text-primary);
-      margin-bottom: 12px;
-      line-height: 1.3;
-    }
-
-    .post-text {
-      font-size: 16px;
-      color: var(--text-secondary);
-      line-height: 1.7;
-    }
-
-    .post-actions {
-      padding: 16px 24px;
-      border-top: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      gap: 24px;
-    }
-
-    .post-action-btn {
+    .server-name {
       display: flex;
       align-items: center;
       gap: 8px;
-      background: none;
-      border: none;
-      color: var(--text-secondary);
-      font-size: 14px;
-      font-weight: 500;
+    }
+
+    .server-icon {
+      width: 24px;
+      height: 24px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      color: white;
+      font-weight: 700;
+    }
+
+    .channels-container {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px 8px;
+    }
+
+    .channel-category {
+      margin-bottom: 4px;
+    }
+
+    .category-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 8px 4px 8px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-muted);
       cursor: pointer;
-      padding: 8px 12px;
-      border-radius: 8px;
-      transition: all 0.2s ease;
+      transition: color 0.15s ease;
     }
 
-    .post-action-btn:hover {
-      background: var(--bg-secondary);
-      color: var(--text-primary);
+    .category-header:hover {
+      color: var(--interactive-hover);
     }
 
-    .post-action-btn.liked {
-      color: #dc2626;
+    .category-icon {
+      font-size: 10px;
+      transition: transform 0.2s ease;
     }
 
-    .post-action-btn i {
+    .category-header.collapsed .category-icon {
+      transform: rotate(-90deg);
+    }
+
+    .category-channels {
+      margin-bottom: 16px;
+    }
+
+    .category-channels.hidden {
+      display: none;
+    }
+
+    .channel-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 8px;
+      margin: 2px 0;
+      border-radius: 4px;
+      cursor: pointer;
+      color: var(--interactive-normal);
+      font-size: 15px;
+      font-weight: 500;
+      transition: all 0.15s ease;
+      position: relative;
+    }
+
+    .channel-item:hover {
+      background: var(--bg-modifier);
+      color: var(--interactive-hover);
+    }
+
+    .channel-item.active {
+      background: var(--bg-modifier);
+      color: var(--interactive-active);
+    }
+
+    .channel-item.active::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 3px;
+      height: 20px;
+      background: var(--header-primary);
+      border-radius: 0 2px 2px 0;
+    }
+
+    .channel-icon {
       font-size: 18px;
+      opacity: 0.6;
     }
 
-    /* ============ ADMIN CHAT ============ */
-    .chat-container {
-      max-width: 900px;
-      margin: 0 auto;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      box-shadow: var(--shadow-md);
-      height: calc(100vh - 200px);
+    .channel-item.active .channel-icon {
+      opacity: 1;
+    }
+
+    .channel-name {
+      flex: 1;
+    }
+
+    .channel-actions {
+      display: none;
+      gap: 4px;
+    }
+
+    .channel-item:hover .channel-actions {
+      display: flex;
+    }
+
+    .channel-action-btn {
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 3px;
+      font-size: 12px;
+      color: var(--interactive-normal);
+      transition: all 0.15s ease;
+    }
+
+    .channel-action-btn:hover {
+      background: var(--bg-tertiary);
+      color: var(--interactive-active);
+    }
+
+    .add-channel-btn {
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 3px;
+      font-size: 12px;
+      color: var(--interactive-normal);
+      transition: all 0.15s ease;
+      cursor: pointer;
+    }
+
+    .add-channel-btn:hover {
+      background: var(--bg-tertiary);
+      color: var(--interactive-active);
+    }
+
+    .user-panel {
+      background: var(--bg-tertiary);
+      padding: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .user-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--accent-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 700;
+      color: white;
+      position: relative;
+    }
+
+    .user-status {
+      position: absolute;
+      bottom: -2px;
+      right: -2px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #43b581;
+      border: 2px solid var(--bg-tertiary);
+    }
+
+    .user-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .user-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--header-primary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .user-role-badge {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 6px;
+      border-radius: 3px;
+      display: inline-block;
+      margin-top: 2px;
+    }
+
+    .user-role-badge.admin {
+      background: rgba(240, 71, 71, 0.15);
+      color: var(--role-admin);
+    }
+
+    .user-role-badge.xuser {
+      background: rgba(114, 137, 218, 0.15);
+      color: var(--role-xuser);
+    }
+
+    .user-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .user-action-btn {
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 4px;
+      color: var(--interactive-normal);
+      cursor: pointer;
+      transition: all 0.15s ease;
+      font-size: 16px;
+    }
+
+    .user-action-btn:hover {
+      background: var(--bg-modifier);
+      color: var(--interactive-hover);
+    }
+
+    /* ============ MAIN CONTENT ============ */
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: var(--bg-primary);
+    }
+
+    .chat-header {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border-color);
+      background: var(--bg-primary);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 1px 0 rgba(0, 0, 0, 0.2), 0 1.5px 0 rgba(0, 0, 0, 0.05), 0 2px 0 rgba(0, 0, 0, 0.05);
+    }
+
+    .chat-header-info {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .chat-header-icon {
+      font-size: 20px;
+      color: var(--text-muted);
+    }
+
+    .chat-header-name {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--header-primary);
+    }
+
+    .chat-header-divider {
+      width: 1px;
+      height: 24px;
+      background: var(--border-color);
+      margin: 0 4px;
+    }
+
+    .chat-header-topic {
+      font-size: 14px;
+      color: var(--text-muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .chat-header-actions {
+      display: flex;
+      gap: 16px;
+    }
+
+    .header-icon-btn {
+      color: var(--interactive-normal);
+      font-size: 20px;
+      cursor: pointer;
+      transition: color 0.15s ease;
+    }
+
+    .header-icon-btn:hover {
+      color: var(--interactive-hover);
+    }
+
+    .messages-container {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px 16px 0 16px;
       display: flex;
       flex-direction: column;
     }
 
-    .chat-header {
-      padding: 24px;
-      border-bottom: 1px solid var(--border);
-      background: var(--bg-secondary);
-      border-radius: 16px 16px 0 0;
+    .messages-container::-webkit-scrollbar {
+      width: 14px;
     }
 
-    .chat-title {
-      font-size: 24px;
-      color: var(--text-primary);
-      margin-bottom: 4px;
+    .messages-container::-webkit-scrollbar-track {
+      background: transparent;
     }
 
-    .chat-subtitle {
-      font-size: 14px;
-      color: var(--text-muted);
-    }
-
-    .chat-tools {
-      padding: 16px 24px;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      gap: 8px;
-    }
-
-    .tool-btn {
-      padding: 8px 16px;
-      background: var(--bg-secondary);
-      border: 1px solid var(--border);
+    .messages-container::-webkit-scrollbar-thumb {
+      background: var(--bg-tertiary);
+      border: 3px solid var(--bg-primary);
       border-radius: 8px;
-      color: var(--text-secondary);
-      font-size: 13px;
-      font-weight: 500;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      transition: all 0.2s ease;
     }
 
-    .tool-btn:hover {
-      background: var(--accent-dim);
-      border-color: var(--accent);
-      color: var(--accent);
+    .messages-container::-webkit-scrollbar-thumb:hover {
+      background: var(--interactive-muted);
     }
 
-    .tool-btn.active {
-      background: var(--accent);
-      color: white;
-      border-color: var(--accent);
+    .chat-welcome {
+      padding: 16px 0;
     }
 
-    .chat-messages {
-      flex: 1;
-      padding: 24px;
-      overflow-y: auto;
-    }
-
-    .chat-message {
-      display: flex;
-      gap: 12px;
-      margin-bottom: 20px;
-      animation: slideIn 0.3s ease;
-    }
-
-    @keyframes slideIn {
-      from { opacity: 0; transform: translateX(-10px); }
-      to { opacity: 1; transform: translateX(0); }
-    }
-
-    .message-avatar {
-      width: 40px;
-      height: 40px;
-      background: linear-gradient(135deg, var(--accent), var(--accent-light));
+    .welcome-icon {
+      width: 68px;
+      height: 68px;
+      background: var(--bg-modifier);
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      color: white;
-      font-weight: 600;
-      font-size: 14px;
-      flex-shrink: 0;
+      font-size: 32px;
+      color: var(--header-primary);
+      margin-bottom: 16px;
     }
 
-    .message-content {
-      flex: 1;
+    .welcome-title {
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--header-primary);
+      margin-bottom: 8px;
+    }
+
+    .welcome-text {
+      font-size: 16px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .message-group {
+      padding: 4px 0;
+      margin-bottom: 16px;
+      position: relative;
+    }
+
+    .message-group:hover {
+      background: var(--bg-modifier);
+      margin: 0 -16px 16px -72px;
+      padding: 4px 16px 4px 72px;
+    }
+
+    .message-timestamp {
+      position: absolute;
+      left: 0;
+      top: 4px;
+      font-size: 11px;
+      color: var(--text-muted);
+      opacity: 0;
+      transition: opacity 0.15s ease;
+      width: 56px;
+      text-align: right;
+    }
+
+    .message-group:hover .message-timestamp {
+      opacity: 1;
     }
 
     .message-header {
       display: flex;
       align-items: center;
       gap: 8px;
-      margin-bottom: 6px;
+      margin-bottom: 4px;
+    }
+
+    .message-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--accent-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: 700;
+      color: white;
+      flex-shrink: 0;
     }
 
     .message-author {
+      font-size: 16px;
       font-weight: 600;
-      font-size: 14px;
-      color: var(--text-primary);
+      color: var(--header-primary);
+      cursor: pointer;
+      transition: text-decoration 0.15s ease;
+    }
+
+    .message-author:hover {
+      text-decoration: underline;
+    }
+
+    .message-author.admin {
+      color: var(--role-admin);
+    }
+
+    .message-author.xuser {
+      color: var(--role-xuser);
+    }
+
+    .role-badge {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 3px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    .role-badge.admin {
+      background: rgba(240, 71, 71, 0.15);
+      color: var(--role-admin);
+      animation: adminPulse 2s ease-in-out infinite;
+    }
+
+    .role-badge.xuser {
+      background: rgba(114, 137, 218, 0.15);
+      color: var(--role-xuser);
+      animation: xuserGlow 3s ease-in-out infinite;
+    }
+
+    @keyframes adminPulse {
+      0%, 100% { box-shadow: 0 0 0 rgba(240, 71, 71, 0); }
+      50% { box-shadow: 0 0 8px rgba(240, 71, 71, 0.4); }
+    }
+
+    @keyframes xuserGlow {
+      0%, 100% { box-shadow: 0 0 0 rgba(114, 137, 218, 0); }
+      50% { box-shadow: 0 0 8px rgba(114, 137, 218, 0.3); }
     }
 
     .message-time {
@@ -608,722 +706,436 @@
       color: var(--text-muted);
     }
 
-    .message-text {
+    .message-content {
+      margin-left: 48px;
+      color: var(--text-normal);
       font-size: 15px;
-      color: var(--text-secondary);
       line-height: 1.5;
+      word-wrap: break-word;
     }
 
-    /* Poll Card */
-    .poll-card {
-      background: var(--bg-secondary);
-      border: 1px solid var(--border);
-      border-radius: 12px;
+    .message-input-container {
       padding: 16px;
-      margin-top: 8px;
-      max-width: 500px;
+      background: var(--bg-primary);
     }
 
-    .poll-question {
-      font-weight: 600;
-      font-size: 15px;
-      color: var(--text-primary);
-      margin-bottom: 12px;
-    }
-
-    .poll-option {
-      background: var(--surface);
-      border: 2px solid var(--border);
+    .message-input-wrapper {
+      background: var(--bg-modifier);
       border-radius: 8px;
-      padding: 12px;
-      margin-bottom: 8px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .poll-option:hover {
-      border-color: var(--accent);
-    }
-
-    .poll-option.voted {
-      border-color: var(--accent);
-    }
-
-    .poll-option-fill {
-      position: absolute;
-      left: 0;
-      top: 0;
-      height: 100%;
-      background: var(--accent-dim);
-      transition: width 0.5s ease;
-      z-index: 0;
-    }
-
-    .poll-option-content {
-      position: relative;
-      z-index: 1;
+      padding: 12px 16px;
       display: flex;
-      justify-content: space-between;
       align-items: center;
-    }
-
-    .poll-option-text {
-      font-size: 14px;
-      color: var(--text-primary);
-      font-weight: 500;
-    }
-
-    .poll-option-percent {
-      font-size: 13px;
-      color: var(--accent);
-      font-weight: 600;
-    }
-
-    /* Quiz Card */
-    .quiz-card {
-      background: var(--bg-secondary);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 16px;
-      margin-top: 8px;
-      max-width: 500px;
-    }
-
-    .quiz-question {
-      font-weight: 600;
-      font-size: 15px;
-      color: var(--text-primary);
-      margin-bottom: 12px;
-    }
-
-    .quiz-option {
-      background: var(--surface);
-      border: 2px solid var(--border);
-      border-radius: 8px;
-      padding: 12px;
-      margin-bottom: 8px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      font-size: 14px;
-      color: var(--text-primary);
-    }
-
-    .quiz-option:hover {
-      border-color: var(--accent);
-    }
-
-    .quiz-option.correct {
-      border-color: #10b981;
-      background: rgba(16, 185, 129, 0.1);
-    }
-
-    .quiz-option.incorrect {
-      border-color: #dc2626;
-      background: rgba(220, 38, 38, 0.1);
-    }
-
-    .chat-input-area {
-      padding: 20px 24px;
-      border-top: 1px solid var(--border);
-      background: var(--bg-secondary);
-      border-radius: 0 0 16px 16px;
-    }
-
-    .chat-input-wrapper {
-      display: flex;
       gap: 12px;
     }
 
-    .chat-input {
+    .message-input-wrapper.disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .message-input-wrapper.disabled .message-input {
+      cursor: not-allowed;
+    }
+
+    .message-input {
       flex: 1;
-      background: var(--surface);
-      border: 2px solid var(--border);
-      border-radius: 10px;
-      padding: 14px 16px;
+      background: transparent;
+      border: none;
+      color: var(--text-normal);
       font-size: 15px;
-      color: var(--text-primary);
-      font-family: 'Work Sans', sans-serif;
-      transition: all 0.2s ease;
-    }
-
-    .chat-input:focus {
+      font-family: 'Inter', sans-serif;
       outline: none;
-      border-color: var(--accent);
     }
 
-    .btn-send {
-      padding: 14px 24px;
-      background: var(--accent);
+    .message-input::placeholder {
+      color: var(--text-muted);
+    }
+
+    .message-input:disabled {
+      cursor: not-allowed;
+    }
+
+    .message-send-btn {
+      background: var(--accent-primary);
       color: white;
       border: none;
-      border-radius: 10px;
-      font-weight: 600;
+      border-radius: 4px;
+      padding: 8px 16px;
       font-size: 14px;
+      font-weight: 600;
       cursor: pointer;
-      transition: all 0.2s ease;
+      transition: all 0.15s ease;
+      font-family: 'Inter', sans-serif;
     }
 
-    .btn-send:hover {
-      background: var(--accent-light);
+    .message-send-btn:hover:not(:disabled) {
+      background: var(--accent-hover);
     }
 
-    /* ============ UPLOAD FORM ============ */
-    .upload-container {
-      max-width: 800px;
-      margin: 0 auto;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 40px;
-      box-shadow: var(--shadow-md);
+    .message-send-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
     }
 
-    .upload-header {
-      margin-bottom: 32px;
-    }
-
-    .upload-title {
-      font-size: 36px;
-      color: var(--text-primary);
-      margin-bottom: 8px;
-    }
-
-    .upload-description {
-      font-size: 16px;
-      color: var(--text-secondary);
-    }
-
-    .upload-form {
-      display: flex;
-      flex-direction: column;
-      gap: 24px;
-    }
-
-    .form-field {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .field-label {
+    .no-permission-banner {
+      background: rgba(240, 71, 71, 0.1);
+      border: 1px solid rgba(240, 71, 71, 0.3);
+      border-radius: 4px;
+      padding: 12px;
+      margin: 16px;
+      color: #f04747;
       font-size: 14px;
-      font-weight: 600;
-      color: var(--text-primary);
-    }
-
-    .field-input {
-      background: var(--bg-secondary);
-      border: 2px solid transparent;
-      border-radius: 10px;
-      padding: 14px 16px;
-      font-size: 15px;
-      color: var(--text-primary);
-      font-family: 'Work Sans', sans-serif;
-      transition: all 0.2s ease;
-    }
-
-    .field-input:focus {
-      outline: none;
-      border-color: var(--accent);
-      background: var(--surface);
-    }
-
-    textarea.field-input {
-      min-height: 150px;
-      resize: vertical;
-    }
-
-    .upload-area {
-      border: 2px dashed var(--border);
-      border-radius: 12px;
-      padding: 40px;
       text-align: center;
+    }
+
+    /* ============ MEMBERS SIDEBAR ============ */
+    .members-sidebar {
+      width: 240px;
       background: var(--bg-secondary);
-      transition: all 0.2s ease;
-      cursor: pointer;
+      border-left: 1px solid var(--border-color);
+      overflow-y: auto;
+      padding: 16px 8px;
     }
 
-    .upload-area:hover {
-      border-color: var(--accent);
-      background: var(--accent-dim);
+    .members-sidebar::-webkit-scrollbar {
+      width: 8px;
     }
 
-    .upload-area.has-file {
-      border-color: var(--accent);
-      background: var(--accent-dim);
+    .members-sidebar::-webkit-scrollbar-track {
+      background: transparent;
     }
 
-    .upload-icon {
-      font-size: 48px;
+    .members-sidebar::-webkit-scrollbar-thumb {
+      background: var(--bg-tertiary);
+      border-radius: 4px;
+    }
+
+    .members-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
       color: var(--text-muted);
-      margin-bottom: 12px;
-    }
-
-    .upload-text {
-      font-size: 15px;
-      color: var(--text-secondary);
+      padding: 8px 8px 4px 8px;
       margin-bottom: 4px;
     }
 
-    .upload-hint {
-      font-size: 13px;
-      color: var(--text-muted);
+    .role-group {
+      margin-bottom: 16px;
     }
 
-    .image-preview {
-      display: none;
-      margin-top: 16px;
-      border-radius: 12px;
-      overflow: hidden;
-      max-height: 400px;
-    }
-
-    .image-preview img {
-      width: 100%;
-      height: auto;
-      display: block;
-    }
-
-    .btn-submit {
-      padding: 16px 32px;
-      background: var(--accent);
-      color: white;
-      border: none;
-      border-radius: 10px;
-      font-weight: 600;
-      font-size: 15px;
+    .role-group-header {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 8px 4px 8px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
       cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 16px rgba(45, 125, 95, 0.2);
+      transition: color 0.15s ease;
     }
 
-    .btn-submit:hover {
-      background: var(--accent-light);
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(45, 125, 95, 0.3);
+    .role-group-header.admin {
+      color: var(--role-admin);
     }
 
-    /* ============ POST MODAL ============ */
-    .modal {
+    .role-group-header.xuser {
+      color: var(--role-xuser);
+    }
+
+    .role-group-header.member {
+      color: var(--role-member);
+    }
+
+    .role-count {
+      font-size: 10px;
+      opacity: 0.6;
+    }
+
+    .role-members {
+      margin-bottom: 8px;
+    }
+
+    .member-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 8px;
+      margin: 2px 0;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.15s ease;
+    }
+
+    .member-item:hover {
+      background: var(--bg-modifier);
+    }
+
+    .member-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--accent-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 700;
+      color: white;
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .member-status {
+      position: absolute;
+      bottom: -2px;
+      right: -2px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #43b581;
+      border: 2px solid var(--bg-secondary);
+    }
+
+    .member-name {
+      flex: 1;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--interactive-normal);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .member-item:hover .member-name {
+      color: var(--interactive-hover);
+    }
+
+    /* ============ MODALS ============ */
+    .modal-overlay {
       position: fixed;
-      inset: 0;
-      z-index: 2000;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.85);
       display: none;
       align-items: center;
       justify-content: center;
-      background: rgba(0, 0, 0, 0.7);
-      backdrop-filter: blur(4px);
-      padding: 20px;
+      z-index: 10000;
+      animation: fadeIn 0.15s ease;
     }
 
-    .modal.active {
+    .modal-overlay.active {
       display: flex;
-      animation: fadeInModal 0.3s ease;
     }
 
-    @keyframes fadeInModal {
+    @keyframes fadeIn {
       from { opacity: 0; }
       to { opacity: 1; }
     }
 
-    .modal-content {
-      background: var(--surface);
-      border-radius: 16px;
-      max-width: 900px;
-      width: 100%;
+    .modal {
+      background: var(--bg-primary);
+      border-radius: 8px;
+      width: 90%;
+      max-width: 480px;
       max-height: 90vh;
-      overflow-y: auto;
-      box-shadow: var(--shadow-lg);
-      animation: slideUp 0.3s ease;
+      overflow: hidden;
+      animation: slideUp 0.2s ease;
     }
 
     @keyframes slideUp {
-      from { transform: translateY(30px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
+      from { transform: scale(0.95) translateY(20px); opacity: 0; }
+      to { transform: scale(1) translateY(0); opacity: 1; }
     }
 
     .modal-header {
-      padding: 24px;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      position: sticky;
-      top: 0;
-      background: var(--surface);
-      z-index: 1;
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border-color);
     }
 
     .modal-title {
-      font-size: 24px;
-      color: var(--text-primary);
-    }
-
-    .btn-close {
-      width: 36px;
-      height: 36px;
-      background: var(--bg-secondary);
-      border: none;
-      border-radius: 50%;
-      color: var(--text-secondary);
-      font-size: 18px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-
-    .btn-close:hover {
-      background: var(--border);
-      color: var(--text-primary);
-    }
-
-    .modal-post {
-      padding: 24px;
-    }
-
-    .modal-post-image {
-      width: 100%;
-      max-height: 500px;
-      object-fit: cover;
-      border-radius: 12px;
-      margin-bottom: 20px;
-    }
-
-    .modal-post-title {
-      font-size: 32px;
-      color: var(--text-primary);
-      margin-bottom: 16px;
-    }
-
-    .modal-post-text {
-      font-size: 17px;
-      color: var(--text-secondary);
-      line-height: 1.7;
-      margin-bottom: 24px;
-    }
-
-    /* Comments Section */
-    .comments-section {
-      padding: 24px;
-      border-top: 1px solid var(--border);
-      background: var(--bg-secondary);
-    }
-
-    .comments-header {
       font-size: 20px;
-      font-weight: 600;
-      color: var(--text-primary);
-      margin-bottom: 20px;
-    }
-
-    .comment-form {
-      display: flex;
-      gap: 12px;
-      margin-bottom: 24px;
-    }
-
-    .comment-input {
-      flex: 1;
-      background: var(--surface);
-      border: 2px solid var(--border);
-      border-radius: 10px;
-      padding: 12px 16px;
-      font-size: 14px;
-      color: var(--text-primary);
-      font-family: 'Work Sans', sans-serif;
-      transition: all 0.2s ease;
-    }
-
-    .comment-input:focus {
-      outline: none;
-      border-color: var(--accent);
-    }
-
-    .btn-comment {
-      padding: 12px 20px;
-      background: var(--accent);
-      color: white;
-      border: none;
-      border-radius: 10px;
-      font-weight: 600;
-      font-size: 14px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-
-    .btn-comment:hover {
-      background: var(--accent-light);
-    }
-
-    .comments-list {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-
-    .comment {
-      display: flex;
-      gap: 12px;
-      padding: 16px;
-      background: var(--surface);
-      border-radius: 12px;
-      border: 1px solid var(--border);
-    }
-
-    .comment-avatar {
-      width: 36px;
-      height: 36px;
-      background: linear-gradient(135deg, var(--accent), var(--accent-light));
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-weight: 600;
-      font-size: 13px;
-      flex-shrink: 0;
-    }
-
-    .comment-body {
-      flex: 1;
-    }
-
-    .comment-header {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 6px;
-    }
-
-    .comment-author {
-      font-weight: 600;
-      font-size: 14px;
-      color: var(--text-primary);
-    }
-
-    .comment-time {
-      font-size: 12px;
-      color: var(--text-muted);
-    }
-
-    .comment-text {
-      font-size: 14px;
-      color: var(--text-secondary);
-      line-height: 1.6;
+      font-weight: 700;
+      color: var(--header-primary);
       margin-bottom: 8px;
     }
 
-    .comment-actions {
-      display: flex;
-      gap: 16px;
+    .modal-subtitle {
+      font-size: 14px;
+      color: var(--text-muted);
     }
 
-    .comment-action {
-      background: none;
+    .modal-body {
+      padding: 24px;
+      max-height: 60vh;
+      overflow-y: auto;
+    }
+
+    .modal-footer {
+      padding: 16px 24px;
+      background: var(--bg-secondary);
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--text-normal);
       border: none;
+      padding: 10px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      font-family: 'Inter', sans-serif;
+      transition: all 0.15s ease;
+    }
+
+    .btn-secondary:hover {
+      background: var(--bg-modifier);
+    }
+
+    .permission-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .permission-item:last-child {
+      border-bottom: none;
+    }
+
+    .permission-info {
+      flex: 1;
+    }
+
+    .permission-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--header-primary);
+      margin-bottom: 4px;
+    }
+
+    .permission-desc {
+      font-size: 12px;
       color: var(--text-muted);
-      font-size: 13px;
-      font-weight: 500;
+    }
+
+    .toggle-switch {
+      position: relative;
+      width: 44px;
+      height: 24px;
+      background: var(--interactive-muted);
+      border-radius: 12px;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    .toggle-switch.active {
+      background: var(--accent-primary);
+    }
+
+    .toggle-switch::after {
+      content: '';
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 18px;
+      height: 18px;
+      background: white;
+      border-radius: 50%;
+      transition: transform 0.2s ease;
+    }
+
+    .toggle-switch.active::after {
+      transform: translateX(20px);
+    }
+
+    .role-picker {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .role-option {
+      padding: 16px;
+      background: var(--bg-secondary);
+      border: 2px solid transparent;
+      border-radius: 8px;
       cursor: pointer;
       transition: all 0.2s ease;
     }
 
-    .comment-action:hover {
-      color: var(--accent);
+    .role-option:hover {
+      background: var(--bg-hover);
+      border-color: var(--bg-modifier);
     }
 
-    /* Nested Replies */
-    .replies {
-      margin-top: 12px;
-      padding-left: 48px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
+    .role-option.selected {
+      border-color: var(--accent-primary);
+      background: rgba(88, 101, 242, 0.1);
     }
 
-    .reply {
-      display: flex;
-      gap: 10px;
-      padding: 12px;
-      background: var(--bg-secondary);
-      border-radius: 10px;
-      border: 1px solid var(--border);
-    }
-
-    .reply-avatar {
-      width: 32px;
-      height: 32px;
-      background: linear-gradient(135deg, var(--accent), var(--accent-light));
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-weight: 600;
-      font-size: 12px;
-      flex-shrink: 0;
-    }
-
-    .reply-body {
-      flex: 1;
-    }
-
-    .reply-header {
-      display: flex;
-      align-items: center;
-      gap: 6px;
+    .role-option-name {
+      font-size: 16px;
+      font-weight: 700;
       margin-bottom: 4px;
     }
 
-    .reply-author {
-      font-weight: 600;
-      font-size: 13px;
-      color: var(--text-primary);
+    .role-option-name.admin {
+      color: var(--role-admin);
     }
 
-    .reply-time {
-      font-size: 11px;
+    .role-option-name.xuser {
+      color: var(--role-xuser);
+    }
+
+    .role-option-desc {
+      font-size: 13px;
       color: var(--text-muted);
     }
 
-    .reply-text {
-      font-size: 13px;
-      color: var(--text-secondary);
-      line-height: 1.5;
-    }
-
-    .reply-form {
-      display: none;
-      margin-top: 8px;
-      gap: 8px;
-    }
-
-    .reply-form.active {
-      display: flex;
-    }
-
-    .reply-input {
-      flex: 1;
-      background: var(--surface);
-      border: 2px solid var(--border);
-      border-radius: 8px;
-      padding: 10px 12px;
-      font-size: 13px;
-      color: var(--text-primary);
-      font-family: 'Work Sans', sans-serif;
-    }
-
-    .reply-input:focus {
-      outline: none;
-      border-color: var(--accent);
-    }
-
-    .btn-reply {
-      padding: 10px 16px;
-      background: var(--accent);
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-weight: 600;
-      font-size: 13px;
-      cursor: pointer;
-    }
-
-    /* Empty States */
-    .empty-state {
-      text-align: center;
-      padding: 60px 20px;
-      color: var(--text-muted);
-    }
-
-    .empty-icon {
-      font-size: 64px;
-      margin-bottom: 16px;
-      opacity: 0.3;
-    }
-
-    .empty-text {
-      font-size: 16px;
-    }
-
-    /* Loading State */
-    .loading {
-      text-align: center;
-      padding: 40px;
-      color: var(--text-muted);
-    }
-
-    .loading-spinner {
-      width: 40px;
-      height: 40px;
-      margin: 0 auto 16px;
-      border: 3px solid var(--border);
-      border-top-color: var(--accent);
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-    }
-
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-
-    /* Admin Badge */
-    .admin-badge {
-      display: inline-block;
-      padding: 4px 8px;
-      background: var(--accent);
-      color: white;
-      font-size: 11px;
-      font-weight: 600;
-      border-radius: 4px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    /* Responsive */
-    @media (max-width: 1024px) {
-      .sidebar {
+    /* ============ RESPONSIVE ============ */
+    @media (max-width: 768px) {
+      .members-sidebar {
         display: none;
       }
 
-      .app-layout {
-        padding-top: 85px;
+      .sidebar {
+        width: 72px;
       }
 
-      .main-content {
-        padding: 20px;
+      .channel-name,
+      .server-name span,
+      .user-info,
+      .category-header span {
+        display: none;
+      }
+
+      .server-header {
+        justify-content: center;
+      }
+
+      .user-panel {
+        justify-content: center;
       }
     }
 
-    @media (max-width: 768px) {
-      .header-inner {
-        padding: 16px 20px;
-      }
+    /* ============ UTILITY ============ */
+    .hidden {
+      display: none !important;
+    }
 
-      .brand-name {
-        font-size: 24px;
-      }
-
-      .feed-title {
-        font-size: 36px;
-      }
-
-      .post-title {
-        font-size: 24px;
-      }
-
-      .chat-container {
-        height: calc(100vh - 150px);
-      }
-
-      .upload-container {
-        padding: 24px;
-      }
-
-      .replies {
-        padding-left: 24px;
-      }
+    .fade-in {
+      animation: fadeIn 0.3s ease;
     }
   </style>
 </head>
@@ -1331,1022 +1143,914 @@
   <!-- ============ AUTH SCREEN ============ -->
   <div id="authScreen">
     <div class="auth-container">
-      <div class="auth-brand">
-        <div class="auth-logo">
-          <i class="fas fa-bolt"></i>
-        </div>
-        <h1 class="auth-title">PhineX Community</h1>
-        <p class="auth-subtitle">Enter your access code to join</p>
+      <div class="auth-logo">
+        <img src="PhineX (2).png" style="width: 100px; height: 100px;">
       </div>
+      <h1 class="auth-title">Welcome to PhineX</h1>
+      <p class="auth-subtitle">Enter your access code to continue</p>
 
       <form id="authForm">
         <div class="form-group">
           <label class="form-label">Access Code</label>
-          <input 
-            type="text" 
-            id="codeInput" 
-            class="form-input" 
-            placeholder="Enter your code"
-            required
-          >
+          <input type="text" id="accessCode" class="form-input" placeholder="Enter your code..." required>
         </div>
 
         <button type="submit" class="btn-primary" id="submitBtn">
-          Access Community
+          Enter Community
         </button>
 
-        <div id="errorMsg" class="message error"></div>
-        <div id="successMsg" class="message success"></div>
+        <div id="authMessage" class="message"></div>
+
+        <div class="code-hint">
+          <strong>How to get an access code:</strong>
+            <p>1. Join our <a href="https://discord.gg/wk4xtQVRzm" target="_blank" style="color: #00b0f4; text-decoration: none;" class="Discord">Discord server</a>.</p>
+            <p>2. Navigate to the #verify channel.</p>
+            <p>3. Verify your account.</p>
+            <p>4. Navigate to the #codes channel.</p>
+            <p>5. Copy the community code.</p>
+        </div>
       </form>
     </div>
   </div>
 
   <!-- ============ MAIN APP ============ -->
   <div id="app">
-    <!-- Header -->
-    <header class="app-header">
-      <div class="header-inner">
-        <div class="brand">
-          <div class="brand-icon">
-            <i class="fas fa-bolt"></i>
+    <div class="app-container">
+      <!-- Left Sidebar -->
+      <div class="sidebar">
+        <div class="server-header" onclick="showServerMenu()">
+          <div class="server-name">
+            <div class="server-icon">P</div>
+            <span>PhineX Community</span>
           </div>
-          <div class="brand-name">Phine<span>X</span></div>
+          <i class="fas fa-chevron-down" style="font-size: 12px;"></i>
         </div>
 
-        <div class="header-actions">
-          <div class="user-info">
-            <i class="fas fa-user-circle"></i>
-            <span id="userDisplay"></span>
+        <div class="channels-container" id="channelsContainer">
+          <!-- Channels will be rendered here -->
+        </div>
+
+        <div class="user-panel">
+          <div class="user-avatar">
+            <span id="userInitials">U</span>
+            <div class="user-status"></div>
           </div>
-          <button class="btn-logout" id="logoutBtn">
-            <i class="fas fa-sign-out-alt"></i> Logout
-          </button>
+          <div class="user-info">
+            <div class="user-name" id="userName">User</div>
+            <div class="user-role-badge" id="userRoleBadge">Member</div>
+          </div>
+          <div class="user-actions">
+            <div class="user-action-btn" onclick="toggleMute()" title="Mute">
+              <i class="fas fa-microphone"></i>
+            </div>
+            <div class="user-action-btn" onclick="showSettings()" title="Settings">
+              <i class="fas fa-cog"></i>
+            </div>
+            <div class="user-action-btn" onclick="logout()" title="Logout">
+              <i class="fas fa-sign-out-alt"></i>
+            </div>
+          </div>
         </div>
       </div>
-    </header>
-
-    <!-- App Layout -->
-    <div class="app-layout">
-      <!-- Sidebar Navigation -->
-      <aside class="sidebar">
-        <div class="nav-section">
-          <div class="nav-section-title">Browse</div>
-          <div class="nav-item active" data-section="feed">
-            <i class="fas fa-home"></i>
-            <span>Feed</span>
-          </div>
-          <div class="nav-item" data-section="public-chat">
-            <i class="fas fa-comments"></i>
-            <span>Community Chat</span>
-          </div>
-        </div>
-
-        <div class="nav-section" id="adminNav" style="display: none;">
-          <div class="nav-section-title">Admin</div>
-          <div class="nav-item" data-section="admin-chat">
-            <i class="fas fa-shield-alt"></i>
-            <span>Admin Chat</span>
-          </div>
-          <div class="nav-item" data-section="upload">
-            <i class="fas fa-plus-circle"></i>
-            <span>Create Post</span>
-          </div>
-        </div>
-      </aside>
 
       <!-- Main Content -->
-      <main class="main-content">
-        <!-- Posts Feed -->
-        <section id="feed" class="content-section active">
-          <div class="feed-header">
-            <h1 class="feed-title">Community Feed</h1>
-            <p class="feed-description">Latest posts and updates from our community</p>
+      <div class="main-content">
+        <div class="chat-header">
+          <div class="chat-header-info">
+            <i class="chat-header-icon fas fa-hashtag" id="channelIcon"></i>
+            <span class="chat-header-name" id="channelName">Select a channel</span>
+            <div class="chat-header-divider"></div>
+            <span class="chat-header-topic" id="channelTopic"></span>
           </div>
-
-          <div class="posts-feed" id="postsFeed">
-            <div class="loading">
-              <div class="loading-spinner"></div>
-              <p>Loading posts...</p>
-            </div>
+          <div class="chat-header-actions">
+            <i class="header-icon-btn fas fa-bell" title="Notifications"></i>
+            <i class="header-icon-btn fas fa-search" title="Search"></i>
+            <i class="header-icon-btn fas fa-users" title="Members" onclick="toggleMembersSidebar()"></i>
           </div>
-        </section>
+        </div>
 
-        <!-- Public Chat -->
-        <section id="public-chat" class="content-section">
-          <div class="chat-container">
-            <div class="chat-header">
-              <div>
-                <h2 class="chat-title">Community Chat</h2>
-                <p class="chat-subtitle">Connect with other members</p>
-              </div>
+        <div class="messages-container" id="messagesContainer">
+          <div class="chat-welcome">
+            <div class="welcome-icon">
+              <i class="fas fa-hashtag"></i>
             </div>
-
-            <div class="chat-messages" id="publicMessages">
-              <div class="loading">
-                <div class="loading-spinner"></div>
-                <p>Loading messages...</p>
-              </div>
-            </div>
-
-            <div class="chat-input-area">
-              <div class="chat-input-wrapper">
-                <input 
-                  type="text" 
-                  class="chat-input" 
-                  id="publicInput" 
-                  placeholder="Type a message..."
-                >
-                <button class="btn-send" id="sendPublicBtn">
-                  <i class="fas fa-paper-plane"></i> Send
-                </button>
-              </div>
-            </div>
+            <h2 class="welcome-title">Welcome to PhineX!</h2>
+            <p class="welcome-text">
+              This is the beginning of your journey. Select a channel to start chatting with the community.
+            </p>
           </div>
-        </section>
+        </div>
 
-        <!-- Admin Chat -->
-        <section id="admin-chat" class="content-section">
-          <div class="chat-container">
-            <div class="chat-header">
-              <div>
-                <h2 class="chat-title">Admin Chat <span class="admin-badge">Admin Only</span></h2>
-                <p class="chat-subtitle">Tools: Polls, Quizzes, and more</p>
-              </div>
-            </div>
-
-            <div class="chat-tools" id="chatTools">
-              <button class="tool-btn" id="createPollBtn">
-                <i class="fas fa-poll"></i> Create Poll
-              </button>
-              <button class="tool-btn" id="createQuizBtn">
-                <i class="fas fa-question-circle"></i> Create Quiz
-              </button>
-            </div>
-
-            <div class="chat-messages" id="adminMessages">
-              <div class="loading">
-                <div class="loading-spinner"></div>
-                <p>Loading messages...</p>
-              </div>
-            </div>
-
-            <div class="chat-input-area">
-              <div class="chat-input-wrapper">
-                <input 
-                  type="text" 
-                  class="chat-input" 
-                  id="adminInput" 
-                  placeholder="Type a message..."
-                >
-                <button class="btn-send" id="sendAdminBtn">
-                  <i class="fas fa-paper-plane"></i> Send
-                </button>
-              </div>
-            </div>
+        <div class="message-input-container">
+          <div class="message-input-wrapper" id="messageInputWrapper">
+            <input 
+              type="text" 
+              class="message-input" 
+              id="messageInput" 
+              placeholder="Message #general"
+              disabled
+            >
+            <button class="message-send-btn" id="sendMessageBtn" disabled>Send</button>
           </div>
-        </section>
-
-        <!-- Upload Post -->
-        <section id="upload" class="content-section">
-          <div class="upload-container">
-            <div class="upload-header">
-              <h2 class="upload-title">Create New Post</h2>
-              <p class="upload-description">Share updates with the community</p>
-            </div>
-
-            <form id="uploadForm" class="upload-form">
-              <div class="form-field">
-                <label class="field-label">Post Title</label>
-                <input 
-                  type="text" 
-                  id="postTitle" 
-                  class="field-input" 
-                  placeholder="Enter a compelling title..."
-                  required
-                >
-              </div>
-
-              <div class="form-field">
-                <label class="field-label">Content</label>
-                <textarea 
-                  id="postContent" 
-                  class="field-input" 
-                  placeholder="Write your post content here..."
-                  required
-                ></textarea>
-              </div>
-
-              <div class="form-field">
-                <label class="field-label">Featured Image (Optional)</label>
-                <div class="upload-area" id="uploadArea">
-                  <i class="fas fa-cloud-upload-alt upload-icon"></i>
-                  <p class="upload-text">Click to upload an image</p>
-                  <p class="upload-hint">PNG, JPG up to 10MB</p>
-                  <input 
-                    type="file" 
-                    id="postImage" 
-                    accept="image/*" 
-                    style="display: none;"
-                  >
-                </div>
-                <div class="image-preview" id="imagePreview">
-                  <img id="previewImg" src="" alt="Preview">
-                </div>
-              </div>
-
-              <button type="submit" class="btn-submit">
-                <i class="fas fa-check"></i> Publish Post
-              </button>
-            </form>
-          </div>
-        </section>
-      </main>
-    </div>
-  </div>
-
-  <!-- ============ POST MODAL ============ -->
-  <div id="postModal" class="modal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3 class="modal-title">Post Details</h3>
-        <button class="btn-close" id="closeModal">
-          <i class="fas fa-times"></i>
-        </button>
+        </div>
       </div>
 
-      <div id="modalBody"></div>
+      <!-- Members Sidebar -->
+      <div class="members-sidebar" id="membersSidebar">
+        <div class="members-title">Members</div>
+        <div id="membersContainer">
+          <!-- Members will be rendered here -->
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- ============ SCRIPTS ============ -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- ============ MODALS ============ -->
+  <!-- Create Channel Modal -->
+  <div class="modal-overlay" id="createChannelModal">
+    <div class="modal">
+      <div class="modal-header">
+        <div class="modal-title">Create Channel</div>
+        <div class="modal-subtitle">Create a new text channel</div>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">Channel Name</label>
+          <input type="text" id="newChannelName" class="form-input" placeholder="new-channel">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Channel Topic (Optional)</label>
+          <input type="text" id="newChannelTopic" class="form-input" placeholder="What's this channel about?">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Category</label>
+          <select id="newChannelCategory" class="form-input" style="cursor: pointer;">
+            <option value="TEXT CHANNELS">TEXT CHANNELS</option>
+            <option value="VOICE CHANNELS">VOICE CHANNELS</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" onclick="closeModal('createChannelModal')">Cancel</button>
+        <button class="btn-primary" onclick="createChannel()" style="width: auto; padding: 10px 24px;">Create</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Channel Settings Modal -->
+  <div class="modal-overlay" id="channelSettingsModal">
+    <div class="modal">
+      <div class="modal-header">
+        <div class="modal-title">Channel Permissions</div>
+        <div class="modal-subtitle" id="settingsChannelName"></div>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">Select Role</label>
+          <div class="role-picker" id="rolePickerSettings">
+            <!-- Will be populated dynamically -->
+          </div>
+        </div>
+        <div class="form-group" style="margin-top: 24px;">
+          <label class="form-label">Permissions</label>
+          <div id="permissionsContainer">
+            <!-- Permissions will be rendered here -->
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" onclick="closeModal('channelSettingsModal')">Close</button>
+        <button class="btn-primary" onclick="savePermissions()" style="width: auto; padding: 10px 24px;">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+
   <script>
-    (() => {
-      // Configuration
-      const CONFIG = {
-        SUPABASE_URL: 'https://nwgsqaztrggyfthkkpan.supabase.co',
-        SUPABASE_KEY: 'sb_publishable_3W9Yscrc35Hmb9EeFAlfTA_myvjfxUo',
-        GUILD_ID: '1438576191610032160'
+    // ============ FIREBASE CONFIG ============
+    const CONFIG = {
+      FIREBASE_CONFIG: {
+        apiKey: "AIzaSyAWVx7WUlMcMPyTJxF1hDQc0-VCfP87xRE",
+        authDomain: "phinex-b73e1.firebaseapp.com",
+        databaseURL: "https://phinex-b73e1-default-rtdb.firebaseio.com",
+        projectId: "phinex-b73e1",
+        storageBucket: "phinex-b73e1.firebasestorage.app",
+        messagingSenderId: "1078507208782",
+        appId: "1:1078507208782:web:2ac21f4a58d4b41be40bce"
+      },
+      GUILD_ID: 'phinex_community_v2',
+      ACCESS_CODES: {
+        'ADMIN26': { role: 'admin', name: 'Admin' },
+        'PHNX@098764583729': { role: 'xuser', name: 'X-User' }
+      }
+    };
+
+    // Initialize Firebase
+    const app = firebase.initializeApp(CONFIG.FIREBASE_CONFIG);
+    const db = firebase.database();
+    const { ref, set, push, onValue, get, update, remove } = firebase.database;
+
+    // ============ STATE ============
+    let currentUser = null;
+    let isAdmin = false;
+    let currentChannel = null;
+    let channels = [];
+    let permissions = {};
+    let selectedRoleForSettings = 'member';
+
+    // Default channels structure
+    const defaultChannels = [
+      {
+        id: 'general',
+        name: 'general',
+        category: 'TEXT CHANNELS',
+        topic: 'General discussion for all members',
+        icon: 'hashtag'
+      },
+      {
+        id: 'announcements',
+        name: 'announcements',
+        category: 'TEXT CHANNELS',
+        topic: 'Official announcements from the PhineX team',
+        icon: 'bullhorn'
+      },
+      {
+        id: 'development',
+        name: 'development',
+        category: 'TEXT CHANNELS',
+        topic: 'Discuss development, coding, and technical topics',
+        icon: 'code'
+      },
+      {
+        id: 'random',
+        name: 'random',
+        category: 'TEXT CHANNELS',
+        topic: 'Off-topic conversations and fun',
+        icon: 'dice'
+      }
+    ];
+
+    // Default permissions structure
+    const defaultPermissions = {
+      general: {
+        admin: { send_messages: true, react: true, manage: true },
+        xuser: { send_messages: true, react: true, manage: false },
+        member: { send_messages: true, react: true, manage: false }
+      },
+      announcements: {
+        admin: { send_messages: true, react: true, manage: true },
+        xuser: { send_messages: false, react: true, manage: false },
+        member: { send_messages: false, react: true, manage: false }
+      },
+      development: {
+        admin: { send_messages: true, react: true, manage: true },
+        xuser: { send_messages: true, react: true, manage: false },
+        member: { send_messages: true, react: true, manage: false }
+      },
+      random: {
+        admin: { send_messages: true, react: true, manage: true },
+        xuser: { send_messages: true, react: true, manage: true },
+        member: { send_messages: true, react: true, manage: false }
+      }
+    };
+
+    // ============ AUTH ============
+    document.getElementById('authForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const code = document.getElementById('accessCode').value.trim();
+      const messageEl = document.getElementById('authMessage');
+      const submitBtn = document.getElementById('submitBtn');
+
+      if (!CONFIG.ACCESS_CODES[code]) {
+        messageEl.textContent = 'Invalid access code';
+        messageEl.className = 'message error';
+        messageEl.style.display = 'block';
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Entering...';
+
+      const userRole = CONFIG.ACCESS_CODES[code];
+      currentUser = {
+        user_id: Date.now().toString(),
+        role: userRole.role,
+        name: userRole.name,
+        joined_at: Date.now()
       };
 
-      // Initialize Supabase
-      const supabaseClient = supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_KEY);
-      
-      let currentUser = null;
-      let isAdmin = false;
-      let currentPost = null;
+      isAdmin = userRole.role === 'admin';
 
-      // ============ AUTH ============
-      document.getElementById('authForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        
-        const code = document.getElementById('codeInput').value.trim();
-        const submitBtn = document.getElementById('submitBtn');
-        const errorMsg = document.getElementById('errorMsg');
-        const successMsg = document.getElementById('successMsg');
+      // Initialize default data if needed
+      await initializeDefaultData();
 
-        errorMsg.style.display = 'none';
-        successMsg.style.display = 'none';
-        submitBtn.disabled = true;
-        submitBtn.textContent = 'Verifying...';
+      // Load channels and permissions
+      await loadChannels();
+      await loadPermissions();
 
-        try {
-          const { data, error } = await supabaseClient
-            .from('community_tickets')
-            .select('*')
-            .eq('code', code)
-            .eq('guild_id', CONFIG.GUILD_ID)
-            .eq('used', false)
-            .single();
+      // Show app
+      document.getElementById('authScreen').style.display = 'none';
+      document.getElementById('app').style.display = 'block';
 
-          if (error || !data) {
-            throw new Error('Invalid or expired code');
-          }
+      // Initialize UI
+      initializeUI();
+      renderChannels();
+      renderMembers();
 
-          // Mark ticket as used
-          await supabaseClient
-            .from('community_tickets')
-            .update({ used: true, used_at: new Date().toISOString() })
-            .eq('id', data.id);
+      // Select first channel
+      if (channels.length > 0) {
+        selectChannel(channels[0].id);
+      }
+    });
 
-          currentUser = data;
-          isAdmin = data.is_admin;
-
-          successMsg.textContent = 'Access granted! Loading community...';
-          successMsg.style.display = 'block';
-
-          setTimeout(() => {
-            document.getElementById('authScreen').style.display = 'none';
-            document.getElementById('app').style.display = 'block';
-            initializeApp();
-          }, 1000);
-
-        } catch (err) {
-          errorMsg.textContent = err.message || 'Authentication failed';
-          errorMsg.style.display = 'block';
-          submitBtn.disabled = false;
-          submitBtn.textContent = 'Access Community';
+    async function initializeDefaultData() {
+      try {
+        // Check if channels exist
+        const channelsSnapshot = await get(ref(db, `channels/${CONFIG.GUILD_ID}`));
+        if (!channelsSnapshot.exists()) {
+          // Create default channels
+          const channelsData = {};
+          defaultChannels.forEach(channel => {
+            channelsData[channel.id] = channel;
+          });
+          await set(ref(db, `channels/${CONFIG.GUILD_ID}`), channelsData);
         }
+
+        // Check if permissions exist
+        const permissionsSnapshot = await get(ref(db, `permissions/${CONFIG.GUILD_ID}`));
+        if (!permissionsSnapshot.exists()) {
+          await set(ref(db, `permissions/${CONFIG.GUILD_ID}`), defaultPermissions);
+        }
+      } catch (error) {
+        console.error('Error initializing default data:', error);
+      }
+    }
+
+    async function loadChannels() {
+      try {
+        const snapshot = await get(ref(db, `channels/${CONFIG.GUILD_ID}`));
+        if (snapshot.exists()) {
+          const data = snapshot.val();
+          channels = Object.entries(data).map(([id, channel]) => ({
+            id,
+            ...channel
+          }));
+        } else {
+          channels = defaultChannels;
+        }
+      } catch (error) {
+        console.error('Error loading channels:', error);
+        channels = defaultChannels;
+      }
+    }
+
+    async function loadPermissions() {
+      try {
+        const snapshot = await get(ref(db, `permissions/${CONFIG.GUILD_ID}`));
+        if (snapshot.exists()) {
+          permissions = snapshot.val();
+        } else {
+          permissions = defaultPermissions;
+        }
+      } catch (error) {
+        console.error('Error loading permissions:', error);
+        permissions = defaultPermissions;
+      }
+    }
+
+    function initializeUI() {
+      document.getElementById('userName').textContent = currentUser.name;
+      document.getElementById('userInitials').textContent = currentUser.name.charAt(0).toUpperCase();
+      
+      const roleBadge = document.getElementById('userRoleBadge');
+      roleBadge.textContent = currentUser.role === 'admin' ? 'ADMIN' : currentUser.role === 'xuser' ? 'X-USER' : 'MEMBER';
+      roleBadge.className = `user-role-badge ${currentUser.role}`;
+    }
+
+    // ============ RENDER CHANNELS ============
+    function renderChannels() {
+      const container = document.getElementById('channelsContainer');
+      const categories = {};
+
+      // Group channels by category
+      channels.forEach(channel => {
+        if (!categories[channel.category]) {
+          categories[channel.category] = [];
+        }
+        categories[channel.category].push(channel);
       });
 
-      // ============ APP INITIALIZATION ============
-      function initializeApp() {
-        document.getElementById('userDisplay').textContent = isAdmin ? 'Admin' : 'Member';
-        
-        if (isAdmin) {
-          document.getElementById('adminNav').style.display = 'block';
-        }
+      let html = '';
 
-        // Navigation
-        document.querySelectorAll('.nav-item').forEach(item => {
-          item.addEventListener('click', () => {
-            const section = item.dataset.section;
-            switchSection(section);
-          });
-        });
-
-        // Upload area
-        document.getElementById('uploadArea').addEventListener('click', () => {
-          document.getElementById('postImage').click();
-        });
-
-        // Load initial content
-        loadPosts();
-        loadChatMessages('public');
-        if (isAdmin) {
-          loadChatMessages('admin');
-        }
-
-        // Realtime subscriptions
-        subscribeToRealtime();
-
-        // Logout
-        document.getElementById('logoutBtn').addEventListener('click', () => {
-          location.reload();
-        });
-      }
-
-      function switchSection(section) {
-        // Update nav
-        document.querySelectorAll('.nav-item').forEach(item => {
-          item.classList.remove('active');
-        });
-        document.querySelector(`[data-section="${section}"]`).classList.add('active');
-
-        // Update content
-        document.querySelectorAll('.content-section').forEach(content => {
-          content.classList.remove('active');
-        });
-        document.getElementById(section).classList.add('active');
-
-        // Load data if needed
-        if (section === 'admin-chat' && isAdmin) {
-          loadChatMessages('admin');
-        } else if (section === 'public-chat') {
-          loadChatMessages('public');
-        }
-      }
-
-      // ============ POSTS ============
-      async function loadPosts() {
-        try {
-          const { data, error } = await supabaseClient
-            .from('community_posts')
-            .select('*')
-            .eq('guild_id', CONFIG.GUILD_ID)
-            .order('created_at', { ascending: false });
-
-          if (error) throw error;
-
-          const container = document.getElementById('postsFeed');
-          container.innerHTML = '';
-
-          if (!data || data.length === 0) {
-            container.innerHTML = `
-              <div class="empty-state">
-                <i class="fas fa-file-alt empty-icon"></i>
-                <p class="empty-text">No posts yet. Check back soon!</p>
-              </div>
-            `;
-            return;
-          }
-
-          data.forEach(post => {
-            container.innerHTML += createPostCard(post);
-          });
-
-        } catch (err) {
-          console.error('Error loading posts:', err);
-        }
-      }
-
-      function createPostCard(post) {
-        const initials = post.author_name.slice(0, 2).toUpperCase();
-        const date = new Date(post.created_at).toLocaleDateString('en-US', { 
-          month: 'long', 
-          day: 'numeric', 
-          year: 'numeric' 
-        });
-
-        return `
-          <article class="post-card">
-            <div class="post-header">
-              <div class="post-avatar">${initials}</div>
-              <div class="post-author-info">
-                <div class="post-author">${post.author_name}</div>
-                <div class="post-date">${date}</div>
+      Object.entries(categories).forEach(([category, categoryChannels]) => {
+        html += `
+          <div class="channel-category">
+            <div class="category-header" onclick="toggleCategory(this)">
+              <span>${category}</span>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                ${isAdmin ? `<div class="add-channel-btn" onclick="event.stopPropagation(); openCreateChannelModal()"><i class="fas fa-plus"></i></div>` : ''}
+                <i class="category-icon fas fa-chevron-down"></i>
               </div>
             </div>
-
-            ${post.image_url ? `<img src="${post.image_url}" alt="${post.title}" class="post-image">` : ''}
-
-            <div class="post-content">
-              <h2 class="post-title">${post.title}</h2>
-              <p class="post-text">${post.content}</p>
+            <div class="category-channels">
+              ${categoryChannels.map(channel => `
+                <div class="channel-item ${currentChannel?.id === channel.id ? 'active' : ''}" onclick="selectChannel('${channel.id}')">
+                  <i class="channel-icon fas fa-${channel.icon || 'hashtag'}"></i>
+                  <span class="channel-name">${channel.name}</span>
+                  ${isAdmin ? `
+                    <div class="channel-actions">
+                      <div class="channel-action-btn" onclick="event.stopPropagation(); openChannelSettings('${channel.id}')" title="Settings">
+                        <i class="fas fa-cog"></i>
+                      </div>
+                      <div class="channel-action-btn" onclick="event.stopPropagation(); deleteChannel('${channel.id}')" title="Delete">
+                        <i class="fas fa-trash"></i>
+                      </div>
+                    </div>
+                  ` : ''}
+                </div>
+              `).join('')}
             </div>
-
-            <div class="post-actions">
-              <button class="post-action-btn" onclick="toggleLike(${post.id})">
-                <i class="far fa-heart"></i>
-                <span>${post.likes || 0}</span>
-              </button>
-              <button class="post-action-btn" onclick="openPostModal(${post.id})">
-                <i class="far fa-comment"></i>
-                <span>Comment</span>
-              </button>
-              <button class="post-action-btn" onclick="sharePost(${post.id})">
-                <i class="far fa-share-square"></i>
-                <span>Share</span>
-              </button>
-            </div>
-          </article>
+          </div>
         `;
+      });
+
+      container.innerHTML = html;
+    }
+
+    function toggleCategory(element) {
+      element.classList.toggle('collapsed');
+      const channels = element.nextElementSibling;
+      channels.classList.toggle('hidden');
+    }
+
+    // ============ CHANNEL SELECTION ============
+    async function selectChannel(channelId) {
+      const channel = channels.find(c => c.id === channelId);
+      if (!channel) return;
+
+      currentChannel = channel;
+
+      // Update UI
+      document.getElementById('channelName').textContent = channel.name;
+      document.getElementById('channelTopic').textContent = channel.topic || 'No topic set';
+      document.getElementById('channelIcon').className = `chat-header-icon fas fa-${channel.icon || 'hashtag'}`;
+      document.getElementById('messageInput').placeholder = `Message #${channel.name}`;
+
+      // Check permissions
+      const userRole = currentUser.role;
+      const channelPerms = permissions[channelId]?.[userRole] || { send_messages: false, react: false };
+
+      const inputWrapper = document.getElementById('messageInputWrapper');
+      const messageInput = document.getElementById('messageInput');
+      const sendBtn = document.getElementById('sendMessageBtn');
+
+      if (channelPerms.send_messages) {
+        inputWrapper.classList.remove('disabled');
+        messageInput.disabled = false;
+        sendBtn.disabled = false;
+      } else {
+        inputWrapper.classList.add('disabled');
+        messageInput.disabled = true;
+        sendBtn.disabled = true;
       }
 
-      window.toggleLike = async function(postId) {
-        try {
-          // Check if already liked
-          const { data: existingLike } = await supabaseClient
-            .from('community_post_likes')
-            .select('*')
-            .eq('post_id', postId)
-            .eq('user_id', currentUser.user_id)
-            .single();
+      // Update active channel in sidebar
+      renderChannels();
 
-          if (existingLike) {
-            // Unlike
-            await supabaseClient
-              .from('community_post_likes')
-              .delete()
-              .eq('id', existingLike.id);
+      // Load messages
+      await loadMessages(channelId);
+    }
 
-            await supabaseClient
-              .from('community_posts')
-              .update({ likes: (existingLike.likes || 1) - 1 })
-              .eq('id', postId);
-          } else {
-            // Like
-            await supabaseClient
-              .from('community_post_likes')
-              .insert({
-                post_id: postId,
-                user_id: currentUser.user_id
-              });
+    async function loadMessages(channelId) {
+      const container = document.getElementById('messagesContainer');
+      
+      try {
+        const snapshot = await get(ref(db, `messages/${CONFIG.GUILD_ID}/${channelId}`));
+        
+        if (snapshot.exists()) {
+          const messagesData = snapshot.val();
+          const messagesList = Object.entries(messagesData).map(([id, msg]) => ({
+            id,
+            ...msg
+          })).sort((a, b) => a.timestamp - b.timestamp);
 
-            const { data: post } = await supabaseClient
-              .from('community_posts')
-              .select('likes')
-              .eq('id', postId)
-              .single();
+          let html = '';
+          messagesList.forEach(msg => {
+            html += renderMessage(msg);
+          });
 
-            await supabaseClient
-              .from('community_posts')
-              .update({ likes: (post.likes || 0) + 1 })
-              .eq('id', postId);
-          }
-
-          loadPosts();
-        } catch (err) {
-          console.error('Error toggling like:', err);
-        }
-      };
-
-      window.sharePost = function(postId) {
-        const url = `${window.location.origin}${window.location.pathname}?post=${postId}`;
-        navigator.clipboard.writeText(url).then(() => {
-          alert('Post link copied to clipboard!');
-        });
-      };
-
-      // ============ POST MODAL & COMMENTS ============
-      window.openPostModal = async function(postId) {
-        try {
-          const { data: post } = await supabaseClient
-            .from('community_posts')
-            .select('*')
-            .eq('id', postId)
-            .single();
-
-          const { data: comments } = await supabaseClient
-            .from('community_comments')
-            .select('*')
-            .eq('post_id', postId)
-            .is('parent_id', null)
-            .order('created_at', { ascending: true });
-
-          currentPost = post;
-
-          const modalBody = document.getElementById('modalBody');
-          modalBody.innerHTML = `
-            <div class="modal-post">
-              ${post.image_url ? `<img src="${post.image_url}" alt="${post.title}" class="modal-post-image">` : ''}
-              <h2 class="modal-post-title">${post.title}</h2>
-              <p class="modal-post-text">${post.content}</p>
-            </div>
-
-            <div class="comments-section">
-              <h3 class="comments-header">Comments</h3>
-              
-              <div class="comment-form">
-                <input type="text" class="comment-input" id="newCommentInput" placeholder="Write a comment...">
-                <button class="btn-comment" onclick="submitComment(${postId})">Post</button>
+          container.innerHTML = html;
+          container.scrollTop = container.scrollHeight;
+        } else {
+          container.innerHTML = `
+            <div class="chat-welcome">
+              <div class="welcome-icon">
+                <i class="fas fa-${currentChannel.icon || 'hashtag'}"></i>
               </div>
-
-              <div class="comments-list" id="commentsList">
-                ${comments && comments.length > 0 ? await renderComments(comments, postId) : '<div class="empty-state"><i class="far fa-comments empty-icon"></i><p class="empty-text">No comments yet. Be the first!</p></div>'}
-              </div>
+              <h2 class="welcome-title">Welcome to #${currentChannel.name}!</h2>
+              <p class="welcome-text">
+                ${currentChannel.topic || 'This is the beginning of the #' + currentChannel.name + ' channel.'}
+              </p>
             </div>
           `;
-
-          document.getElementById('postModal').classList.add('active');
-
-          // Enter key support
-          document.getElementById('newCommentInput').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') submitComment(postId);
-          });
-
-        } catch (err) {
-          console.error('Error opening post modal:', err);
-        }
-      };
-
-      async function renderComments(comments, postId) {
-        let html = '';
-        
-        for (const comment of comments) {
-          const { data: replies } = await supabaseClient
-            .from('community_comments')
-            .select('*')
-            .eq('parent_id', comment.id)
-            .order('created_at', { ascending: true });
-
-          html += createCommentHTML(comment, replies, postId);
         }
 
-        return html;
+        // Subscribe to realtime updates
+        subscribeToMessages(channelId);
+      } catch (error) {
+        console.error('Error loading messages:', error);
       }
+    }
 
-      function createCommentHTML(comment, replies, postId) {
-        const initials = comment.author_name.slice(0, 2).toUpperCase();
-        const time = new Date(comment.created_at).toLocaleTimeString([], {
-          hour: '2-digit',
-          minute: '2-digit'
-        });
-
-        let html = `
-          <div class="comment">
-            <div class="comment-avatar">${initials}</div>
-            <div class="comment-body">
-              <div class="comment-header">
-                <span class="comment-author">${comment.author_name}</span>
-                <span class="comment-time">${time}</span>
-              </div>
-              <p class="comment-text">${comment.content}</p>
-              <div class="comment-actions">
-                <button class="comment-action" onclick="toggleReplyForm(${comment.id})">
-                  <i class="fas fa-reply"></i> Reply
-                </button>
-              </div>
-
-              <div class="reply-form" id="replyForm${comment.id}">
-                <input type="text" class="reply-input" id="replyInput${comment.id}" placeholder="Write a reply...">
-                <button class="btn-reply" onclick="submitReply(${postId}, ${comment.id})">Reply</button>
-              </div>
-
-              ${replies && replies.length > 0 ? `
-                <div class="replies">
-                  ${replies.map(reply => createReplyHTML(reply)).join('')}
-                </div>
-              ` : ''}
-            </div>
-          </div>
-        `;
-
-        return html;
-      }
-
-      function createReplyHTML(reply) {
-        const initials = reply.author_name.slice(0, 2).toUpperCase();
-        const time = new Date(reply.created_at).toLocaleTimeString([], {
-          hour: '2-digit',
-          minute: '2-digit'
-        });
-
-        return `
-          <div class="reply">
-            <div class="reply-avatar">${initials}</div>
-            <div class="reply-body">
-              <div class="reply-header">
-                <span class="reply-author">${reply.author_name}</span>
-                <span class="reply-time">${time}</span>
-              </div>
-              <p class="reply-text">${reply.content}</p>
-            </div>
-          </div>
-        `;
-      }
-
-      window.toggleReplyForm = function(commentId) {
-        const form = document.getElementById(`replyForm${commentId}`);
-        form.classList.toggle('active');
-        if (form.classList.contains('active')) {
-          document.getElementById(`replyInput${commentId}`).focus();
-        }
-      };
-
-      window.submitComment = async function(postId) {
-        const input = document.getElementById('newCommentInput');
-        const content = input.value.trim();
-
-        if (!content) return;
-
-        try {
-          await supabaseClient
-            .from('community_comments')
-            .insert({
-              post_id: postId,
-              author_id: currentUser.user_id,
-              author_name: isAdmin ? 'Admin' : 'Member',
-              content: content
-            });
-
-          input.value = '';
-          openPostModal(postId); // Refresh
-        } catch (err) {
-          console.error('Error submitting comment:', err);
-        }
-      };
-
-      window.submitReply = async function(postId, parentId) {
-        const input = document.getElementById(`replyInput${parentId}`);
-        const content = input.value.trim();
-
-        if (!content) return;
-
-        try {
-          await supabaseClient
-            .from('community_comments')
-            .insert({
-              post_id: postId,
-              parent_id: parentId,
-              author_id: currentUser.user_id,
-              author_name: isAdmin ? 'Admin' : 'Member',
-              content: content
-            });
-
-          input.value = '';
-          openPostModal(postId); // Refresh
-        } catch (err) {
-          console.error('Error submitting reply:', err);
-        }
-      };
-
-      document.getElementById('closeModal').addEventListener('click', () => {
-        document.getElementById('postModal').classList.remove('active');
+    function renderMessage(msg) {
+      const time = new Date(msg.timestamp).toLocaleTimeString('en-US', {
+        hour: '2-digit',
+        minute: '2-digit'
       });
 
-      // ============ CHAT ============
-      async function loadChatMessages(channelType) {
-        try {
-          const { data, error } = await supabaseClient
-            .from('community_chat_messages')
-            .select('*')
-            .eq('guild_id', CONFIG.GUILD_ID)
-            .eq('channel_type', channelType)
-            .order('created_at', { ascending: false })
-            .limit(100);
+      const initials = msg.author.charAt(0).toUpperCase();
+      const roleClass = msg.role || 'member';
+      const roleBadge = msg.role === 'admin' 
+        ? '<span class="role-badge admin"><i class="fas fa-shield-alt"></i> ADMIN</span>'
+        : msg.role === 'xuser'
+        ? '<span class="role-badge xuser"><i class="fas fa-star"></i> X-USER</span>'
+        : '';
 
-          if (error) throw error;
-
-          const container = channelType === 'admin' 
-            ? document.getElementById('adminMessages')
-            : document.getElementById('publicMessages');
-
-          container.innerHTML = '';
-
-          if (!data || data.length === 0) {
-            container.innerHTML = `
-              <div class="empty-state">
-                <i class="far fa-comments empty-icon"></i>
-                <p class="empty-text">No messages yet. Start the conversation!</p>
-              </div>
-            `;
-            return;
-          }
-
-          data.reverse().forEach(msg => {
-            container.innerHTML += createChatMessageHTML(msg);
-          });
-
-          container.scrollTop = container.scrollHeight;
-        } catch (err) {
-          console.error('Error loading chat messages:', err);
-        }
-      }
-
-      function createChatMessageHTML(msg) {
-        const initials = msg.author_name.slice(0, 2).toUpperCase();
-        const time = new Date(msg.created_at).toLocaleTimeString([], {
-          hour: '2-digit',
-          minute: '2-digit'
-        });
-
-        // Check if message contains poll data
-        let messageContent = msg.content;
-        if (msg.content.startsWith('POLL:')) {
-          const pollData = JSON.parse(msg.content.replace('POLL:', ''));
-          messageContent = createPollHTML(pollData, msg.id);
-        } else if (msg.content.startsWith('QUIZ:')) {
-          const quizData = JSON.parse(msg.content.replace('QUIZ:', ''));
-          messageContent = createQuizHTML(quizData, msg.id);
-        }
-
-        return `
-          <div class="chat-message">
+      return `
+        <div class="message-group">
+          <div class="message-timestamp">${time}</div>
+          <div style="display: flex; gap: 16px;">
             <div class="message-avatar">${initials}</div>
-            <div class="message-content">
+            <div style="flex: 1;">
               <div class="message-header">
-                <span class="message-author">${msg.author_name}</span>
+                <span class="message-author ${roleClass}">${msg.author}</span>
+                ${roleBadge}
                 <span class="message-time">${time}</span>
               </div>
-              <div class="message-text">${messageContent}</div>
+              <div class="message-content">${msg.content}</div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function subscribeToMessages(channelId) {
+      const messagesRef = ref(db, `messages/${CONFIG.GUILD_ID}/${channelId}`);
+      
+      onValue(messagesRef, (snapshot) => {
+        if (currentChannel?.id === channelId) {
+          loadMessages(channelId);
+        }
+      });
+    }
+
+    // ============ SEND MESSAGE ============
+    document.getElementById('sendMessageBtn').addEventListener('click', sendMessage);
+    document.getElementById('messageInput').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+      }
+    });
+
+    async function sendMessage() {
+      const input = document.getElementById('messageInput');
+      const content = input.value.trim();
+
+      if (!content || !currentChannel) return;
+
+      // Check permissions
+      const userRole = currentUser.role;
+      const channelPerms = permissions[currentChannel.id]?.[userRole] || { send_messages: false };
+
+      if (!channelPerms.send_messages) {
+        alert('You do not have permission to send messages in this channel.');
+        return;
+      }
+
+      try {
+        const messageRef = push(ref(db, `messages/${CONFIG.GUILD_ID}/${currentChannel.id}`));
+        await set(messageRef, {
+          author: currentUser.name,
+          author_id: currentUser.user_id,
+          role: currentUser.role,
+          content: content,
+          timestamp: Date.now()
+        });
+
+        input.value = '';
+      } catch (error) {
+        console.error('Error sending message:', error);
+        alert('Failed to send message. Please try again.');
+      }
+    }
+
+    // ============ CHANNEL MANAGEMENT ============
+    function openCreateChannelModal() {
+      document.getElementById('createChannelModal').classList.add('active');
+    }
+
+    async function createChannel() {
+      const name = document.getElementById('newChannelName').value.trim().toLowerCase().replace(/\s+/g, '-');
+      const topic = document.getElementById('newChannelTopic').value.trim();
+      const category = document.getElementById('newChannelCategory').value;
+
+      if (!name) {
+        alert('Please enter a channel name');
+        return;
+      }
+
+      const channelId = name.replace(/[^a-z0-9-]/g, '');
+
+      const newChannel = {
+        id: channelId,
+        name: name,
+        category: category,
+        topic: topic,
+        icon: 'hashtag',
+        created_at: Date.now()
+      };
+
+      try {
+        // Add channel
+        await set(ref(db, `channels/${CONFIG.GUILD_ID}/${channelId}`), newChannel);
+
+        // Set default permissions
+        await set(ref(db, `permissions/${CONFIG.GUILD_ID}/${channelId}`), {
+          admin: { send_messages: true, react: true, manage: true },
+          xuser: { send_messages: true, react: true, manage: false },
+          member: { send_messages: true, react: true, manage: false }
+        });
+
+        // Reload
+        await loadChannels();
+        await loadPermissions();
+        renderChannels();
+
+        closeModal('createChannelModal');
+        
+        // Clear form
+        document.getElementById('newChannelName').value = '';
+        document.getElementById('newChannelTopic').value = '';
+      } catch (error) {
+        console.error('Error creating channel:', error);
+        alert('Failed to create channel');
+      }
+    }
+
+    async function deleteChannel(channelId) {
+      if (!confirm('Are you sure you want to delete this channel?')) return;
+
+      try {
+        await remove(ref(db, `channels/${CONFIG.GUILD_ID}/${channelId}`));
+        await remove(ref(db, `messages/${CONFIG.GUILD_ID}/${channelId}`));
+        await remove(ref(db, `permissions/${CONFIG.GUILD_ID}/${channelId}`));
+
+        await loadChannels();
+        await loadPermissions();
+        renderChannels();
+
+        if (currentChannel?.id === channelId) {
+          currentChannel = null;
+          if (channels.length > 0) {
+            selectChannel(channels[0].id);
+          }
+        }
+      } catch (error) {
+        console.error('Error deleting channel:', error);
+        alert('Failed to delete channel');
+      }
+    }
+
+    // ============ PERMISSIONS ============
+    function openChannelSettings(channelId) {
+      const channel = channels.find(c => c.id === channelId);
+      if (!channel) return;
+
+      currentChannel = channel;
+      document.getElementById('settingsChannelName').textContent = `#${channel.name}`;
+
+      // Render role picker
+      const rolePicker = document.getElementById('rolePickerSettings');
+      rolePicker.innerHTML = `
+        <div class="role-option ${selectedRoleForSettings === 'admin' ? 'selected' : ''}" onclick="selectRoleForSettings('admin')">
+          <div class="role-option-name admin">Admin</div>
+          <div class="role-option-desc">Full access and management permissions</div>
+        </div>
+        <div class="role-option ${selectedRoleForSettings === 'xuser' ? 'selected' : ''}" onclick="selectRoleForSettings('xuser')">
+          <div class="role-option-name xuser">X-User</div>
+          <div class="role-option-desc">Enhanced user with special privileges</div>
+        </div>
+        <div class="role-option ${selectedRoleForSettings === 'member' ? 'selected' : ''}" onclick="selectRoleForSettings('member')">
+          <div class="role-option-name">Member</div>
+          <div class="role-option-desc">Standard community member</div>
+        </div>
+      `;
+
+      renderPermissions(channelId, selectedRoleForSettings);
+
+      document.getElementById('channelSettingsModal').classList.add('active');
+    }
+
+    window.selectRoleForSettings = function(role) {
+      selectedRoleForSettings = role;
+      openChannelSettings(currentChannel.id);
+    };
+
+    function renderPermissions(channelId, role) {
+      const perms = permissions[channelId]?.[role] || { send_messages: false, react: false, manage: false };
+
+      const permissionsContainer = document.getElementById('permissionsContainer');
+      permissionsContainer.innerHTML = `
+        <div class="permission-item">
+          <div class="permission-info">
+            <div class="permission-name">Send Messages</div>
+            <div class="permission-desc">Allows members to send messages in this channel</div>
+          </div>
+          <div class="toggle-switch ${perms.send_messages ? 'active' : ''}" 
+               onclick="togglePermission('${channelId}', '${role}', 'send_messages')">
+          </div>
+        </div>
+        <div class="permission-item">
+          <div class="permission-info">
+            <div class="permission-name">Add Reactions</div>
+            <div class="permission-desc">Allows members to add reactions to messages</div>
+          </div>
+          <div class="toggle-switch ${perms.react ? 'active' : ''}" 
+               onclick="togglePermission('${channelId}', '${role}', 'react')">
+          </div>
+        </div>
+        ${role === 'admin' ? `
+          <div class="permission-item">
+            <div class="permission-info">
+              <div class="permission-name">Manage Channel</div>
+              <div class="permission-desc">Allows admins to manage channel settings</div>
+            </div>
+            <div class="toggle-switch ${perms.manage ? 'active' : ''}" 
+                 onclick="togglePermission('${channelId}', '${role}', 'manage')">
+            </div>
+          </div>
+        ` : ''}
+      `;
+    }
+
+    window.togglePermission = function(channelId, role, permission) {
+      if (!permissions[channelId]) {
+        permissions[channelId] = {};
+      }
+      if (!permissions[channelId][role]) {
+        permissions[channelId][role] = { send_messages: false, react: false, manage: false };
+      }
+
+      permissions[channelId][role][permission] = !permissions[channelId][role][permission];
+      renderPermissions(channelId, role);
+    };
+
+    async function savePermissions() {
+      try {
+        await set(ref(db, `permissions/${CONFIG.GUILD_ID}`), permissions);
+        await loadPermissions();
+        closeModal('channelSettingsModal');
+        
+        // Refresh current channel if needed
+        if (currentChannel) {
+          selectChannel(currentChannel.id);
+        }
+      } catch (error) {
+        console.error('Error saving permissions:', error);
+        alert('Failed to save permissions');
+      }
+    }
+
+    // ============ MEMBERS ============
+    function renderMembers() {
+      const container = document.getElementById('membersContainer');
+      
+      // Mock members for demonstration
+      const members = [
+        { name: 'Admin', role: 'admin', status: 'online' },
+        { name: 'X-User', role: 'xuser', status: 'online' }
+      ];
+
+      // Add current user if not already in list
+      if (!members.find(m => m.name === currentUser.name)) {
+        members.push({
+          name: currentUser.name,
+          role: currentUser.role,
+          status: 'online'
+        });
+      }
+
+      // Group by role
+      const roleGroups = {
+        admin: members.filter(m => m.role === 'admin'),
+        xuser: members.filter(m => m.role === 'xuser'),
+        member: members.filter(m => m.role === 'member')
+      };
+
+      let html = '';
+
+      if (roleGroups.admin.length > 0) {
+        html += `
+          <div class="role-group">
+            <div class="role-group-header admin">
+              <i class="fas fa-shield-alt"></i>
+              <span>ADMIN</span>
+              <span class="role-count">— ${roleGroups.admin.length}</span>
+            </div>
+            <div class="role-members">
+              ${roleGroups.admin.map(member => renderMemberItem(member)).join('')}
             </div>
           </div>
         `;
       }
 
-      function createPollHTML(poll, msgId) {
-        return `
-          <div class="poll-card">
-            <div class="poll-question">${poll.question}</div>
-            ${poll.options.map((option, idx) => `
-              <div class="poll-option" onclick="votePoll(${msgId}, ${idx})">
-                <div class="poll-option-fill" style="width: ${option.votes || 0}%"></div>
-                <div class="poll-option-content">
-                  <span class="poll-option-text">${option.text}</span>
-                  <span class="poll-option-percent">${option.votes || 0}%</span>
-                </div>
-              </div>
-            `).join('')}
+      if (roleGroups.xuser.length > 0) {
+        html += `
+          <div class="role-group">
+            <div class="role-group-header xuser">
+              <i class="fas fa-star"></i>
+              <span>X-USER</span>
+              <span class="role-count">— ${roleGroups.xuser.length}</span>
+            </div>
+            <div class="role-members">
+              ${roleGroups.xuser.map(member => renderMemberItem(member)).join('')}
+            </div>
           </div>
         `;
       }
 
-      function createQuizHTML(quiz, msgId) {
-        return `
-          <div class="quiz-card">
-            <div class="quiz-question">${quiz.question}</div>
-            ${quiz.options.map((option, idx) => `
-              <div class="quiz-option" onclick="answerQuiz(${msgId}, ${idx}, ${quiz.correct})">
-                ${option}
-              </div>
-            `).join('')}
+      if (roleGroups.member.length > 0) {
+        html += `
+          <div class="role-group">
+            <div class="role-group-header member">
+              <i class="fas fa-user"></i>
+              <span>MEMBERS</span>
+              <span class="role-count">— ${roleGroups.member.length}</span>
+            </div>
+            <div class="role-members">
+              ${roleGroups.member.map(member => renderMemberItem(member)).join('')}
+            </div>
           </div>
         `;
       }
 
-      window.votePoll = function(msgId, optionIdx) {
-        // Implement poll voting logic
-        console.log(`Voted for option ${optionIdx} in poll ${msgId}`);
-      };
+      container.innerHTML = html;
+    }
 
-      window.answerQuiz = function(msgId, answerIdx, correctIdx) {
-        const options = document.querySelectorAll(`[onclick*="answerQuiz(${msgId}"]`);
-        options[answerIdx].classList.add(answerIdx === correctIdx ? 'correct' : 'incorrect');
-        if (answerIdx !== correctIdx) {
-          options[correctIdx].classList.add('correct');
-        }
-      };
+    function renderMemberItem(member) {
+      const initials = member.name.charAt(0).toUpperCase();
+      return `
+        <div class="member-item">
+          <div class="member-avatar">
+            ${initials}
+            <div class="member-status"></div>
+          </div>
+          <div class="member-name">${member.name}</div>
+        </div>
+      `;
+    }
 
-      async function sendChatMessage(channelType) {
-        const input = channelType === 'admin'
-          ? document.getElementById('adminInput')
-          : document.getElementById('publicInput');
+    // ============ UTILITY ============
+    function closeModal(modalId) {
+      document.getElementById(modalId).classList.remove('active');
+    }
 
-        const content = input.value.trim();
+    function toggleMembersSidebar() {
+      const sidebar = document.getElementById('membersSidebar');
+      sidebar.classList.toggle('hidden');
+    }
 
-        if (!content) return;
+    function showServerMenu() {
+      alert('Server menu coming soon!');
+    }
 
-        try {
-          await supabaseClient
-            .from('community_chat_messages')
-            .insert({
-              guild_id: CONFIG.GUILD_ID,
-              channel_type: channelType,
-              author_id: currentUser.user_id,
-              author_name: isAdmin ? 'Admin' : 'Member',
-              content: content
-            });
+    function toggleMute() {
+      alert('Voice features coming soon!');
+    }
 
-          input.value = '';
-        } catch (err) {
-          console.error('Error sending message:', err);
-        }
+    function showSettings() {
+      alert('Settings coming soon!');
+    }
+
+    function logout() {
+      if (confirm('Are you sure you want to logout?')) {
+        location.reload();
       }
+    }
 
-      document.getElementById('sendPublicBtn').addEventListener('click', () => sendChatMessage('public'));
-      document.getElementById('publicInput').addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') sendChatMessage('public');
-      });
-
-      if (document.getElementById('sendAdminBtn')) {
-        document.getElementById('sendAdminBtn').addEventListener('click', () => sendChatMessage('admin'));
-        document.getElementById('adminInput').addEventListener('keypress', (e) => {
-          if (e.key === 'Enter') sendChatMessage('admin');
-        });
-      }
-
-      // ============ ADMIN TOOLS ============
-      document.getElementById('createPollBtn')?.addEventListener('click', () => {
-        const question = prompt('Enter poll question:');
-        if (!question) return;
-
-        const options = [];
-        for (let i = 1; i <= 4; i++) {
-          const option = prompt(`Option ${i} (leave empty to finish):`);
-          if (!option) break;
-          options.push({ text: option, votes: 0 });
-        }
-
-        if (options.length < 2) {
-          alert('You need at least 2 options');
-          return;
-        }
-
-        const pollData = { question, options };
-        
-        sendAdminTool('POLL:' + JSON.stringify(pollData));
-      });
-
-      document.getElementById('createQuizBtn')?.addEventListener('click', () => {
-        const question = prompt('Enter quiz question:');
-        if (!question) return;
-
-        const options = [];
-        for (let i = 1; i <= 4; i++) {
-          const option = prompt(`Option ${i} (leave empty to finish):`);
-          if (!option) break;
-          options.push(option);
-        }
-
-        if (options.length < 2) {
-          alert('You need at least 2 options');
-          return;
-        }
-
-        const correct = parseInt(prompt(`Which option is correct? (1-${options.length}):`)) - 1;
-        if (correct < 0 || correct >= options.length) {
-          alert('Invalid correct answer');
-          return;
-        }
-
-        const quizData = { question, options, correct };
-        
-        sendAdminTool('QUIZ:' + JSON.stringify(quizData));
-      });
-
-      async function sendAdminTool(content) {
-        try {
-          await supabaseClient
-            .from('community_chat_messages')
-            .insert({
-              guild_id: CONFIG.GUILD_ID,
-              channel_type: 'admin',
-              author_id: currentUser.user_id,
-              author_name: 'Admin',
-              content: content
-            });
-        } catch (err) {
-          console.error('Error sending admin tool:', err);
-        }
-      }
-
-      // ============ UPLOAD POST ============
-      document.getElementById('postImage').addEventListener('change', (e) => {
-        const file = e.target.files[0];
-        if (file) {
-          const reader = new FileReader();
-          reader.onload = (e) => {
-            document.getElementById('previewImg').src = e.target.result;
-            document.getElementById('imagePreview').style.display = 'block';
-            document.getElementById('uploadArea').classList.add('has-file');
-          };
-          reader.readAsDataURL(file);
+    // Close modals when clicking outside
+    document.querySelectorAll('.modal-overlay').forEach(overlay => {
+      overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) {
+          overlay.classList.remove('active');
         }
       });
-
-      document.getElementById('uploadForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-
-        if (!isAdmin) return;
-
-        const title = document.getElementById('postTitle').value;
-        const content = document.getElementById('postContent').value;
-        const imageFile = document.getElementById('postImage').files[0];
-
-        let imageUrl = null;
-
-        if (imageFile) {
-          const reader = new FileReader();
-          imageUrl = await new Promise((resolve) => {
-            reader.onload = (e) => resolve(e.target.result);
-            reader.readAsDataURL(imageFile);
-          });
-        }
-
-        try {
-          await supabaseClient
-            .from('community_posts')
-            .insert({
-              guild_id: CONFIG.GUILD_ID,
-              author_id: currentUser.user_id,
-              author_name: 'Admin',
-              title: title,
-              content: content,
-              image_url: imageUrl
-            });
-
-          // Reset form
-          document.getElementById('uploadForm').reset();
-          document.getElementById('imagePreview').style.display = 'none';
-          document.getElementById('uploadArea').classList.remove('has-file');
-
-          // Switch to feed
-          switchSection('feed');
-
-          alert('Post published successfully!');
-        } catch (err) {
-          console.error('Error creating post:', err);
-          alert('Failed to publish post');
-        }
-      });
-
-      // ============ REALTIME ============
-      function subscribeToRealtime() {
-        supabaseClient
-          .channel('community_posts')
-          .on('postgres_changes', {
-            event: 'INSERT',
-            schema: 'public',
-            table: 'community_posts',
-            filter: `guild_id=eq.${CONFIG.GUILD_ID}`
-          }, () => {
-            loadPosts();
-          })
-          .subscribe();
-
-        supabaseClient
-          .channel('community_chat')
-          .on('postgres_changes', {
-            event: 'INSERT',
-            schema: 'public',
-            table: 'community_chat_messages',
-            filter: `guild_id=eq.${CONFIG.GUILD_ID}`
-          }, (payload) => {
-            const msg = payload.new;
-            const container = msg.channel_type === 'admin'
-              ? document.getElementById('adminMessages')
-              : document.getElementById('publicMessages');
-
-            container.innerHTML += createChatMessageHTML(msg);
-            container.scrollTop = container.scrollHeight;
-          })
-          .subscribe();
-
-        supabaseClient
-          .channel('community_comments')
-          .on('postgres_changes', {
-            event: 'INSERT',
-            schema: 'public',
-            table: 'community_comments'
-          }, () => {
-            if (currentPost) {
-              openPostModal(currentPost.id);
-            }
-          })
-          .subscribe();
-      }
-    })();
+    });
   </script>
 </body>
 </html>
